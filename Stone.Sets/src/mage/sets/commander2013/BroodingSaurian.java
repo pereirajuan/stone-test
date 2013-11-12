@@ -30,11 +30,10 @@ package mage.sets.commander2013;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
 import mage.abilities.effects.ContinuousEffectImpl;
-import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
@@ -42,10 +41,13 @@ import mage.constants.Layer;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.SubLayer;
+import mage.constants.TargetController;
 import mage.constants.Zone;
 import mage.filter.FilterPermanent;
 import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.Predicates;
 import mage.filter.predicate.other.OwnerIdPredicate;
+import mage.filter.predicate.permanent.TokenPredicate;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
 import mage.players.Player;
@@ -54,45 +56,50 @@ import mage.players.Player;
  *
  * @author LevelX2
  */
-public class HomewardPath extends CardImpl<HomewardPath> {
+public class BroodingSaurian extends CardImpl<BroodingSaurian> {
 
-    public HomewardPath(UUID ownerId) {
-        super(ownerId, 295, "Homeward Path", Rarity.RARE, new CardType[]{CardType.LAND}, "");
+    public BroodingSaurian(UUID ownerId) {
+        super(ownerId, 138, "Brooding Saurian", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
         this.expansionSetCode = "C13";
+        this.subtype.add("Lizard");
 
-        // {tap}: Add {1} to your mana pool.
-        this.addAbility(new ColorlessManaAbility());
-        // {tap}: Each player gains control of all creatures he or she owns.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new HomewardPathControlEffect(), new TapSourceCost()));
+        this.color.setGreen(true);
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
+        // At the beginning of each end step, each player gains control of all nontoken permanents he or she owns.
+        this.addAbility(new BeginningOfEndStepTriggeredAbility(new BroodingSaurianControlEffect(), TargetController.ANY, false));
     }
 
-    public HomewardPath(final HomewardPath card) {
+    public BroodingSaurian(final BroodingSaurian card) {
         super(card);
     }
 
     @Override
-    public HomewardPath copy() {
-        return new HomewardPath(this);
+    public BroodingSaurian copy() {
+        return new BroodingSaurian(this);
     }
 }
 
-class HomewardPathControlEffect extends ContinuousEffectImpl<HomewardPathControlEffect> {
+class BroodingSaurianControlEffect extends ContinuousEffectImpl<BroodingSaurianControlEffect> {
 
     private static final FilterCreaturePermanent filter = new FilterCreaturePermanent();
-
-    public HomewardPathControlEffect() {
-        super(Duration.EndOfGame, Layer.ControlChangingEffects_2, SubLayer.NA, Outcome.GainControl);
-        this.staticText = "Each player gains control of all creatures he or she owns";
+    static {
+        filter.add(Predicates.not(new TokenPredicate()));
     }
 
-    public HomewardPathControlEffect(final HomewardPathControlEffect effect) {
+    public BroodingSaurianControlEffect() {
+        super(Duration.EndOfGame, Layer.ControlChangingEffects_2, SubLayer.NA, Outcome.GainControl);
+        this.staticText = "each player gains control of all nontoken permanents he or she owns";
+    }
+
+    public BroodingSaurianControlEffect(final BroodingSaurianControlEffect effect) {
         super(effect);
     }
 
     @Override
-    public HomewardPathControlEffect copy() {
-        return new HomewardPathControlEffect(this);
+    public BroodingSaurianControlEffect copy() {
+        return new BroodingSaurianControlEffect(this);
     }
 
     @Override

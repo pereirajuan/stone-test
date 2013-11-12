@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.legends;
+package mage.sets.timespiral;
 
 import java.util.UUID;
 
@@ -33,20 +33,20 @@ import java.util.UUID;
  *
  * @author LevelX2
  */
-public class Reincarnation extends mage.sets.commander2013.Reincarnation {
+public class EndrekSahrMasterBreeder extends mage.sets.commander2013.EndrekSahrMasterBreeder {
 
-    public Reincarnation(UUID ownerId) {
+    public EndrekSahrMasterBreeder(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 115;
-        this.expansionSetCode = "LEG";
+        this.cardNumber = 106;
+        this.expansionSetCode = "TSP";
     }
 
-    public Reincarnation(final Reincarnation card) {
+    public EndrekSahrMasterBreeder(final EndrekSahrMasterBreeder card) {
         super(card);
     }
 
     @Override
-    public Reincarnation copy() {
-        return new Reincarnation(this);
+    public EndrekSahrMasterBreeder copy() {
+        return new EndrekSahrMasterBreeder(this);
     }
 }

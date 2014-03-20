@@ -36,15 +36,14 @@ import mage.constants.SetType;
  *
  * @author LevelX2
  */
+public class AjaniVsNicolBolas extends ExpansionSet {
+    private static final AjaniVsNicolBolas fINSTANCE =  new AjaniVsNicolBolas();
 
-public class DivineVsDemonic extends ExpansionSet {
-    private static final DivineVsDemonic fINSTANCE =  new DivineVsDemonic();
-
-    public static DivineVsDemonic getInstance() {
+    public static AjaniVsNicolBolas getInstance() {
         return fINSTANCE;
     }
 
-    private DivineVsDemonic() {
-        super("Duel Decks: Divine vs. Demonic", "DDC", "mage.sets.divinevsdemonic", new GregorianCalendar(2009, 04, 10).getTime(), SetType.REPRINT);
+    private AjaniVsNicolBolas() {
+        super("Duel Decks: Ajani vs. Nicol Bolas", "DDH", "mage.sets.ajanivsnicolbolas", new GregorianCalendar(2011, 9, 2).getTime(), SetType.REPRINT);
     }
 }

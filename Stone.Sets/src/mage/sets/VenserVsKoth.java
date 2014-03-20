@@ -37,14 +37,14 @@ import mage.constants.SetType;
  * @author LevelX2
  */
 
-public class DivineVsDemonic extends ExpansionSet {
-    private static final DivineVsDemonic fINSTANCE =  new DivineVsDemonic();
+public class VenserVsKoth extends ExpansionSet {
+    private static final VenserVsKoth fINSTANCE =  new VenserVsKoth();
 
-    public static DivineVsDemonic getInstance() {
+    public static VenserVsKoth getInstance() {
         return fINSTANCE;
     }
 
-    private DivineVsDemonic() {
-        super("Duel Decks: Divine vs. Demonic", "DDC", "mage.sets.divinevsdemonic", new GregorianCalendar(2009, 04, 10).getTime(), SetType.REPRINT);
+    private VenserVsKoth() {
+        super("Duel Decks: Venser vs. Koth", "DDI", "mage.sets.venservskoth", new GregorianCalendar(2012, 3, 30).getTime(), SetType.REPRINT);
     }
 }

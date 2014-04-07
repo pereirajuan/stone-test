@@ -25,30 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.abilities.effects.common.DestroyAllEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class ExtinguishAllHope extends CardImpl<ExtinguishAllHope> {
 
-    private final String text;
+    private static final FilterPermanent filter = new FilterPermanent("nonenchantment creatures");
+    
+    static {
+        filter.add(new CardTypePredicate(CardType.CREATURE));
+        filter.add(Predicates.not(new CardTypePredicate(CardType.ENCHANTMENT)));
+    }
+    
+    
+    public ExtinguishAllHope(UUID ownerId) {
+        //TODO: Fix card number
+        super(ownerId, 999, "Extinguish All Hope", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{B}{B}");
+        this.expansionSetCode = "JOU";
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setBlack(true);
+
+        // Destroy all nonenchantment creatures.
+        this.getSpellAbility().addEffect(new DestroyAllEffect(filter));
+        
+    }
+
+    public ExtinguishAllHope(final ExtinguishAllHope card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public ExtinguishAllHope copy() {
+        return new ExtinguishAllHope(this);
     }
-
 }

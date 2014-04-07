@@ -25,30 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.abilityword.ConstellationAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class EidolonOfBlossoms extends CardImpl<EidolonOfBlossoms> {
 
-    private final String text;
+    public EidolonOfBlossoms(UUID ownerId) {
+        super(ownerId, 122, "Eidolon of Blossoms", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT, CardType.CREATURE}, "{2}{G}{G}");
+        this.expansionSetCode = "JOU";
+        this.subtype.add("Spirit");
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setGreen(true);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Constellation - Whenever Eidolon of Blossoms or another enchantment enters the battlefield under your control, draw a card.
+        this.addAbility(new ConstellationAbility(new DrawCardSourceControllerEffect(1)));
+    }
+
+    public EidolonOfBlossoms(final EidolonOfBlossoms card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public EidolonOfBlossoms copy() {
+        return new EidolonOfBlossoms(this);
     }
-
 }

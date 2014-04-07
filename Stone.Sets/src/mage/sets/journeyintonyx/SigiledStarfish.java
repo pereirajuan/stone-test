@@ -25,30 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.ScryEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class SigiledStarfish extends CardImpl<SigiledStarfish> {
 
-    private final String text;
+    public SigiledStarfish(UUID ownerId) {
+        super(ownerId, 52, "Sigiled Starfish", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "JOU";
+        this.subtype.add("Starfish");
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setBlue(true);
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(3);
+
+        // {T}: Scry 1.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new ScryEffect(1), new TapSourceCost()));
+    }
+
+    public SigiledStarfish(final SigiledStarfish card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public SigiledStarfish copy() {
+        return new SigiledStarfish(this);
     }
-
 }

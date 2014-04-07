@@ -25,30 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.abilityword.ConstellationAbility;
+import mage.abilities.effects.common.combat.CantBeBlockedTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class WhitewaterNaiads extends CardImpl<WhitewaterNaiads> {
 
-    private final String text;
+    public WhitewaterNaiads(UUID ownerId) {
+        super(ownerId, 58, "Whitewater Naiads", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT, CardType.CREATURE}, "{3}{U}{U}");
+        this.expansionSetCode = "JOU";
+        this.subtype.add("Nymph");
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setBlue(true);
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
+
+        // Constellation - Whenever Whitewater Naiads or another enchantment enters the battlefield under your control, target creature can't be blocked this turn.
+        Ability ability = new ConstellationAbility(new CantBeBlockedTargetEffect(Duration.EndOfTurn), false);
+        ability.addTarget(new TargetCreaturePermanent(true));        
+        this.addAbility(ability);
+    }
+
+    public WhitewaterNaiads(final WhitewaterNaiads card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public WhitewaterNaiads copy() {
+        return new WhitewaterNaiads(this);
     }
-
 }

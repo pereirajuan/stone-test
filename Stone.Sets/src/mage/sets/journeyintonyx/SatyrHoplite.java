@@ -25,30 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.keyword.HeroicAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.counters.CounterType;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class SatyrHoplite extends CardImpl<SatyrHoplite> {
 
-    private final String text;
+    public SatyrHoplite(UUID ownerId) {
+        super(ownerId, 110, "Satyr Hoplite", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{R}");
+        this.expansionSetCode = "JOU";
+        this.subtype.add("Satyr");
+        this.subtype.add("Soldier");
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setRed(true);
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // Heroic - Whenever you cast a spell that targets Satyr Hoplite, put a +1/+1 counter on Satyr Hoplite.
+        this.addAbility(new HeroicAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance())));
+    }
+
+    public SatyrHoplite(final SatyrHoplite card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public SatyrHoplite copy() {
+        return new SatyrHoplite(this);
     }
-
 }

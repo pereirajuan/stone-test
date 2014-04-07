@@ -25,30 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.continious.GainAbilityControlledEffect;
+import mage.abilities.keyword.HasteAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class CyclopsOfEternalFury extends CardImpl<CyclopsOfEternalFury> {
 
-    private final String text;
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("tapped creature");
+    
+    public CyclopsOfEternalFury(UUID ownerId) {
+        super(ownerId, 92, "Cyclops of Eternal Fury", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT, CardType.CREATURE}, "{4}{R}{R}");
+        this.expansionSetCode = "JOU";
+        this.subtype.add("Cyclops");
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setRed(true);
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(3);
+
+        // Creatures you control have haste.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(HasteAbility.getInstance(), Duration.WhileOnBattlefield, filter)));
+    }
+
+    public CyclopsOfEternalFury(final CyclopsOfEternalFury card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public CyclopsOfEternalFury copy() {
+        return new CyclopsOfEternalFury(this);
     }
-
 }

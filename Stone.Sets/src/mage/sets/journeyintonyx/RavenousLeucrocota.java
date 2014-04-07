@@ -25,30 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.journeyintonyx;
 
-package mage.constants;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.MonstrosityAbility;
+import mage.abilities.keyword.VigilanceAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
  * @author LevelX2
  */
-public enum AbilityWord {
-    BLOODRUSH("Bloodrush"),
-    CONSTELLATION("Constellation"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    LANDFALL("Landfall"),
-    METALCRAFT("Metalcraft");
+public class RavenousLeucrocota extends CardImpl<RavenousLeucrocota> {
 
-    private final String text;
+    public RavenousLeucrocota(UUID ownerId) {
+        super(ownerId, 136, "Ravenous Leucrocota", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{G}");
+        this.expansionSetCode = "JOU";
+        this.subtype.add("Beast");
 
-    AbilityWord(String text) {
-        this.text = text;
+        this.color.setGreen(true);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(4);
+
+        // Vigilance
+        this.addAbility(VigilanceAbility.getInstance());
+        // {6}{G}: Monstrosity 3.
+        this.addAbility(new MonstrosityAbility("{6}{G}", 3));
+    }
+
+    public RavenousLeucrocota(final RavenousLeucrocota card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public RavenousLeucrocota copy() {
+        return new RavenousLeucrocota(this);
     }
-
 }

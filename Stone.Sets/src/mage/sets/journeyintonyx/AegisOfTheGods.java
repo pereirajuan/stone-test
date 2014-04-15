@@ -28,39 +28,42 @@
 package mage.sets.journeyintonyx;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.effects.common.ScryEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.continious.GainAbilityControllerEffect;
+import mage.abilities.keyword.HexproofAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.filter.common.FilterInstantOrSorceryCard;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Zone;
 
 /**
  *
  * @author LevelX2
  */
-public class SpiteOfMogis extends CardImpl<SpiteOfMogis> {
+public class AegisOfTheGods extends CardImpl<AegisOfTheGods> {
 
-    public SpiteOfMogis(UUID ownerId) {
-        super(ownerId, 113, "Spite of Mogis", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{R}");
+    public AegisOfTheGods(UUID ownerId) {
+        super(ownerId, 1, "Aegis of the Gods", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT, CardType.CREATURE}, "{1}{W}");
         this.expansionSetCode = "JOU";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Spite of Mogis deals damage to target creature equal to the number of instant and sorcery cards in your graveyard. Scry 1.
-        this.getSpellAbility().addEffect(new DamageTargetEffect(new CardsInControllerGraveyardCount(new FilterInstantOrSorceryCard("instant and sorcery cards"))));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(true));
-        this.getSpellAbility().addEffect(new ScryEffect(1));
+        // You have hexproof.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityControllerEffect(HexproofAbility.getInstance(), Duration.WhileOnBattlefield)));
     }
 
-    public SpiteOfMogis(final SpiteOfMogis card) {
+    public AegisOfTheGods(final AegisOfTheGods card) {
         super(card);
     }
 
     @Override
-    public SpiteOfMogis copy() {
-        return new SpiteOfMogis(this);
+    public AegisOfTheGods copy() {
+        return new AegisOfTheGods(this);
     }
 }

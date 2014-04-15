@@ -28,39 +28,46 @@
 package mage.sets.journeyintonyx;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.effects.common.ScryEffect;
+import mage.MageInt;
+import mage.abilities.DelayedTriggeredAbility;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.common.delayed.AtEndOfTurnDelayedTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.DestroyAllEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterInstantOrSorceryCard;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.FilterPermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class SpiteOfMogis extends CardImpl<SpiteOfMogis> {
+public class BearerOfTheHeavens extends CardImpl<BearerOfTheHeavens> {
 
-    public SpiteOfMogis(UUID ownerId) {
-        super(ownerId, 113, "Spite of Mogis", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{R}");
+    public BearerOfTheHeavens(UUID ownerId) {
+        super(ownerId, 9991, "Bearer of the Heavens", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{7}{R}");
         this.expansionSetCode = "JOU";
+        this.subtype.add("Giant");
 
         this.color.setRed(true);
+        this.power = new MageInt(10);
+        this.toughness = new MageInt(10);
 
-        // Spite of Mogis deals damage to target creature equal to the number of instant and sorcery cards in your graveyard. Scry 1.
-        this.getSpellAbility().addEffect(new DamageTargetEffect(new CardsInControllerGraveyardCount(new FilterInstantOrSorceryCard("instant and sorcery cards"))));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(true));
-        this.getSpellAbility().addEffect(new ScryEffect(1));
+        // When Bearer of the Heavens dies, destroy all permanents at the beginning of the next end step.
+        DelayedTriggeredAbility delayedAbility = new AtEndOfTurnDelayedTriggeredAbility(new DestroyAllEffect(new FilterPermanent("permanents")));
+        Effect effect = new CreateDelayedTriggeredAbilityEffect(delayedAbility);
+        effect.setText("destroy all permanents at the beginning of the next end step");
+        this.addAbility(new DiesTriggeredAbility(effect, false));
     }
 
-    public SpiteOfMogis(final SpiteOfMogis card) {
+    public BearerOfTheHeavens(final BearerOfTheHeavens card) {
         super(card);
     }
 
     @Override
-    public SpiteOfMogis copy() {
-        return new SpiteOfMogis(this);
+    public BearerOfTheHeavens copy() {
+        return new BearerOfTheHeavens(this);
     }
 }

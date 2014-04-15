@@ -28,39 +28,39 @@
 package mage.sets.journeyintonyx;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.effects.common.ScryEffect;
+import mage.MageInt;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
+import mage.abilities.effects.common.GainLifeEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterInstantOrSorceryCard;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.TargetController;
 
 /**
  *
  * @author LevelX2
  */
-public class SpiteOfMogis extends CardImpl<SpiteOfMogis> {
+public class NyxFleeceRam extends CardImpl<NyxFleeceRam> {
 
-    public SpiteOfMogis(UUID ownerId) {
-        super(ownerId, 113, "Spite of Mogis", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{R}");
+    public NyxFleeceRam(UUID ownerId) {
+        super(ownerId, 18, "Nyx-Fleece Ram", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT, CardType.CREATURE}, "{1}{W}");
         this.expansionSetCode = "JOU";
+        this.subtype.add("Sheep");
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(5);
 
-        // Spite of Mogis deals damage to target creature equal to the number of instant and sorcery cards in your graveyard. Scry 1.
-        this.getSpellAbility().addEffect(new DamageTargetEffect(new CardsInControllerGraveyardCount(new FilterInstantOrSorceryCard("instant and sorcery cards"))));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(true));
-        this.getSpellAbility().addEffect(new ScryEffect(1));
+        // At the beginning of your upkeep, you gain 1 life.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new GainLifeEffect(1), TargetController.YOU, false));
     }
 
-    public SpiteOfMogis(final SpiteOfMogis card) {
+    public NyxFleeceRam(final NyxFleeceRam card) {
         super(card);
     }
 
     @Override
-    public SpiteOfMogis copy() {
-        return new SpiteOfMogis(this);
+    public NyxFleeceRam copy() {
+        return new NyxFleeceRam(this);
     }
 }

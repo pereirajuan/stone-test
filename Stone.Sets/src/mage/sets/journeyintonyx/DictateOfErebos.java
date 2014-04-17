@@ -28,43 +28,47 @@
 package mage.sets.journeyintonyx;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
+import mage.abilities.common.DiesCreatureTriggeredAbility;
+import mage.abilities.effects.common.SacrificeOpponentsEffect;
+import mage.abilities.keyword.FlashAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterCreatureCard;
-import mage.target.common.TargetCardInYourGraveyard;
+import mage.constants.TargetController;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class FontOfReturn extends CardImpl<FontOfReturn> {
-
-    public FontOfReturn(UUID ownerId) {
-        super(ownerId, 71, "Font of Return", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{B}");
+public class DictateOfErebos extends CardImpl<DictateOfErebos> {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature you control");
+    
+    static {
+        filter.add(new ControllerPredicate(TargetController.YOU));
+    }
+    
+    public DictateOfErebos(UUID ownerId) {
+        super(ownerId, 63, "Dictate of Erebos", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{3}{B}{B}");
         this.expansionSetCode = "JOU";
 
         this.color.setBlack(true);
 
-        // {3}{B}, Sacrifice Font of Return: Return up to three target creature cards from your graveyard to your hand.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnFromGraveyardToHandTargetEffect(), new ManaCostsImpl("{3}{B}"));
-        ability.addCost(new SacrificeSourceCost());
-        ability.addTarget(new TargetCardInYourGraveyard(0, 3, new FilterCreatureCard("creature cards from your graveyard")));
-        this.addAbility(ability);        
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        // Whenever a creature you control dies, each opponent sacrifices a creature.
+        this.addAbility(new DiesCreatureTriggeredAbility(new SacrificeOpponentsEffect(new FilterControlledCreaturePermanent("a creature")), false, filter));        
     }
 
-    public FontOfReturn(final FontOfReturn card) {
+    public DictateOfErebos(final DictateOfErebos card) {
         super(card);
     }
 
     @Override
-    public FontOfReturn copy() {
-        return new FontOfReturn(this);
+    public DictateOfErebos copy() {
+        return new DictateOfErebos(this);
     }
 }

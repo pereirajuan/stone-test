@@ -28,43 +28,64 @@
 package mage.sets.journeyintonyx;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.ObjectColor;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.costs.common.SacrificeSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.keyword.ReachAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterCreatureCard;
-import mage.target.common.TargetCardInYourGraveyard;
+import mage.game.permanent.token.Token;
 
 /**
  *
  * @author LevelX2
  */
-public class FontOfReturn extends CardImpl<FontOfReturn> {
+public class RenownedWeaver extends CardImpl<RenownedWeaver> {
 
-    public FontOfReturn(UUID ownerId) {
-        super(ownerId, 71, "Font of Return", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{B}");
+    public RenownedWeaver(UUID ownerId) {
+        super(ownerId, 137, "Renowned Weaver", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{G}");
         this.expansionSetCode = "JOU";
+        this.subtype.add("Human");
+        this.subtype.add("Shaman");
 
-        this.color.setBlack(true);
+        this.color.setGreen(true);
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // {3}{B}, Sacrifice Font of Return: Return up to three target creature cards from your graveyard to your hand.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnFromGraveyardToHandTargetEffect(), new ManaCostsImpl("{3}{B}"));
+        // {1}{G}, Sacrifice Renowned Weaver: Put a 1/3 green Spider enchantment creature token with reach onto the battlefield.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CreateTokenEffect(new RenownedWeaverSpiderToken(), 1), new ManaCostsImpl("{1}{G}")) ;
         ability.addCost(new SacrificeSourceCost());
-        ability.addTarget(new TargetCardInYourGraveyard(0, 3, new FilterCreatureCard("creature cards from your graveyard")));
-        this.addAbility(ability);        
+        this.addAbility(ability);
+        
     }
 
-    public FontOfReturn(final FontOfReturn card) {
+    public RenownedWeaver(final RenownedWeaver card) {
         super(card);
     }
 
     @Override
-    public FontOfReturn copy() {
-        return new FontOfReturn(this);
+    public RenownedWeaver copy() {
+        return new RenownedWeaver(this);
+    }
+}
+
+class RenownedWeaverSpiderToken extends Token {
+
+    public RenownedWeaverSpiderToken() {
+        super("Spider", "1/3 green Spider enchantment creature token with reach");
+        this.setOriginalExpansionSetCode("JOU");
+        cardType.add(CardType.ENCHANTMENT);
+        cardType.add(CardType.CREATURE);        
+        color.setColor(ObjectColor.GREEN);
+        subtype.add("Spider");
+        power = new MageInt(1);
+        toughness = new MageInt(3);
+        this.addAbility(ReachAbility.getInstance());
     }
 }

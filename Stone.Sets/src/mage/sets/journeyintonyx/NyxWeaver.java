@@ -28,43 +28,55 @@
 package mage.sets.journeyintonyx;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.ExileSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffect;
 import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
+import mage.abilities.keyword.ReachAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.common.FilterCreatureCard;
 import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
  * @author LevelX2
  */
-public class FontOfReturn extends CardImpl<FontOfReturn> {
+public class NyxWeaver extends CardImpl<NyxWeaver> {
 
-    public FontOfReturn(UUID ownerId) {
-        super(ownerId, 71, "Font of Return", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{B}");
+    public NyxWeaver(UUID ownerId) {
+        super(ownerId, 153, "Nyx Weaver", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT, CardType.CREATURE}, "{1}{B}{G}");
         this.expansionSetCode = "JOU";
+        this.subtype.add("Spider");
 
+        this.color.setGreen(true);
         this.color.setBlack(true);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
-        // {3}{B}, Sacrifice Font of Return: Return up to three target creature cards from your graveyard to your hand.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnFromGraveyardToHandTargetEffect(), new ManaCostsImpl("{3}{B}"));
-        ability.addCost(new SacrificeSourceCost());
-        ability.addTarget(new TargetCardInYourGraveyard(0, 3, new FilterCreatureCard("creature cards from your graveyard")));
-        this.addAbility(ability);        
+        // Reach
+        this.addAbility(ReachAbility.getInstance());
+        // At the beginning of your upkeep, put the top two cards of your library into your graveyard.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new PutTopCardOfLibraryIntoGraveControllerEffect(2), TargetController.YOU, false));
+        // {1}{B}{G}, Exile Nyx Weaver: Return target card from your graveyard to your hand.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnFromGraveyardToHandTargetEffect(), new ManaCostsImpl("{1}{B}{G}"));
+        ability.addCost(new ExileSourceCost());
+        ability.addTarget(new TargetCardInYourGraveyard(true));
+        this.addAbility(ability);
     }
 
-    public FontOfReturn(final FontOfReturn card) {
+    public NyxWeaver(final NyxWeaver card) {
         super(card);
     }
 
     @Override
-    public FontOfReturn copy() {
-        return new FontOfReturn(this);
+    public NyxWeaver copy() {
+        return new NyxWeaver(this);
     }
 }

@@ -29,64 +29,68 @@
 package mage.abilities.effects.common.counter;
 
 import mage.abilities.Ability;
+import mage.abilities.Mode;
 import mage.abilities.effects.OneShotEffect;
 import mage.cards.Card;
 import mage.constants.Outcome;
 import mage.counters.Counter;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
+import mage.util.CardUtil;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
 
-public class RemoveCounterSourceEffect extends OneShotEffect<RemoveCounterSourceEffect> {
+public class RemoveCounterTargetEffect extends OneShotEffect<RemoveCounterTargetEffect> {
     private final Counter counter;
 
-    public RemoveCounterSourceEffect(Counter counter) {
+    public RemoveCounterTargetEffect(Counter counter) {
         super(Outcome.UnboostCreature);
         this.counter = counter;
-        setText();
     }
 
-    public RemoveCounterSourceEffect(RemoveCounterSourceEffect effect) {
+    public RemoveCounterTargetEffect(RemoveCounterTargetEffect effect) {
         super(effect);
         this.counter = effect.counter.copy();
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
-        Permanent p = game.getPermanent(source.getSourceId());
+        Permanent p = game.getPermanent(targetPointer.getFirst(game, source));
         if (p != null && p.getCounters().getCount(counter.getName()) >= counter.getCount()) {
             p.removeCounters(counter.getName(), counter.getCount(), game);
             game.informPlayers(new StringBuilder("Removed ").append(counter.getCount()).append(" ").append(counter.getName())
                     .append(" counter from ").append(p.getName()).toString());
             return true;
         }
-        Card c = game.getCard(source.getSourceId());
+        Card c = game.getCard(targetPointer.getFirst(game, source));
         if (c != null && c.getCounters().getCount(counter.getName()) >= counter.getCount()) {
             c.removeCounters(counter.getName(), counter.getCount(), game);
             game.informPlayers(new StringBuilder("Removed ").append(counter.getCount()).append(" ").append(counter.getName())
                     .append(" counter from ").append(c.getName())
                     .append(" (").append(c.getCounters().getCount(counter.getName())).append(" left)").toString());
             return true;
-        }    
+        }
         return false;
     }
 
     @Override
-    public RemoveCounterSourceEffect copy() {
-        return new RemoveCounterSourceEffect(this);
+    public RemoveCounterTargetEffect copy() {
+        return new RemoveCounterTargetEffect(this);
     }
 
-     private void setText() {
-        if (counter.getCount() > 1) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("remove ").append(Integer.toString(counter.getCount())).append(" ").append(counter.getName()).append(" counters from {this}");
-            staticText = sb.toString();
-        } else {
-            staticText = "remove a " + counter.getName() + " counter from {this}";
-        }
+    @Override
+     public String getText(Mode mode) {
+         if (staticText != null && !staticText.isEmpty()) {
+             return staticText;
+         }
+        StringBuilder sb = new StringBuilder("remove ");
+        sb.append(CardUtil.numberToText(counter.getCount(), "a"));
+        sb.append(" ").append(counter.getName());
+        sb.append(counter.getCount() > 1 ?" counters from ":" counter from ");
+        sb.append(mode.getTargets().get(0).getTargetName());
+        return sb.toString();
     }
 }

@@ -25,51 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.championsofkamigawa;
+package mage.sets.magic2015;
 
 import java.util.UUID;
-import mage.abilities.effects.Effect;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.effects.common.continious.BoostControlledEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.ExileSourceFromGraveCost;
+import mage.abilities.costs.mana.GenericManaCost;
 import mage.abilities.effects.common.continious.GainAbilityControlledEffect;
-import mage.abilities.keyword.FearAbility;
+import mage.abilities.keyword.IndestructibleAbility;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
+import mage.constants.CardType;
 import mage.constants.Duration;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class DanceOfShadows extends CardImpl {
+public class SoulOfNewPhyrexia extends CardImpl {
 
-    static private FilterCreaturePermanent filter = new FilterCreaturePermanent("Creatures you control");
-    
-    public DanceOfShadows (UUID ownerId) {
-        super(ownerId, 108, "Dance of Shadows", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{B}{B}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Arcane");
-        this.color.setBlack(true);
-        
-        // Creatures you control get +1/+0 and gain fear until end of turn. (They can't be blocked except by artifact creatures and/or black creatures.)
-        Effect effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, filter);
-        effect.setText("Creatures you control get +1/+0");
-        this.getSpellAbility().addEffect(effect);
-        effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, filter);
-        effect.setText("and gain fear until end of turn");
-        this.getSpellAbility().addEffect(new GainAbilityControlledEffect(FearAbility.getInstance(), Duration.EndOfTurn, filter));
+    public SoulOfNewPhyrexia(UUID ownerId) {
+        super(ownerId, 231, "Soul of New Phyrexia", Rarity.MYTHIC, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{6}");
+        this.expansionSetCode = "M15";
+        this.subtype.add("Avatar");
+
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+        // {5}: Permanents you control gain indestructible until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn), new GenericManaCost(5)));
+        // {5}, Exile Soul of New Phyrexia from your graveyard: Permanents you control gain indestructible until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.GRAVEYARD, new GainAbilityControlledEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn), new GenericManaCost(5));
+        ability.addCost(new ExileSourceFromGraveCost());
+        this.addAbility(ability);
     }
 
-    public DanceOfShadows (final DanceOfShadows card) {
+    public SoulOfNewPhyrexia(final SoulOfNewPhyrexia card) {
         super(card);
     }
 
     @Override
-    public DanceOfShadows copy() {
-        return new DanceOfShadows(this);
+    public SoulOfNewPhyrexia copy() {
+        return new SoulOfNewPhyrexia(this);
     }
-
 }

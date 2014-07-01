@@ -25,51 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.championsofkamigawa;
+package mage.sets.magic2015;
 
 import java.util.UUID;
-import mage.abilities.effects.Effect;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.effects.common.continious.BoostControlledEffect;
-import mage.abilities.effects.common.continious.GainAbilityControlledEffect;
-import mage.abilities.keyword.FearAbility;
-import mage.cards.CardImpl;
-import mage.constants.Duration;
-import mage.filter.common.FilterCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class DanceOfShadows extends CardImpl {
+public class BronzeSable extends mage.sets.theros.BronzeSable {
 
-    static private FilterCreaturePermanent filter = new FilterCreaturePermanent("Creatures you control");
-    
-    public DanceOfShadows (UUID ownerId) {
-        super(ownerId, 108, "Dance of Shadows", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{B}{B}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Arcane");
-        this.color.setBlack(true);
-        
-        // Creatures you control get +1/+0 and gain fear until end of turn. (They can't be blocked except by artifact creatures and/or black creatures.)
-        Effect effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, filter);
-        effect.setText("Creatures you control get +1/+0");
-        this.getSpellAbility().addEffect(effect);
-        effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, filter);
-        effect.setText("and gain fear until end of turn");
-        this.getSpellAbility().addEffect(new GainAbilityControlledEffect(FearAbility.getInstance(), Duration.EndOfTurn, filter));
+    public BronzeSable(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 9902;
+        this.expansionSetCode = "M15";
     }
 
-    public DanceOfShadows (final DanceOfShadows card) {
+    public BronzeSable(final BronzeSable card) {
         super(card);
     }
 
     @Override
-    public DanceOfShadows copy() {
-        return new DanceOfShadows(this);
+    public BronzeSable copy() {
+        return new BronzeSable(this);
     }
-
 }

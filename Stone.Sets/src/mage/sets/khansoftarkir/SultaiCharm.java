@@ -28,47 +28,63 @@
 package mage.sets.khansoftarkir;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.abilityword.RaidAbility;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.effects.common.discard.DiscardTargetEffect;
+import mage.abilities.Mode;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.common.DrawDiscardControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetOpponent;
+import mage.filter.common.FilterArtifactOrEnchantmentPermanent;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.MonocoloredPredicate;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class MarduSkullhunter extends CardImpl {
 
-    public MarduSkullhunter(UUID ownerId) {
-        super(ownerId, 78, "Mardu Skullhunter", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+public class SultaiCharm extends CardImpl {
+
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("monocolored creature");
+
+    static {
+        filter.add(new MonocoloredPredicate());
+    }
+
+    public SultaiCharm(UUID ownerId) {
+        super(ownerId, 204, "Sultai Charm", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{B}{G}{U}");
         this.expansionSetCode = "KTK";
-        this.subtype.add("Human");
-        this.subtype.add("Warrior");
 
+        this.color.setBlue(true);
+        this.color.setGreen(true);
         this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
 
-        // Mardu Skullhunter enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
-        // <em>Raid</em> - When Mardu Skullhunter enters the battlefield, if you attacked with a creature this turn, target opponent discards a card.
-        Ability ability = new RaidAbility(this, new DiscardTargetEffect(1), false);
-        ability.addTarget(new TargetOpponent());
-        this.addAbility(ability);
+        // Choose one -
+        // <strong>*</strong> Destroy target monocolored creature.
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(filter));
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        
+        // <strong>*</strong> Destroy target artifact or enchantment.
+        Mode mode = new Mode();
+        mode.getEffects().add(new DestroyTargetEffect());
+        mode.getTargets().add(new TargetPermanent(new FilterArtifactOrEnchantmentPermanent()));
+        this.getSpellAbility().addMode(mode);
+        
+        // <strong>*</strong> Draw two cards, then discard a card.
+        mode = new Mode();
+        mode.getEffects().add(new DrawDiscardControllerEffect(2,1));
+        this.getSpellAbility().addMode(mode);
 
     }
 
-    public MarduSkullhunter(final MarduSkullhunter card) {
+    public SultaiCharm(final SultaiCharm card) {
         super(card);
     }
 
     @Override
-    public MarduSkullhunter copy() {
-        return new MarduSkullhunter(this);
+    public SultaiCharm copy() {
+        return new SultaiCharm(this);
     }
 }

@@ -28,47 +28,38 @@
 package mage.sets.khansoftarkir;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.abilityword.RaidAbility;
 import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.effects.common.discard.DiscardTargetEffect;
+import mage.abilities.mana.BlackManaAbility;
+import mage.abilities.mana.RedManaAbility;
+import mage.abilities.mana.WhiteManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetOpponent;
 
 /**
  *
  * @author LevelX2
  */
-public class MarduSkullhunter extends CardImpl {
+public class NomadOutpost extends CardImpl {
 
-    public MarduSkullhunter(UUID ownerId) {
-        super(ownerId, 78, "Mardu Skullhunter", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+    public NomadOutpost(UUID ownerId) {
+        super(ownerId, 237, "Nomad Outpost", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
         this.expansionSetCode = "KTK";
-        this.subtype.add("Human");
-        this.subtype.add("Warrior");
 
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Mardu Skullhunter enters the battlefield tapped.
+        // Nomad Outpost enters the battlefield tapped.
         this.addAbility(new EntersBattlefieldTappedAbility());
-        // <em>Raid</em> - When Mardu Skullhunter enters the battlefield, if you attacked with a creature this turn, target opponent discards a card.
-        Ability ability = new RaidAbility(this, new DiscardTargetEffect(1), false);
-        ability.addTarget(new TargetOpponent());
-        this.addAbility(ability);
-
+        // {T}: Add {R}, {W}, or {B} to your mana pool.
+        this.addAbility(new RedManaAbility());
+        this.addAbility(new WhiteManaAbility());
+        this.addAbility(new BlackManaAbility());
     }
 
-    public MarduSkullhunter(final MarduSkullhunter card) {
+    public NomadOutpost(final NomadOutpost card) {
         super(card);
     }
 
     @Override
-    public MarduSkullhunter copy() {
-        return new MarduSkullhunter(this);
+    public NomadOutpost copy() {
+        return new NomadOutpost(this);
     }
 }

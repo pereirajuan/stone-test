@@ -25,56 +25,65 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.alarareborn;
+package mage.sets.khansoftarkir;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldAllTriggeredAbility;
+import mage.abilities.common.AttacksEachTurnStaticAbility;
+import mage.abilities.common.DiesAndDealtDamageThisTurnTriggeredAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.MyTurnCondition;
+import mage.abilities.decorator.ConditionalContinousEffect;
+import mage.abilities.effects.common.continious.GainAbilitySourceEffect;
 import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.keyword.HasteAbility;
+import mage.abilities.keyword.IndestructibleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.counters.CounterType;
-import mage.filter.Filter;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.predicate.mageobject.PowerPredicate;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class GodtrackerOfJund extends CardImpl {
-    
-    final private static FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
-    
-    static {
-        filter.add(new PowerPredicate(Filter.ComparisonType.GreaterThan, 4));
-    }
-    
-    String rule = "Whenever a creature with power 5 or greater enters the battlefield under your control, you may put a +1/+1 counter on {this}.";
+public class ZurgoHelmsmasher extends CardImpl {
 
-    public GodtrackerOfJund(UUID ownerId) {
-        super(ownerId, 55, "Godtracker of Jund", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{R}{G}");
-        this.expansionSetCode = "ARB";
-        this.subtype.add("Elf");
-        this.subtype.add("Shaman");
+    public ZurgoHelmsmasher(UUID ownerId) {
+        super(ownerId, 214, "Zurgo Helmsmasher", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{R}{W}{B}");
+        this.expansionSetCode = "KTK";
+        this.supertype.add("Legendary");
+        this.subtype.add("Orc");
+        this.subtype.add("Warrior");
 
         this.color.setRed(true);
-        this.color.setGreen(true);
-        this.power = new MageInt(2);
+        this.color.setBlack(true);
+        this.color.setWhite(true);
+        this.power = new MageInt(7);
         this.toughness = new MageInt(2);
 
-        // Whenever a creature with power 5 or greater enters the battlefield under your control, you may put a +1/+1 counter on Godtracker of Jund.
-        this.addAbility(new EntersBattlefieldAllTriggeredAbility(Zone.BATTLEFIELD, new AddCountersSourceEffect(CounterType.P1P1.createInstance()), filter, true, rule, true));
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
+        // Zurgo Helmsmasher attacks each combat if able.
+        this.addAbility(new AttacksEachTurnStaticAbility());
+        // Zurgo Helmsmasher has indestructible as long as it's your turn.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, 
+                new ConditionalContinousEffect(new GainAbilitySourceEffect(IndestructibleAbility.getInstance(), Duration.WhileOnBattlefield),
+                MyTurnCondition.getInstance(),
+                "{this} has indestructible as long as it's your turn")));
+
+        // Whenever a creature dealt damage by Zurgo Helmsmasher this turn dies, put a +1/+1 counter on Zurgo Helmsmasher.
+        this.addAbility(new DiesAndDealtDamageThisTurnTriggeredAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance()), false));
     }
 
-    public GodtrackerOfJund(final GodtrackerOfJund card) {
+    public ZurgoHelmsmasher(final ZurgoHelmsmasher card) {
         super(card);
     }
 
     @Override
-    public GodtrackerOfJund copy() {
-        return new GodtrackerOfJund(this);
+    public ZurgoHelmsmasher copy() {
+        return new ZurgoHelmsmasher(this);
     }
 }

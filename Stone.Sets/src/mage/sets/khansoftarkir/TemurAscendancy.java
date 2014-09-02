@@ -28,47 +28,53 @@
 package mage.sets.khansoftarkir;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.abilityword.RaidAbility;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.effects.common.discard.DiscardTargetEffect;
+import mage.abilities.common.EntersBattlefieldAllTriggeredAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continious.GainAbilityControlledEffect;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetOpponent;
+import mage.constants.Zone;
+import mage.filter.Filter;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.PowerPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class MarduSkullhunter extends CardImpl {
+public class TemurAscendancy extends CardImpl {
 
-    public MarduSkullhunter(UUID ownerId) {
-        super(ownerId, 78, "Mardu Skullhunter", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
-        this.expansionSetCode = "KTK";
-        this.subtype.add("Human");
-        this.subtype.add("Warrior");
+    final private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creature with power 4 or greater");
 
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Mardu Skullhunter enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
-        // <em>Raid</em> - When Mardu Skullhunter enters the battlefield, if you attacked with a creature this turn, target opponent discards a card.
-        Ability ability = new RaidAbility(this, new DiscardTargetEffect(1), false);
-        ability.addTarget(new TargetOpponent());
-        this.addAbility(ability);
-
+    static {
+        filter.add(new PowerPredicate(Filter.ComparisonType.GreaterThan, 3));
     }
 
-    public MarduSkullhunter(final MarduSkullhunter card) {
+    public TemurAscendancy(UUID ownerId) {
+        super(ownerId, 207, "Temur Ascendancy", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{G}{U}{R}");
+        this.expansionSetCode = "KTK";
+
+        this.color.setRed(true);
+        this.color.setBlue(true);
+        this.color.setGreen(true);
+
+        // Creatures you control have haste.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(HasteAbility.getInstance(), Duration.WhileOnBattlefield, new FilterControlledCreaturePermanent("Creatures"))));
+        // Whenever a creature with power 4 or greater enters the battlefield under your control, you may draw a card.
+        this.addAbility(new EntersBattlefieldAllTriggeredAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1), filter, true));
+    }
+
+    public TemurAscendancy(final TemurAscendancy card) {
         super(card);
     }
 
     @Override
-    public MarduSkullhunter copy() {
-        return new MarduSkullhunter(this);
+    public TemurAscendancy copy() {
+        return new TemurAscendancy(this);
     }
 }

@@ -25,41 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.worldwake;
+package mage.sets.commander2014;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.ReturnToHandChosenControlledPermanentEffect;
+import mage.abilities.keyword.FlashAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageAllEffect;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.common.FilterControlledCreaturePermanent;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class ChainReaction extends CardImpl {
+public class WhitemaneLion extends CardImpl {
 
-    public ChainReaction(UUID ownerId) {
-        super(ownerId, 74, "Chain Reaction", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
-        this.expansionSetCode = "WWK";
+    public WhitemaneLion(UUID ownerId) {
+        super(ownerId, 96, "Whitemane Lion", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{W}");
+        this.expansionSetCode = "C14";
+        this.subtype.add("Cat");
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Chain Reaction deals X damage to each creature, where X is the number of creatures on the battlefield.
-        Effect effect = new DamageAllEffect(new PermanentsOnBattlefieldCount(new FilterCreaturePermanent()), new FilterCreaturePermanent());
-        effect.setText("{this} deals X damage to each creature, where X is the number of creatures on the battlefield");
-        this.getSpellAbility().addEffect(effect);
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        // When Whitemane Lion enters the battlefield, return a creature you control to its owner's hand.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new ReturnToHandChosenControlledPermanentEffect(new FilterControlledCreaturePermanent())));
+
     }
 
-    public ChainReaction(final ChainReaction card) {
+    public WhitemaneLion(final WhitemaneLion card) {
         super(card);
     }
 
     @Override
-    public ChainReaction copy() {
-        return new ChainReaction(this);
+    public WhitemaneLion copy() {
+        return new WhitemaneLion(this);
     }
 }

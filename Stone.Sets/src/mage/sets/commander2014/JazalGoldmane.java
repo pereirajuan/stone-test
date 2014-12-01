@@ -25,41 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.worldwake;
+package mage.sets.commander2014;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageAllEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.dynamicvalue.DynamicValue;
+import mage.abilities.dynamicvalue.common.AttackingCreatureCount;
+import mage.abilities.effects.common.continious.BoostControlledEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterAttackingCreature;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class ChainReaction extends CardImpl {
+public class JazalGoldmane extends CardImpl {
 
-    public ChainReaction(UUID ownerId) {
-        super(ownerId, 74, "Chain Reaction", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
-        this.expansionSetCode = "WWK";
+    public JazalGoldmane(UUID ownerId) {
+        super(ownerId, 9, "Jazal Goldmane", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{W}{W}");
+        this.expansionSetCode = "C14";
+        this.supertype.add("Legendary");
+        this.subtype.add("Cat");
+        this.subtype.add("Warrior");
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-        // Chain Reaction deals X damage to each creature, where X is the number of creatures on the battlefield.
-        Effect effect = new DamageAllEffect(new PermanentsOnBattlefieldCount(new FilterCreaturePermanent()), new FilterCreaturePermanent());
-        effect.setText("{this} deals X damage to each creature, where X is the number of creatures on the battlefield");
-        this.getSpellAbility().addEffect(effect);
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+        // {3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking creatures.
+        DynamicValue xValue = new AttackingCreatureCount("the number of attacking creatures");
+        this.addAbility(new SimpleActivatedAbility(
+                Zone.BATTLEFIELD,
+                new BoostControlledEffect(xValue, xValue , Duration.WhileOnBattlefield, new FilterAttackingCreature("Attacking creatures"), false),
+                new ManaCostsImpl("{3}{W}{W}")));
     }
 
-    public ChainReaction(final ChainReaction card) {
+    public JazalGoldmane(final JazalGoldmane card) {
         super(card);
     }
 
     @Override
-    public ChainReaction copy() {
-        return new ChainReaction(this);
+    public JazalGoldmane copy() {
+        return new JazalGoldmane(this);
     }
 }

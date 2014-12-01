@@ -25,41 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.worldwake;
+package mage.sets.commander2014;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.constants.Rarity;
 import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageAllEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 import mage.filter.common.FilterCreaturePermanent;
+import mage.game.permanent.token.SoldierToken;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class ChainReaction extends CardImpl {
+public class DeployToTheFront extends CardImpl {
 
-    public ChainReaction(UUID ownerId) {
-        super(ownerId, 74, "Chain Reaction", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
-        this.expansionSetCode = "WWK";
+    public DeployToTheFront(UUID ownerId) {
+        super(ownerId, 6, "Deploy to the Front", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{5}{W}{W}");
+        this.expansionSetCode = "C14";
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
 
-        // Chain Reaction deals X damage to each creature, where X is the number of creatures on the battlefield.
-        Effect effect = new DamageAllEffect(new PermanentsOnBattlefieldCount(new FilterCreaturePermanent()), new FilterCreaturePermanent());
-        effect.setText("{this} deals X damage to each creature, where X is the number of creatures on the battlefield");
+        // Put X 1/1 white Soldier creature tokens onto the battlefield, where X is the number of creatures on the battlefield.
+        Effect effect = new CreateTokenEffect(new SoldierToken("C14"), new PermanentsOnBattlefieldCount(new FilterCreaturePermanent("the number of creatures on the battlefield")));
+        effect.setText("Put X 1/1 white Soldier creature tokens onto the battlefield, where X is the number of creatures on the battlefield");
         this.getSpellAbility().addEffect(effect);
     }
 
-    public ChainReaction(final ChainReaction card) {
+    public DeployToTheFront(final DeployToTheFront card) {
         super(card);
     }
 
     @Override
-    public ChainReaction copy() {
-        return new ChainReaction(this);
+    public DeployToTheFront copy() {
+        return new DeployToTheFront(this);
     }
 }

@@ -25,41 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.worldwake;
+package mage.sets.commander2014;
 
 import java.util.UUID;
+import mage.abilities.condition.common.OpponentControllsMoreCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageAllEffect;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.common.FilterBasicLandCard;
+import mage.filter.common.FilterLandPermanent;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class ChainReaction extends CardImpl {
+public class GiftOfEstates extends CardImpl {
 
-    public ChainReaction(UUID ownerId) {
-        super(ownerId, 74, "Chain Reaction", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
-        this.expansionSetCode = "WWK";
+    public GiftOfEstates(UUID ownerId) {
+        super(ownerId, 73, "Gift of Estates", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{1}{W}");
+        this.expansionSetCode = "C14";
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
 
-        // Chain Reaction deals X damage to each creature, where X is the number of creatures on the battlefield.
-        Effect effect = new DamageAllEffect(new PermanentsOnBattlefieldCount(new FilterCreaturePermanent()), new FilterCreaturePermanent());
-        effect.setText("{this} deals X damage to each creature, where X is the number of creatures on the battlefield");
-        this.getSpellAbility().addEffect(effect);
+        // If an opponent controls more lands than you, search your library for up to three Plains cards, reveal them, and put them into your hand. Then shuffle your library.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(
+                new SearchLibraryPutInHandEffect(new TargetCardInLibrary(0, 3, new FilterBasicLandCard()), true),
+                new OpponentControllsMoreCondition(new FilterLandPermanent("lands"))));
     }
 
-    public ChainReaction(final ChainReaction card) {
+    public GiftOfEstates(final GiftOfEstates card) {
         super(card);
     }
 
     @Override
-    public ChainReaction copy() {
-        return new ChainReaction(this);
+    public GiftOfEstates copy() {
+        return new GiftOfEstates(this);
     }
 }

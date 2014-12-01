@@ -25,41 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.worldwake;
+package mage.sets.commander2014;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.GainLifeTargetEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageAllEffect;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.constants.Zone;
+import mage.target.common.TargetOpponent;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class ChainReaction extends CardImpl {
+public class Armistice extends CardImpl {
 
-    public ChainReaction(UUID ownerId) {
-        super(ownerId, 74, "Chain Reaction", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
-        this.expansionSetCode = "WWK";
+    public Armistice(UUID ownerId) {
+        super(ownerId, 65, "Armistice", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}");
+        this.expansionSetCode = "C14";
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
 
-        // Chain Reaction deals X damage to each creature, where X is the number of creatures on the battlefield.
-        Effect effect = new DamageAllEffect(new PermanentsOnBattlefieldCount(new FilterCreaturePermanent()), new FilterCreaturePermanent());
-        effect.setText("{this} deals X damage to each creature, where X is the number of creatures on the battlefield");
-        this.getSpellAbility().addEffect(effect);
+        // {3}{W}{W}: You draw a card and target opponent gains 3 life.
+        Effect effect = new DrawCardSourceControllerEffect(1);
+        effect.setText("You draw a card");
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, effect, new ManaCostsImpl("{3}{W}{W}"));
+        effect = new GainLifeTargetEffect(3);
+        effect.setText("and target opponent gains 3 life");
+        ability.addEffect(effect);
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
+
     }
 
-    public ChainReaction(final ChainReaction card) {
+    public Armistice(final Armistice card) {
         super(card);
     }
 
     @Override
-    public ChainReaction copy() {
-        return new ChainReaction(this);
+    public Armistice copy() {
+        return new Armistice(this);
     }
 }

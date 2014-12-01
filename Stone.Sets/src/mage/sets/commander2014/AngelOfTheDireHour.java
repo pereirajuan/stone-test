@@ -25,41 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.worldwake;
+package mage.sets.commander2014;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.condition.common.CastFromHandCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.ExileAllEffect;
+import mage.abilities.keyword.FlashAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageAllEffect;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.common.FilterAttackingCreature;
+import mage.watchers.common.CastFromHandWatcher;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class ChainReaction extends CardImpl {
+public class AngelOfTheDireHour extends CardImpl {
 
-    public ChainReaction(UUID ownerId) {
-        super(ownerId, 74, "Chain Reaction", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
-        this.expansionSetCode = "WWK";
+    public AngelOfTheDireHour(UUID ownerId) {
+        super(ownerId, 1, "Angel of the Dire Hour", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{W}{W}");
+        this.expansionSetCode = "C14";
+        this.subtype.add("Angel");
 
-        this.color.setRed(true);
+        this.color.setWhite(true);
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(4);
 
-        // Chain Reaction deals X damage to each creature, where X is the number of creatures on the battlefield.
-        Effect effect = new DamageAllEffect(new PermanentsOnBattlefieldCount(new FilterCreaturePermanent()), new FilterCreaturePermanent());
-        effect.setText("{this} deals X damage to each creature, where X is the number of creatures on the battlefield");
-        this.getSpellAbility().addEffect(effect);
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // When Angel of the Dire Hour enters the battlefield, if you cast it from your hand, exile all attacking creatures.
+        Ability ability = new EntersBattlefieldTriggeredAbility(
+                new ConditionalOneShotEffect(new ExileAllEffect(new FilterAttackingCreature("attacking creatures")), new CastFromHandCondition(),
+                " if you cast it from your hand, exile all attacking creatures"));
+        this.addAbility(ability);
+        this.addWatcher(new CastFromHandWatcher());
     }
 
-    public ChainReaction(final ChainReaction card) {
+    public AngelOfTheDireHour(final AngelOfTheDireHour card) {
         super(card);
     }
 
     @Override
-    public ChainReaction copy() {
-        return new ChainReaction(this);
+    public AngelOfTheDireHour copy() {
+        return new AngelOfTheDireHour(this);
     }
 }

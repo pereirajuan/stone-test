@@ -29,60 +29,37 @@ package mage.sets.fatereforged;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.keyword.ProwessAbility;
+import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.game.permanent.token.Token;
 
 /**
  *
  * @author fireshoes
  */
-public class MonasteryMentor extends CardImpl {
-    
-    private static final FilterSpell filter = new FilterSpell("a noncreature spell");
-    static {
-        filter.add(Predicates.not(new CardTypePredicate(CardType.CREATURE)));
-    }
+public class PilgrimOfTheFires extends CardImpl {
 
-    public MonasteryMentor(UUID ownerId) {
-        super(ownerId, 20, "Monastery Mentor", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{W}");
+    public PilgrimOfTheFires(UUID ownerId) {
+        super(ownerId, 162, "Pilgrim of the Fires", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{7}");
         this.expansionSetCode = "FRF";
-        this.subtype.add("Human");
-        this.subtype.add("Monk");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+        this.subtype.add("Golem");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(4);
 
-        // Prowess
-        this.addAbility(new ProwessAbility());
-        // Whenever you cast a noncreature spell, put a 1/1 white Monk creature token with prowess onto the battlefield.
-        this.addAbility(new SpellCastControllerTriggeredAbility(new CreateTokenEffect(new MonasteryMentorToken()), filter, false));
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
     }
 
-    public MonasteryMentor(final MonasteryMentor card) {
+    public PilgrimOfTheFires(final PilgrimOfTheFires card) {
         super(card);
     }
 
     @Override
-    public MonasteryMentor copy() {
-        return new MonasteryMentor(this);
-    }
-}
-    
-    class MonasteryMentorToken extends Token {
-    MonasteryMentorToken() {
-        super("Monk", "1/1 white Monk creature token with prowess");
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Monk");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
-        this.addAbility(new ProwessAbility());
+    public PilgrimOfTheFires copy() {
+        return new PilgrimOfTheFires(this);
     }
 }

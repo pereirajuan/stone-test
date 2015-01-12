@@ -29,60 +29,51 @@ package mage.sets.fatereforged;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
 import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.Predicates;
+import mage.filter.FilterCard;
 import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.game.permanent.token.Token;
+import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
  * @author fireshoes
  */
-public class MonasteryMentor extends CardImpl {
+public class LotusEyeMystics extends CardImpl {
     
-    private static final FilterSpell filter = new FilterSpell("a noncreature spell");
+    private static final FilterCard filter = new FilterCard("enchantment card from your graveyard");
+    
     static {
-        filter.add(Predicates.not(new CardTypePredicate(CardType.CREATURE)));
+        filter.add(new CardTypePredicate(CardType.ENCHANTMENT));
     }
 
-    public MonasteryMentor(UUID ownerId) {
-        super(ownerId, 20, "Monastery Mentor", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{W}");
+    public LotusEyeMystics(UUID ownerId) {
+        super(ownerId, 17, "Lotus-Eye Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{W}");
         this.expansionSetCode = "FRF";
         this.subtype.add("Human");
         this.subtype.add("Monk");
-        this.power = new MageInt(2);
+        this.power = new MageInt(3);
         this.toughness = new MageInt(2);
 
         // Prowess
         this.addAbility(new ProwessAbility());
-        // Whenever you cast a noncreature spell, put a 1/1 white Monk creature token with prowess onto the battlefield.
-        this.addAbility(new SpellCastControllerTriggeredAbility(new CreateTokenEffect(new MonasteryMentorToken()), filter, false));
+        // When Lotus-Eye Mystics enters the battlefield, return target enchantment card from your graveyard to your hand.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new ReturnFromGraveyardToHandTargetEffect(), false);
+        ability.addTarget(new TargetCardInYourGraveyard(filter));
+        this.addAbility(ability);
     }
 
-    public MonasteryMentor(final MonasteryMentor card) {
+    public LotusEyeMystics(final LotusEyeMystics card) {
         super(card);
     }
 
     @Override
-    public MonasteryMentor copy() {
-        return new MonasteryMentor(this);
-    }
-}
-    
-    class MonasteryMentorToken extends Token {
-    MonasteryMentorToken() {
-        super("Monk", "1/1 white Monk creature token with prowess");
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Monk");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
-        this.addAbility(new ProwessAbility());
+    public LotusEyeMystics copy() {
+        return new LotusEyeMystics(this);
     }
 }

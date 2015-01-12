@@ -28,61 +28,25 @@
 package mage.sets.fatereforged;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.keyword.ProwessAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.game.permanent.token.Token;
 
 /**
  *
  * @author fireshoes
  */
-public class MonasteryMentor extends CardImpl {
-    
-    private static final FilterSpell filter = new FilterSpell("a noncreature spell");
-    static {
-        filter.add(Predicates.not(new CardTypePredicate(CardType.CREATURE)));
-    }
+public class HuntTheWeak extends mage.sets.magic2014.HuntTheWeak {
 
-    public MonasteryMentor(UUID ownerId) {
-        super(ownerId, 20, "Monastery Mentor", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{W}");
+    public HuntTheWeak(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 133;
         this.expansionSetCode = "FRF";
-        this.subtype.add("Human");
-        this.subtype.add("Monk");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Prowess
-        this.addAbility(new ProwessAbility());
-        // Whenever you cast a noncreature spell, put a 1/1 white Monk creature token with prowess onto the battlefield.
-        this.addAbility(new SpellCastControllerTriggeredAbility(new CreateTokenEffect(new MonasteryMentorToken()), filter, false));
     }
 
-    public MonasteryMentor(final MonasteryMentor card) {
+    public HuntTheWeak(final HuntTheWeak card) {
         super(card);
     }
 
     @Override
-    public MonasteryMentor copy() {
-        return new MonasteryMentor(this);
-    }
-}
-    
-    class MonasteryMentorToken extends Token {
-    MonasteryMentorToken() {
-        super("Monk", "1/1 white Monk creature token with prowess");
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Monk");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
-        this.addAbility(new ProwessAbility());
+    public HuntTheWeak copy() {
+        return new HuntTheWeak(this);
     }
 }

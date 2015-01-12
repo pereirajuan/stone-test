@@ -25,63 +25,75 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.shadowmoor;
 
-package mage.abilities.effects.common;
-
+import java.util.UUID;
 import mage.abilities.Ability;
 import mage.abilities.effects.OneShotEffect;
-import mage.cards.Card;
+import mage.abilities.keyword.ConspireAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterLandCard;
+import mage.filter.common.FilterAttackingOrBlockingCreature;
 import mage.game.Game;
-import mage.players.Player;
-import mage.target.Target;
-import mage.target.common.TargetCardInHand;
+import mage.game.permanent.Permanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author jeffwadsworth
  */
-public class PutLandFromHandOntoBattlefieldEffect extends OneShotEffect {
+public class AEthertow extends CardImpl {
 
-    private boolean tapped;
+    private static final FilterAttackingOrBlockingCreature filter = new FilterAttackingOrBlockingCreature();
 
-    public PutLandFromHandOntoBattlefieldEffect() {
-        this(false);
+    public AEthertow(UUID ownerId) {
+        super(ownerId, 136, "AEthertow", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{W/U}");
+        this.expansionSetCode = "SHM";
+
+        // Put target attacking or blocking creature on top of its owner's library.
+        this.getSpellAbility().addEffect(new AEthertowEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(filter));
+
+        // Conspire
+        this.addAbility(new ConspireAbility(this));
     }
-    public PutLandFromHandOntoBattlefieldEffect(boolean tapped) {
-        super(Outcome.PutLandInPlay);
-        staticText = "you may put a land card from your hand onto the battlefield" + (tapped ? " tapped":"");
+
+    public AEthertow(final AEthertow card) {
+        super(card);
     }
 
-    public PutLandFromHandOntoBattlefieldEffect(final PutLandFromHandOntoBattlefieldEffect effect) {
+    @Override
+    public AEthertow copy() {
+        return new AEthertow(this);
+    }
+}
+
+class AEthertowEffect extends OneShotEffect {
+
+    AEthertowEffect() {
+        super(Outcome.Removal);
+        staticText = "Put target attacking or blocking creature on top of its owner's library";
+    }
+
+    AEthertowEffect(final AEthertowEffect effect) {
         super(effect);
-        this.tapped = effect.tapped;
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
-        Player controller = game.getPlayer(source.getControllerId());
-        if (controller != null) {
-            Target target = new TargetCardInHand(new FilterLandCard("land card"));
-            if (target.canChoose(source.getSourceId(), source.getControllerId(), game) &&
-                    controller.chooseUse(outcome, "Put land onto battlefield?", game) &&
-                    controller.choose(outcome, target, source.getSourceId(), game)) {
-                Card card = game.getCard(target.getFirstTarget());
-                if (card != null) {
-                    controller.putOntoBattlefieldWithInfo(card, game, Zone.HAND, source.getSourceId(), tapped);
-                }
-            }
+        Permanent targetCreature = game.getPermanent(targetPointer.getFirst(game, source));
+        if (targetCreature != null) {
+            targetCreature.moveToZone(Zone.LIBRARY, source.getSourceId(), game, true);
             return true;
         }
         return false;
-
     }
 
     @Override
-    public PutLandFromHandOntoBattlefieldEffect copy() {
-        return new PutLandFromHandOntoBattlefieldEffect(this);
+    public AEthertowEffect copy() {
+        return new AEthertowEffect(this);
     }
-
- }
+}

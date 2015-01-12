@@ -29,60 +29,38 @@ package mage.sets.fatereforged;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.keyword.ProwessAbility;
+import mage.abilities.keyword.DefenderAbility;
+import mage.abilities.keyword.ReachAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.game.permanent.token.Token;
 
 /**
  *
  * @author fireshoes
  */
-public class MonasteryMentor extends CardImpl {
-    
-    private static final FilterSpell filter = new FilterSpell("a noncreature spell");
-    static {
-        filter.add(Predicates.not(new CardTypePredicate(CardType.CREATURE)));
-    }
+public class ArchersOfQarsi extends CardImpl {
 
-    public MonasteryMentor(UUID ownerId) {
-        super(ownerId, 20, "Monastery Mentor", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{W}");
+    public ArchersOfQarsi(UUID ownerId) {
+        super(ownerId, 124, "Archers of Qarsi", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{G}");
         this.expansionSetCode = "FRF";
-        this.subtype.add("Human");
-        this.subtype.add("Monk");
-        this.power = new MageInt(2);
+        this.subtype.add("Naga");
+        this.subtype.add("Archer");
+        this.power = new MageInt(5);
         this.toughness = new MageInt(2);
 
-        // Prowess
-        this.addAbility(new ProwessAbility());
-        // Whenever you cast a noncreature spell, put a 1/1 white Monk creature token with prowess onto the battlefield.
-        this.addAbility(new SpellCastControllerTriggeredAbility(new CreateTokenEffect(new MonasteryMentorToken()), filter, false));
+        // Defender
+        this.addAbility(DefenderAbility.getInstance());
+        // Reach
+        this.addAbility(ReachAbility.getInstance());
     }
 
-    public MonasteryMentor(final MonasteryMentor card) {
+    public ArchersOfQarsi(final ArchersOfQarsi card) {
         super(card);
     }
 
     @Override
-    public MonasteryMentor copy() {
-        return new MonasteryMentor(this);
-    }
-}
-    
-    class MonasteryMentorToken extends Token {
-    MonasteryMentorToken() {
-        super("Monk", "1/1 white Monk creature token with prowess");
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Monk");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
-        this.addAbility(new ProwessAbility());
+    public ArchersOfQarsi copy() {
+        return new ArchersOfQarsi(this);
     }
 }

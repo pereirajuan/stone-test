@@ -46,36 +46,36 @@ import mage.watchers.common.CastSpellLastTurnWatcher;
  *
  * @author fireshoes
  */
-public class CutStoneRetainers extends CardImpl {
+public class HewedStoneRetainers extends CardImpl {
 
-    public CutStoneRetainers(UUID ownerId) {
-        super(ownerId, 161, "Cut-Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
+    public HewedStoneRetainers(UUID ownerId) {
+        super(ownerId, 161, "Hewed Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
         this.expansionSetCode = "FRF";
         this.subtype.add("Golem");
         this.power = new MageInt(4);
         this.toughness = new MageInt(4);
 
-        // Cast Cut-Stone Retainers only if you've cast another spell this turn.
-       this.addAbility(new SimpleStaticAbility(Zone.ALL, new CutStoneRetainersEffect()));
+        // Cast Hewed Stone Retainers only if you've cast another spell this turn.
+       this.addAbility(new SimpleStaticAbility(Zone.ALL, new HewedStoneRetainersEffect()));
     }
 
-    public CutStoneRetainers(final CutStoneRetainers card) {
+    public HewedStoneRetainers(final HewedStoneRetainers card) {
         super(card);
     }
 
     @Override
-    public CutStoneRetainers copy() {
-        return new CutStoneRetainers(this);
+    public HewedStoneRetainers copy() {
+        return new HewedStoneRetainers(this);
     }
 }
 
-class CutStoneRetainersEffect extends ContinuousRuleModifiyingEffectImpl {
-    CutStoneRetainersEffect() {
+class HewedStoneRetainersEffect extends ContinuousRuleModifiyingEffectImpl {
+    HewedStoneRetainersEffect() {
        super(Duration.EndOfGame, Outcome.Detriment);
        staticText = "Cast {this} only if you've cast another spell this turn";
     }
 
-    CutStoneRetainersEffect(final CutStoneRetainersEffect effect) {
+    HewedStoneRetainersEffect(final HewedStoneRetainersEffect effect) {
        super(effect);
     }
 
@@ -97,7 +97,7 @@ class CutStoneRetainersEffect extends ContinuousRuleModifiyingEffectImpl {
     }
 
     @Override
-    public CutStoneRetainersEffect copy() {
-       return new CutStoneRetainersEffect(this);
+    public HewedStoneRetainersEffect copy() {
+       return new HewedStoneRetainersEffect(this);
     }
 }

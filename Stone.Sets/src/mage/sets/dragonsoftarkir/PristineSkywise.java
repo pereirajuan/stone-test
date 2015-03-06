@@ -25,14 +25,16 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.championsofkamigawa;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.Mode;
 import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.common.UntapSourceEffect;
 import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.abilities.keyword.ProtectionAbility;
 import mage.cards.CardImpl;
 import mage.choices.Choice;
@@ -41,44 +43,51 @@ import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.filter.FilterCard;
-import mage.filter.common.FilterSpiritOrArcaneCard;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class KamiOfThePaintedRoad extends CardImpl {
+public class PristineSkywise extends CardImpl {
+    
+    private static final FilterSpell filter = new FilterSpell("a noncreature spell");
 
-    private static final FilterSpiritOrArcaneCard filter = new FilterSpiritOrArcaneCard();
-
-    public KamiOfThePaintedRoad(UUID ownerId) {
-        super(ownerId, 23, "Kami of the Painted Road", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Spirit");
-
-        this.color.setWhite(true);
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-
-        // Whenever you cast a Spirit or Arcane spell, Kami of the Painted Road gains protection from the color of your choice until end of turn.
-        Ability ability = new SpellCastControllerTriggeredAbility(new GainProtectionFromColorSourceEffect(Duration.EndOfTurn), filter, false);
-        Choice colorChoice = new ChoiceColor();
-        colorChoice.setMessage("Choose color (Kami of the Painted Road)");
-        ability.addChoice(colorChoice);
-        this.addAbility(ability);
-
+    static {
+        filter.add(Predicates.not(new CardTypePredicate(CardType.CREATURE)));
     }
 
-    public KamiOfThePaintedRoad(final KamiOfThePaintedRoad card) {
+    public PristineSkywise(UUID ownerId) {
+        super(ownerId, 228, "Pristine Skywise", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}{U}");
+        this.expansionSetCode = "DTK";
+        this.subtype.add("Dragon");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(4);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        
+        // Whenever you cast a noncreature spell, untap Pristine Skywise. It gains protection from the color of your choice until the end of turn.
+        Ability ability = new SpellCastControllerTriggeredAbility(new UntapSourceEffect(), filter, false);
+        ability.addEffect(new GainProtectionFromColorSourceEffect(Duration.EndOfTurn));
+        Choice colorChoice = new ChoiceColor();
+        colorChoice.setMessage("Choose color (Pristine Skywise)");
+        ability.addChoice(colorChoice);
+        this.addAbility(ability);
+    }
+
+    public PristineSkywise(final PristineSkywise card) {
         super(card);
     }
 
     @Override
-    public KamiOfThePaintedRoad copy() {
-        return new KamiOfThePaintedRoad(this);
+    public PristineSkywise copy() {
+        return new PristineSkywise(this);
     }
 }
 

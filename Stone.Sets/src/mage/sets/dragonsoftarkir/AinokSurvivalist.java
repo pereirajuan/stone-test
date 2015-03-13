@@ -25,57 +25,61 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
-import mage.abilities.keyword.EnchantAbility;
-import mage.abilities.keyword.FearAbility;
+import mage.abilities.common.TurnedFaceUpSourceTriggeredAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.keyword.MorphAbility;
 import mage.cards.CardImpl;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
+import mage.constants.TargetController;
+import mage.filter.common.FilterArtifactOrEnchantmentPermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 import mage.target.TargetPermanent;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author michael.napoleon@gmail.com
+ * @author fireshoes
  */
-public class CursedFlesh extends CardImpl {
+public class AinokSurvivalist extends CardImpl {
+    
+     private static final FilterArtifactOrEnchantmentPermanent filter = new FilterArtifactOrEnchantmentPermanent("artifact or enchantment an opponent controls");
 
-    public CursedFlesh(UUID ownerId) {
-        super(ownerId, 98, "Cursed Flesh", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{B}");
-        this.expansionSetCode = "INV";
-        this.subtype.add("Aura");
-
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.UnboostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
-        this.addAbility(ability);
-        
-        // Enchanted creature gets -1/-1 and has fear.
-        ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(-1, -1, Duration.WhileOnBattlefield));
-        ability.addEffect(new GainAbilityAttachedEffect(FearAbility.getInstance(), AttachmentType.AURA, Duration.WhileOnBattlefield, "and has fear"));
-        this.addAbility(ability);               
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public CursedFlesh(final CursedFlesh card) {
+    public AinokSurvivalist(UUID ownerId) {
+        super(ownerId, 172, "Ainok Survivalist", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "DTK";
+        this.subtype.add("Hound");
+        this.subtype.add("Shaman");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
+
+        // Megamorph {1}{G}
+        this.addAbility(new MorphAbility(this, new ManaCostsImpl("{1}{G}"), true));
+        
+        // When Ainok Survivalist is turned face up, destroy target artifact or enchantment an opponent controls.
+        Effect effect = new DestroyTargetEffect();
+        effect.setText("destroy target artifact or enchantment an opponent controls");
+        Ability ability = new TurnedFaceUpSourceTriggeredAbility(effect, false);
+        ability.addTarget(new TargetPermanent(filter));
+        this.addAbility(ability);
+    }
+
+    public AinokSurvivalist(final AinokSurvivalist card) {
         super(card);
     }
 
     @Override
-    public CursedFlesh copy() {
-        return new CursedFlesh(this);
+    public AinokSurvivalist copy() {
+        return new AinokSurvivalist(this);
     }
 }

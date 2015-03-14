@@ -25,76 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.dragonsmaze;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.BecomesCreatureAllEffect;
 import mage.abilities.effects.common.continuous.BecomesCreatureTargetEffect;
-import mage.abilities.effects.common.continuous.LoseAllAbilitiesAllEffect;
 import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.OverloadAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
 import mage.game.permanent.token.Token;
 import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class Dragonshift extends CardImpl {
+public class DanceOfTheSkywise extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("all creatures you controls");
-    static {
-        filter.add(new ControllerPredicate(TargetController.YOU));
-    }
+    public DanceOfTheSkywise(UUID ownerId) {
+        super(ownerId, 50, "Dance of the Skywise", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}");
+        this.expansionSetCode = "DTK";
 
-    public Dragonshift(UUID ownerId) {
-        super(ownerId, 66, "Dragonshift", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{1}{U}{R}");
-        this.expansionSetCode = "DGM";
-
-        this.color.setRed(true);
-        this.color.setBlue(true);
-
-        // Until end of turn, target creature you control becomes a blue and red Dragon with base power and toughness 4/4, loses all abilities, and gains flying.
-        Effect effect = new BecomesCreatureTargetEffect(new DragonToken(), true, false, Duration.EndOfTurn);
-        effect.setText("Until end of turn, target creature you control becomes a blue and red Dragon with base power and toughness 4/4, loses all abilities, and gains flying.");
+        // Until end of turn, target creature you control becomes a blue Dragon Illusion with base power and toughness 4/4, loses all abilities, and gains flying.
+        Effect effect = new BecomesCreatureTargetEffect(new DragonIllusionToken(), true, false, Duration.EndOfTurn);
+        effect.setText("Until end of turn, target creature you control becomes a blue Dragon Illusion with base power and toughness 4/4, loses all abilities, and gains flying.");
         this.getSpellAbility().addEffect(effect);
         this.getSpellAbility().addTarget(new TargetControlledCreaturePermanent());
-
-        // Overload {3}{U}{U}{R}{R}
-        Ability ability = new OverloadAbility(this, new LoseAllAbilitiesAllEffect(new FilterControlledCreaturePermanent(""), Duration.EndOfTurn), new ManaCostsImpl("{3}{U}{U}{R}{R}"));
-        ability.addEffect(new BecomesCreatureAllEffect(new DragonToken(), null, filter, Duration.EndOfTurn));
-        this.addAbility(ability);
     }
 
-    public Dragonshift(final Dragonshift card) {
+    public DanceOfTheSkywise(final DanceOfTheSkywise card) {
         super(card);
     }
 
     @Override
-    public Dragonshift copy() {
-        return new Dragonshift(this);
+    public DanceOfTheSkywise copy() {
+        return new DanceOfTheSkywise(this);
     }
+    
+        private class DragonIllusionToken extends Token {
 
-    private class DragonToken extends Token {
-
-        public DragonToken() {
-            super("Dragon", "blue and red Dragon with base power and toughness 4/4 and with flying");
+        public DragonIllusionToken() {
+            super("Dragon", "blue Dragon Illusion with base power and toughness 4/4 and with flying");
             cardType.add(CardType.CREATURE);
             color.setBlue(true);
-            color.setRed(true);
             subtype.add("Dragon");
+            subtype.add("Illusion");            
             power = new MageInt(4);
             toughness = new MageInt(4);
             this.addAbility(FlyingAbility.getInstance());

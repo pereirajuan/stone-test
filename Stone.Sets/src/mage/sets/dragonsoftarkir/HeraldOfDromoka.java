@@ -25,50 +25,59 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.constants.Rarity;
 import mage.MageInt;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
+import mage.abilities.keyword.VigilanceAbility;
 import mage.cards.CardImpl;
-import mage.game.permanent.token.Token;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.AnotherPredicate;
 
 /**
  *
- * @author jonubuu
+ * @author fireshoes
  */
-public class GoblinOffensive extends CardImpl {
+public class HeraldOfDromoka extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("other Warrior creatures");
 
-    public GoblinOffensive(UUID ownerId) {
-        super(ownerId, 192, "Goblin Offensive", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{1}{R}{R}");
-        this.expansionSetCode = "USG";
-
-        this.color.setRed(true);
-
-        // Put X 1/1 red Goblin creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new GoblinToken(), new ManacostVariableValue()));
+    static {
+        filter.add(new CardTypePredicate(CardType.CREATURE));
+        filter.add(new SubtypePredicate("Warrior"));
+        filter.add(new AnotherPredicate());
     }
 
-    public GoblinOffensive(final GoblinOffensive card) {
+    public HeraldOfDromoka(UUID ownerId) {
+        super(ownerId, 22, "Herald of Dromoka", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{W}");
+        this.expansionSetCode = "DTK";
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Vigilance
+        this.addAbility(VigilanceAbility.getInstance());
+        
+        // Other Warrior creatures you control have vigilance.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect
+            (VigilanceAbility.getInstance(), Duration.WhileOnBattlefield, filter)));
+    }
+
+    public HeraldOfDromoka(final HeraldOfDromoka card) {
         super(card);
     }
 
     @Override
-    public GoblinOffensive copy() {
-        return new GoblinOffensive(this);
-    }
-}
-
-class GoblinToken extends Token {
-    public GoblinToken() {
-        super("Goblin", "1/1 red Goblin creature token");
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Goblin");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
+    public HeraldOfDromoka copy() {
+        return new HeraldOfDromoka(this);
     }
 }

@@ -25,50 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.MorphAbility;
+import mage.abilities.keyword.VigilanceAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.MageInt;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.cards.CardImpl;
-import mage.game.permanent.token.Token;
 
 /**
  *
- * @author jonubuu
+ * @author fireshoes
  */
-public class GoblinOffensive extends CardImpl {
+public class MisthoofKirin extends CardImpl {
 
-    public GoblinOffensive(UUID ownerId) {
-        super(ownerId, 192, "Goblin Offensive", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{1}{R}{R}");
-        this.expansionSetCode = "USG";
+    public MisthoofKirin(UUID ownerId) {
+        super(ownerId, 25, "Misthoof Kirin", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{W}");
+        this.expansionSetCode = "DTK";
+        this.subtype.add("Kirin");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        this.color.setRed(true);
-
-        // Put X 1/1 red Goblin creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new GoblinToken(), new ManacostVariableValue()));
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        
+        // Vigilance
+        this.addAbility(VigilanceAbility.getInstance());
+        
+        // Megamorph {1}{W} <i>(You may cast this face down as a 2/2 creature for {3}. Turn it face up any time for its megamorph cost and put a +1/+1 counter on it.)</i>
+        this.addAbility(new MorphAbility(this, new ManaCostsImpl("{1}{W}"), true));
     }
 
-    public GoblinOffensive(final GoblinOffensive card) {
+    public MisthoofKirin(final MisthoofKirin card) {
         super(card);
     }
 
     @Override
-    public GoblinOffensive copy() {
-        return new GoblinOffensive(this);
-    }
-}
-
-class GoblinToken extends Token {
-    public GoblinToken() {
-        super("Goblin", "1/1 red Goblin creature token");
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Goblin");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
+    public MisthoofKirin copy() {
+        return new MisthoofKirin(this);
     }
 }

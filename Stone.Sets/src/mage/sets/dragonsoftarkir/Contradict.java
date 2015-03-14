@@ -25,50 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
+import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.MageInt;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.cards.CardImpl;
-import mage.game.permanent.token.Token;
+import mage.target.TargetSpell;
 
 /**
  *
- * @author jonubuu
+ * @author fireshoes
  */
-public class GoblinOffensive extends CardImpl {
+public class Contradict extends CardImpl {
 
-    public GoblinOffensive(UUID ownerId) {
-        super(ownerId, 192, "Goblin Offensive", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{1}{R}{R}");
-        this.expansionSetCode = "USG";
+    public Contradict(UUID ownerId) {
+        super(ownerId, 49, "Contradict", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{U}{U}");
+        this.expansionSetCode = "DTK";
 
-        this.color.setRed(true);
-
-        // Put X 1/1 red Goblin creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new GoblinToken(), new ManacostVariableValue()));
+        // Counter target spell.
+        this.getSpellAbility().addEffect(new CounterTargetEffect());
+        this.getSpellAbility().addTarget(new TargetSpell());
+        
+        // Draw a card.        
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
     }
 
-    public GoblinOffensive(final GoblinOffensive card) {
+    public Contradict(final Contradict card) {
         super(card);
     }
 
     @Override
-    public GoblinOffensive copy() {
-        return new GoblinOffensive(this);
-    }
-}
-
-class GoblinToken extends Token {
-    public GoblinToken() {
-        super("Goblin", "1/1 red Goblin creature token");
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Goblin");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
+    public Contradict copy() {
+        return new Contradict(this);
     }
 }

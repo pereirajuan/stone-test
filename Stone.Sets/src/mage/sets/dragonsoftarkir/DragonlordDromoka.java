@@ -25,85 +25,75 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.commander;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.common.CantBeCounteredAbility;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.ContinuousRuleModifyingEffectImpl;
-import mage.abilities.effects.common.combat.AttacksIfAbleTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.AttacksThisTurnMarkerAbility;
 import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.LifelinkAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.TurnPhase;
 import mage.constants.Zone;
 import mage.game.Game;
 import mage.game.events.GameEvent;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class BasandraBattleSeraph extends CardImpl {
+public class DragonlordDromoka extends CardImpl {
 
-    public BasandraBattleSeraph(UUID ownerId) {
-        super(ownerId, 184, "Basandra, Battle Seraph", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{R}{W}");
-        this.expansionSetCode = "CMD";
+    public DragonlordDromoka(UUID ownerId) {
+        super(ownerId, 217, "Dragonlord Dromoka", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{4}{G}{W}");
+        this.expansionSetCode = "DTK";
         this.supertype.add("Legendary");
-        this.subtype.add("Angel");
+        this.subtype.add("Elder");
+        this.subtype.add("Dragon");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(7);
 
-        this.color.setRed(true);
-        this.color.setWhite(true);
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
-
+        // Dragonlord Dromoka can't be countered
+        this.addAbility(new CantBeCounteredAbility());
         // Flying
         this.addAbility(FlyingAbility.getInstance());
-
-        // Players can't cast spells during combat.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BasandraBattleSeraphEffect()));
-
-        // {R}: Target creature attacks this turn if able.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AttacksIfAbleTargetEffect(Duration.EndOfTurn), new ManaCostsImpl("{R}"));
-        ability.addEffect(new GainAbilityTargetEffect(AttacksThisTurnMarkerAbility.getInstance(), Duration.EndOfTurn, null));
-        ability.addTarget(new TargetCreaturePermanent());
-        this.addAbility(ability);
-
+        // Lifelink
+        this.addAbility(LifelinkAbility.getInstance());
+        // Your opponents can't cast spells during your turn.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new DragonlordDromokaEffect()));
+        
     }
 
-    public BasandraBattleSeraph(final BasandraBattleSeraph card) {
+    public DragonlordDromoka(final DragonlordDromoka card) {
         super(card);
     }
 
     @Override
-    public BasandraBattleSeraph copy() {
-        return new BasandraBattleSeraph(this);
+    public DragonlordDromoka copy() {
+        return new DragonlordDromoka(this);
     }
 }
 
-class BasandraBattleSeraphEffect extends ContinuousRuleModifyingEffectImpl {
+class DragonlordDromokaEffect extends ContinuousRuleModifyingEffectImpl {
 
-    public BasandraBattleSeraphEffect() {
-        super(Duration.EndOfTurn, Outcome.Neutral);
-        staticText = "Players can't cast spells during combat";
+    public DragonlordDromokaEffect() {
+        super(Duration.WhileOnBattlefield, Outcome.Benefit);
+        staticText = "Your opponents can't cast spells during your turn";
     }
 
-    public BasandraBattleSeraphEffect(final BasandraBattleSeraphEffect effect) {
+    public DragonlordDromokaEffect(final DragonlordDromokaEffect effect) {
         super(effect);
     }
 
     @Override
-    public BasandraBattleSeraphEffect copy() {
-        return new BasandraBattleSeraphEffect(this);
+    public DragonlordDromokaEffect copy() {
+        return new DragonlordDromokaEffect(this);
     }
 
     @Override
@@ -118,7 +108,8 @@ class BasandraBattleSeraphEffect extends ContinuousRuleModifyingEffectImpl {
 
     @Override
     public boolean applies(GameEvent event, Ability source, Game game) {
-        if (game.getPhase().getType() == TurnPhase.COMBAT) {
+        if (game.getActivePlayerId().equals(source.getSourceId()) &&
+                game.getPlayer(source.getControllerId()).hasOpponent(event.getPlayerId(), game)) {
             return true;
         }
         return false;

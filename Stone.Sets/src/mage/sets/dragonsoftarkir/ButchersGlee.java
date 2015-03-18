@@ -25,51 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgment;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
-import mage.abilities.condition.common.CardsInControllerGraveCondition;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalOneShotEffect;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.keyword.FlashbackAbility;
+import mage.abilities.effects.common.RegenerateTargetEffect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.LifelinkAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TimingRule;
-import mage.game.permanent.token.BearToken;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class GrizzlyFate extends CardImpl {
+public class ButchersGlee extends CardImpl {
 
-    public GrizzlyFate(UUID ownerId) {
-        super(ownerId, 119, "Grizzly Fate", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{G}{G}");
-        this.expansionSetCode = "JUD";
+    public ButchersGlee(UUID ownerId) {
+        super(ownerId, 90, "Butcher's Glee", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{B}");
+        this.expansionSetCode = "DTK";
 
-        this.color.setGreen(true);
-
-        // Put two 2/2 green Bear creature tokens onto the battlefield.
-        // Threshold - Put four 2/2 green Bear creature tokens onto the battlefield instead if seven or more cards are in your graveyard.
-        Effect effect = new ConditionalOneShotEffect(new CreateTokenEffect(new BearToken(), 4),
-                                                     new CreateTokenEffect(new BearToken(), 2),
-                                                     new CardsInControllerGraveCondition(7),
-                                                     "Put two 2/2 green Bear creature tokens onto the battlefield.<br/><br/><i>Threshold</i> - Put four 2/2 green Bear creature tokens onto the battlefield instead if seven or more cards are in your graveyard.");
+        // Target creature gets +3/+0 and gains lifelink until end of turn. Regenerate it.
+        Effect effect = new BoostTargetEffect(3, 0, Duration.EndOfTurn);
+        effect.setText("Target creature gets +3/+0");
         this.getSpellAbility().addEffect(effect);
-
-        // Flashback {5}{G}{G}
-        this.addAbility(new FlashbackAbility(new ManaCostsImpl("{5}{G}{G}"), TimingRule.SORCERY));
+        effect = new GainAbilityTargetEffect(LifelinkAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("and gains lifelink until end of turn");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        effect = new RegenerateTargetEffect();
+        effect.setText("Regenerate it");
+        this.getSpellAbility().addEffect(effect);
     }
 
-    public GrizzlyFate(final GrizzlyFate card) {
+    public ButchersGlee(final ButchersGlee card) {
         super(card);
     }
 
     @Override
-    public GrizzlyFate copy() {
-        return new GrizzlyFate(this);
+    public ButchersGlee copy() {
+        return new ButchersGlee(this);
     }
 }

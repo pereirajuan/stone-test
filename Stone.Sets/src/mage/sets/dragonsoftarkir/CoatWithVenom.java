@@ -25,51 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgment;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
-import mage.abilities.condition.common.CardsInControllerGraveCondition;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalOneShotEffect;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.keyword.FlashbackAbility;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.DeathtouchAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TimingRule;
-import mage.game.permanent.token.BearToken;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class GrizzlyFate extends CardImpl {
+public class CoatWithVenom extends CardImpl {
 
-    public GrizzlyFate(UUID ownerId) {
-        super(ownerId, 119, "Grizzly Fate", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{G}{G}");
-        this.expansionSetCode = "JUD";
+    public CoatWithVenom(UUID ownerId) {
+        super(ownerId, 91, "Coat with Venom", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{B}");
+        this.expansionSetCode = "DTK";
 
-        this.color.setGreen(true);
-
-        // Put two 2/2 green Bear creature tokens onto the battlefield.
-        // Threshold - Put four 2/2 green Bear creature tokens onto the battlefield instead if seven or more cards are in your graveyard.
-        Effect effect = new ConditionalOneShotEffect(new CreateTokenEffect(new BearToken(), 4),
-                                                     new CreateTokenEffect(new BearToken(), 2),
-                                                     new CardsInControllerGraveCondition(7),
-                                                     "Put two 2/2 green Bear creature tokens onto the battlefield.<br/><br/><i>Threshold</i> - Put four 2/2 green Bear creature tokens onto the battlefield instead if seven or more cards are in your graveyard.");
+        // Target creature gets +1/+2 and gains deathtouch until end of turn.
+        Effect effect = new BoostTargetEffect(1, 2, Duration.EndOfTurn);
+        effect.setText("Target creature gets +1/+2");
         this.getSpellAbility().addEffect(effect);
-
-        // Flashback {5}{G}{G}
-        this.addAbility(new FlashbackAbility(new ManaCostsImpl("{5}{G}{G}"), TimingRule.SORCERY));
+        effect = new GainAbilityTargetEffect(DeathtouchAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("and gains deathtouch until end of turn");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public GrizzlyFate(final GrizzlyFate card) {
+    public CoatWithVenom(final CoatWithVenom card) {
         super(card);
     }
 
     @Override
-    public GrizzlyFate copy() {
-        return new GrizzlyFate(this);
+    public CoatWithVenom copy() {
+        return new CoatWithVenom(this);
     }
 }

@@ -25,77 +25,74 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.tenth;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.BlocksCreatureTriggeredAbility;
+import mage.abilities.dynamicvalue.common.AttackingCreatureCount;
 import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
+import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.constants.Rarity;
 import mage.game.Game;
-import mage.game.permanent.Permanent;
+import mage.players.Player;
+import mage.target.common.TargetOpponent;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class LoyalSentry extends CardImpl {
+public class FoulTongueShriek extends CardImpl {
 
-    public LoyalSentry (UUID ownerId) {
-        super(ownerId, 27, "Loyal Sentry", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{W}");
-        this.expansionSetCode = "10E";
-        this.subtype.add("Human");
-        this.subtype.add("Soldier");
+    public FoulTongueShriek(UUID ownerId) {
+        super(ownerId, 103, "Foul-Tongue Shriek", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{B}");
+        this.expansionSetCode = "DTK";
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+        // Target opponent loses 1 life for each attacking creature you control. You gain that much life.
+        this.getSpellAbility().addEffect(new FoulTongueShriekEffect());
+        this.getSpellAbility().addTarget(new TargetOpponent());
 
-        // When Loyal Sentry blocks a creature, destroy that creature and Loyal Sentry.
-        this.addAbility(new BlocksCreatureTriggeredAbility(new LoyalSentryEffect(), false, true));
     }
 
-    public LoyalSentry (final LoyalSentry card) {
+    public FoulTongueShriek(final FoulTongueShriek card) {
         super(card);
     }
 
     @Override
-    public LoyalSentry copy() {
-        return new LoyalSentry(this);
+    public FoulTongueShriek copy() {
+        return new FoulTongueShriek(this);
     }
 }
 
-class LoyalSentryEffect extends OneShotEffect {
-    LoyalSentryEffect() {
-        super(Outcome.DestroyPermanent);
-        staticText = "destroy that creature and {this}";
+class FoulTongueShriekEffect extends OneShotEffect {
+
+    public FoulTongueShriekEffect() {
+        super(Outcome.Benefit);
+        this.staticText = "Target opponent loses 1 life for each attacking creature you control. You gain that much life";
     }
 
-    LoyalSentryEffect(LoyalSentryEffect effect) {
+    public FoulTongueShriekEffect(final FoulTongueShriekEffect effect) {
         super(effect);
     }
 
     @Override
-    public boolean apply(Game game, Ability source) {
-        Permanent p = game.getPermanent(getTargetPointer().getFirst(game, source));        
-        if (p != null) {
-            p.destroy(source.getSourceId(), game, false);
-        }
-        Permanent s = game.getPermanent(source.getSourceId());
-        if (s != null) {
-            s.destroy(source.getSourceId(), game, false);
-        }
-        return true;
+    public FoulTongueShriekEffect copy() {
+        return new FoulTongueShriekEffect(this);
     }
 
     @Override
-    public LoyalSentryEffect copy() {
-        return new LoyalSentryEffect(this);
+    public boolean apply(Game game, Ability source) {
+        Player controller = game.getPlayer(source.getControllerId());
+        Player targetOpponent = game.getPlayer(getTargetPointer().getFirst(game, source));
+        if (controller != null && targetOpponent != null) {
+            int amount = new AttackingCreatureCount().calculate(game, source, this);
+            if (amount > 0) {
+                targetOpponent.loseLife(amount, game);
+                controller.gainLife(amount, game);
+            }
+            return true;
+        }
+        return false;
     }
-
 }

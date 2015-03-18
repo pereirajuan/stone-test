@@ -25,51 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgment;
+package mage.sets.dragonsoftarkir;
 
 import java.util.UUID;
-import mage.abilities.condition.common.CardsInControllerGraveCondition;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalOneShotEffect;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.keyword.FlashbackAbility;
+import mage.MageInt;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.effects.common.combat.CantBeBlockedByOneAllEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TimingRule;
-import mage.game.permanent.token.BearToken;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class GrizzlyFate extends CardImpl {
+public class BloodChinRager extends CardImpl {
 
-    public GrizzlyFate(UUID ownerId) {
-        super(ownerId, 119, "Grizzly Fate", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{G}{G}");
-        this.expansionSetCode = "JUD";
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("Warrior","Warrior creature you control");
 
-        this.color.setGreen(true);
-
-        // Put two 2/2 green Bear creature tokens onto the battlefield.
-        // Threshold - Put four 2/2 green Bear creature tokens onto the battlefield instead if seven or more cards are in your graveyard.
-        Effect effect = new ConditionalOneShotEffect(new CreateTokenEffect(new BearToken(), 4),
-                                                     new CreateTokenEffect(new BearToken(), 2),
-                                                     new CardsInControllerGraveCondition(7),
-                                                     "Put two 2/2 green Bear creature tokens onto the battlefield.<br/><br/><i>Threshold</i> - Put four 2/2 green Bear creature tokens onto the battlefield instead if seven or more cards are in your graveyard.");
-        this.getSpellAbility().addEffect(effect);
-
-        // Flashback {5}{G}{G}
-        this.addAbility(new FlashbackAbility(new ManaCostsImpl("{5}{G}{G}"), TimingRule.SORCERY));
+    static {
+        filter.add(new ControllerPredicate(TargetController.YOU));
     }
 
-    public GrizzlyFate(final GrizzlyFate card) {
+    public BloodChinRager(UUID ownerId) {
+        super(ownerId, 89, "Blood-Chin Rager", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+        this.expansionSetCode = "DTK";
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Whenever Blood-Chin Rager attacks, each Warrior creature you control can't be blocked this turn except by two or more creatures.
+        this.addAbility(new AttacksTriggeredAbility(new CantBeBlockedByOneAllEffect(2, filter), false));
+    }
+
+    public BloodChinRager(final BloodChinRager card) {
         super(card);
     }
 
     @Override
-    public GrizzlyFate copy() {
-        return new GrizzlyFate(this);
+    public BloodChinRager copy() {
+        return new BloodChinRager(this);
     }
 }

@@ -25,55 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.tempestremastered;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldAbility;
-import mage.abilities.condition.common.KickedCondition;;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.RemoveCountersSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.RegenerateSourceEffect;
 import mage.abilities.effects.common.counter.AddCountersSourceEffect;
-import mage.abilities.keyword.FearAbility;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 import mage.counters.CounterType;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author michael.napoleon@gmail.com
+ * @author fireshoes
  */
-public class Duskwalker extends CardImpl {
+public class SpikeHatcher extends CardImpl {
 
-    public Duskwalker(UUID ownerId) {
-        super(ownerId, 104, "Duskwalker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "INV";
-        this.subtype.add("Human");
-        this.subtype.add("Minion");
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+    public SpikeHatcher(UUID ownerId) {
+        super(ownerId, 197, "Spike Hatcher", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{6}{G}");
+        this.expansionSetCode = "TPR";
+        this.subtype.add("Spike");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(0);
 
-        // Kicker {3}{B}
-        this.addAbility(new KickerAbility("{3}{B}"));
+        // Spike Hatcher enters the battlefield with six +1/+1 counters on it.
+        this.addAbility(new EntersBattlefieldAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance(6)), "with six +1/+1 counters on it"));
         
-        // If Duskwalker was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.
-        Ability ability = new EntersBattlefieldAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance(2)),
-                KickedCondition.getInstance(), true,
-                "If {this} was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.", "");
-        ability.addEffect(new GainAbilitySourceEffect(FearAbility.getInstance(), Duration.WhileOnBattlefield));
+        // {2}, Remove a +1/+1 counter from Spike Hatcher: Put a +1/+1 counter on target creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersTargetEffect(CounterType.P1P1.createInstance()), new GenericManaCost(2));
+        ability.addCost(new RemoveCountersSourceCost(CounterType.P1P1.createInstance()));
+        ability.addTarget(new TargetCreaturePermanent());
         this.addAbility(ability);
+        
+        // {1}, Remove a +1/+1 counter from Spike Hatcher: Regenerate Spike Hatcher.
+        Ability ability2 = new SimpleActivatedAbility(Zone.BATTLEFIELD, new RegenerateSourceEffect(), new GenericManaCost(1));
+        ability2.addCost(new RemoveCountersSourceCost(CounterType.P1P1.createInstance()));
+        this.addAbility(ability2);
+        
     }
 
-    public Duskwalker(final Duskwalker card) {
+    public SpikeHatcher(final SpikeHatcher card) {
         super(card);
     }
 
     @Override
-    public Duskwalker copy() {
-        return new Duskwalker(this);
+    public SpikeHatcher copy() {
+        return new SpikeHatcher(this);
     }
 }
-

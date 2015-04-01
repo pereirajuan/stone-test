@@ -25,52 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.jacevsvraska;
+package mage.sets.stronghold;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.DealsCombatDamageToACreatureTriggeredAbility;
-import mage.abilities.common.DealsCombatDamageToAPlayerTriggeredAbility;
-import mage.abilities.common.delayed.AtTheEndOfCombatDelayedTriggeredAbility;
-import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
-import mage.abilities.effects.common.DestroyTargetEffect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.dynamicvalue.common.ManacostVariableValue;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.keyword.BuybackAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class OhranViper extends CardImpl {
+public class FanningTheFlames extends CardImpl {
 
-    public OhranViper(UUID ownerId) {
-        super(ownerId, 57, "Ohran Viper", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}{G}");
-        this.expansionSetCode = "DDM";
-        this.supertype.add("Snow");
-        this.subtype.add("Snake");
+    public FanningTheFlames(UUID ownerId) {
+        super(ownerId, 80, "Fanning the Flames", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{R}{R}");
+        this.expansionSetCode = "STH";
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(3);
-
-        // Whenever Ohran Viper deals combat damage to a creature, destroy that creature at end of combat.
-        this.addAbility(new DealsCombatDamageToACreatureTriggeredAbility(
-                new CreateDelayedTriggeredAbilityEffect(
-                        new AtTheEndOfCombatDelayedTriggeredAbility(new DestroyTargetEffect("destroy that creature at end of combat")), true),
-                false, 
-                true));
-
-        // Whenever Ohran Viper deals combat damage to a player, you may draw a card.
-        this.addAbility(new DealsCombatDamageToAPlayerTriggeredAbility(new DrawCardSourceControllerEffect(1), true));
+        // Buyback {3}
+        this.addAbility(new BuybackAbility("{3}"));
+        
+        // Fanning the Flames deals X damage to target creature or player.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(new ManacostVariableValue()));
+        this.getSpellAbility().addTarget(new TargetCreatureOrPlayer());
     }
 
-    public OhranViper(final OhranViper card) {
+    public FanningTheFlames(final FanningTheFlames card) {
         super(card);
     }
 
     @Override
-    public OhranViper copy() {
-        return new OhranViper(this);
+    public FanningTheFlames copy() {
+        return new FanningTheFlames(this);
     }
 }

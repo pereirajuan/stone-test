@@ -25,55 +25,73 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.tempestremastered;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldAbility;
-import mage.abilities.condition.common.KickedCondition;;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
-import mage.abilities.keyword.FearAbility;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.AsThoughEffectImpl;
 import mage.cards.CardImpl;
+import mage.constants.AsThoughEffectType;
 import mage.constants.CardType;
 import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.counters.CounterType;
+import mage.constants.Zone;
+import mage.game.Game;
 
 /**
  *
- * @author michael.napoleon@gmail.com
+ * @author fireshoes
  */
-public class Duskwalker extends CardImpl {
+public class HeartwoodDryad extends CardImpl {
 
-    public Duskwalker(UUID ownerId) {
-        super(ownerId, 104, "Duskwalker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "INV";
-        this.subtype.add("Human");
-        this.subtype.add("Minion");
-        this.power = new MageInt(1);
+    public HeartwoodDryad(UUID ownerId) {
+        super(ownerId, 173, "Heartwood Dryad", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "TPR";
+        this.subtype.add("Dryad");
+        this.power = new MageInt(2);
         this.toughness = new MageInt(1);
 
-        // Kicker {3}{B}
-        this.addAbility(new KickerAbility("{3}{B}"));
-        
-        // If Duskwalker was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.
-        Ability ability = new EntersBattlefieldAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance(2)),
-                KickedCondition.getInstance(), true,
-                "If {this} was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.", "");
-        ability.addEffect(new GainAbilitySourceEffect(FearAbility.getInstance(), Duration.WhileOnBattlefield));
-        this.addAbility(ability);
+        // Heartwood Dryad can block creatures with shadow as though Heartwood Dryad had shadow.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CanBlockAsThoughtIthadShadowEffect(Duration.WhileOnBattlefield)));
     }
 
-    public Duskwalker(final Duskwalker card) {
+    public HeartwoodDryad(final HeartwoodDryad card) {
         super(card);
     }
 
     @Override
-    public Duskwalker copy() {
-        return new Duskwalker(this);
+    public HeartwoodDryad copy() {
+        return new HeartwoodDryad(this);
     }
 }
 
+class CanBlockAsThoughtIthadShadowEffect extends AsThoughEffectImpl {
+
+    public CanBlockAsThoughtIthadShadowEffect(Duration duration) {
+        super(AsThoughEffectType.BLOCK_SHADOW, duration, Outcome.Benefit);
+        staticText = "{this} can block creatures with shadow as though {this} had shadow";
+    }
+
+    public CanBlockAsThoughtIthadShadowEffect(final CanBlockAsThoughtIthadShadowEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        return true;
+    }
+
+    @Override
+    public CanBlockAsThoughtIthadShadowEffect copy() {
+        return new CanBlockAsThoughtIthadShadowEffect(this);
+    }
+
+    @Override
+    public boolean applies(UUID sourceId, Ability source, UUID affectedControllerId, Game game) {
+        return sourceId.equals(source.getSourceId());
+    }
+
+}

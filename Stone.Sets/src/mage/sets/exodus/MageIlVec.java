@@ -25,52 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.jacevsvraska;
+package mage.sets.exodus;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.DealsCombatDamageToACreatureTriggeredAbility;
-import mage.abilities.common.DealsCombatDamageToAPlayerTriggeredAbility;
-import mage.abilities.common.delayed.AtTheEndOfCombatDelayedTriggeredAbility;
-import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
-import mage.abilities.effects.common.DestroyTargetEffect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.DamageTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class OhranViper extends CardImpl {
+public class MageIlVec extends CardImpl {
 
-    public OhranViper(UUID ownerId) {
-        super(ownerId, 57, "Ohran Viper", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}{G}");
-        this.expansionSetCode = "DDM";
-        this.supertype.add("Snow");
-        this.subtype.add("Snake");
+    public MageIlVec(UUID ownerId) {
+        super(ownerId, 86, "Mage il-Vec", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "EXO";
+        this.subtype.add("Human");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(3);
-
-        // Whenever Ohran Viper deals combat damage to a creature, destroy that creature at end of combat.
-        this.addAbility(new DealsCombatDamageToACreatureTriggeredAbility(
-                new CreateDelayedTriggeredAbilityEffect(
-                        new AtTheEndOfCombatDelayedTriggeredAbility(new DestroyTargetEffect("destroy that creature at end of combat")), true),
-                false, 
-                true));
-
-        // Whenever Ohran Viper deals combat damage to a player, you may draw a card.
-        this.addAbility(new DealsCombatDamageToAPlayerTriggeredAbility(new DrawCardSourceControllerEffect(1), true));
+        // {tap}, Discard a card at random: Mage il-Vec deals 1 damage to target creature or player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(1), new TapSourceCost());
+        ability.addCost(new DiscardCardCost(true));
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
 
-    public OhranViper(final OhranViper card) {
+    public MageIlVec(final MageIlVec card) {
         super(card);
     }
 
     @Override
-    public OhranViper copy() {
-        return new OhranViper(this);
+    public MageIlVec copy() {
+        return new MageIlVec(this);
     }
 }

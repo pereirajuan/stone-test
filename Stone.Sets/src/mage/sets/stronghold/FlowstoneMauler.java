@@ -25,52 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.jacevsvraska;
+package mage.sets.stronghold;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.DealsCombatDamageToACreatureTriggeredAbility;
-import mage.abilities.common.DealsCombatDamageToAPlayerTriggeredAbility;
-import mage.abilities.common.delayed.AtTheEndOfCombatDelayedTriggeredAbility;
-import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
-import mage.abilities.effects.common.DestroyTargetEffect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class OhranViper extends CardImpl {
+public class FlowstoneMauler extends CardImpl {
 
-    public OhranViper(UUID ownerId) {
-        super(ownerId, 57, "Ohran Viper", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}{G}");
-        this.expansionSetCode = "DDM";
-        this.supertype.add("Snow");
-        this.subtype.add("Snake");
+    public FlowstoneMauler(UUID ownerId) {
+        super(ownerId, 85, "Flowstone Mauler", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{R}{R}");
+        this.expansionSetCode = "STH";
+        this.subtype.add("Beast");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(5);
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(3);
-
-        // Whenever Ohran Viper deals combat damage to a creature, destroy that creature at end of combat.
-        this.addAbility(new DealsCombatDamageToACreatureTriggeredAbility(
-                new CreateDelayedTriggeredAbilityEffect(
-                        new AtTheEndOfCombatDelayedTriggeredAbility(new DestroyTargetEffect("destroy that creature at end of combat")), true),
-                false, 
-                true));
-
-        // Whenever Ohran Viper deals combat damage to a player, you may draw a card.
-        this.addAbility(new DealsCombatDamageToAPlayerTriggeredAbility(new DrawCardSourceControllerEffect(1), true));
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+        
+        // {R}: Flowstone Mauler gets +1/-1 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new BoostSourceEffect(1, -1, Duration.EndOfTurn),
+                new ManaCostsImpl("{R}")));
     }
 
-    public OhranViper(final OhranViper card) {
+    public FlowstoneMauler(final FlowstoneMauler card) {
         super(card);
     }
 
     @Override
-    public OhranViper copy() {
-        return new OhranViper(this);
+    public FlowstoneMauler copy() {
+        return new FlowstoneMauler(this);
     }
 }

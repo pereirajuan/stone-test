@@ -25,55 +25,73 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.stronghold;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldAbility;
-import mage.abilities.condition.common.KickedCondition;;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
-import mage.abilities.keyword.FearAbility;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.counters.CounterType;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
+import mage.target.Target;
+import mage.target.common.TargetCreaturePermanentAmount;
 
 /**
  *
- * @author michael.napoleon@gmail.com
+ * @author fireshoes
  */
-public class Duskwalker extends CardImpl {
+public class ElvenRite extends CardImpl {
 
-    public Duskwalker(UUID ownerId) {
-        super(ownerId, 104, "Duskwalker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "INV";
-        this.subtype.add("Human");
-        this.subtype.add("Minion");
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+    public ElvenRite(UUID ownerId) {
+        super(ownerId, 56, "Elven Rite", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{1}{G}");
+        this.expansionSetCode = "STH";
 
-        // Kicker {3}{B}
-        this.addAbility(new KickerAbility("{3}{B}"));
-        
-        // If Duskwalker was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.
-        Ability ability = new EntersBattlefieldAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance(2)),
-                KickedCondition.getInstance(), true,
-                "If {this} was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.", "");
-        ability.addEffect(new GainAbilitySourceEffect(FearAbility.getInstance(), Duration.WhileOnBattlefield));
-        this.addAbility(ability);
+        // Distribute two +1/+1 counters among one or two target creatures.
+        this.getSpellAbility().addEffect(new ElvenRiteDistributeEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanentAmount(2));
     }
 
-    public Duskwalker(final Duskwalker card) {
+    public ElvenRite(final ElvenRite card) {
         super(card);
     }
 
     @Override
-    public Duskwalker copy() {
-        return new Duskwalker(this);
+    public ElvenRite copy() {
+        return new ElvenRite(this);
     }
 }
 
+class ElvenRiteDistributeEffect extends OneShotEffect {
+
+    public ElvenRiteDistributeEffect() {
+        super(Outcome.BoostCreature);
+        this.staticText = "Distribute two +1/+1 counters among one or two target creatures";
+    }
+
+    public ElvenRiteDistributeEffect(final ElvenRiteDistributeEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public ElvenRiteDistributeEffect copy() {
+        return new ElvenRiteDistributeEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        if (source.getTargets().size() > 0) {
+            Target multiTarget = source.getTargets().get(0);
+            for (UUID target : multiTarget.getTargets()) {
+                Permanent permanent = game.getPermanent(target);
+                if (permanent != null) {
+                    permanent.addCounters(CounterType.P1P1.createInstance(multiTarget.getTargetAmount(target)), game);
+                }
+            }
+        }
+        return true;
+    }
+}

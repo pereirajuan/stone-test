@@ -25,11 +25,12 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.tempestremastered;
 
 import java.util.UUID;
 import mage.abilities.Ability;
 import mage.abilities.effects.OneShotEffect;
+import mage.abilities.effects.common.TapTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Outcome;
@@ -37,62 +38,53 @@ import mage.constants.Rarity;
 import mage.filter.common.FilterCreaturePermanent;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
-import mage.target.common.TargetControlledCreaturePermanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- *
- * As Fall of the Hammer tries to resolve, if only one of the targets is legal,
- * Fall of the Hammer will still resolve but will have no effect: If the first
- * target creature is illegal, it can't deal damage to anything. If the second
- * target creature is illegal, it can't be dealt damage.
- *
- * The amount of damage dealt is based on the first target creature's power as Fall of the Hammer resolves.
-
-
- * @author LevelX2
+ * @author fireshoes
  */
-public class FallOfTheHammer extends CardImpl {
-
+public class Deadshot extends CardImpl {
+    
     private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("another target creature");
 
-    public FallOfTheHammer(UUID ownerId) {
-        super(ownerId, 93, "Fall of the Hammer", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{R}");
-        this.expansionSetCode = "BNG";
+    public Deadshot(UUID ownerId) {
+        super(ownerId, 129, "Deadshot", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{R}");
+        this.expansionSetCode = "TPR";
 
-        this.color.setRed(true);
-
-        // Target creature you control deals damage equal to its power to another target creature.
-        this.getSpellAbility().addEffect(new FallOfTheHammerDamageEffect());
-        this.getSpellAbility().addTarget(new TargetControlledCreaturePermanent());
-        this.getSpellAbility().addTarget(new FallOfTheHammerTargetCreaturePermanent(filter));
+        // Tap target creature.
+        this.getSpellAbility().addEffect(new TapTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        
+        // It deals damage equal to its power to another target creature.
+        this.getSpellAbility().addEffect(new DeadshotDamageEffect());
+        this.getSpellAbility().addTarget(new DeadshotTargetCreaturePermanent(filter));
     }
 
-    public FallOfTheHammer(final FallOfTheHammer card) {
+    public Deadshot(final Deadshot card) {
         super(card);
     }
 
     @Override
-    public FallOfTheHammer copy() {
-        return new FallOfTheHammer(this);
+    public Deadshot copy() {
+        return new Deadshot(this);
     }
 }
 
-class FallOfTheHammerDamageEffect extends OneShotEffect {
+class DeadshotDamageEffect extends OneShotEffect {
 
-    public FallOfTheHammerDamageEffect() {
+    public DeadshotDamageEffect() {
         super(Outcome.Damage);
-        this.staticText = "Target creature you control deals damage equal to its power to another target creature";
+        this.staticText = "Target creature deals damage equal to its power to another target creature";
     }
 
-    public FallOfTheHammerDamageEffect(final FallOfTheHammerDamageEffect effect) {
+    public DeadshotDamageEffect(final DeadshotDamageEffect effect) {
         super(effect);
     }
 
     @Override
-    public FallOfTheHammerDamageEffect copy() {
-        return new FallOfTheHammerDamageEffect(this);
+    public DeadshotDamageEffect copy() {
+        return new DeadshotDamageEffect(this);
     }
 
     @Override
@@ -110,10 +102,9 @@ class FallOfTheHammerDamageEffect extends OneShotEffect {
     }
 }
 
+class DeadshotTargetCreaturePermanent extends TargetCreaturePermanent {
 
-class FallOfTheHammerTargetCreaturePermanent extends TargetCreaturePermanent {
-
-    public FallOfTheHammerTargetCreaturePermanent(FilterCreaturePermanent filter) {
+    public DeadshotTargetCreaturePermanent(FilterCreaturePermanent filter) {
         super(filter);
     }
 

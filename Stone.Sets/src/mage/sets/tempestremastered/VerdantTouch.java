@@ -25,52 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.jacevsvraska;
+package mage.sets.tempestremastered;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.DealsCombatDamageToACreatureTriggeredAbility;
-import mage.abilities.common.DealsCombatDamageToAPlayerTriggeredAbility;
-import mage.abilities.common.delayed.AtTheEndOfCombatDelayedTriggeredAbility;
-import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
-import mage.abilities.effects.common.DestroyTargetEffect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continuous.BecomesCreatureTargetEffect;
+import mage.abilities.keyword.BuybackAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.game.permanent.token.Token;
+import mage.target.common.TargetLandPermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class OhranViper extends CardImpl {
+public class VerdantTouch extends CardImpl {
+    
+    public VerdantTouch(UUID ownerId) {
+        super(ownerId, 203, "Verdant Touch", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{1}{G}");
+        this.expansionSetCode = "TPR";
 
-    public OhranViper(UUID ownerId) {
-        super(ownerId, 57, "Ohran Viper", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}{G}");
-        this.expansionSetCode = "DDM";
-        this.supertype.add("Snow");
-        this.subtype.add("Snake");
-
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(3);
-
-        // Whenever Ohran Viper deals combat damage to a creature, destroy that creature at end of combat.
-        this.addAbility(new DealsCombatDamageToACreatureTriggeredAbility(
-                new CreateDelayedTriggeredAbilityEffect(
-                        new AtTheEndOfCombatDelayedTriggeredAbility(new DestroyTargetEffect("destroy that creature at end of combat")), true),
-                false, 
-                true));
-
-        // Whenever Ohran Viper deals combat damage to a player, you may draw a card.
-        this.addAbility(new DealsCombatDamageToAPlayerTriggeredAbility(new DrawCardSourceControllerEffect(1), true));
+        // Buyback {3}
+        this.addAbility(new BuybackAbility("{3}"));
+        
+        // Target land becomes a 2/2 creature that's still a land.
+        this.getSpellAbility().addEffect(new BecomesCreatureTargetEffect(new VerdantTouchLandToken(), false, true, Duration.Custom));
+        this.getSpellAbility().addTarget(new TargetLandPermanent());
     }
 
-    public OhranViper(final OhranViper card) {
+    public VerdantTouch(final VerdantTouch card) {
         super(card);
     }
 
     @Override
-    public OhranViper copy() {
-        return new OhranViper(this);
+    public VerdantTouch copy() {
+        return new VerdantTouch(this);
+    }
+}
+
+class VerdantTouchLandToken extends Token {
+
+    public VerdantTouchLandToken() {
+        super("", "2/2 creature");
+        this.cardType.add(CardType.CREATURE);
+
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
     }
 }

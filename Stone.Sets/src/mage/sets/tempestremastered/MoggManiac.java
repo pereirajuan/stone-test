@@ -25,55 +25,77 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.tempestremastered;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldAbility;
-import mage.abilities.condition.common.KickedCondition;;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
-import mage.abilities.keyword.FearAbility;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.common.DealtDamageToSourceTriggeredAbility;
+import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.counters.CounterType;
+import mage.constants.Zone;
+import mage.game.Game;
+import mage.players.Player;
+import mage.target.common.TargetOpponent;
 
 /**
  *
- * @author michael.napoleon@gmail.com
+ * @author fireshoes
  */
-public class Duskwalker extends CardImpl {
+public class MoggManiac extends CardImpl {
 
-    public Duskwalker(UUID ownerId) {
-        super(ownerId, 104, "Duskwalker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "INV";
-        this.subtype.add("Human");
-        this.subtype.add("Minion");
+    public MoggManiac(UUID ownerId) {
+        super(ownerId, 147, "Mogg Maniac", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
+        this.expansionSetCode = "TPR";
+        this.subtype.add("Goblin");
         this.power = new MageInt(1);
         this.toughness = new MageInt(1);
 
-        // Kicker {3}{B}
-        this.addAbility(new KickerAbility("{3}{B}"));
-        
-        // If Duskwalker was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.
-        Ability ability = new EntersBattlefieldAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance(2)),
-                KickedCondition.getInstance(), true,
-                "If {this} was kicked, it enters the battlefield with two +1/+1 counters on it and with fear.", "");
-        ability.addEffect(new GainAbilitySourceEffect(FearAbility.getInstance(), Duration.WhileOnBattlefield));
+        // Whenever Mogg Maniac is dealt damage, it deals that much damage to target opponent.
+        Ability ability = new DealtDamageToSourceTriggeredAbility(Zone.BATTLEFIELD, new MoggManiacDealDamageEffect(), false);
+        ability.addTarget(new TargetOpponent());
         this.addAbility(ability);
     }
 
-    public Duskwalker(final Duskwalker card) {
+    public MoggManiac(final MoggManiac card) {
         super(card);
     }
 
     @Override
-    public Duskwalker copy() {
-        return new Duskwalker(this);
+    public MoggManiac copy() {
+        return new MoggManiac(this);
     }
 }
 
+class MoggManiacDealDamageEffect extends OneShotEffect {
+
+    public MoggManiacDealDamageEffect() {
+        super(Outcome.Damage);
+        this.staticText = "it deals that much damage to target opponent";
+    }
+
+    public MoggManiacDealDamageEffect(final MoggManiacDealDamageEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public MoggManiacDealDamageEffect copy() {
+        return new MoggManiacDealDamageEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        int amount = (Integer) getValue("damage");
+        if (amount > 0) {
+            Player opponent = game.getPlayer(targetPointer.getFirst(game, source));
+            if (opponent != null) {
+                opponent.damage(amount, source.getSourceId(), game, false, true);
+                return true;
+            }
+        }
+        return false;
+    }
+}

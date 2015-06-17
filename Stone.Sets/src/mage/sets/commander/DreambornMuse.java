@@ -25,30 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package org.mage.test.commander.duel;
+package mage.sets.commander;
 
-import mage.constants.PhaseStep;
-import mage.constants.Zone;
-import org.junit.Test;
-import org.mage.test.serverside.base.CardTestCommanderDuelBase;
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author anonymous
  */
-public class CastCommanderTest extends CardTestCommanderDuelBase {
-    @Test
-    public void testCastCommander() {
-        addCard(Zone.BATTLEFIELD, playerA, "Swamp", 5);
+public class DreambornMuse extends mage.sets.legions.DreambornMuse {
 
-        castSpell(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Ob Nixilis of the Black Oath");
+    public DreambornMuse(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 44;
+        this.expansionSetCode = "CMD";
+    }
 
-        setStopAt(1, PhaseStep.BEGIN_COMBAT);
-        execute();
+    public DreambornMuse(final DreambornMuse card) {
+        super(card);
+    }
 
-        assertLife(playerA, 40);
-        assertLife(playerB, 40);
-
-        assertPermanentCount(playerA, "Ob Nixilis of the Black Oath", 1);
-    }     
+    @Override
+    public DreambornMuse copy() {
+        return new DreambornMuse(this);
+    }
 }

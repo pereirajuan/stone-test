@@ -29,6 +29,7 @@ package org.mage.test.cards.abilities.keywords;
 
 import mage.constants.PhaseStep;
 import mage.constants.Zone;
+import mage.counters.CounterType;
 import org.junit.Test;
 import org.mage.test.serverside.base.CardTestPlayerBase;
 
@@ -36,54 +37,32 @@ import org.mage.test.serverside.base.CardTestPlayerBase;
  *
  * @author LevelX2
  */
-public class DiscardTest extends CardTestPlayerBase {
 
-    /*
-     * If Rest in Peace is in play, every card going to the graveyard goes to exile instead.
-     * If a card is discarded while Rest in Peace is on the battlefield, abilities that function
-     * when a card is discarded (such as madness) still work, even though that card never reaches
-     * a graveyard.
-     */
+public class TransformTest extends CardTestPlayerBase{
+
     @Test
-    public void testRestInPeaceAndCycle() {
+    public void NissaVastwoodSeerTest() {
+        
+        addCard(Zone.LIBRARY, playerA, "Forest");
+        
+        addCard(Zone.BATTLEFIELD, playerA, "Forest", 6);
+        // When Nissa, Vastwood Seer enters the battlefield, you may search your library for a basic Forest card, reveal it, put it into your hand, then shuffle your library.
+        // Whenever a land enters the battlefield under your control, if you control seven or more lands, exile Nissa, then return her to the battlefield transformed under her owner's control.
+        
+        addCard(Zone.HAND, playerA, "Nissa, Vastwood Seer");
 
-        addCard(Zone.BATTLEFIELD, playerA, "Forest", 1);
-        addCard(Zone.HAND, playerA, "Tranquil Thicket");
 
-        addCard(Zone.BATTLEFIELD, playerB, "Rest in Peace", 1);
-
-        activateAbility(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Cycling {G} <i>({G},Discard {this}: Draw a card.)</i>");
+        castSpell(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Nissa, Vastwood Seer");
+        playLand(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Forest");
+        
         setStopAt(1, PhaseStep.BEGIN_COMBAT);
         execute();
 
-        assertLife(playerA, 20);
-        assertLife(playerB, 20);
-
-        assertHandCount(playerA, "Tranquil Thicket", 0);
-        assertExileCount("Tranquil Thicket", 1);
-        assertHandCount(playerA, 1); // the card drawn by Cycling
+        assertPermanentCount(playerA, "Forest", 7);
+        
+        assertPermanentCount(playerA, "Nissa, Vastwood Seer", 0);
+        assertPermanentCount(playerA, "Nissa, Sage Animist", 1);
+        assertCounterCount("Nissa, Sage Animist", CounterType.LOYALTY, 3);
     }
 
-    /**
-     * With Bazaar of Baghdad, if you use it when you have no cards in hand, you
-     * draw 2, it asks for you to discard 3, but you can't. So the game can't
-     * progress and you lose on time.
-     */
-    @Test
-    public void testBazaarOfBaghdad() {
-        // {T}: Draw two cards, then discard three cards.
-        addCard(Zone.BATTLEFIELD, playerA, "Bazaar of Baghdad", 1);
-
-        activateAbility(1, PhaseStep.PRECOMBAT_MAIN, playerA, "{T}: Draw two cards, then discard three cards");
-
-        setStopAt(1, PhaseStep.BEGIN_COMBAT);
-        execute();
-
-        assertLife(playerA, 20);
-        assertLife(playerB, 20);
-
-        assertHandCount(playerA, 0);
-        assertGraveyardCount(playerA, 2);
-
-    }
 }

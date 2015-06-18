@@ -25,30 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package org.mage.test.commander.duel;
+package mage.sets.magicorigins;
 
-import mage.constants.PhaseStep;
+import java.util.UUID;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.continuous.BoostEquippedEffect;
+import mage.abilities.keyword.EquipAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Outcome;
+import mage.constants.Rarity;
 import mage.constants.Zone;
-import org.junit.Test;
-import org.mage.test.serverside.base.CardTestCommanderDuelBase;
 
 /**
  *
- * @author LevelX2
+ * @author emerald000
  */
-public class CastCommanderTest extends CardTestCommanderDuelBase {
-    @Test
-    public void testCastCommander() {
-        addCard(Zone.BATTLEFIELD, playerA, "Swamp", 5);
+public class VeteransSidearm extends CardImpl {
 
-        castSpell(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Ob Nixilis of the Black Oath");
+    public VeteransSidearm(UUID ownerId) {
+        super(ownerId, 242, "Veteran's Sidearm", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{2}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Equipment");
 
-        setStopAt(1, PhaseStep.BEGIN_COMBAT);
-        execute();
+        // Equipped creature gets +1/+1.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(1, 1)));
+        
+        // Equip {1}
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(1)));
+    }
 
-        assertLife(playerA, 40);
-        assertLife(playerB, 40);
+    public VeteransSidearm(final VeteransSidearm card) {
+        super(card);
+    }
 
-        assertPermanentCount(playerA, "Ob Nixilis of the Black Oath", 1);
-    }     
+    @Override
+    public VeteransSidearm copy() {
+        return new VeteransSidearm(this);
+    }
 }

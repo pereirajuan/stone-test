@@ -25,34 +25,36 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.riseoftheeldrazi;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
-
-import mage.constants.*;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
 import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DealsDamageToOpponentTriggeredAbility;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
 import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
 import mage.abilities.keyword.EnchantAbility;
-import mage.abilities.keyword.TotemArmorAbility;
+import mage.abilities.keyword.ReachAbility;
 import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Outcome;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 import mage.target.TargetPermanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author jeff
+ * @author emerald000
  */
-public class SnakeUmbra extends CardImpl {
+public class MantleOfWebs extends CardImpl {
 
-    public SnakeUmbra(UUID ownerId) {
-        super(ownerId, 207, "Snake Umbra", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{G}");
-        this.expansionSetCode = "ROE";
+    public MantleOfWebs(UUID ownerId) {
+        super(ownerId, 187, "Mantle of Webs", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
+        this.expansionSetCode = "ORI";
         this.subtype.add("Aura");
 
         // Enchant creature
@@ -62,26 +64,19 @@ public class SnakeUmbra extends CardImpl {
         Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
         
-        // Enchanted creature gets +1/+1
-        ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.WhileOnBattlefield));
-        
-        // and has "Whenever this creature deals damage to an opponent, you may draw a card."
-        Ability gainedAbility = new DealsDamageToOpponentTriggeredAbility(new DrawCardSourceControllerEffect(1), true);
-        Effect effect = new GainAbilityAttachedEffect(gainedAbility, AttachmentType.AURA);
-        effect.setText("and has \"Whenever this creature deals damage to an opponent, you may draw a card.\"");
-        ability.addEffect(effect);
-        this.addAbility(ability);
-        
-        // Totem armor
-        this.addAbility(new TotemArmorAbility());
+        // Enchanted creature gets +1/+3 and has reach.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 3, Duration.WhileOnBattlefield)));
+        Effect effect = new GainAbilityAttachedEffect(ReachAbility.getInstance(), AttachmentType.AURA);
+        effect.setText("and has reach");
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
     }
 
-    public SnakeUmbra(final SnakeUmbra card) {
+    public MantleOfWebs(final MantleOfWebs card) {
         super(card);
     }
 
     @Override
-    public SnakeUmbra copy() {
-        return new SnakeUmbra(this);
+    public MantleOfWebs copy() {
+        return new MantleOfWebs(this);
     }
 }

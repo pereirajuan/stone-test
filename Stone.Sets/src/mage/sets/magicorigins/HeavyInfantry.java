@@ -25,30 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package org.mage.test.commander.duel;
+package mage.sets.magicorigins;
 
-import mage.constants.PhaseStep;
-import mage.constants.Zone;
-import org.junit.Test;
-import org.mage.test.serverside.base.CardTestCommanderDuelBase;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.TapTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class CastCommanderTest extends CardTestCommanderDuelBase {
-    @Test
-    public void testCastCommander() {
-        addCard(Zone.BATTLEFIELD, playerA, "Swamp", 5);
+public class HeavyInfantry extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
+    
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
+    }
+    
+    public HeavyInfantry(UUID ownerId) {
+        super(ownerId, 18, "Heavy Infantry", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
 
-        castSpell(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Ob Nixilis of the Black Oath");
+        // When Heavy Infantry enters the battlefield, tap target creature an opponent controls.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new TapTargetEffect());
+        ability.addTarget(new TargetCreaturePermanent(filter));
+        this.addAbility(ability);        
+    }
 
-        setStopAt(1, PhaseStep.BEGIN_COMBAT);
-        execute();
+    public HeavyInfantry(final HeavyInfantry card) {
+        super(card);
+    }
 
-        assertLife(playerA, 40);
-        assertLife(playerB, 40);
-
-        assertPermanentCount(playerA, "Ob Nixilis of the Black Oath", 1);
-    }     
+    @Override
+    public HeavyInfantry copy() {
+        return new HeavyInfantry(this);
+    }
 }

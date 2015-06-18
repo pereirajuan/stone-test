@@ -25,30 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package org.mage.test.commander.duel;
+package mage.sets.magicorigins;
 
-import mage.constants.PhaseStep;
-import mage.constants.Zone;
-import org.junit.Test;
-import org.mage.test.serverside.base.CardTestCommanderDuelBase;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterArtifactOrEnchantmentPermanent;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author LevelX2
+ * @author emerald000
  */
-public class CastCommanderTest extends CardTestCommanderDuelBase {
-    @Test
-    public void testCastCommander() {
-        addCard(Zone.BATTLEFIELD, playerA, "Swamp", 5);
+public class ConclaveNaturalists extends CardImpl {
 
-        castSpell(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Ob Nixilis of the Black Oath");
+    public ConclaveNaturalists(UUID ownerId) {
+        super(ownerId, 171, "Conclave Naturalists", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{G}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Dryad");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-        setStopAt(1, PhaseStep.BEGIN_COMBAT);
-        execute();
+        // When Conclave Naturalists enters the battlefield, you may destroy target artifact or enchantment.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new DestroyTargetEffect(), true);
+        ability.addTarget(new TargetPermanent(new FilterArtifactOrEnchantmentPermanent()));
+        this.addAbility(ability);
+    }
 
-        assertLife(playerA, 40);
-        assertLife(playerB, 40);
+    public ConclaveNaturalists(final ConclaveNaturalists card) {
+        super(card);
+    }
 
-        assertPermanentCount(playerA, "Ob Nixilis of the Black Oath", 1);
-    }     
+    @Override
+    public ConclaveNaturalists copy() {
+        return new ConclaveNaturalists(this);
+    }
 }

@@ -27,65 +27,66 @@
  */
 package mage.sets.lorwyn;
 
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.DealsDamageToAPlayerAllTriggeredAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.keyword.ChampionAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.UntapSourceEffect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.ShroudAbility;
-import mage.cards.CardImpl;
-import mage.constants.Duration;
-import mage.constants.Zone;
+import mage.constants.SetTargetPointer;
 import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
 import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.game.permanent.token.MerfolkWizardToken;
-import mage.target.common.TargetControlledPermanent;
-
-import java.util.UUID;
+import mage.game.permanent.token.Token;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class Benthicore extends CardImpl {
-
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("untapped Merfolk you control");
+public class BoggartMob extends CardImpl {
+    
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("a Goblin you control");
 
     static {
-        filter.add(Predicates.not(new TappedPredicate()));
-        filter.add(new SubtypePredicate("Merfolk"));
+        filter.add(new SubtypePredicate("Goblin"));
     }
 
-    public Benthicore(UUID ownerId) {
-        super(ownerId, 53, "Benthicore", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{6}{U}");
+    public BoggartMob(UUID ownerId) {
+        super(ownerId, 104, "Boggart Mob", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{B}");
         this.expansionSetCode = "LRW";
-        this.subtype.add("Elemental");
-        this.color.setBlue(true);
+        this.subtype.add("Goblin");
+        this.subtype.add("Warrior");
         this.power = new MageInt(5);
         this.toughness = new MageInt(5);
+
+        // Champion a Goblin
+        this.addAbility(new ChampionAbility(this, "Goblin"));
         
-        // When Benthicore enters the battlefield, put two 1/1 blue Merfolk Wizard creature tokens onto the battlefield.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new MerfolkWizardToken(), 2), false));
-        
-        // Tap two untapped Merfolk you control: Untap Benthicore. It gains shroud until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new UntapSourceEffect(), new TapTargetCost(new TargetControlledPermanent(2, 2, filter, false)));
-        ability.addEffect(new GainAbilitySourceEffect(ShroudAbility.getInstance(), Duration.EndOfTurn));
-        this.addAbility(ability);
+        // Whenever a Goblin you control deals combat damage to a player, you may put a 1/1 black Goblin Rogue creature token onto the battlefield.
+        this.addAbility(new DealsDamageToAPlayerAllTriggeredAbility(
+                new CreateTokenEffect(new BlackGoblinRogueToken()), 
+                filter, true, SetTargetPointer.NONE, true));
     }
 
-    public Benthicore(final Benthicore card) {
+    public BoggartMob(final BoggartMob card) {
         super(card);
     }
 
     @Override
-    public Benthicore copy() {
-        return new Benthicore(this);
+    public BoggartMob copy() {
+        return new BoggartMob(this);
+    }
+}
+
+class BlackGoblinRogueToken extends Token {
+    BlackGoblinRogueToken() {
+        super("Goblin Rogue", "1/1 black Goblin Rogue creature token");
+        cardType.add(CardType.CREATURE);
+        color.setBlack(true);
+        subtype.add("Goblin");
+        subtype.add("Rogue");
+        power = new MageInt(1);
+        toughness = new MageInt(1);
     }
 }

@@ -25,28 +25,30 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgepromo;
+package mage.sets.clashpack;
 
 import java.util.UUID;
+import mage.constants.Rarity;
 
 /**
  *
  * @author fireshoes
  */
-public class Wasteland extends mage.sets.tempest.Wasteland {
+public class PrognosticSphinx extends mage.sets.theros.PrognosticSphinx {
 
-    public Wasteland(UUID ownerId) {
+    public PrognosticSphinx(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 55;
-        this.expansionSetCode = "JR";
+        this.cardNumber = 1;
+        this.expansionSetCode = "CLASH";
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public Wasteland(final Wasteland card) {
+    public PrognosticSphinx(final PrognosticSphinx card) {
         super(card);
     }
 
     @Override
-    public Wasteland copy() {
-        return new Wasteland(this);
+    public PrognosticSphinx copy() {
+        return new PrognosticSphinx(this);
     }
 }

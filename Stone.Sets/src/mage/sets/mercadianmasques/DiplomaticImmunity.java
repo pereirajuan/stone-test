@@ -25,55 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.lorwyn;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.cards.CardImpl;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.game.permanent.token.MerfolkWizardToken;
-import mage.target.common.TargetControlledPermanent;
+package mage.sets.mercadianmasques;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.ShroudAbility;
+import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
+import mage.constants.CardType;
+import mage.constants.Outcome;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class SummonTheSchool extends CardImpl {
+public class DiplomaticImmunity extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("untapped Merfolk you control");
+    public DiplomaticImmunity(UUID ownerId) {
+        super(ownerId, 75, "Diplomatic Immunity", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
+        this.expansionSetCode = "MMQ";
+        this.subtype.add("Aura");
 
-    static {
-        filter.add(Predicates.not(new TappedPredicate()));
-        filter.add(new SubtypePredicate("Merfolk"));
-    }
-
-    public SummonTheSchool(UUID ownerId) {
-        super(ownerId, 42, "Summon the School", Rarity.UNCOMMON, new CardType[]{CardType.TRIBAL, CardType.SORCERY}, "{3}{W}");
-        this.expansionSetCode = "LRW";
-        this.subtype.add("Merfolk");
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
         
-        // Put two 1/1 blue Merfolk Wizard creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new MerfolkWizardToken(), 2));
-        // Tap four untapped Merfolk you control: Return Summon the School from your graveyard to your hand.
-        this.addAbility(new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnToHandSourceEffect(), new TapTargetCost(new TargetControlledPermanent(4, 4, filter, false))));
+        // Shroud
+        this.addAbility(ShroudAbility.getInstance());
+        
+        // Enchanted creature has shroud.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(ShroudAbility.getInstance(), AttachmentType.AURA)));
     }
 
-    public SummonTheSchool(final SummonTheSchool card) {
+    public DiplomaticImmunity(final DiplomaticImmunity card) {
         super(card);
     }
 
     @Override
-    public SummonTheSchool copy() {
-        return new SummonTheSchool(this);
+    public DiplomaticImmunity copy() {
+        return new DiplomaticImmunity(this);
     }
 }

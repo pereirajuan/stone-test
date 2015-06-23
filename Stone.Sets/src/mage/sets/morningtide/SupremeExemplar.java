@@ -25,55 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.lorwyn;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.cards.CardImpl;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.game.permanent.token.MerfolkWizardToken;
-import mage.target.common.TargetControlledPermanent;
+package mage.sets.morningtide;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.ChampionAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class SummonTheSchool extends CardImpl {
-
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("untapped Merfolk you control");
+public class SupremeExemplar extends CardImpl {
+    
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("Elemental");
 
     static {
-        filter.add(Predicates.not(new TappedPredicate()));
-        filter.add(new SubtypePredicate("Merfolk"));
+        filter.add(new SubtypePredicate("Elemental"));
     }
 
-    public SummonTheSchool(UUID ownerId) {
-        super(ownerId, 42, "Summon the School", Rarity.UNCOMMON, new CardType[]{CardType.TRIBAL, CardType.SORCERY}, "{3}{W}");
-        this.expansionSetCode = "LRW";
-        this.subtype.add("Merfolk");
+    public SupremeExemplar(UUID ownerId) {
+        super(ownerId, 53, "Supreme Exemplar", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{6}{U}");
+        this.expansionSetCode = "MOR";
+        this.subtype.add("Elemental");
+        this.power = new MageInt(10);
+        this.toughness = new MageInt(10);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
         
-        // Put two 1/1 blue Merfolk Wizard creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new MerfolkWizardToken(), 2));
-        // Tap four untapped Merfolk you control: Return Summon the School from your graveyard to your hand.
-        this.addAbility(new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnToHandSourceEffect(), new TapTargetCost(new TargetControlledPermanent(4, 4, filter, false))));
+        // Champion an Elemental
+        this.addAbility(new ChampionAbility(this, "Elemental"));
     }
 
-    public SummonTheSchool(final SummonTheSchool card) {
+    public SupremeExemplar(final SupremeExemplar card) {
         super(card);
     }
 
     @Override
-    public SummonTheSchool copy() {
-        return new SummonTheSchool(this);
+    public SupremeExemplar copy() {
+        return new SupremeExemplar(this);
     }
 }

@@ -25,55 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.lorwyn;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.cards.CardImpl;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.game.permanent.token.MerfolkWizardToken;
-import mage.target.common.TargetControlledPermanent;
+package mage.sets.scourge;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.TurnedFaceUpAllTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterPermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class SummonTheSchool extends CardImpl {
+public class AphettoRunecaster extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("untapped Merfolk you control");
+    public AphettoRunecaster(UUID ownerId) {
+        super(ownerId, 28, "Aphetto Runecaster", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "SCG";
+        this.subtype.add("Human");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
-    static {
-        filter.add(Predicates.not(new TappedPredicate()));
-        filter.add(new SubtypePredicate("Merfolk"));
+        // Whenever a permanent is turned face up, you may draw a card.
+        this.addAbility(new TurnedFaceUpAllTriggeredAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1), new FilterPermanent("a permanent"), false, true));
     }
 
-    public SummonTheSchool(UUID ownerId) {
-        super(ownerId, 42, "Summon the School", Rarity.UNCOMMON, new CardType[]{CardType.TRIBAL, CardType.SORCERY}, "{3}{W}");
-        this.expansionSetCode = "LRW";
-        this.subtype.add("Merfolk");
-        
-        // Put two 1/1 blue Merfolk Wizard creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new MerfolkWizardToken(), 2));
-        // Tap four untapped Merfolk you control: Return Summon the School from your graveyard to your hand.
-        this.addAbility(new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnToHandSourceEffect(), new TapTargetCost(new TargetControlledPermanent(4, 4, filter, false))));
-    }
-
-    public SummonTheSchool(final SummonTheSchool card) {
+    public AphettoRunecaster(final AphettoRunecaster card) {
         super(card);
     }
 
     @Override
-    public SummonTheSchool copy() {
-        return new SummonTheSchool(this);
+    public AphettoRunecaster copy() {
+        return new AphettoRunecaster(this);
     }
 }

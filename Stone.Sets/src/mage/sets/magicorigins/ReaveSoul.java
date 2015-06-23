@@ -25,55 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.lorwyn;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.cards.CardImpl;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.game.permanent.token.MerfolkWizardToken;
-import mage.target.common.TargetControlledPermanent;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.Filter;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.PowerPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class SummonTheSchool extends CardImpl {
-
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("untapped Merfolk you control");
+public class ReaveSoul extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature with power 3 or less");
 
     static {
-        filter.add(Predicates.not(new TappedPredicate()));
-        filter.add(new SubtypePredicate("Merfolk"));
+        filter.add(new PowerPredicate(Filter.ComparisonType.LessThan, 4));
     }
 
-    public SummonTheSchool(UUID ownerId) {
-        super(ownerId, 42, "Summon the School", Rarity.UNCOMMON, new CardType[]{CardType.TRIBAL, CardType.SORCERY}, "{3}{W}");
-        this.expansionSetCode = "LRW";
-        this.subtype.add("Merfolk");
-        
-        // Put two 1/1 blue Merfolk Wizard creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new MerfolkWizardToken(), 2));
-        // Tap four untapped Merfolk you control: Return Summon the School from your graveyard to your hand.
-        this.addAbility(new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnToHandSourceEffect(), new TapTargetCost(new TargetControlledPermanent(4, 4, filter, false))));
+    public ReaveSoul(UUID ownerId) {
+        super(ownerId, 115, "Reave Soul", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{1}{B}");
+        this.expansionSetCode = "ORI";
+
+        // Destroy target creature with power 3 or less.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(filter));
     }
 
-    public SummonTheSchool(final SummonTheSchool card) {
+    public ReaveSoul(final ReaveSoul card) {
         super(card);
     }
 
     @Override
-    public SummonTheSchool copy() {
-        return new SummonTheSchool(this);
+    public ReaveSoul copy() {
+        return new ReaveSoul(this);
     }
 }

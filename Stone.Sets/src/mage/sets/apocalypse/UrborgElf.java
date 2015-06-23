@@ -25,28 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgepromo;
+package mage.sets.apocalypse;
 
 import java.util.UUID;
 
+import mage.MageInt;
+import mage.abilities.mana.BlackManaAbility;
+import mage.abilities.mana.BlueManaAbility;
+import mage.abilities.mana.GreenManaAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+
 /**
  *
- * @author fireshoes
+ * @author EvilGeek
  */
-public class Wasteland extends mage.sets.tempest.Wasteland {
+public class UrborgElf extends CardImpl {
 
-    public Wasteland(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 55;
-        this.expansionSetCode = "JR";
+    public UrborgElf(UUID ownerId) {
+        super(ownerId, 90, "Urborg Elf", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "APC";
+        this.subtype.add("Elf");
+        this.subtype.add("Druid");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // {tap}: Add {G}, {U}, or {B} to your mana pool.
+        this.addAbility(new GreenManaAbility());
+        this.addAbility(new BlueManaAbility());
+        this.addAbility(new BlackManaAbility());
     }
 
-    public Wasteland(final Wasteland card) {
+    public UrborgElf(final UrborgElf card) {
         super(card);
     }
 
     @Override
-    public Wasteland copy() {
-        return new Wasteland(this);
+    public UrborgElf copy() {
+        return new UrborgElf(this);
     }
 }

@@ -25,55 +25,58 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.lorwyn;
-
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.cards.CardImpl;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.game.permanent.token.MerfolkWizardToken;
-import mage.target.common.TargetControlledPermanent;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.permanent.AnotherPredicate;
+import mage.target.common.TargetControlledPermanent;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class SummonTheSchool extends CardImpl {
-
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("untapped Merfolk you control");
+public class BlazingHellhound extends CardImpl {
+    
+    private static final FilterControlledPermanent filter = new FilterControlledCreaturePermanent("another creature");
 
     static {
-        filter.add(Predicates.not(new TappedPredicate()));
-        filter.add(new SubtypePredicate("Merfolk"));
+        filter.add(new AnotherPredicate());
     }
 
-    public SummonTheSchool(UUID ownerId) {
-        super(ownerId, 42, "Summon the School", Rarity.UNCOMMON, new CardType[]{CardType.TRIBAL, CardType.SORCERY}, "{3}{W}");
-        this.expansionSetCode = "LRW";
-        this.subtype.add("Merfolk");
-        
-        // Put two 1/1 blue Merfolk Wizard creature tokens onto the battlefield.
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new MerfolkWizardToken(), 2));
-        // Tap four untapped Merfolk you control: Return Summon the School from your graveyard to your hand.
-        this.addAbility(new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnToHandSourceEffect(), new TapTargetCost(new TargetControlledPermanent(4, 4, filter, false))));
+    public BlazingHellhound(UUID ownerId) {
+        super(ownerId, 210, "Blazing Hellhound", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{B}{R}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Elemental");
+        this.subtype.add("Hound");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
+
+        // {1}, Sacrifice another creature: Blazing Hellhound deals 1 damage to target creature or player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(1), new ManaCostsImpl("{1}"));
+        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(filter)));
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
 
-    public SummonTheSchool(final SummonTheSchool card) {
+    public BlazingHellhound(final BlazingHellhound card) {
         super(card);
     }
 
     @Override
-    public SummonTheSchool copy() {
-        return new SummonTheSchool(this);
+    public BlazingHellhound copy() {
+        return new BlazingHellhound(this);
     }
 }

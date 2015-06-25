@@ -25,53 +25,61 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.onslaught;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.ShuffleIntoLibrarySourceEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
 import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.NamePredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
  * @author fireshoes
  */
-public class LightningShrieker extends CardImpl {
+public class Avarax extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard("card named Avarax");
 
-    public LightningShrieker(UUID ownerId) {
-        super(ownerId, 106, "Lightning Shrieker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Dragon");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
-
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, Lightning Shrieker's owner shuffles it into his or her library.
-        Effect effect = new ShuffleIntoLibrarySourceEffect();
-        effect.setText("{this}'s owner shuffles it into his or her library.");
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(Zone.BATTLEFIELD, effect, TargetController.ANY, null, false));
+    static {
+        filter.add(new NamePredicate("Avarax"));
     }
 
-    public LightningShrieker(final LightningShrieker card) {
+    public Avarax(UUID ownerId) {
+        super(ownerId, 187, "Avarax", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{R}{R}");
+        this.expansionSetCode = "ONS";
+        this.subtype.add("Beast");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
+        
+        // When Avarax enters the battlefield, you may search your library for a card named Avarax, reveal it, and put it into your hand. If you do, shuffle your library.
+        TargetCardInLibrary target = new TargetCardInLibrary(0, 1, filter);
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutInHandEffect(target, true, true), true));
+        
+        // {1}{R}: Avarax gets +1/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1, 0, Duration.EndOfTurn), new ManaCostsImpl("{1}{R}")));
+    }
+
+    public Avarax(final Avarax card) {
         super(card);
     }
 
     @Override
-    public LightningShrieker copy() {
-        return new LightningShrieker(this);
+    public Avarax copy() {
+        return new Avarax(this);
     }
 }

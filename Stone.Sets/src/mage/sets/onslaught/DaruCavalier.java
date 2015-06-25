@@ -25,53 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.onslaught;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.ShuffleIntoLibrarySourceEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.NamePredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
  * @author fireshoes
  */
-public class LightningShrieker extends CardImpl {
 
-    public LightningShrieker(UUID ownerId) {
-        super(ownerId, 106, "Lightning Shrieker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Dragon");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+public class DaruCavalier extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard("card named Daru Cavalier");
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, Lightning Shrieker's owner shuffles it into his or her library.
-        Effect effect = new ShuffleIntoLibrarySourceEffect();
-        effect.setText("{this}'s owner shuffles it into his or her library.");
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(Zone.BATTLEFIELD, effect, TargetController.ANY, null, false));
+    static {
+        filter.add(new NamePredicate("Daru Cavalier"));
     }
 
-    public LightningShrieker(final LightningShrieker card) {
+    public DaruCavalier(UUID ownerId) {
+        super(ownerId, 18, "Daru Cavalier", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{W}");
+        this.expansionSetCode = "ONS";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+        
+        // When Daru Cavalier enters the battlefield, you may search your library for a card named Daru Cavalier, reveal it, and put it into your hand. If you do, shuffle your library.
+        TargetCardInLibrary target = new TargetCardInLibrary(0, 1, filter);
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutInHandEffect(target, true, true), true));
+    }
+
+    public DaruCavalier(final DaruCavalier card) {
         super(card);
     }
 
     @Override
-    public LightningShrieker copy() {
-        return new LightningShrieker(this);
+    public DaruCavalier copy() {
+        return new DaruCavalier(this);
     }
 }

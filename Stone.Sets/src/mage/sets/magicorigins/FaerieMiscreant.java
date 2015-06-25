@@ -25,53 +25,64 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.ShuffleIntoLibrarySourceEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
-import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.NamePredicate;
+import mage.filter.predicate.permanent.AnotherPredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class LightningShrieker extends CardImpl {
+public class FaerieMiscreant extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("you control another creature named Faerie Miscreant");
 
-    public LightningShrieker(UUID ownerId) {
-        super(ownerId, 106, "Lightning Shrieker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Dragon");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+    static {
+        filter.add(new NamePredicate("Faerie Miscreant"));
+        filter.add(new AnotherPredicate());
+        filter.add(new ControllerPredicate(TargetController.YOU));
+    }
+
+    public FaerieMiscreant(UUID ownerId) {
+        super(ownerId, 57, "Faerie Miscreant", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{U}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Faerie");
+        this.subtype.add("Rogue");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
         // Flying
         this.addAbility(FlyingAbility.getInstance());
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, Lightning Shrieker's owner shuffles it into his or her library.
-        Effect effect = new ShuffleIntoLibrarySourceEffect();
-        effect.setText("{this}'s owner shuffles it into his or her library.");
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(Zone.BATTLEFIELD, effect, TargetController.ANY, null, false));
+        
+        // When Faerie Miscreant enters the battlefield, if you control another creature named Faerie Miscreant, draw a card.
+        Ability ability = new ConditionalTriggeredAbility(
+                new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(1), false),
+                new PermanentsOnTheBattlefieldCondition(filter, PermanentsOnTheBattlefieldCondition.CountType.MORE_THAN, 0),
+                "When Faerie Miscreant enters the battlefield, if you control another creature named Faerie Miscreant, draw a card");
+        this.addAbility(ability);
     }
 
-    public LightningShrieker(final LightningShrieker card) {
+    public FaerieMiscreant(final FaerieMiscreant card) {
         super(card);
     }
 
     @Override
-    public LightningShrieker copy() {
-        return new LightningShrieker(this);
+    public FaerieMiscreant copy() {
+        return new FaerieMiscreant(this);
     }
 }

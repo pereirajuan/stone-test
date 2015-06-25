@@ -25,53 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.exodus;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.ShuffleIntoLibrarySourceEffect;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
 import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.NamePredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
  * @author fireshoes
  */
-public class LightningShrieker extends CardImpl {
 
-    public LightningShrieker(UUID ownerId) {
-        super(ownerId, 106, "Lightning Shrieker", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Dragon");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+public class WelkinHawk extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard("card named Welkin Hawk");
+
+    static {
+        filter.add(new NamePredicate("Welkin Hawk"));
+    }
+
+    public WelkinHawk(UUID ownerId) {
+        super(ownerId, 25, "Welkin Hawk", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{W}");
+        this.expansionSetCode = "EXO";
+        this.subtype.add("Bird");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
         // Flying
         this.addAbility(FlyingAbility.getInstance());
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, Lightning Shrieker's owner shuffles it into his or her library.
-        Effect effect = new ShuffleIntoLibrarySourceEffect();
-        effect.setText("{this}'s owner shuffles it into his or her library.");
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(Zone.BATTLEFIELD, effect, TargetController.ANY, null, false));
+                
+        // When Welkin Hawk dies, you may search your library for a card named Welkin Hawk, reveal that card, put it into your hand, then shuffle your library.
+        TargetCardInLibrary target = new TargetCardInLibrary(0, 1, filter);
+        this.addAbility(new DiesTriggeredAbility(new SearchLibraryPutInHandEffect(target, true, true), true));
     }
 
-    public LightningShrieker(final LightningShrieker card) {
+    public WelkinHawk(final WelkinHawk card) {
         super(card);
     }
 
     @Override
-    public LightningShrieker copy() {
-        return new LightningShrieker(this);
+    public WelkinHawk copy() {
+        return new WelkinHawk(this);
     }
 }

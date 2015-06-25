@@ -25,62 +25,62 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.mastersedition;
+package mage.sets.onslaught;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.ObjectColor;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.BoostSourceEffect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.FirstStrikeAbility;
-import mage.abilities.keyword.ProtectionAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.filter.FilterCard;
-import mage.filter.predicate.mageobject.ColorPredicate;
+import mage.filter.predicate.mageobject.NamePredicate;
+import mage.target.common.TargetCardInLibrary;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author LoneFox
-
+ * @author fireshoes
  */
-public class OrderOfTheEbonHand extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("white");
+public class EmbermageGoblin extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard("card named Embermage Goblin");
 
     static {
-        filter.add(new ColorPredicate(ObjectColor.WHITE));
+        filter.add(new NamePredicate("Embermage Goblin"));
     }
 
-    public OrderOfTheEbonHand(UUID ownerId) {
-        super(ownerId, 78, "Order of the Ebon Hand", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{B}{B}");
-        this.expansionSetCode = "MED";
-        this.subtype.add("Cleric");
-        this.subtype.add("Knight");
-        this.power = new MageInt(2);
+    public EmbermageGoblin(UUID ownerId) {
+        super(ownerId, 200, "Embermage Goblin", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{R}");
+        this.expansionSetCode = "ONS";
+        this.subtype.add("Goblin");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(1);
         this.toughness = new MageInt(1);
 
-        // Protection from white
-        this.addAbility(new ProtectionAbility(filter));
-
-        // {B}: Order of the Ebon Hand gains first strike until end of turn.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilitySourceEffect(FirstStrikeAbility.getInstance(), Duration.EndOfTurn), new ManaCostsImpl("{B}")));
-
-        // {B}{B}: Order of the Ebon Hand gets +1/+0 until end of turn.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1,0, Duration.EndOfTurn), new ManaCostsImpl("{B}{B}")));
+        // When Embermage Goblin enters the battlefield, you may search your library for a card named Embermage Goblin, reveal it, and put it into your hand. If you do, shuffle your library.
+        TargetCardInLibrary target = new TargetCardInLibrary(0, 1, filter);
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutInHandEffect(target, true, true), true));
+        
+        // {tap}: Embermage Goblin deals 1 damage to target creature or player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(1), new TapSourceCost());
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
 
-    public OrderOfTheEbonHand(final OrderOfTheEbonHand card) {
+    public EmbermageGoblin(final EmbermageGoblin card) {
         super(card);
     }
 
     @Override
-    public OrderOfTheEbonHand copy() {
-        return new OrderOfTheEbonHand(this);
+    public EmbermageGoblin copy() {
+        return new EmbermageGoblin(this);
     }
 }

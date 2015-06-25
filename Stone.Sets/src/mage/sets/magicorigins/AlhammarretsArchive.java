@@ -25,14 +25,12 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.dragonsmaze;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
 import mage.abilities.effects.ReplacementEffectImpl;
-import mage.abilities.keyword.FlashAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
@@ -46,51 +44,85 @@ import mage.watchers.common.CardsDrawnDuringDrawStepWatcher;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class NotionThief extends CardImpl {
 
-    public NotionThief(UUID ownerId) {
-        super(ownerId, 88, "Notion Thief", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{U}{B}");
-        this.expansionSetCode = "DGM";
-        this.subtype.add("Human");
-        this.subtype.add("Rogue");
+public class AlhammarretsArchive extends CardImpl {
 
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(1);
+    public AlhammarretsArchive(UUID ownerId) {
+        super(ownerId, 221, "Alhammarret's Archive", Rarity.MYTHIC, new CardType[]{CardType.ARTIFACT}, "{5}");
+        this.expansionSetCode = "ORI";
+        this.supertype.add("Legendary");
 
-        // Flash
-        this.addAbility(FlashAbility.getInstance());
-        // If an opponent would draw a card except the first one he or she draws in each of his or her draw steps, instead that player skips that draw and you draw a card.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new NotionThiefReplacementEffect()), new CardsDrawnDuringDrawStepWatcher());
-
+        // If you would gain life, you gain twice that much life instead.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new AlhammarretsArchiveEffect()));
+        
+        // If you draw a card except the first one you draw in each of your draw steps, draw two cards instead.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new AlhammarretsArchiveReplacementEffect()), new CardsDrawnDuringDrawStepWatcher());
     }
 
-    public NotionThief(final NotionThief card) {
+    public AlhammarretsArchive(final AlhammarretsArchive card) {
         super(card);
     }
 
     @Override
-    public NotionThief copy() {
-        return new NotionThief(this);
+    public AlhammarretsArchive copy() {
+        return new AlhammarretsArchive(this);
     }
 }
 
+class AlhammarretsArchiveEffect extends ReplacementEffectImpl {
 
-class NotionThiefReplacementEffect extends ReplacementEffectImpl {
-
-    public NotionThiefReplacementEffect() {
+    public AlhammarretsArchiveEffect() {
         super(Duration.WhileOnBattlefield, Outcome.Benefit);
-        staticText = "If an opponent would draw a card except the first one he or she draws in each of his or her draw steps, instead that player skips that draw and you draw a card";
+        staticText = "If you would gain life, you gain twice that much life instead";
     }
 
-    public NotionThiefReplacementEffect(final NotionThiefReplacementEffect effect) {
+    public AlhammarretsArchiveEffect(final AlhammarretsArchiveEffect effect) {
         super(effect);
     }
 
     @Override
-    public NotionThiefReplacementEffect copy() {
-        return new NotionThiefReplacementEffect(this);
+    public AlhammarretsArchiveEffect copy() {
+        return new AlhammarretsArchiveEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        return true;
+    }
+
+    @Override
+    public boolean replaceEvent(GameEvent event, Ability source, Game game) {
+        event.setAmount(event.getAmount() * 2);
+        return false;
+    }
+
+    @Override
+    public boolean checksEventType(GameEvent event, Game game) {
+        return event.getType().equals(GameEvent.EventType.GAIN_LIFE);
+    }
+
+    @Override
+    public boolean applies(GameEvent event, Ability source, Game game) {
+        return event.getPlayerId().equals(source.getControllerId()) && (source.getControllerId() != null);
+    }
+}
+
+class AlhammarretsArchiveReplacementEffect extends ReplacementEffectImpl {
+
+    public AlhammarretsArchiveReplacementEffect() {
+        super(Duration.WhileOnBattlefield, Outcome.Neutral);
+        staticText = "If you draw a card except the first one you draw in each of your draw steps, draw two cards instead";
+    }
+
+    public AlhammarretsArchiveReplacementEffect(final AlhammarretsArchiveReplacementEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public AlhammarretsArchiveReplacementEffect copy() {
+        return new AlhammarretsArchiveReplacementEffect(this);
     }
 
     @Override
@@ -102,7 +134,7 @@ class NotionThiefReplacementEffect extends ReplacementEffectImpl {
     public boolean replaceEvent(GameEvent event, Ability source, Game game) {
         Player player = game.getPlayer(source.getControllerId());
         if (player != null) {
-            player.drawCards(1, game, event.getAppliedEffects());
+            player.drawCards(2, game, event.getAppliedEffects());
         }
         return true;
     }
@@ -110,11 +142,11 @@ class NotionThiefReplacementEffect extends ReplacementEffectImpl {
     @Override
     public boolean checksEventType(GameEvent event, Game game) {
         return event.getType() == GameEvent.EventType.DRAW_CARD;
-    } 
-    
+    }   
+
     @Override
     public boolean applies(GameEvent event, Ability source, Game game) {
-        if (game.getOpponents(source.getControllerId()).contains(event.getPlayerId())) {
+        if (event.getPlayerId().equals(source.getControllerId())) {
             if (game.getActivePlayerId().equals(event.getPlayerId())) {
                 CardsDrawnDuringDrawStepWatcher watcher = (CardsDrawnDuringDrawStepWatcher) game.getState().getWatchers().get("CardsDrawnDuringDrawStep");
                 if (watcher != null && watcher.getAmountCardsDrawn(event.getPlayerId()) > 0) {

@@ -25,14 +25,13 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2015;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
 import mage.MageObject;
 import mage.abilities.Ability;
 import mage.abilities.Mode;
 import mage.abilities.effects.common.search.SearchTargetGraveyardHandLibraryForCardNameAndExileEffect;
-import mage.abilities.keyword.ConvokeAbility;
 import mage.cards.CardImpl;
 import mage.cards.repository.CardRepository;
 import mage.choices.Choice;
@@ -42,54 +41,53 @@ import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.game.Game;
 import mage.players.Player;
-import mage.target.TargetPlayer;
+import mage.target.common.TargetOpponent;
 
 /**
  *
  * @author LevelX2
  */
-public class StainTheMind extends CardImpl {
+public class InfiniteObliteration extends CardImpl {
 
-    public StainTheMind(UUID ownerId) {
-        super(ownerId, 117, "Stain the Mind", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{B}");
-        this.expansionSetCode = "M15";
+    public InfiniteObliteration(UUID ownerId) {
+        super(ownerId, 103, "Infinite Obliteration", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{1}{B}{B}");
+        this.expansionSetCode = "ORI";
 
-        // Convoke
-        this.addAbility(new ConvokeAbility());
-        // Name a nonland card. Search target player's graveyard, hand, and library for any number of card's with that name and exile them. Then that player shuffles his or her library.
-        this.getSpellAbility().addEffect(new StainTheMindEffect());
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // Name a creature card.  Search target opponent's graveyard, hand, and library
+        // for any number of cards with that name and exile them.  Then that player shuffles his or her library.
+        this.getSpellAbility().addEffect(new InfiniteObliterationEffect());
+        this.getSpellAbility().addTarget(new TargetOpponent());
     }
 
-    public StainTheMind(final StainTheMind card) {
+    public InfiniteObliteration(final InfiniteObliteration card) {
         super(card);
     }
 
     @Override
-    public StainTheMind copy() {
-        return new StainTheMind(this);
+    public InfiniteObliteration copy() {
+        return new InfiniteObliteration(this);
     }
 }
 
-class StainTheMindEffect extends SearchTargetGraveyardHandLibraryForCardNameAndExileEffect {
+class InfiniteObliterationEffect extends SearchTargetGraveyardHandLibraryForCardNameAndExileEffect {
 
-    public StainTheMindEffect() {
-        super(true, "target player's", "any number of cards with that name");
+    public InfiniteObliterationEffect() {
+        super(true, "target opponent's", "any number of cards with that name");
     }
 
-    public StainTheMindEffect(final StainTheMindEffect effect) {
+    public InfiniteObliterationEffect(final InfiniteObliterationEffect effect) {
         super(effect);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
-        Player player = game.getPlayer(targetPointer.getFirst(game, source));
+        Player player = game.getPlayer(getTargetPointer().getFirst(game, source));
         Player controller = game.getPlayer(source.getControllerId());
         if (player != null && controller != null) {
             Choice cardChoice = new ChoiceImpl();
-            cardChoice.setChoices(CardRepository.instance.getNonLandNames());
+            cardChoice.setChoices(CardRepository.instance.getCreatureNames());
             cardChoice.clearChoice();
-            cardChoice.setMessage("Name a nonland card");
+            cardChoice.setMessage("Name a creature card");
 
             while (!controller.choose(Outcome.Exile, cardChoice, game)) {
                 if (!controller.isInGame()) {
@@ -109,14 +107,14 @@ class StainTheMindEffect extends SearchTargetGraveyardHandLibraryForCardNameAndE
     }
 
     @Override
-    public StainTheMindEffect copy() {
-        return new StainTheMindEffect(this);
+    public InfiniteObliterationEffect copy() {
+        return new InfiniteObliterationEffect(this);
     }
 
     @Override
     public String getText(Mode mode) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Name a nonland card. ");
+        sb.append("Name a creature card. ");
         sb.append(super.getText(mode));
         return sb.toString();
     }

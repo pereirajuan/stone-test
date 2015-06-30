@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,44 +20,42 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.magic2011;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
-import mage.abilities.effects.common.ReturnToHandTargetEffect;
+import mage.abilities.dynamicvalue.common.ManacostVariableValue;
+import mage.abilities.effects.common.CounterUnlessPaysEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterInstantOrSorceryCard;
-import mage.target.common.TargetCardInYourGraveyard;
+import mage.target.TargetSpell;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class CallToMind extends CardImpl {
+public class ClashOfWills extends CardImpl {
 
-    public CallToMind(UUID ownerId) {
-        super(ownerId, 47, "Call to Mind", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{2}{U}");
-        this.expansionSetCode = "M11";
+    public ClashOfWills(UUID ownerId) {
+        super(ownerId, 49, "Clash of Wills", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{X}{U}");
+        this.expansionSetCode = "ORI";
 
-        // Return target instant or sorcery card from your graveyard to your hand.
-        this.getSpellAbility().addEffect(new ReturnToHandTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCardInYourGraveyard(new FilterInstantOrSorceryCard("instant or sorcery card from your graveyard")));
+        // Counter target spell unless its controller pays {X}.
+        this.getSpellAbility().addEffect(new CounterUnlessPaysEffect(new ManacostVariableValue()));
+        this.getSpellAbility().addTarget(new TargetSpell());
     }
 
-    public CallToMind(final CallToMind card) {
+    public ClashOfWills(final ClashOfWills card) {
         super(card);
     }
 
     @Override
-    public CallToMind copy() {
-        return new CallToMind(this);
+    public ClashOfWills copy() {
+        return new ClashOfWills(this);
     }
-
 }

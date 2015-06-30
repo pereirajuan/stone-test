@@ -26,38 +26,33 @@
  *  or implied, of BetaSteward_at_googlemail.com.
  */
 
-package mage.sets.magic2011;
+package mage.game.permanent.token;
 
-import java.util.UUID;
-import mage.abilities.effects.common.ReturnToHandTargetEffect;
-import mage.cards.CardImpl;
+import mage.MageInt;
+import mage.abilities.keyword.FlyingAbility;
 import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.filter.common.FilterInstantOrSorceryCard;
-import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class CallToMind extends CardImpl {
 
-    public CallToMind(UUID ownerId) {
-        super(ownerId, 47, "Call to Mind", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{2}{U}");
-        this.expansionSetCode = "M11";
+public class ThopterColorlessToken extends Token {
 
-        // Return target instant or sorcery card from your graveyard to your hand.
-        this.getSpellAbility().addEffect(new ReturnToHandTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCardInYourGraveyard(new FilterInstantOrSorceryCard("instant or sorcery card from your graveyard")));
+    public ThopterColorlessToken() {
+        this("EXO");
     }
 
-    public CallToMind(final CallToMind card) {
-        super(card);
-    }
-
-    @Override
-    public CallToMind copy() {
-        return new CallToMind(this);
+    public ThopterColorlessToken(String expansionSetCode) {
+        super("Thopter", "1/1 colorless Thopter creature token with flying");
+        this.setOriginalExpansionSetCode(expansionSetCode);
+        cardType.add(CardType.ARTIFACT);
+        cardType.add(CardType.CREATURE);
+        subtype.add("Thopter");
+        power = new MageInt(1);
+        toughness = new MageInt(1);
+        
+        addAbility(FlyingAbility.getInstance());
     }
 
 }

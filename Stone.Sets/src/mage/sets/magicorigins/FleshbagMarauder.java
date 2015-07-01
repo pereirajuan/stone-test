@@ -28,43 +28,25 @@
 package mage.sets.magicorigins;
 
 import java.util.UUID;
-import mage.abilities.condition.common.SpellMasteryCondition;
-import mage.abilities.decorator.ConditionalContinuousRuleModifyingEffect;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class SendToSleep extends CardImpl {
+public class FleshbagMarauder extends mage.sets.shardsofalara.FleshbagMarauder {
 
-    public SendToSleep(UUID ownerId) {
-        super(ownerId, 71, "Send to Sleep", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public FleshbagMarauder(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 98;
         this.expansionSetCode = "ORI";
-
-        // Tap up to two target creatures.
-        this.getSpellAbility().addEffect(new TapTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
-        
-        // <i>Spell mastery</i> — If there are two or more instant and/or sorcery cards in your graveyard, those creatures don't untap during their controllers' next untap steps.
-        Effect effect = new ConditionalContinuousRuleModifyingEffect(new DontUntapInControllersNextUntapStepTargetEffect(),
-                SpellMasteryCondition.getInstance());
-        effect.setText("<br><i>Spell mastery</i> — If there are two or more instant and/or sorcery cards in your graveyard, those creatures don't untap during their controllers' next untap steps");
-        this.getSpellAbility().addEffect(effect);
     }
 
-    public SendToSleep(final SendToSleep card) {
+    public FleshbagMarauder(final FleshbagMarauder card) {
         super(card);
     }
 
     @Override
-    public SendToSleep copy() {
-        return new SendToSleep(this);
+    public FleshbagMarauder copy() {
+        return new FleshbagMarauder(this);
     }
 }

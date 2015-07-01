@@ -25,48 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.masterseditioniv;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.common.GainLifeEffect;
 import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.filter.FilterCard;
-import mage.filter.predicate.Predicates;
+import mage.filter.FilterSpell;
 import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class ManaMatrix extends CardImpl {
-
-    private static final FilterCard filter = new FilterCard("instant and enchantment spells");
+public class HeraldOfThePantheon extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard("enchantment spells");
+    private static final FilterSpell filter2 = new FilterSpell("an enchantment spell");
     
     static {
-        filter.add(Predicates.or(
-            new CardTypePredicate(CardType.INSTANT),
-            new CardTypePredicate(CardType.ENCHANTMENT)
-        ));                
-    }
-            
-    public ManaMatrix(UUID ownerId) {
-        super(ownerId, 213, "Mana Matrix", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{6}");
-        this.expansionSetCode = "ME4";
-
-        // Instant and enchantment spells you cast cost up to {2} less to cast.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 2, true)));        
+        filter.add(new CardTypePredicate(CardType.ENCHANTMENT)); 
+        filter2.add(new CardTypePredicate(CardType.ENCHANTMENT));
     }
 
-    public ManaMatrix(final ManaMatrix card) {
+    public HeraldOfThePantheon(UUID ownerId) {
+        super(ownerId, 180, "Herald of the Pantheon", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Centaur");
+        this.subtype.add("Shaman");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Enchantment spells you cast cost {1} less to cast.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 1)));     
+        
+        // Whenever you cast an enchantment spell, you gain 1 life.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new GainLifeEffect(1), filter2, false));
+    }
+
+    public HeraldOfThePantheon(final HeraldOfThePantheon card) {
         super(card);
     }
 
     @Override
-    public ManaMatrix copy() {
-        return new ManaMatrix(this);
+    public HeraldOfThePantheon copy() {
+        return new HeraldOfThePantheon(this);
     }
 }

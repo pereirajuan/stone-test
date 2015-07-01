@@ -25,48 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.masterseditioniv;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
+import mage.MageInt;
+import mage.abilities.keyword.CantAttackAloneAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.FilterCard;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class ManaMatrix extends CardImpl {
+public class BondedConstruct extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("instant and enchantment spells");
-    
-    static {
-        filter.add(Predicates.or(
-            new CardTypePredicate(CardType.INSTANT),
-            new CardTypePredicate(CardType.ENCHANTMENT)
-        ));                
-    }
-            
-    public ManaMatrix(UUID ownerId) {
-        super(ownerId, 213, "Mana Matrix", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{6}");
-        this.expansionSetCode = "ME4";
+    public BondedConstruct(UUID ownerId) {
+        super(ownerId, 223, "Bonded Construct", Rarity.COMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{1}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Construct");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        // Instant and enchantment spells you cast cost up to {2} less to cast.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 2, true)));        
+        // Bonded Construct can't attack alone.
+        this.addAbility(CantAttackAloneAbility.getInstance());
     }
 
-    public ManaMatrix(final ManaMatrix card) {
+    public BondedConstruct(final BondedConstruct card) {
         super(card);
     }
 
     @Override
-    public ManaMatrix copy() {
-        return new ManaMatrix(this);
+    public BondedConstruct copy() {
+        return new BondedConstruct(this);
     }
 }

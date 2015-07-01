@@ -25,48 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.masterseditioniv;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
+import mage.abilities.condition.common.RenownCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.MenaceAbility;
+import mage.abilities.keyword.RenownAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.FilterCard;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class ManaMatrix extends CardImpl {
+public class GoblinGloryChaser extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("instant and enchantment spells");
-    
-    static {
-        filter.add(Predicates.or(
-            new CardTypePredicate(CardType.INSTANT),
-            new CardTypePredicate(CardType.ENCHANTMENT)
-        ));                
+    public GoblinGloryChaser(UUID ownerId) {
+        super(ownerId, 150, "Goblin Glory Chaser", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{R}");
+        this.expansionSetCode = "ORI";
+        this.subtype.add("Goblin");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // Renown 1
+        this.addAbility(new RenownAbility(1));
+        
+        // As long as Goblin Glory Chaser is renowned, it has menace.
+        Effect effect = new ConditionalContinuousEffect(
+                new GainAbilitySourceEffect(MenaceAbility.getInstance(), Duration.WhileOnBattlefield),
+                RenownCondition.getInstance(),
+                "As long as {this} is renowned, it has menace");
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, effect);
+        this.addAbility(ability); 
     }
-            
-    public ManaMatrix(UUID ownerId) {
-        super(ownerId, 213, "Mana Matrix", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{6}");
-        this.expansionSetCode = "ME4";
 
-        // Instant and enchantment spells you cast cost up to {2} less to cast.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 2, true)));        
-    }
-
-    public ManaMatrix(final ManaMatrix card) {
+    public GoblinGloryChaser(final GoblinGloryChaser card) {
         super(card);
     }
 
     @Override
-    public ManaMatrix copy() {
-        return new ManaMatrix(this);
+    public GoblinGloryChaser copy() {
+        return new GoblinGloryChaser(this);
     }
 }

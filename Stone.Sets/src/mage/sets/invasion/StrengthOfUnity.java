@@ -25,49 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.conflux;
+package mage.sets.invasion;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.dynamicvalue.common.DomainValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.ShroudAbility;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LoneFox
+
  */
-public class AerieMystics extends CardImpl {
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
+public class StrengthOfUnity extends CardImpl {
 
-    public AerieMystics(UUID ownerId) {
-        super(ownerId, 1, "Aerie Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CON";
+    public StrengthOfUnity(UUID ownerId) {
+        super(ownerId, 40, "Strength of Unity", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{3}{W}");
+        this.expansionSetCode = "INV";
+        this.subtype.add("Aura");
 
-        this.subtype.add("Bird");
-        this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{1}{G}{U}")));
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
+        // Domain - Enchanted creature gets +1/+1 for each basic land type among lands you control.
+        DomainValue dv = new DomainValue();
+        Effect effect = new BoostEnchantedEffect(dv, dv);
+        effect.setText("Domain - Enchanted creature gets +1/+1 for each basic land type among lands you control.");
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
     }
 
-    public AerieMystics(final AerieMystics card) {
+    public StrengthOfUnity(final StrengthOfUnity card) {
         super(card);
     }
 
     @Override
-    public AerieMystics copy() {
-        return new AerieMystics(this);
+    public StrengthOfUnity copy() {
+        return new StrengthOfUnity(this);
     }
-
 }

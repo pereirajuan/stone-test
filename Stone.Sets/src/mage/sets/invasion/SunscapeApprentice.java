@@ -25,49 +25,59 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.conflux;
+package mage.sets.invasion;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.PutOnLibraryTargetEffect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.ShroudAbility;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.target.common.TargetControlledCreaturePermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LoneFox
+
  */
-public class AerieMystics extends CardImpl {
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
+public class SunscapeApprentice extends CardImpl {
 
-    public AerieMystics(UUID ownerId) {
-        super(ownerId, 1, "Aerie Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CON";
-
-        this.subtype.add("Bird");
+    public SunscapeApprentice(UUID ownerId) {
+        super(ownerId, 41, "Sunscape Apprentice", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
+        this.expansionSetCode = "INV";
+        this.subtype.add("Human");
         this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{1}{G}{U}")));
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // {G}, {tap}: Target creature gets +1/+1 until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostTargetEffect(1, 1, Duration.EndOfTurn),
+            new ManaCostsImpl("{G}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
+        // {U}, {tap}: Put target creature you control on top of its owner's library.
+        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new PutOnLibraryTargetEffect(true),
+            new ManaCostsImpl("{U}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetControlledCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public AerieMystics(final AerieMystics card) {
+    public SunscapeApprentice(final SunscapeApprentice card) {
         super(card);
     }
 
     @Override
-    public AerieMystics copy() {
-        return new AerieMystics(this);
+    public SunscapeApprentice copy() {
+        return new SunscapeApprentice(this);
     }
-
 }

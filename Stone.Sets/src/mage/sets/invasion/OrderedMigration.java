@@ -25,49 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.conflux;
+package mage.sets.invasion;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Rarity;
-import mage.constants.Zone;
 import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
+import mage.abilities.dynamicvalue.common.DomainValue;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.ShroudAbility;
 import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.game.permanent.token.Token;
 
 /**
  *
- * @author Loki
+ * @author LoneFox
+
  */
-public class AerieMystics extends CardImpl {
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
+public class OrderedMigration extends CardImpl {
 
-    public AerieMystics(UUID ownerId) {
-        super(ownerId, 1, "Aerie Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CON";
+    public OrderedMigration(UUID ownerId) {
+        super(ownerId, 258, "Ordered Migration", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{W}{U}");
+        this.expansionSetCode = "INV";
 
-        this.subtype.add("Bird");
-        this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{1}{G}{U}")));
+        // Domain - Put a 1/1 blue Bird creature token with flying onto the battlefield for each basic land type among lands you control.
+        this.getSpellAbility().addEffect(new CreateTokenEffect(new BirdToken(), new DomainValue()));
     }
 
-    public AerieMystics(final AerieMystics card) {
+    public OrderedMigration(final OrderedMigration card) {
         super(card);
     }
 
     @Override
-    public AerieMystics copy() {
-        return new AerieMystics(this);
+    public OrderedMigration copy() {
+        return new OrderedMigration(this);
     }
+}
 
+// TODO: There is a player rewards token for this (http://magiccards.info/extra/token/player-rewards-2001/bird.html),
+// but player rewards tokens are not downloaded...
+class BirdToken extends Token {
+    public BirdToken() {
+        super("Bird", "1/1 blue Bird creature token with flying");
+        cardType.add(CardType.CREATURE);
+        color.setBlue(true);
+        subtype.add("Bird");
+        power = new MageInt(1);
+        toughness = new MageInt(1);
+        addAbility(FlyingAbility.getInstance());
+    }
 }

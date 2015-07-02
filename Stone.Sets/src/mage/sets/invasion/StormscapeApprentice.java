@@ -25,49 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.conflux;
+package mage.sets.invasion;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.LoseLifeTargetEffect;
+import mage.abilities.effects.common.TapTargetEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.ShroudAbility;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.target.TargetPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LoneFox
+
  */
-public class AerieMystics extends CardImpl {
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
+public class StormscapeApprentice extends CardImpl {
 
-    public AerieMystics(UUID ownerId) {
-        super(ownerId, 1, "Aerie Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CON";
-
-        this.subtype.add("Bird");
+    public StormscapeApprentice(UUID ownerId) {
+        super(ownerId, 75, "Stormscape Apprentice", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{U}");
+        this.expansionSetCode = "INV";
+        this.subtype.add("Human");
         this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{1}{G}{U}")));
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // {W}, {T}: Tap target creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new TapTargetEffect(), new ManaCostsImpl("{W}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
+        // {B}, {T}: Target player loses 1 life.
+        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new LoseLifeTargetEffect(1), new ManaCostsImpl("{B}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetPlayer());
+        this.addAbility(ability);
     }
 
-    public AerieMystics(final AerieMystics card) {
+    public StormscapeApprentice(final StormscapeApprentice card) {
         super(card);
     }
 
     @Override
-    public AerieMystics copy() {
-        return new AerieMystics(this);
+    public StormscapeApprentice copy() {
+        return new StormscapeApprentice(this);
     }
-
 }

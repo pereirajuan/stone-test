@@ -25,49 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.conflux;
+package mage.sets.planeshift;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.mana.AnyColorManaAbility;
+import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.ShroudAbility;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LoneFox
+
  */
-public class AerieMystics extends CardImpl {
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
+public class MultanisHarmony extends CardImpl {
 
-    public AerieMystics(UUID ownerId) {
-        super(ownerId, 1, "Aerie Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CON";
+    public MultanisHarmony(UUID ownerId) {
+        super(ownerId, 84, "Multani's Harmony", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{G}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Aura");
 
-        this.subtype.add("Bird");
-        this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{1}{G}{U}")));
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
+        // Enchanted creature has "{T}: Add one mana of any color to your mana pool."
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(new AnyColorManaAbility(),
+            AttachmentType.AURA, Duration.WhileOnBattlefield, "Enchanted creature has \"{T}: Add one mana of any color to your mana pool.\"")));
     }
 
-    public AerieMystics(final AerieMystics card) {
+    public MultanisHarmony(final MultanisHarmony card) {
         super(card);
     }
 
     @Override
-    public AerieMystics copy() {
-        return new AerieMystics(this);
+    public MultanisHarmony copy() {
+        return new MultanisHarmony(this);
     }
-
 }

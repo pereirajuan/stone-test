@@ -25,49 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.conflux;
+package mage.sets.planeshift;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.ObjectColor;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.ReturnToHandChosenControlledPermanentEffect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.ShroudAbility;
-import mage.cards.CardImpl;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.ColorPredicate;
 
 /**
  *
- * @author Loki
+ * @author LoneFox
+
  */
-public class AerieMystics extends CardImpl {
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
+public class LavaZombie extends CardImpl {
 
-    public AerieMystics(UUID ownerId) {
-        super(ownerId, 1, "Aerie Mystics", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{W}");
-        this.expansionSetCode = "CON";
+    static final private FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("black or red creature you control");
 
-        this.subtype.add("Bird");
-        this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{1}{G}{U}")));
+    static {
+        filter.add(Predicates.or(new ColorPredicate(ObjectColor.BLACK), new ColorPredicate(ObjectColor.RED)));
     }
 
-    public AerieMystics(final AerieMystics card) {
+    public LavaZombie(UUID ownerId) {
+        super(ownerId, 113, "Lava Zombie", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{R}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Zombie");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
+
+        // When Lava Zombie enters the battlefield, return a black or red creature you control to its owner's hand.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new ReturnToHandChosenControlledPermanentEffect(filter), false));
+        // {2}: Lava Zombie gets +1/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1,0, Duration.EndOfTurn), new ManaCostsImpl("{2}")));
+    }
+
+    public LavaZombie(final LavaZombie card) {
         super(card);
     }
 
     @Override
-    public AerieMystics copy() {
-        return new AerieMystics(this);
+    public LavaZombie copy() {
+        return new LavaZombie(this);
     }
-
 }

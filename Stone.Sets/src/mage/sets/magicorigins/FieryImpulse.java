@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,55 +20,46 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.magic2011;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.condition.common.SpellMasteryCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.DamageTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.target.common.TargetAttackingCreature;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class InfantryVeteran extends CardImpl {
+public class FieryImpulse extends CardImpl {
 
-    public InfantryVeteran(UUID ownerId) {
-        super(ownerId, 18, "Infantry Veteran", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
-        this.expansionSetCode = "M11";
-        this.subtype.add("Human");
-        this.subtype.add("Soldier");
+    public FieryImpulse(UUID ownerId) {
+        super(ownerId, 145, "Fiery Impulse", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+        this.expansionSetCode = "ORI";
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
-
-        // {T}: Target attacking creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostTargetEffect(1, 1, Duration.EndOfTurn), new TapSourceCost());
-        ability.addTarget(new TargetAttackingCreature());
-        this.addAbility(ability);
+        // Fiery Impulse deals 2 damage to target creature.
+        // <i>Spell mastery</i> — If there are two or more instant and/or sorcery cards in your graveyard, Fiery Impulse deals 3 damage to that creature instead.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(new DamageTargetEffect(3),
+                new DamageTargetEffect(2), SpellMasteryCondition.getInstance(),
+                "{this} deals 2 damage to target creature. <i>Spell mastery</i> — If there are two or more instant and/or sorcery cards in your graveyard, {this} deals 3 damage to that creature instead"));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public InfantryVeteran(final InfantryVeteran card) {
+    public FieryImpulse(final FieryImpulse card) {
         super(card);
     }
 
     @Override
-    public InfantryVeteran copy() {
-        return new InfantryVeteran(this);
+    public FieryImpulse copy() {
+        return new FieryImpulse(this);
     }
-
 }

@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,55 +20,54 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.magic2011;
+package mage.sets.magicorigins;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition.CountType;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.discard.DiscardControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.target.common.TargetAttackingCreature;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class InfantryVeteran extends CardImpl {
+public class ArtificersEpiphany extends CardImpl {
+    
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("artifacts");
 
-    public InfantryVeteran(UUID ownerId) {
-        super(ownerId, 18, "Infantry Veteran", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
-        this.expansionSetCode = "M11";
-        this.subtype.add("Human");
-        this.subtype.add("Soldier");
-
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
-
-        // {T}: Target attacking creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostTargetEffect(1, 1, Duration.EndOfTurn), new TapSourceCost());
-        ability.addTarget(new TargetAttackingCreature());
-        this.addAbility(ability);
+    static {
+        filter.add(new CardTypePredicate(CardType.ARTIFACT));
     }
 
-    public InfantryVeteran(final InfantryVeteran card) {
+    public ArtificersEpiphany(UUID ownerId) {
+        super(ownerId, 45, "Artificer's Epiphany", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
+        this.expansionSetCode = "ORI";
+
+        // Draw two cards. If you control no artifacts, discard a card.
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(2));
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(
+                new DiscardControllerEffect(1),
+                new PermanentsOnTheBattlefieldCondition(filter, CountType.EQUAL_TO, 0)));
+    }
+
+    public ArtificersEpiphany(final ArtificersEpiphany card) {
         super(card);
     }
 
     @Override
-    public InfantryVeteran copy() {
-        return new InfantryVeteran(this);
+    public ArtificersEpiphany copy() {
+        return new ArtificersEpiphany(this);
     }
-
 }

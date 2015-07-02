@@ -25,46 +25,29 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.abilities.costs.common;
+package mage.sets.planeshift;
 
 import java.util.UUID;
 
-import mage.constants.Zone;
-import mage.abilities.Ability;
-import mage.abilities.costs.CostImpl;
-import mage.game.Game;
-import mage.game.permanent.Permanent;
-
 /**
- * @author Loki
+ *
+ * @author LoneFox
+
  */
-public class ReturnToHandSourceCost extends CostImpl {
+public class MoggSentry extends mage.sets.ninthedition.MoggSentry {
 
-    public ReturnToHandSourceCost() {
-        this.text = "return {this} to its owner's hand";
+    public MoggSentry(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 69;
+        this.expansionSetCode = "PLS";
     }
 
-    public ReturnToHandSourceCost(ReturnToHandSourceCost cost) {
-        super(cost);
-    }
-
-    @Override
-    public boolean pay(Ability ability, Game game, UUID sourceId, UUID controllerId, boolean noMana) {
-        Permanent permanent = game.getPermanent(sourceId);
-        if (permanent == null)
-            return false;
-        paid = permanent.moveToZone(Zone.HAND, sourceId, game, false);
-        return paid;
+    public MoggSentry(final MoggSentry card) {
+        super(card);
     }
 
     @Override
-    public boolean canPay(Ability ability, UUID sourceId, UUID controllerId, Game game) {
-        return game.getBattlefield().containsPermanent(sourceId);
-    }
-
-    @Override
-    public ReturnToHandSourceCost copy() {
-        return new ReturnToHandSourceCost(this);
+    public MoggSentry copy() {
+        return new MoggSentry(this);
     }
 }

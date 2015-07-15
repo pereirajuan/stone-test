@@ -25,27 +25,26 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.planeshift;
+package mage.sets.apocalypse;
 
 import java.util.UUID;
 import mage.ObjectColor;
-import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.EnchantedCreatureColorCondition;
-import mage.abilities.decorator.ConditionalRestrictionEffect;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.common.combat.CantAttackAttachedEffect;
-import mage.abilities.effects.common.combat.CantBlockAttachedEffect;
-import mage.abilities.keyword.EnchantAbility;
-import mage.cards.CardImpl;
 import mage.constants.AttachmentType;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.ProtectionAbility;
+import mage.cards.CardImpl;
+import mage.filter.FilterCard;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.target.TargetPermanent;
 import mage.target.common.TargetCreaturePermanent;
 
@@ -53,36 +52,36 @@ import mage.target.common.TargetCreaturePermanent;
  *
  * @author LoneFox
  */
-public class Hobble extends CardImpl {
+public class ShieldOfDutyAndReason extends CardImpl {
 
-    public Hobble(UUID ownerId) {
-        super(ownerId, 7, "Hobble", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}");
-        this.expansionSetCode = "PLS";
+    private static final FilterCard filter = new FilterCard("green and from blue");
+
+    static {
+        filter.add(Predicates.or(new ColorPredicate(ObjectColor.GREEN), new ColorPredicate(ObjectColor.BLUE)));
+    }
+
+    public ShieldOfDutyAndReason(UUID ownerId) {
+        super(ownerId, 16, "Shield of Duty and Reason", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{W}");
+        this.expansionSetCode = "APC";
         this.subtype.add("Aura");
 
         // Enchant creature
         TargetPermanent auraTarget = new TargetCreaturePermanent();
         this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Detriment));
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
         Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
-        // When Hobble enters the battlefield, draw a card.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(1)));
-        // Enchanted creature can't attack.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CantAttackAttachedEffect(AttachmentType.AURA)));
-        // Enchanted creature can't block if it's black.
-        Effect effect = new ConditionalRestrictionEffect(new CantBlockAttachedEffect(AttachmentType.AURA),
-            new EnchantedCreatureColorCondition(ObjectColor.BLACK));
-        effect.setText("Enchanted creature can't block if it's black.");
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
+        // Enchanted creature has protection from green and from blue.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(new ProtectionAbility(filter),
+            AttachmentType.AURA, Duration.WhileOnBattlefield)));
     }
 
-    public Hobble(final Hobble card) {
+    public ShieldOfDutyAndReason(final ShieldOfDutyAndReason card) {
         super(card);
     }
 
     @Override
-    public Hobble copy() {
-        return new Hobble(this);
+    public ShieldOfDutyAndReason copy() {
+        return new ShieldOfDutyAndReason(this);
     }
 }

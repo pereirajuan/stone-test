@@ -25,60 +25,29 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.pdsgraveborn;
 
-package mage.abilities.effects.common.combat;
-
-import mage.abilities.Ability;
-import mage.abilities.effects.RequirementEffect;
-import mage.constants.AttachmentType;
-import mage.constants.Duration;
-import mage.game.Game;
-import mage.game.permanent.Permanent;
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author LoneFox
+
  */
+public class CrosisThePurger extends mage.sets.invasion.CrosisThePurger {
 
-public class BlocksIfAbleAttachedEffect extends RequirementEffect {
-
-    public BlocksIfAbleAttachedEffect(Duration duration, AttachmentType attachmentType) {
-        super(duration);
-        if (attachmentType.equals(AttachmentType.AURA)) {
-            this.staticText = "Enchanted creature blocks each turn if able";
-        } else {
-            this.staticText = "Equipped creature blocks each turn if able";
-        }
+    public CrosisThePurger(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 5;
+        this.expansionSetCode = "PD3";
     }
 
-    public BlocksIfAbleAttachedEffect(final BlocksIfAbleAttachedEffect effect) {
-        super(effect);
+    public CrosisThePurger(final CrosisThePurger card) {
+        super(card);
     }
 
     @Override
-    public BlocksIfAbleAttachedEffect copy() {
-        return new BlocksIfAbleAttachedEffect(this);
-    }
-
-    @Override
-    public boolean applies(Permanent permanent, Ability source, Game game) {
-        Permanent attachment = game.getPermanent(source.getSourceId());
-        return attachment != null && attachment.getAttachedTo() != null
-                && permanent.getId().equals(attachment.getAttachedTo());
-    }
-
-    @Override
-    public boolean mustAttack(Game game) {
-        return false;
-    }
-
-    @Override
-    public boolean mustBlock(Game game) {
-        return false;
-    }
-
-    @Override
-    public boolean mustBlockAny(Game game) {
-        return true;
+    public CrosisThePurger copy() {
+        return new CrosisThePurger(this);
     }
 }

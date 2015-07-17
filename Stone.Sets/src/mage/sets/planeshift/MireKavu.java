@@ -25,38 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.continuous.BoostSourceWhileControlsEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class MireKavu extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    private static final FilterPermanent filter = new FilterPermanent("Swamp");
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+    static {
+        filter.add(new SubtypePredicate("Swamp"));
     }
 
-    public Opt(final Opt card) {
+    public MireKavu(UUID ownerId) {
+        super(ownerId, 67, "Mire Kavu", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{R}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Kavu");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
+
+        // Mire Kavu gets +1/+1 as long as you control a Swamp.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostSourceWhileControlsEffect(filter, 1, 1)));
+    }
+
+    public MireKavu(final MireKavu card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public MireKavu copy() {
+        return new MireKavu(this);
     }
 }

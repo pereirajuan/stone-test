@@ -25,38 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.MageInt;
+import mage.ObjectColor;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.dynamicvalue.common.PermanentsTargetOpponentControlsCount;
+import mage.abilities.effects.common.GainLifeEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.ColorPredicate;
+import mage.target.common.TargetOpponent;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class HonorableScout extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("black and/or red creature");
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+    static {
+        filter.add(Predicates.or(new ColorPredicate(ObjectColor.BLACK), new ColorPredicate(ObjectColor.RED)));
     }
 
-    public Opt(final Opt card) {
+    public HonorableScout(UUID ownerId) {
+        super(ownerId, 8, "Honorable Scout", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
+        this.subtype.add("Scout");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // When Honorable Scout enters the battlefield, you gain 2 life for each black and/or red creature target opponent controls.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new GainLifeEffect(new PermanentsTargetOpponentControlsCount(filter, 2)));
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
+    }
+
+    public HonorableScout(final HonorableScout card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public HonorableScout copy() {
+        return new HonorableScout(this);
     }
 }

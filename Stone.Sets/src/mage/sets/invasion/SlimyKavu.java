@@ -28,35 +28,43 @@
 package mage.sets.invasion;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.continuous.BecomesBasicLandTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.common.TargetLandPermanent;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class SlimyKavu extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
+    public SlimyKavu(UUID ownerId) {
+        super(ownerId, 170, "Slimy Kavu", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
         this.expansionSetCode = "INV";
+        this.subtype.add("Kavu");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+        // {T}: Target land becomes a Swamp until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BecomesBasicLandTargetEffect(Duration.EndOfTurn, "Swamp"), new TapSourceCost());
+        ability.addTarget(new TargetLandPermanent());
+        this.addAbility(ability);
     }
 
-    public Opt(final Opt card) {
+    public SlimyKavu(final SlimyKavu card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public SlimyKavu copy() {
+        return new SlimyKavu(this);
     }
 }

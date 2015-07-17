@@ -25,38 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.ObjectColor;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
 import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.ColorPredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class PygmyKavu extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("black creature your opponents control");
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+    static {
+        filter.add(new ColorPredicate(ObjectColor.BLACK));
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public Opt(final Opt card) {
+    public PygmyKavu(UUID ownerId) {
+        super(ownerId, 88, "Pygmy Kavu", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{G}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Kavu");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
+
+        // When Pygmy Kavu enters the battlefield, draw a card for each black creature your opponents control.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(new PermanentsOnBattlefieldCount(filter))));
+    }
+
+    public PygmyKavu(final PygmyKavu card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public PygmyKavu copy() {
+        return new PygmyKavu(this);
     }
 }

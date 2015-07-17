@@ -25,38 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
 import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
+import mage.abilities.keyword.ShroudAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.filter.common.FilterLandPermanent;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class SkyshroudBlessing extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    public SkyshroudBlessing(UUID ownerId) {
+        super(ownerId, 92, "Skyshroud Blessing", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{G}");
+        this.expansionSetCode = "PLS";
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
+        // Lands gain shroud until end of turn.
+        this.getSpellAbility().addEffect(new GainAbilityAllEffect(ShroudAbility.getInstance(),
+            Duration.EndOfTurn, new FilterLandPermanent("all lands")));
         // Draw a card.
         this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
     }
 
-    public Opt(final Opt card) {
+    public SkyshroudBlessing(final SkyshroudBlessing card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public SkyshroudBlessing copy() {
+        return new SkyshroudBlessing(this);
     }
 }

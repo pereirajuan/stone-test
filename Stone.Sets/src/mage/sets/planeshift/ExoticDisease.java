@@ -25,38 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.abilities.dynamicvalue.common.DomainValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.effects.common.LoseLifeTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class ExoticDisease extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    public ExoticDisease(UUID ownerId) {
+        super(ownerId, 43, "Exotic Disease", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{4}{B}");
+        this.expansionSetCode = "PLS";
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+        // Domain - Target player loses X life and you gain X life, where X is the number of basic land types among lands you control.
+        DomainValue dv = new DomainValue();
+        Effect effect = new LoseLifeTargetEffect(dv);
+        effect.setText("Domain - Target player loses X life");
+        this.getSpellAbility().addEffect(effect);
+        effect = new GainLifeEffect(dv);
+        effect.setText("and you gain X life, where X is the number of basic land types among lands you control");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetPlayer());
     }
 
-    public Opt(final Opt card) {
+    public ExoticDisease(final ExoticDisease card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public ExoticDisease copy() {
+        return new ExoticDisease(this);
     }
 }

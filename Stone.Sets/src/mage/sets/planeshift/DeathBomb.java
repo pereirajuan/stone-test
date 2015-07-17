@@ -25,38 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.ObjectColor;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.common.LoseLifeTargetControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.ColorPredicate;
+import mage.target.common.TargetControlledCreaturePermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class DeathBomb extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
-
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("nonblack creature");
+    static {
+        filter.add(Predicates.not(new ColorPredicate(ObjectColor.BLACK)));
     }
 
-    public Opt(final Opt card) {
+    public DeathBomb(UUID ownerId) {
+        super(ownerId, 41, "Death Bomb", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{B}");
+        this.expansionSetCode = "PLS";
+
+        // As an additional cost to cast Death Bomb, sacrifice a creature.
+        this.getSpellAbility().addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent(1,1, new FilterControlledCreaturePermanent("a creature"), true)));
+        // Destroy target nonblack creature. It can't be regenerated. Its controller loses 2 life.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect(true));
+        this.getSpellAbility().addEffect(new LoseLifeTargetControllerEffect(2));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(filter));
+    }
+
+    public DeathBomb(final DeathBomb card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public DeathBomb copy() {
+        return new DeathBomb(this);
     }
 }

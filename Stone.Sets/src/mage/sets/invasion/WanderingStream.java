@@ -28,35 +28,36 @@
 package mage.sets.invasion;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.abilities.dynamicvalue.MultipliedValue;
+import mage.abilities.dynamicvalue.common.DomainValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.GainLifeEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class WanderingStream extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
+    public WanderingStream(UUID ownerId) {
+        super(ownerId, 224, "Wandering Stream", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{G}");
         this.expansionSetCode = "INV";
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
-    }
+        // Domain - You gain 2 life for each basic land type among lands you control.
+        Effect effect = new GainLifeEffect(new MultipliedValue(new DomainValue(), 2));
+        effect.setText("Domain - You gain 2 life for each basic land type among lands you control");
+        this.getSpellAbility().addEffect(effect);
+     }
 
-    public Opt(final Opt card) {
+    public WanderingStream(final WanderingStream card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public WanderingStream copy() {
+        return new WanderingStream(this);
     }
 }

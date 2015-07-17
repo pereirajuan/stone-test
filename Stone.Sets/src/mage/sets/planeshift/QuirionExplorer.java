@@ -25,38 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.MageInt;
+import mage.abilities.mana.AnyColorOpponentLandsProduceManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class QuirionExplorer extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    public QuirionExplorer(UUID ownerId) {
+        super(ownerId, 90, "Quirion Explorer", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Elf");
+        this.subtype.add("Druid");
+        this.subtype.add("Scout");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+        // {T}: Add to your mana pool one mana of any color that a land an opponent controls could produce.
+        this.addAbility(new AnyColorOpponentLandsProduceManaAbility());
     }
 
-    public Opt(final Opt card) {
+    public QuirionExplorer(final QuirionExplorer card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public QuirionExplorer copy() {
+        return new QuirionExplorer(this);
     }
 }

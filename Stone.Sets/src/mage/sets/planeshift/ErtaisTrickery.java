@@ -25,38 +25,67 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.abilities.Ability;
+import mage.abilities.condition.common.KickedCondition;
+import mage.abilities.effects.common.CounterTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.game.Game;
+import mage.game.stack.Spell;
+import mage.target.TargetSpell;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class ErtaisTrickery extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    public ErtaisTrickery(UUID ownerId) {
+        super(ownerId, 24, "Ertai's Trickery", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{U}");
+        this.expansionSetCode = "PLS";
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+        // Counter target spell if it was kicked.
+        this.getSpellAbility().addEffect(new ErtaisTrickeryEffect());
+        this.getSpellAbility().addTarget(new TargetSpell());
     }
 
-    public Opt(final Opt card) {
+    public ErtaisTrickery(final ErtaisTrickery card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public ErtaisTrickery copy() {
+        return new ErtaisTrickery(this);
     }
+}
+
+class ErtaisTrickeryEffect extends CounterTargetEffect {
+
+    public ErtaisTrickeryEffect() {
+        super();
+        staticText = "Counter target spell if it was kicked.";
+    }
+
+    public ErtaisTrickeryEffect(final CounterTargetEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public ErtaisTrickeryEffect copy() {
+        return new ErtaisTrickeryEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        Spell targetSpell = game.getStack().getSpell(source.getFirstTarget());
+        if(targetSpell != null && KickedCondition.getInstance().apply(game, targetSpell.getSpellAbility())) {
+            return super.apply(game, source);
+        }
+        return false;
+    }
+
 }

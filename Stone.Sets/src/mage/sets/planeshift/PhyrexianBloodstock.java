@@ -25,38 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.invasion;
+package mage.sets.planeshift;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.keyword.ScryEffect;
+import mage.MageInt;
+import mage.ObjectColor;
+import mage.abilities.Ability;
+import mage.abilities.common.LeavesBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.ColorPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author KholdFuzion
+ * @author LoneFox
  */
-public class Opt extends CardImpl {
+public class PhyrexianBloodstock extends CardImpl {
 
-    public Opt(UUID ownerId) {
-        super(ownerId, 64, "Opt", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "INV";
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("white creature");
 
-        // Scry 1.
-        this.getSpellAbility().addEffect(new ScryEffect(1));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+    static {
+        filter.add(new ColorPredicate(ObjectColor.WHITE));
     }
 
-    public Opt(final Opt card) {
+    public PhyrexianBloodstock(UUID ownerId) {
+        super(ownerId, 50, "Phyrexian Bloodstock", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{B}");
+        this.expansionSetCode = "PLS";
+        this.subtype.add("Zombie");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // When Phyrexian Bloodstock leaves the battlefield, destroy target white creature. It can't be regenerated.
+        Ability ability = new LeavesBattlefieldTriggeredAbility(new DestroyTargetEffect(true), false);
+        ability.addTarget(new TargetCreaturePermanent(filter));
+        this.addAbility(ability);
+    }
+
+    public PhyrexianBloodstock(final PhyrexianBloodstock card) {
         super(card);
     }
 
     @Override
-    public Opt copy() {
-        return new Opt(this);
+    public PhyrexianBloodstock copy() {
+        return new PhyrexianBloodstock(this);
     }
 }

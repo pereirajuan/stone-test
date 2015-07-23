@@ -25,46 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.lorwyn;
+package mage.sets.ftvangels;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.keyword.ChampionAbility;
-import mage.abilities.keyword.ChangelingAbility;
-import mage.abilities.keyword.HasteAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
 
 /**
  *
  * @author fireshoes
  */
-public class ChangelingBerserker extends CardImpl {
+public class IonaShieldOfEmeria extends mage.sets.zendikar.IonaShieldOfEmeria {
 
-    public ChangelingBerserker(UUID ownerId) {
-        super(ownerId, 160, "Changeling Berserker", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{R}");
-        this.expansionSetCode = "LRW";
-        this.subtype.add("Shapeshifter");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(3);
-
-        // Changeling
-        this.addAbility(ChangelingAbility.getInstance());
-        
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        
-        // Champion a creature
-        this.addAbility(new ChampionAbility(this, ""));
+    public IonaShieldOfEmeria(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 9;
+        this.expansionSetCode = "V15";
     }
 
-    public ChangelingBerserker(final ChangelingBerserker card) {
+    public IonaShieldOfEmeria(final IonaShieldOfEmeria card) {
         super(card);
     }
 
     @Override
-    public ChangelingBerserker copy() {
-        return new ChangelingBerserker(this);
+    public IonaShieldOfEmeria copy() {
+        return new IonaShieldOfEmeria(this);
     }
 }

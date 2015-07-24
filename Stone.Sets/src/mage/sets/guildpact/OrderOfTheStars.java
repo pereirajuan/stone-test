@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.planeshift;
+package mage.sets.guildpact;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -34,7 +34,7 @@ import mage.abilities.common.AsEntersBattlefieldAbility;
 import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.OneShotEffect;
 import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.DefenderAbility;
 import mage.abilities.keyword.ProtectionAbility;
 import mage.cards.CardImpl;
 import mage.choices.ChoiceColor;
@@ -49,48 +49,50 @@ import mage.players.Player;
 
 /**
  *
- * @author anonymous
+ * @author fireshoes
  */
-public class VoiceOfAll extends CardImpl {
+public class OrderOfTheStars extends CardImpl {
 
-    public VoiceOfAll(UUID ownerId) {
-        super(ownerId, 19, "Voice of All", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}{W}");
-        this.expansionSetCode = "PLS";
-        this.subtype.add("Angel");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+    public OrderOfTheStars(UUID ownerId) {
+        super(ownerId, 13, "Order of the Stars", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{W}");
+        this.expansionSetCode = "GPT";
+        this.subtype.add("Human");
+        this.subtype.add("Cleric");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(1);
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        // As Voice of All enters the battlefield, choose a color.
-        // Voice of All has protection from the chosen color.
-        this.addAbility(new AsEntersBattlefieldAbility(new VoiceOfAllEffect()));
+        // Defender
+        this.addAbility(DefenderAbility.getInstance());
+        
+        // As Order of the Stars enters the battlefield, choose a color.
+        // Order of the Stars has protection from the chosen color.
+        this.addAbility(new AsEntersBattlefieldAbility(new OrderOfTheStarsEffect()));
     }
 
-    public VoiceOfAll(final VoiceOfAll card) {
+    public OrderOfTheStars(final OrderOfTheStars card) {
         super(card);
     }
 
     @Override
-    public VoiceOfAll copy() {
-        return new VoiceOfAll(this);
+    public OrderOfTheStars copy() {
+        return new OrderOfTheStars(this);
     }
 }
 
-class VoiceOfAllEffect extends OneShotEffect {
+class OrderOfTheStarsEffect extends OneShotEffect {
     
-    public VoiceOfAllEffect() {
+    public OrderOfTheStarsEffect() {
         super(Outcome.Protect);
         this.staticText = "{this} gains protection from the color of your choice";
     }
     
-    public VoiceOfAllEffect(final VoiceOfAllEffect effect) {
+    public OrderOfTheStarsEffect(final OrderOfTheStarsEffect effect) {
         super(effect);
     }
     
     @Override
-    public VoiceOfAllEffect copy() {
-        return new VoiceOfAllEffect(this);
+    public OrderOfTheStarsEffect copy() {
+        return new OrderOfTheStarsEffect(this);
     }
     
     @Override

@@ -25,19 +25,22 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.planeshift;
+package mage.sets.timespiral;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.AsEntersBattlefieldAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
 import mage.abilities.keyword.ProtectionAbility;
 import mage.cards.CardImpl;
 import mage.choices.ChoiceColor;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Outcome;
@@ -46,51 +49,58 @@ import mage.filter.FilterCard;
 import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.game.Game;
 import mage.players.Player;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author anonymous
+ * @author fireshoes
  */
-public class VoiceOfAll extends CardImpl {
+public class PentarchWard extends CardImpl {
 
-    public VoiceOfAll(UUID ownerId) {
-        super(ownerId, 19, "Voice of All", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}{W}");
-        this.expansionSetCode = "PLS";
-        this.subtype.add("Angel");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+    public PentarchWard(UUID ownerId) {
+        super(ownerId, 33, "Pentarch Ward", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}");
+        this.expansionSetCode = "TSP";
+        this.subtype.add("Aura");
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        // As Voice of All enters the battlefield, choose a color.
-        // Voice of All has protection from the chosen color.
-        this.addAbility(new AsEntersBattlefieldAbility(new VoiceOfAllEffect()));
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Protect));
+        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
+        
+        // When Pentarch Ward enters the battlefield, draw a card.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(1)));
+        
+        // As Pentarch Ward enters the battlefield, choose a color.
+        // Enchanted creature has protection from the chosen color. This effect doesn't remove Pentarch Ward.
+        this.addAbility(new AsEntersBattlefieldAbility(new PentarchWardEffect()));
     }
 
-    public VoiceOfAll(final VoiceOfAll card) {
+    public PentarchWard(final PentarchWard card) {
         super(card);
     }
 
     @Override
-    public VoiceOfAll copy() {
-        return new VoiceOfAll(this);
+    public PentarchWard copy() {
+        return new PentarchWard(this);
     }
 }
 
-class VoiceOfAllEffect extends OneShotEffect {
+class PentarchWardEffect extends OneShotEffect {
     
-    public VoiceOfAllEffect() {
+    public PentarchWardEffect() {
         super(Outcome.Protect);
-        this.staticText = "{this} gains protection from the color of your choice";
+        this.staticText = "enchanted creature has protection from the chosen color. This effect doesn't remove {this}";
     }
     
-    public VoiceOfAllEffect(final VoiceOfAllEffect effect) {
+    public PentarchWardEffect(final PentarchWardEffect effect) {
         super(effect);
     }
     
     @Override
-    public VoiceOfAllEffect copy() {
-        return new VoiceOfAllEffect(this);
+    public PentarchWardEffect copy() {
+        return new PentarchWardEffect(this);
     }
     
     @Override
@@ -102,7 +112,9 @@ class VoiceOfAllEffect extends OneShotEffect {
             FilterCard protectionFilter = new FilterCard();
             protectionFilter.add(new ColorPredicate(choice.getColor()));
             protectionFilter.setMessage(choice.getChoice().toLowerCase());
-            ContinuousEffect effect = new GainAbilitySourceEffect(new ProtectionAbility(protectionFilter), Duration.WhileOnBattlefield);
+            ProtectionAbility protectionAbility = new ProtectionAbility(protectionFilter);
+            protectionAbility.setRemovesAuras(false);
+            ContinuousEffect effect = new GainAbilityAttachedEffect(protectionAbility, AttachmentType.AURA, Duration.WhileOnBattlefield);
             game.addEffect(effect, source);
             return true;
         }

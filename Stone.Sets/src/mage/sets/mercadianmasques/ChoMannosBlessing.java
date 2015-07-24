@@ -25,19 +25,21 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.planeshift;
+package mage.sets.mercadianmasques;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.AsEntersBattlefieldAbility;
 import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.FlashAbility;
 import mage.abilities.keyword.ProtectionAbility;
 import mage.cards.CardImpl;
 import mage.choices.ChoiceColor;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Outcome;
@@ -46,51 +48,58 @@ import mage.filter.FilterCard;
 import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.game.Game;
 import mage.players.Player;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author anonymous
+ * @author fireshoes
  */
-public class VoiceOfAll extends CardImpl {
+public class ChoMannosBlessing extends CardImpl {
 
-    public VoiceOfAll(UUID ownerId) {
-        super(ownerId, 19, "Voice of All", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}{W}");
-        this.expansionSetCode = "PLS";
-        this.subtype.add("Angel");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+    public ChoMannosBlessing(UUID ownerId) {
+        super(ownerId, 12, "Cho-Manno's Blessing", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{W}{W}");
+        this.expansionSetCode = "MMQ";
+        this.subtype.add("Aura");
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        // As Voice of All enters the battlefield, choose a color.
-        // Voice of All has protection from the chosen color.
-        this.addAbility(new AsEntersBattlefieldAbility(new VoiceOfAllEffect()));
-    }
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Protect));
+        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
+        
+        // As Cho-Manno's Blessing enters the battlefield, choose a color.
+        // Enchanted creature has protection from the chosen color. This effect doesn't remove Cho-Manno's Blessing.
+        this.addAbility(new AsEntersBattlefieldAbility(new ChoMannosBlessingEffect()));
+        }
 
-    public VoiceOfAll(final VoiceOfAll card) {
+    public ChoMannosBlessing(final ChoMannosBlessing card) {
         super(card);
     }
 
     @Override
-    public VoiceOfAll copy() {
-        return new VoiceOfAll(this);
+    public ChoMannosBlessing copy() {
+        return new ChoMannosBlessing(this);
     }
 }
 
-class VoiceOfAllEffect extends OneShotEffect {
+class ChoMannosBlessingEffect extends OneShotEffect {
     
-    public VoiceOfAllEffect() {
+    public ChoMannosBlessingEffect() {
         super(Outcome.Protect);
-        this.staticText = "{this} gains protection from the color of your choice";
+        this.staticText = "enchanted creature has protection from the chosen color. This effect doesn't remove {this}";
     }
     
-    public VoiceOfAllEffect(final VoiceOfAllEffect effect) {
+    public ChoMannosBlessingEffect(final ChoMannosBlessingEffect effect) {
         super(effect);
     }
     
     @Override
-    public VoiceOfAllEffect copy() {
-        return new VoiceOfAllEffect(this);
+    public ChoMannosBlessingEffect copy() {
+        return new ChoMannosBlessingEffect(this);
     }
     
     @Override
@@ -102,7 +111,9 @@ class VoiceOfAllEffect extends OneShotEffect {
             FilterCard protectionFilter = new FilterCard();
             protectionFilter.add(new ColorPredicate(choice.getColor()));
             protectionFilter.setMessage(choice.getChoice().toLowerCase());
-            ContinuousEffect effect = new GainAbilitySourceEffect(new ProtectionAbility(protectionFilter), Duration.WhileOnBattlefield);
+            ProtectionAbility protectionAbility = new ProtectionAbility(protectionFilter);
+            protectionAbility.setRemovesAuras(false);
+            ContinuousEffect effect = new GainAbilityAttachedEffect(protectionAbility, AttachmentType.AURA, Duration.WhileOnBattlefield);
             game.addEffect(effect, source);
             return true;
         }

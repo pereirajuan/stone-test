@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.darksteel;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -35,39 +35,36 @@ import mage.abilities.effects.common.SacrificeSourceUnlessPaysEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledLandPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.common.FilterControlledArtifactPermanent;
+import mage.filter.common.FilterControlledPermanent;
 import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
-
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
-    static{
-        filter.add(new SubtypePredicate("Forest"));
-    }
+public class VulshokWarBoar extends CardImpl {
     
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
-        this.subtype.add("Elemental");
+    private static final FilterControlledPermanent filter = new FilterControlledArtifactPermanent("an artifact");
 
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
+    public VulshokWarBoar(UUID ownerId) {
+        super(ownerId, 72, "Vulshok War Boar", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}{R}");
+        this.expansionSetCode = "DST";
+        this.subtype.add("Boar");
+        this.subtype.add("Beast");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(5);
 
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
+        // When Vulshok War Boar enters the battlefield, sacrifice it unless you sacrifice an artifact.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(filter)))));
     }
 
-    public PrimevalForce(final PrimevalForce card) {
+    public VulshokWarBoar(final VulshokWarBoar card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public VulshokWarBoar copy() {
+        return new VulshokWarBoar(this);
     }
 }

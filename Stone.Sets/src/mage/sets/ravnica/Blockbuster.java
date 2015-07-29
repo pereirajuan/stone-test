@@ -25,49 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.ravnica;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.SacrificeSourceUnlessPaysEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DamageEverythingEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledLandPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.TappedPredicate;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
-
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
-    static{
-        filter.add(new SubtypePredicate("Forest"));
-    }
+public class Blockbuster extends CardImpl {
     
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
-        this.subtype.add("Elemental");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("tapped creature");
 
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
-
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
+    static {
+        filter.add(new TappedPredicate());
     }
 
-    public PrimevalForce(final PrimevalForce card) {
+    public Blockbuster(UUID ownerId) {
+        super(ownerId, 115, "Blockbuster", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{3}{R}{R}");
+        this.expansionSetCode = "RAV";
+
+        // {1}{R}, Sacrifice Blockbuster: Blockbuster deals 3 damage to each tapped creature and each player.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageEverythingEffect(3, filter), new ManaCostsImpl("{1}{R}")));
+    }
+
+    public Blockbuster(final Blockbuster card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public Blockbuster copy() {
+        return new Blockbuster(this);
     }
 }

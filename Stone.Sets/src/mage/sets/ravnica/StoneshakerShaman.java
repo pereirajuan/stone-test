@@ -25,49 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.ravnica;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.SacrificeSourceUnlessPaysEffect;
+import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
+import mage.abilities.effects.common.SacrificeEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledLandPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.constants.TargetController;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.permanent.TappedPredicate;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
-
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
-    static{
-        filter.add(new SubtypePredicate("Forest"));
-    }
+public class StoneshakerShaman extends CardImpl {
     
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
-        this.subtype.add("Elemental");
+    private static final FilterLandPermanent filter = new FilterLandPermanent("untapped land");
 
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
-
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
+    static {
+        filter.add(Predicates.not(new TappedPredicate()));
     }
 
-    public PrimevalForce(final PrimevalForce card) {
+    public StoneshakerShaman(UUID ownerId) {
+        super(ownerId, 145, "Stoneshaker Shaman", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "RAV";
+        this.subtype.add("Human");
+        this.subtype.add("Shaman");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // At the beginning of each player's end step, that player sacrifices an untapped land.
+         this.addAbility(new BeginningOfEndStepTriggeredAbility(new SacrificeEffect(filter, 1, "that player "), TargetController.ANY, false));
+    }
+
+    public StoneshakerShaman(final StoneshakerShaman card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public StoneshakerShaman copy() {
+        return new StoneshakerShaman(this);
     }
 }

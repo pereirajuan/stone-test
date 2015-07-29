@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.weatherlight;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -41,33 +41,33 @@ import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
-
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
+public class RogueElephant extends CardImpl {
+    
+    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("a Forest");
+    
     static{
         filter.add(new SubtypePredicate("Forest"));
     }
-    
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
-        this.subtype.add("Elemental");
 
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
+    public RogueElephant(UUID ownerId) {
+        super(ownerId, 81, "Rogue Elephant", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{G}");
+        this.expansionSetCode = "WTH";
+        this.subtype.add("Elephant");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
+        // When Rogue Elephant enters the battlefield, sacrifice it unless you sacrifice a Forest.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(filter)))));
     }
 
-    public PrimevalForce(final PrimevalForce card) {
+    public RogueElephant(final RogueElephant card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public RogueElephant copy() {
+        return new RogueElephant(this);
     }
 }

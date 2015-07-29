@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.portal;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -41,33 +41,34 @@ import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
-
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
+public class PlantElemental extends CardImpl {
+    
+    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("a Forest");
+    
     static{
         filter.add(new SubtypePredicate("Forest"));
     }
-    
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
+
+    public PlantElemental(UUID ownerId) {
+        super(ownerId, 107, "Plant Elemental", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "POR";
+        this.subtype.add("Plant");
         this.subtype.add("Elemental");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
 
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
-
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
+        // When Plant Elemental enters the battlefield, sacrifice it unless you sacrifice a Forest.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(filter)))));
     }
 
-    public PrimevalForce(final PrimevalForce card) {
+    public PlantElemental(final PlantElemental card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public PlantElemental copy() {
+        return new PlantElemental(this);
     }
 }

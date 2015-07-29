@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.legends;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -41,33 +41,35 @@ import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
-
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
-    static{
-        filter.add(new SubtypePredicate("Forest"));
-    }
+public class MoldDemon extends CardImpl {
     
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
-        this.subtype.add("Elemental");
-
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
-
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
+    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("two Swamps");
+    
+    static{
+        filter.add(new SubtypePredicate("Swamp"));
     }
 
-    public PrimevalForce(final PrimevalForce card) {
+    public MoldDemon(UUID ownerId) {
+        super(ownerId, 26, "Mold Demon", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{B}{B}");
+        this.expansionSetCode = "LEG";
+        this.subtype.add("Fungus");
+        this.subtype.add("Demon");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(6);
+
+        // When Mold Demon enters the battlefield, sacrifice it unless you sacrifice two Swamps.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(
+                new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(2, 2, filter, true)))));
+    }
+
+    public MoldDemon(final MoldDemon card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public MoldDemon copy() {
+        return new MoldDemon(this);
     }
 }

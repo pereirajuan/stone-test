@@ -25,49 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eighthedition;
+package mage.sets.tempest;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.SacrificeSourceUnlessPaysEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.LeavesBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.SacrificeTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledLandPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class PrimevalForce extends CardImpl {
+public class ServantOfVolrath extends CardImpl {
 
-    private static final FilterControlledLandPermanent filter = new FilterControlledLandPermanent("three Forests");
-    static{
-        filter.add(new SubtypePredicate("Forest"));
+    public ServantOfVolrath(UUID ownerId) {
+        super(ownerId, 50, "Servant of Volrath", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{B}");
+        this.expansionSetCode = "TMP";
+        this.subtype.add("Minion");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // When Servant of Volrath leaves the battlefield, sacrifice a creature.
+        Ability ability = new LeavesBattlefieldTriggeredAbility(new SacrificeTargetEffect(), false);
+        ability.addTarget(new TargetControlledCreaturePermanent());
+        this.addAbility(ability);
     }
     
-    public PrimevalForce(UUID ownerId) {
-        super(ownerId, 273, "Primeval Force", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}{G}");
-        this.expansionSetCode = "8ED";
-        this.subtype.add("Elemental");
-
-        this.power = new MageInt(8);
-        this.toughness = new MageInt(8);
-
-        // When Primeval Force enters the battlefield, sacrifice it unless you sacrifice three Forests.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new SacrificeSourceUnlessPaysEffect(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, true)))));
-    }
-
-    public PrimevalForce(final PrimevalForce card) {
+    public ServantOfVolrath(final ServantOfVolrath card) {
         super(card);
     }
 
     @Override
-    public PrimevalForce copy() {
-        return new PrimevalForce(this);
+    public ServantOfVolrath copy() {
+        return new ServantOfVolrath(this);
     }
 }

@@ -25,49 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.ftvangels;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.dynamicvalue.common.CountersCount;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.target.TargetSpell;
 
 /**
  *
  * @author fireshoes
  */
-public class LiltingRefrain extends CardImpl {
+public class TarielReckonerOfSouls extends mage.sets.commander.TarielReckonerOfSouls {
 
-    public LiltingRefrain(UUID ownerId) {
-        super(ownerId, 83, "Lilting Refrain", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
-        this.expansionSetCode = "USG";
-
-        // At the beginning of your upkeep, you may put a verse counter on Lilting Refrain.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new AddCountersSourceEffect(CounterType.VERSE.createInstance()), TargetController.YOU, true));
-
-        // Sacrifice Lilting Refrain: Counter target spell unless its controller pays {X}, where X is the number of verse counters on Lilting Refrain.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CounterUnlessPaysEffect(new CountersCount(CounterType.VERSE)), new SacrificeSourceCost());
-        ability.addTarget(new TargetSpell());
-        this.addAbility(ability);
+    public TarielReckonerOfSouls(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 15;
+        this.expansionSetCode = "V15";
     }
 
-    public LiltingRefrain(final LiltingRefrain card) {
+    public TarielReckonerOfSouls(final TarielReckonerOfSouls card) {
         super(card);
     }
 
     @Override
-    public LiltingRefrain copy() {
-        return new LiltingRefrain(this);
+    public TarielReckonerOfSouls copy() {
+        return new TarielReckonerOfSouls(this);
     }
 }

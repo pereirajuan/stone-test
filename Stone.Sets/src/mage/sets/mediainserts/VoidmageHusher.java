@@ -25,49 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.mediainserts;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.dynamicvalue.common.CountersCount;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.effects.common.ReturnToHandSourceEffect;
+import mage.abilities.keyword.FlashAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.target.TargetSpell;
+import mage.target.common.TargetActivatedAbility;
 
 /**
  *
- * @author fireshoes
+ * @author andyfries
  */
-public class LiltingRefrain extends CardImpl {
+public class VoidmageHusher extends CardImpl {
 
-    public LiltingRefrain(UUID ownerId) {
-        super(ownerId, 83, "Lilting Refrain", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
-        this.expansionSetCode = "USG";
+    public VoidmageHusher(UUID ownerId) {
+        super(ownerId, 62, "Voidmage Husher", Rarity.SPECIAL, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "MBP";
+        this.subtype.add("Human");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // At the beginning of your upkeep, you may put a verse counter on Lilting Refrain.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new AddCountersSourceEffect(CounterType.VERSE.createInstance()), TargetController.YOU, true));
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
 
-        // Sacrifice Lilting Refrain: Counter target spell unless its controller pays {X}, where X is the number of verse counters on Lilting Refrain.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CounterUnlessPaysEffect(new CountersCount(CounterType.VERSE)), new SacrificeSourceCost());
-        ability.addTarget(new TargetSpell());
+        // When Voidmage Husher enters the battlefield, counter target activated ability.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new CounterTargetEffect());
+        ability.addTarget(new TargetActivatedAbility());
         this.addAbility(ability);
+
+        // Whenever you cast a spell, you may return Voidmage Husher to its owner's hand.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new ReturnToHandSourceEffect(true), true));
     }
 
-    public LiltingRefrain(final LiltingRefrain card) {
+    public VoidmageHusher(final VoidmageHusher card) {
         super(card);
     }
 
     @Override
-    public LiltingRefrain copy() {
-        return new LiltingRefrain(this);
+    public VoidmageHusher copy() {
+        return new VoidmageHusher(this);
     }
 }

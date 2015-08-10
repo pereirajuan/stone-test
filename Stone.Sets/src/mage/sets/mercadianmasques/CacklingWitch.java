@@ -25,49 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.mercadianmasques;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.dynamicvalue.common.CountersCount;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.dynamicvalue.common.ManacostVariableValue;
+import mage.abilities.dynamicvalue.common.StaticValue;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.target.TargetSpell;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class LiltingRefrain extends CardImpl {
+public class CacklingWitch extends CardImpl {
 
-    public LiltingRefrain(UUID ownerId) {
-        super(ownerId, 83, "Lilting Refrain", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
-        this.expansionSetCode = "USG";
+    public CacklingWitch(UUID ownerId) {
+        super(ownerId, 119, "Cackling Witch", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+        this.expansionSetCode = "MMQ";
+        this.subtype.add("Human");
+        this.subtype.add("Spellshaper");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // At the beginning of your upkeep, you may put a verse counter on Lilting Refrain.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new AddCountersSourceEffect(CounterType.VERSE.createInstance()), TargetController.YOU, true));
-
-        // Sacrifice Lilting Refrain: Counter target spell unless its controller pays {X}, where X is the number of verse counters on Lilting Refrain.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CounterUnlessPaysEffect(new CountersCount(CounterType.VERSE)), new SacrificeSourceCost());
-        ability.addTarget(new TargetSpell());
+        // {X}{B}, {tap}, Discard a card: Target creature gets +X/+0 until end of turn.
+        ManacostVariableValue manaX = new ManacostVariableValue();
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new BoostTargetEffect(manaX, new StaticValue(0), Duration.EndOfTurn),
+                new ManaCostsImpl("{X}{B}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new DiscardCardCost());
+        ability.addTarget(new TargetCreaturePermanent());
         this.addAbility(ability);
     }
 
-    public LiltingRefrain(final LiltingRefrain card) {
+    public CacklingWitch(final CacklingWitch card) {
         super(card);
     }
 
     @Override
-    public LiltingRefrain copy() {
-        return new LiltingRefrain(this);
+    public CacklingWitch copy() {
+        return new CacklingWitch(this);
     }
 }

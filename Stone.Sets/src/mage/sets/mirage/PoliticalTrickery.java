@@ -25,49 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzassaga;
+package mage.sets.mirage;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.dynamicvalue.common.CountersCount;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.ExchangeControlTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.target.TargetSpell;
+import mage.filter.common.FilterControlledLandPermanent;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author fireshoes
+ * @author andyfries
  */
-public class LiltingRefrain extends CardImpl {
+public class PoliticalTrickery extends CardImpl {
 
-    public LiltingRefrain(UUID ownerId) {
-        super(ownerId, 83, "Lilting Refrain", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
-        this.expansionSetCode = "USG";
+    private static final String rule = "exchange control of target land you control and target land an opponent controls";
 
-        // At the beginning of your upkeep, you may put a verse counter on Lilting Refrain.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new AddCountersSourceEffect(CounterType.VERSE.createInstance()), TargetController.YOU, true));
+    private static final FilterLandPermanent filter = new FilterLandPermanent("land an opponent controls");
 
-        // Sacrifice Lilting Refrain: Counter target spell unless its controller pays {X}, where X is the number of verse counters on Lilting Refrain.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CounterUnlessPaysEffect(new CountersCount(CounterType.VERSE)), new SacrificeSourceCost());
-        ability.addTarget(new TargetSpell());
-        this.addAbility(ability);
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public LiltingRefrain(final LiltingRefrain card) {
+    public PoliticalTrickery(UUID ownerId) {
+        super(ownerId, 81, "Political Trickery", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{U}");
+        this.expansionSetCode = "MIR";
+
+        // Exchange control of target land you control and target land an opponent controls.
+        Effect effect = new ExchangeControlTargetEffect(Duration.EndOfGame, rule, false, true);
+        effect.setText("exchange control of target land you control and target land an opponent controls");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetControlledPermanent(new FilterControlledLandPermanent()));
+        this.getSpellAbility().addTarget(new TargetPermanent(filter));
+    }
+
+    public PoliticalTrickery(final PoliticalTrickery card) {
         super(card);
     }
 
     @Override
-    public LiltingRefrain copy() {
-        return new LiltingRefrain(this);
+    public PoliticalTrickery copy() {
+        return new PoliticalTrickery(this);
     }
 }

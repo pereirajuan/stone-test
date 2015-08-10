@@ -25,89 +25,90 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.championsofkamigawa;
+package mage.sets.futuresight;
 
 import java.util.UUID;
-import mage.MageInt;
+import mage.abilities.TriggeredAbility;
 import mage.abilities.TriggeredAbilityImpl;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DestroyTargetEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.condition.Condition;
+import mage.abilities.condition.common.CardsInHandCondition;
+import mage.abilities.decorator.ConditionalTriggeredAbility;
+import mage.abilities.effects.common.WinGameSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.permanent.AnotherPredicate;
 import mage.game.Game;
 import mage.game.events.GameEvent;
 import mage.game.events.GameEvent.EventType;
-import mage.game.permanent.Permanent;
-import mage.target.targetpointer.FixedTarget;
 
 /**
  *
- * @author LevelX
+ * @author fireshoes
  */
-public class HorobiDeathsWail extends CardImpl {
+public class BarrenGlory extends CardImpl {
 
-    public HorobiDeathsWail(UUID ownerId) {
-        super(ownerId, 117, "Horobi, Death's Wail", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{B}{B}");
-        this.expansionSetCode = "CHK";
-        this.supertype.add("Legendary");
-        this.subtype.add("Spirit");
+    public BarrenGlory(UUID ownerId) {
+        super(ownerId, 3, "Barren Glory", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{4}{W}{W}");
+        this.expansionSetCode = "FUT";
 
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
-
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        
-        // Whenever a creature becomes the target of a spell or ability, destroy that creature.
-        this.addAbility(new HorobiDeathsWailAbility(new DestroyTargetEffect()));
+        // At the beginning of your upkeep, if you control no permanents other than Barren Glory and have no cards in hand, you win the game.
+        Condition condition = new CardsInHandCondition(CardsInHandCondition.CountType.EQUAL_TO, 0);
+        TriggeredAbility ability = new BarrenGloryTriggeredAbility();
+        this.addAbility(new ConditionalTriggeredAbility(ability, 
+                condition, 
+                "At the beginning of your upkeep, if you control no permanents other than {this} and have no cards in hand, you win the game"));
     }
 
-    public HorobiDeathsWail(final HorobiDeathsWail card) {
+    public BarrenGlory(final BarrenGlory card) {
         super(card);
     }
 
     @Override
-    public HorobiDeathsWail copy() {
-        return new HorobiDeathsWail(this);
-    }    
-
+    public BarrenGlory copy() {
+        return new BarrenGlory(this);
+    }
 }
 
-class HorobiDeathsWailAbility extends TriggeredAbilityImpl {
+class BarrenGloryTriggeredAbility extends TriggeredAbilityImpl {
 
-    public HorobiDeathsWailAbility(Effect effect) {
-        super(Zone.BATTLEFIELD, effect);
+    private static final FilterPermanent filter = new FilterPermanent();
+    static {
+        filter.add(new AnotherPredicate());
     }
 
-    public HorobiDeathsWailAbility(final HorobiDeathsWailAbility ability) {
+    BarrenGloryTriggeredAbility() {
+        super(Zone.BATTLEFIELD, new WinGameSourceControllerEffect());
+    }
+
+    BarrenGloryTriggeredAbility(final BarrenGloryTriggeredAbility ability) {
         super(ability);
     }
 
     @Override
-    public HorobiDeathsWailAbility copy() {
-        return new HorobiDeathsWailAbility(this);
+    public BarrenGloryTriggeredAbility copy() {
+        return new BarrenGloryTriggeredAbility(this);
     }
 
     @Override
     public boolean checkEventType(GameEvent event, Game game) {
-        return event.getType() == EventType.TARGETED;
+        return event.getType() == EventType.UPKEEP_STEP_PRE;
     }
 
     @Override
     public boolean checkTrigger(GameEvent event, Game game) {
-        Permanent creature = game.getPermanent(event.getTargetId());
-        if (creature != null && creature.getCardType().contains(CardType.CREATURE)) {
-            getEffects().get(0).setTargetPointer(new FixedTarget(event.getTargetId()));
-            return true;
+        if (event.getPlayerId().equals(this.controllerId)) {
+            if (game.getBattlefield().count(filter, this.getSourceId(), this.getControllerId(), game) == 0) {
+                return true;
+            }
         }
         return false;
     }
 
     @Override
     public String getRule() {
-        return "Whenever a creature becomes the target of a spell or ability, destroy that creature.";
+        return "At the beginning of your upkeep, if you control no permanents other than {this} and have no cards in hand, you win the game";
     }
 }

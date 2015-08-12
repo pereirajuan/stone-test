@@ -28,36 +28,41 @@
 package mage.sets.iceage;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.abilities.common.delayed.AtTheBeginOfNextUpkeepDelayedTriggeredAbility;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class Updraft extends CardImpl {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
+    public Updraft(UUID ownerId) {
+        super(ownerId, 105, "Updraft", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}");
         this.expansionSetCode = "ICE";
 
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // Target creature gains flying until end of turn.
+        this.getSpellAbility().addEffect(new GainAbilityTargetEffect(FlyingAbility.getInstance(), Duration.EndOfTurn));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        
+        // Draw a card at the beginning of the next turn's upkeep.
+        this.getSpellAbility().addEffect(new CreateDelayedTriggeredAbilityEffect(new AtTheBeginOfNextUpkeepDelayedTriggeredAbility(new DrawCardSourceControllerEffect(1)), false));
     }
 
-    public MindWarp(final MindWarp card) {
+    public Updraft(final Updraft card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public Updraft copy() {
+        return new Updraft(this);
     }
 }

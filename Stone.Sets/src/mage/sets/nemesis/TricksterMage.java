@@ -25,39 +25,62 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.nemesis;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.MayTapOrUntapTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class TricksterMage extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("artifact, creature, or land");
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
-
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+    static {
+        filter.add(Predicates.or(
+                new CardTypePredicate(CardType.ARTIFACT),
+                new CardTypePredicate(CardType.CREATURE),
+                new CardTypePredicate(CardType.LAND)));
     }
 
-    public MindWarp(final MindWarp card) {
+    public TricksterMage(UUID ownerId) {
+        super(ownerId, 49, "Trickster Mage", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{U}");
+        this.expansionSetCode = "NMS";
+        this.subtype.add("Human");
+        this.subtype.add("Spellshaper");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // {U}, {tap}, Discard a card: You may tap or untap target artifact, creature, or land.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new MayTapOrUntapTargetEffect(), new ManaCostsImpl("{U}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new DiscardCardCost());
+        ability.addTarget(new TargetPermanent(filter));
+        this.addAbility(ability);
+    }
+
+    public TricksterMage(final TricksterMage card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public TricksterMage copy() {
+        return new TricksterMage(this);
     }
 }

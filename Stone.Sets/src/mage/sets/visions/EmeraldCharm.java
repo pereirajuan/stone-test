@@ -25,41 +25,64 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.tempest;
+package mage.sets.visions;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.common.combat.CantBlockTargetEffect;
+import mage.abilities.Mode;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.common.UntapTargetEffect;
+import mage.abilities.effects.common.continuous.LoseAbilityTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.filter.common.FilterEnchantmentPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.TargetPermanent;
 import mage.target.common.TargetCreaturePermanent;
+import mage.target.common.TargetEnchantmentPermanent;
 
 /**
  *
- * @author anonymous
+ * @author fireshoes
  */
-public class Stun extends CardImpl {
-
-    public Stun(UUID ownerId) {
-        super(ownerId, 207, "Stun", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{R}");
-        this.expansionSetCode = "TMP";
-
-        // Target creature can't block this turn.
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
-        this.getSpellAbility().addEffect(new CantBlockTargetEffect(Duration.EndOfTurn));
-        
-        // Draw a card.
-        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+public class EmeraldCharm extends CardImpl {
+    
+    private static final FilterEnchantmentPermanent filter = new FilterEnchantmentPermanent("non-Aura enchantment");
+    
+    static {
+        filter.add(Predicates.not(new SubtypePredicate("Aura")));
     }
 
-    public Stun(final Stun card) {
+    public EmeraldCharm(UUID ownerId) {
+        super(ownerId, 56, "Emerald Charm", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{G}");
+        this.expansionSetCode = "VIS";
+
+        // Choose one - Untap target permanent;
+        this.getSpellAbility().addEffect(new UntapTargetEffect());
+        this.getSpellAbility().addTarget(new TargetPermanent());
+
+        // or destroy target non-Aura enchantment;
+        Mode mode = new Mode();
+        mode.getEffects().add(new DestroyTargetEffect());
+        mode.getTargets().add(new TargetEnchantmentPermanent(filter));
+        this.getSpellAbility().addMode(mode);
+
+        // or target creature loses flying until end of turn.
+        mode = new Mode();
+        mode.getEffects().add(new LoseAbilityTargetEffect(FlyingAbility.getInstance(), Duration.EndOfTurn));
+        mode.getTargets().add(new TargetCreaturePermanent());
+        this.getSpellAbility().addMode(mode);
+    }
+
+    public EmeraldCharm(final EmeraldCharm card) {
         super(card);
     }
 
     @Override
-    public Stun copy() {
-        return new Stun(this);
+    public EmeraldCharm copy() {
+        return new EmeraldCharm(this);
     }
 }

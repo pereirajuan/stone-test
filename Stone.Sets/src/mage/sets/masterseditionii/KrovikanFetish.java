@@ -25,39 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.masterseditionii;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class KrovikanFetish extends mage.sets.fifthedition.KrovikanFetish {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
-
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+    public KrovikanFetish(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 100;
+        this.expansionSetCode = "ME2";
     }
 
-    public MindWarp(final MindWarp card) {
+    public KrovikanFetish(final KrovikanFetish card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public KrovikanFetish copy() {
+        return new KrovikanFetish(this);
     }
 }

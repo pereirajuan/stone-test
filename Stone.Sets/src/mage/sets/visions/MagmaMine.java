@@ -25,39 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.visions;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.dynamicvalue.common.CountersCount;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
+import mage.counters.CounterType;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class MagmaMine extends CardImpl {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
+    public MagmaMine(UUID ownerId) {
+        super(ownerId, 149, "Magma Mine", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{1}");
+        this.expansionSetCode = "VIS";
 
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // {4}: Put a pressure counter on Magma Mine.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, 
+                new AddCountersSourceEffect(CounterType.PRESSURE.createInstance(), true), 
+                new GenericManaCost(4)));
+        
+        // {tap}, Sacrifice Magma Mine: Magma Mine deals damage equal to the number of pressure counters on it to target creature or player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(new CountersCount(CounterType.PRESSURE)), new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
 
-    public MindWarp(final MindWarp card) {
+    public MagmaMine(final MagmaMine card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public MagmaMine copy() {
+        return new MagmaMine(this);
     }
 }

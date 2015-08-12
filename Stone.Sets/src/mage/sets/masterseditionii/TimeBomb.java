@@ -25,39 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.masterseditionii;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.dynamicvalue.common.CountersCount;
+import mage.abilities.effects.common.DamageEverythingEffect;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
+import mage.counters.CounterType;
+import mage.filter.common.FilterCreaturePermanent;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class TimeBomb extends CardImpl {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
+    public TimeBomb(UUID ownerId) {
+        super(ownerId, 223, "Time Bomb", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{4}");
+        this.expansionSetCode = "ME2";
 
+        // At the beginning of your upkeep, put a time counter on Time Bomb.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new AddCountersSourceEffect(CounterType.TIME.createInstance(), true), TargetController.YOU, false));
 
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // {1}, {tap}, Sacrifice Time Bomb: Time Bomb deals damage equal to the number of time counters on it to each creature and each player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new DamageEverythingEffect(new CountersCount(CounterType.TIME), new FilterCreaturePermanent()),
+                new GenericManaCost(1));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
+        this.addAbility(ability);
     }
 
-    public MindWarp(final MindWarp card) {
+    public TimeBomb(final TimeBomb card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public TimeBomb copy() {
+        return new TimeBomb(this);
     }
 }

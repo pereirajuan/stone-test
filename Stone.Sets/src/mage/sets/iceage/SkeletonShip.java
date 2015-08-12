@@ -28,36 +28,53 @@
 package mage.sets.iceage;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.ControlsPermanentsControllerTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.SacrificeSourceEffect;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
+import mage.counters.CounterType;
+import mage.filter.Filter;
+import mage.filter.common.FilterLandPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class SkeletonShip extends CardImpl {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
+    public SkeletonShip(UUID ownerId) {
+        super(ownerId, 379, "Skeleton Ship", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{U}");
         this.expansionSetCode = "ICE";
+        this.supertype.add("Legendary");
+        this.subtype.add("Skeleton");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(3);
 
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // When you control no Islands, sacrifice Skeleton Ship.
+        this.addAbility(new ControlsPermanentsControllerTriggeredAbility(
+                new FilterLandPermanent("Island", "no Islands"), Filter.ComparisonType.Equal, 0,
+                new SacrificeSourceEffect()));
+        
+        // {tap}: Put a -1/-1 counter on target creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersTargetEffect(CounterType.M1M1.createInstance()), new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public MindWarp(final MindWarp card) {
+    public SkeletonShip(final SkeletonShip card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public SkeletonShip copy() {
+        return new SkeletonShip(this);
     }
 }

@@ -25,39 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.judgment;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.PutOnLibraryTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.target.common.TargetCardInGraveyard;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class NantukoTracer extends CardImpl {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
+    public NantukoTracer(UUID ownerId) {
+        super(ownerId, 125, "Nantuko Tracer", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "JUD";
+        this.subtype.add("Insect");
+        this.subtype.add("Druid");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // When Nantuko Tracer enters the battlefield, you may put target card from a graveyard on the bottom of its owner's library.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new PutOnLibraryTargetEffect(false), true);
+        ability.addTarget(new TargetCardInGraveyard());
+        this.addAbility(ability);
     }
 
-    public MindWarp(final MindWarp card) {
+    public NantukoTracer(final NantukoTracer card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public NantukoTracer copy() {
+        return new NantukoTracer(this);
     }
 }

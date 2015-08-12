@@ -25,39 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.urzasdestiny;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.ControlsPermanentsControllerTriggeredAbility;
+import mage.abilities.effects.common.SacrificeSourceEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.filter.Filter;
+import mage.filter.common.FilterArtifactPermanent;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class CovetousDragon extends CardImpl {
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
+    public CovetousDragon(UUID ownerId) {
+        super(ownerId, 80, "Covetous Dragon", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{R}");
+        this.expansionSetCode = "UDS";
+        this.subtype.add("Dragon");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(5);
 
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        
+        // When you control no artifacts, sacrifice Covetous Dragon.
+        this.addAbility(new ControlsPermanentsControllerTriggeredAbility(
+                new FilterArtifactPermanent(), Filter.ComparisonType.Equal, 0,
+                new SacrificeSourceEffect()));
     }
 
-    public MindWarp(final MindWarp card) {
+    public CovetousDragon(final CovetousDragon card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public CovetousDragon copy() {
+        return new CovetousDragon(this);
     }
 }

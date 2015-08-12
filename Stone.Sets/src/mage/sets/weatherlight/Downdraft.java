@@ -25,39 +25,58 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.weatherlight;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DamageAllEffect;
+import mage.abilities.effects.common.continuous.LoseAbilityTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.AbilityPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class Downdraft extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature with flying");
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
-
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+    static {
+        filter.add(new AbilityPredicate(FlyingAbility.class));
     }
 
-    public MindWarp(final MindWarp card) {
+    public Downdraft(UUID ownerId) {
+        super(ownerId, 67, "Downdraft", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{G}");
+        this.expansionSetCode = "WTH";
+
+        // {G}: Target creature loses flying until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, 
+                new LoseAbilityTargetEffect(FlyingAbility.getInstance(), Duration.EndOfTurn), 
+                new ManaCostsImpl("{G}"));
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
+        
+        // Sacrifice Downdraft: Downdraft deals 2 damage to each creature with flying.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageAllEffect(2, filter), new SacrificeSourceCost()));
+    }
+
+    public Downdraft(final Downdraft card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public Downdraft copy() {
+        return new Downdraft(this);
     }
 }

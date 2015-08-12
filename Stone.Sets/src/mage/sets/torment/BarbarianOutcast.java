@@ -25,39 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.torment;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.ControlsPermanentsControllerTriggeredAbility;
+import mage.abilities.effects.common.SacrificeSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.filter.Filter;
+import mage.filter.common.FilterControlledLandPermanent;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
+public class BarbarianOutcast extends CardImpl {
+    
+    private static final FilterControlledLandPermanent filterControlledLand = new FilterControlledLandPermanent("a Swamp");
 
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
-
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+    static {
+        filterControlledLand.add(new SubtypePredicate("Swamp"));
     }
 
-    public MindWarp(final MindWarp card) {
+    public BarbarianOutcast(UUID ownerId) {
+        super(ownerId, 92, "Barbarian Outcast", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
+        this.expansionSetCode = "TOR";
+        this.subtype.add("Human");
+        this.subtype.add("Barbarian");
+        this.subtype.add("Beast");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // When you control no Swamps, sacrifice Barbarian Outcast.
+        this.addAbility(new ControlsPermanentsControllerTriggeredAbility(
+                new FilterLandPermanent("Swamp", "no Swamps"), Filter.ComparisonType.Equal, 0,
+                new SacrificeSourceEffect()));
+    }
+
+    public BarbarianOutcast(final BarbarianOutcast card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public BarbarianOutcast copy() {
+        return new BarbarianOutcast(this);
     }
 }

@@ -25,39 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.iceage;
+package mage.sets.prophecy;
 
 import java.util.UUID;
-import mage.abilities.dynamicvalue.common.ManacostVariableValue;
-import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.abilities.costs.AlternativeCostSourceAbility;
+import mage.abilities.costs.common.DiscardTargetCost;
+import mage.abilities.effects.common.DamageMultiEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.target.TargetPlayer;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetCardInHand;
+import mage.target.common.TargetCreaturePermanentAmount;
 
 /**
  *
- * @author Quercitron
+ * @author fireshoes
  */
-public class MindWarp extends CardImpl {
-
-    public MindWarp(UUID ownerId) {
-        super(ownerId, 36, "Mind Warp", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{3}{B}");
-        this.expansionSetCode = "ICE";
-
-
-        // Look at target player's hand and choose X cards from it. That player discards those cards.
-        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new ManacostVariableValue(), TargetController.ANY));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+public class Flameshot extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard("a Mountain card");
+    
+    static {
+        filter.add(new SubtypePredicate("Mountain"));
     }
 
-    public MindWarp(final MindWarp card) {
+    public Flameshot(UUID ownerId) {
+        super(ownerId, 90, "Flameshot", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{R}");
+        this.expansionSetCode = "PCY";
+
+        // You may discard a Mountain card rather than pay Flameshot's mana cost.
+        this.addAbility(new AlternativeCostSourceAbility(new DiscardTargetCost(new TargetCardInHand(filter))));
+        
+        // Flameshot deals 3 damage divided as you choose among one, two, or three target creatures.
+        this.getSpellAbility().addEffect(new DamageMultiEffect(3));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanentAmount(3));
+    }
+
+    public Flameshot(final Flameshot card) {
         super(card);
     }
 
     @Override
-    public MindWarp copy() {
-        return new MindWarp(this);
+    public Flameshot copy() {
+        return new Flameshot(this);
     }
 }

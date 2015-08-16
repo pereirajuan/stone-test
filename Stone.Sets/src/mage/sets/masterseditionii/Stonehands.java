@@ -25,40 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.masterseditionii;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class Stonehands extends mage.sets.iceage.Stonehands {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public Stonehands(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 151;
+        this.expansionSetCode = "ME2";
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public Stonehands(final Stonehands card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public Stonehands copy() {
+        return new Stonehands(this);
     }
 }

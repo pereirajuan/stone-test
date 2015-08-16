@@ -25,40 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.weatherlight;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.ExileTopCreatureCardOfGraveyardCost;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class Necratog extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public Necratog(UUID ownerId) {
+        super(ownerId, 18, "Necratog", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{B}");
+        this.expansionSetCode = "WTH";
+        this.subtype.add("Atog");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
+
+        // Exile the top creature card of your graveyard: Necratog gets +2/+2 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(2, 2, Duration.EndOfTurn), new ExileTopCreatureCardOfGraveyardCost(1)));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public Necratog(final Necratog card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public Necratog copy() {
+        return new Necratog(this);
     }
 }

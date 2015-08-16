@@ -25,40 +25,62 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.mirage;
 
 import java.util.UUID;
-import mage.Mana;
 import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.PhasingAbility;
 import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
-
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+public class TeferisCurse extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("artifact or creature");
+    
+    static {
+        filter.add(Predicates.or(
+        new CardTypePredicate(CardType.CREATURE),
+        new CardTypePredicate(CardType.ARTIFACT)));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public TeferisCurse(UUID ownerId) {
+        super(ownerId, 96, "Teferi's Curse", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
+        this.expansionSetCode = "MIR";
+        this.subtype.add("Aura");
+
+        // Enchant artifact or creature
+        TargetPermanent auraTarget = new TargetPermanent(filter);
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
+        
+        // Enchanted permanent has phasing.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(PhasingAbility.getInstance(), AttachmentType.AURA)));
+    }
+
+    public TeferisCurse(final TeferisCurse card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public TeferisCurse copy() {
+        return new TeferisCurse(this);
     }
 }

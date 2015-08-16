@@ -25,40 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.judgment;
 
 import java.util.UUID;
-import mage.Mana;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class CabalTrainee extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public CabalTrainee(UUID ownerId) {
+        super(ownerId, 63, "Cabal Trainee", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{B}");
+        this.expansionSetCode = "JUD";
+        this.subtype.add("Human");
+        this.subtype.add("Minion");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // Sacrifice Cabal Trainee: Target creature gets -2/-0 until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostTargetEffect(-2, 0, Duration.EndOfTurn), new SacrificeSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public CabalTrainee(final CabalTrainee card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public CabalTrainee copy() {
+        return new CabalTrainee(this);
     }
 }

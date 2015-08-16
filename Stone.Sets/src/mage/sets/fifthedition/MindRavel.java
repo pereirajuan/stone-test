@@ -28,37 +28,39 @@
 package mage.sets.fifthedition;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.delayed.AtTheBeginOfNextUpkeepDelayedTriggeredAbility;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.discard.DiscardTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
+public class MindRavel extends CardImpl {
+
+    public MindRavel(UUID ownerId) {
+        super(ownerId, 38, "Mind Ravel", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{B}");
         this.expansionSetCode = "5ED";
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+        // Target player discards a card.
+        this.getSpellAbility().addEffect(new DiscardTargetEffect(1));
+        this.getSpellAbility().addTarget(new TargetPlayer());
+        
+        // Draw a card at the beginning of the next turn's upkeep.
+        this.getSpellAbility().addEffect(new CreateDelayedTriggeredAbilityEffect(new AtTheBeginOfNextUpkeepDelayedTriggeredAbility(new DrawCardSourceControllerEffect(1)), false));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public MindRavel(final MindRavel card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public MindRavel copy() {
+        return new MindRavel(this);
     }
 }

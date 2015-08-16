@@ -25,40 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.morningtide;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.CounterUnlessPaysEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.TargetSpell;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class SagesDousing extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("Wizard");
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    static {
+        filter.add(new SubtypePredicate("Wizard"));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public SagesDousing(UUID ownerId) {
+        super(ownerId, 48, "Sage's Dousing", Rarity.UNCOMMON, new CardType[]{CardType.TRIBAL, CardType.INSTANT}, "{2}{U}");
+        this.expansionSetCode = "MOR";
+        this.subtype.add("Wizard");
+
+        // Counter target spell unless its controller pays {3}. 
+        this.getSpellAbility().addTarget(new TargetSpell());
+        this.getSpellAbility().addEffect(new CounterUnlessPaysEffect(new GenericManaCost(3)));
+        
+        // If you control a Wizard, draw a card.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(new DrawCardSourceControllerEffect(1), 
+                new PermanentsOnTheBattlefieldCondition(filter),"If you control a Wizard, draw a card"));
+    }
+
+    public SagesDousing(final SagesDousing card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public SagesDousing copy() {
+        return new SagesDousing(this);
     }
 }

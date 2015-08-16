@@ -25,40 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.visions;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.PhaseOutSourceEffect;
+import mage.abilities.keyword.FlankingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class TeferisHonorGuard extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public TeferisHonorGuard(UUID ownerId) {
+        super(ownerId, 122, "Teferi's Honor Guard", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}");
+        this.expansionSetCode = "VIS";
+        this.subtype.add("Human");
+        this.subtype.add("Knight");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Flanking
+        this.addAbility(new FlankingAbility());
+        
+        // {U}{U}: Teferi's Honor Guard phases out.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new PhaseOutSourceEffect(), new ManaCostsImpl("{U}{U}")));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public TeferisHonorGuard(final TeferisHonorGuard card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public TeferisHonorGuard copy() {
+        return new TeferisHonorGuard(this);
     }
 }

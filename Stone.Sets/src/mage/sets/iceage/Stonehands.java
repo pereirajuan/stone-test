@@ -25,40 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.iceage;
 
 import java.util.UUID;
-import mage.Mana;
 import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.mana.ColoredManaCost;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
+import mage.abilities.keyword.EnchantAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.ColoredManaSymbol;
+import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class Stonehands extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public Stonehands(UUID ownerId) {
+        super(ownerId, 219, "Stonehands", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
+        this.expansionSetCode = "ICE";
+        this.subtype.add("Aura");
+
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
+        
+        // Enchanted creature gets +0/+2.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(0,2, Duration.WhileOnBattlefield)));
+        
+        // {R}: Enchanted creature gets +1/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 0, Duration.EndOfTurn), new ColoredManaCost(ColoredManaSymbol.R)));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public Stonehands(final Stonehands card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public Stonehands copy() {
+        return new Stonehands(this);
     }
 }

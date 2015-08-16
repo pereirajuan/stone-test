@@ -25,40 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.weatherlight;
 
 import java.util.UUID;
-import mage.Mana;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.PhaseOutTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class VodalianIllusionist extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public VodalianIllusionist(UUID ownerId) {
+        super(ownerId, 58, "Vodalian Illusionist", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+        this.expansionSetCode = "WTH";
+        this.subtype.add("Merfolk");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // {U}{U}, {tap}: Target creature phases out.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new PhaseOutTargetEffect(), new ManaCostsImpl("{U}{U}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public VodalianIllusionist(final VodalianIllusionist card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public VodalianIllusionist copy() {
+        return new VodalianIllusionist(this);
     }
 }

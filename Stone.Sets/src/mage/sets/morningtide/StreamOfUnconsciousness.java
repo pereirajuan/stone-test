@@ -25,40 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.morningtide;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class StreamOfUnconsciousness extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("Wizard");
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    static {
+        filter.add(new SubtypePredicate("Wizard"));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public StreamOfUnconsciousness(UUID ownerId) {
+        super(ownerId, 52, "Stream of Unconsciousness", Rarity.COMMON, new CardType[]{CardType.TRIBAL, CardType.INSTANT}, "{U}");
+        this.expansionSetCode = "MOR";
+        this.subtype.add("Wizard");
+
+        // Target creature gets -4/-0 until end of turn. 
+        this.getSpellAbility().addEffect(new BoostTargetEffect(-4, 0, Duration.EndOfTurn));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        
+        // If you control a Wizard, draw a card.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(new DrawCardSourceControllerEffect(1), 
+                new PermanentsOnTheBattlefieldCondition(filter),"If you control a Wizard, draw a card"));
+    }
+
+    public StreamOfUnconsciousness(final StreamOfUnconsciousness card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public StreamOfUnconsciousness copy() {
+        return new StreamOfUnconsciousness(this);
     }
 }

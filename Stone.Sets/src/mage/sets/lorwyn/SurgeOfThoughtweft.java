@@ -25,40 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.lorwyn;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continuous.BoostControlledEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class SurgeOfThoughtweft extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("Kithkin");
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    static {
+        filter.add(new SubtypePredicate("Kithkin"));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public SurgeOfThoughtweft(UUID ownerId) {
+        super(ownerId, 43, "Surge of Thoughtweft", Rarity.COMMON, new CardType[]{CardType.TRIBAL, CardType.INSTANT}, "{1}{W}");
+        this.expansionSetCode = "LRW";
+        this.subtype.add("Kithkin");
+
+        // Creatures you control get +1/+1 until end of turn.
+        this.getSpellAbility().addEffect(new BoostControlledEffect(1, 1, Duration.EndOfTurn));
+        
+        // If you control a Kithkin, draw a card.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(new DrawCardSourceControllerEffect(1), 
+                new PermanentsOnTheBattlefieldCondition(filter),"If you control a Kithkin, draw a card"));
+    }
+
+    public SurgeOfThoughtweft(final SurgeOfThoughtweft card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public SurgeOfThoughtweft copy() {
+        return new SurgeOfThoughtweft(this);
     }
 }

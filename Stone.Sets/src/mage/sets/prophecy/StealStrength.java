@@ -25,54 +25,75 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.weatherlight;
+package mage.sets.prophecy;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.ExileTopCardOfGraveyardCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.ContinuousEffectImpl;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
+import mage.constants.Layer;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.target.TargetPermanent;
+import mage.constants.SubLayer;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class NaturesKiss extends CardImpl {
+public class StealStrength extends CardImpl {
 
-    public NaturesKiss(UUID ownerId) {
-        super(ownerId, 78, "Nature's Kiss", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
-        this.expansionSetCode = "WTH";
-        this.subtype.add("Aura");
+    public StealStrength(UUID ownerId) {
+        super(ownerId, 79, "Steal Strength", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{B}");
+        this.expansionSetCode = "PCY";
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-        
-        // {1}, Exile the top card of your graveyard: Enchanted creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.EndOfTurn), new ManaCostsImpl("{1}"));
-        ability.addCost(new ExileTopCardOfGraveyardCost(1));
-        this.addAbility(ability);
+        // Target creature gets +1/+1 until end of turn. Another target creature gets -1/-1 until end of turn.
+        this.getSpellAbility().addEffect(new StealStrengthEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(2));
     }
 
-    public NaturesKiss(final NaturesKiss card) {
+    public StealStrength(final StealStrength card) {
         super(card);
     }
 
     @Override
-    public NaturesKiss copy() {
-        return new NaturesKiss(this);
+    public StealStrength copy() {
+        return new StealStrength(this);
+    }
+}
+
+class StealStrengthEffect extends ContinuousEffectImpl {
+
+    public StealStrengthEffect() {
+        super(Duration.EndOfTurn, Layer.PTChangingEffects_7, SubLayer.ModifyPT_7c, Outcome.BoostCreature);
+        this.staticText = "Target creature gets +1/+1 until end of turn. Another target creature gets -1/-1 until end of turn";
+    }
+
+    public StealStrengthEffect(final StealStrengthEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public StealStrengthEffect copy() {
+        return new StealStrengthEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        Permanent permanent = game.getPermanent(source.getFirstTarget());
+        if (permanent != null) {
+            permanent.addPower(1);
+            permanent.addToughness(1);
+        }
+        permanent = game.getPermanent(source.getTargets().get(0).getTargets().get(1));
+        if (permanent != null) {
+            permanent.addPower(-1);
+            permanent.addToughness(-1);
+        }
+        return true;
     }
 }

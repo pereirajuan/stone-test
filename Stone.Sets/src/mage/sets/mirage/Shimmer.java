@@ -25,40 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.mirage;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.AsEntersBattlefieldAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.ChooseLandTypeEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
+import mage.abilities.keyword.PhasingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.mageobject.ChosenSubtypePredicate;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class Shimmer extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public Shimmer(UUID ownerId) {
+        super(ownerId, 92, "Shimmer", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{2}{U}{U}");
+        this.expansionSetCode = "MIR";
+
+        // As Shimmer enters the battlefield, choose a land type.
+        this.addAbility(new AsEntersBattlefieldAbility(new ChooseLandTypeEffect(Outcome.Detriment)));
+        
+        // Each land of the chosen type has phasing.
+        FilterLandPermanent filter = new FilterLandPermanent("Each land of the chosen type");
+        filter.add(new ChosenSubtypePredicate(this.getId()));
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAllEffect(PhasingAbility.getInstance(), Duration.WhileOnBattlefield, filter, false)));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public Shimmer(final Shimmer card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public Shimmer copy() {
+        return new Shimmer(this);
     }
 }

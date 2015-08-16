@@ -25,54 +25,79 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.weatherlight;
+package mage.sets.mirrodin;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.MageObject;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.ExileTopCardOfGraveyardCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.ContinuousRuleModifyingEffectImpl;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.target.TargetPermanent;
-import mage.target.common.TargetCreaturePermanent;
+import mage.game.Game;
+import mage.game.events.GameEvent;
 
 /**
  *
  * @author fireshoes
  */
-public class NaturesKiss extends CardImpl {
+public class GridMonitor extends CardImpl {
 
-    public NaturesKiss(UUID ownerId) {
-        super(ownerId, 78, "Nature's Kiss", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
-        this.expansionSetCode = "WTH";
-        this.subtype.add("Aura");
+    public GridMonitor(UUID ownerId) {
+        super(ownerId, 183, "Grid Monitor", Rarity.RARE, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{4}");
+        this.expansionSetCode = "MRD";
+        this.subtype.add("Construct");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(6);
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-        
-        // {1}, Exile the top card of your graveyard: Enchanted creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.EndOfTurn), new ManaCostsImpl("{1}"));
-        ability.addCost(new ExileTopCardOfGraveyardCost(1));
-        this.addAbility(ability);
+        // You can't cast creature spells.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GridMonitorEffect()));
     }
 
-    public NaturesKiss(final NaturesKiss card) {
+    public GridMonitor(final GridMonitor card) {
         super(card);
     }
 
-    @Override
-    public NaturesKiss copy() {
-        return new NaturesKiss(this);
+    @java.lang.Override
+    public GridMonitor copy() {
+        return new GridMonitor(this);
+    }
+}
+
+class GridMonitorEffect extends ContinuousRuleModifyingEffectImpl {
+    
+    public GridMonitorEffect() {
+        super(Duration.WhileOnBattlefield, Outcome.Detriment);
+        staticText = "You can't cast creature spells";
+    }
+
+    public GridMonitorEffect(final GridMonitorEffect effect) {
+        super(effect);
+    }
+
+    @java.lang.Override
+    public GridMonitorEffect copy() {
+        return new GridMonitorEffect(this);
+    }
+
+    @java.lang.Override
+    public boolean apply(Game game, Ability source) {
+        return true;
+    }
+
+    @java.lang.Override
+    public boolean applies(GameEvent event, Ability source, Game game) {
+        if (event.getType() == GameEvent.EventType.CAST_SPELL && event.getPlayerId().equals(source.getControllerId())) {
+            MageObject object = game.getObject(event.getSourceId());
+            if (object.getCardType().contains(CardType.CREATURE)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

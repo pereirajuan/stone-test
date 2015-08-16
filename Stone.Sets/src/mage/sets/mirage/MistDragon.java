@@ -25,40 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.mirage;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.PhaseOutSourceEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.effects.common.continuous.LoseAbilitySourceEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class MistDragon extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public MistDragon(UUID ownerId) {
+        super(ownerId, 79, "Mist Dragon", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{U}{U}");
+        this.expansionSetCode = "MIR";
+        this.subtype.add("Dragon");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
+
+        // {0}: Mist Dragon gains flying. <i>This effect lasts indefinitely</i>
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, 
+                new GainAbilitySourceEffect(FlyingAbility.getInstance(), Duration.WhileOnBattlefield), new GenericManaCost(0)));
+        
+        // {0}: Mist Dragon loses flying. <i>This effect lasts indefinitely</i>
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, 
+                new LoseAbilitySourceEffect(FlyingAbility.getInstance(), Duration.WhileOnBattlefield), new GenericManaCost(0)));
+        
+        // {3}{U}{U}: Mist Dragon phases out.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, 
+                new PhaseOutSourceEffect(), new ManaCostsImpl("{3}{U}{U}")));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public MistDragon(final MistDragon card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public MistDragon copy() {
+        return new MistDragon(this);
     }
 }

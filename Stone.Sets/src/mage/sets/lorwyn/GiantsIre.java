@@ -25,40 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.lorwyn;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class GiantsIre extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("Giant");
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    static {
+        filter.add(new SubtypePredicate("Giant"));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public GiantsIre(UUID ownerId) {
+        super(ownerId, 170, "Giant's Ire", Rarity.COMMON, new CardType[]{CardType.TRIBAL, CardType.SORCERY}, "{3}{R}");
+        this.expansionSetCode = "LRW";
+        this.subtype.add("Giant");
+
+        // Giant's Ire deals 4 damage to target player.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(4));
+        this.getSpellAbility().addTarget(new TargetPlayer());
+        
+        // If you control a Giant, draw a card.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(new DrawCardSourceControllerEffect(1), 
+                new PermanentsOnTheBattlefieldCondition(filter),"If you control a Giant, draw a card"));
+    }
+
+    public GiantsIre(final GiantsIre card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public GiantsIre copy() {
+        return new GiantsIre(this);
     }
 }

@@ -25,40 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.iceage;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.delayed.AtTheBeginOfNextUpkeepDelayedTriggeredAbility;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.GainLifeEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class TouchOfDeath extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public TouchOfDeath(UUID ownerId) {
+        super(ownerId, 55, "Touch of Death", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{B}");
+        this.expansionSetCode = "ICE";
+
+        // Touch of Death deals 1 damage to target player. You gain 1 life.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(1));
+        this.getSpellAbility().addTarget(new TargetPlayer());
+        this.getSpellAbility().addEffect(new GainLifeEffect(1));
+        
+        // Draw a card at the beginning of the next turn's upkeep.
+        this.getSpellAbility().addEffect(new CreateDelayedTriggeredAbilityEffect(new AtTheBeginOfNextUpkeepDelayedTriggeredAbility(new DrawCardSourceControllerEffect(1)), false));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public TouchOfDeath(final TouchOfDeath card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public TouchOfDeath copy() {
+        return new TouchOfDeath(this);
     }
 }

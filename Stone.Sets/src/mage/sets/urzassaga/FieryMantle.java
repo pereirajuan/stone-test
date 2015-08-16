@@ -25,18 +25,20 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.weatherlight;
+package mage.sets.urzassaga;
 
 import java.util.UUID;
 import mage.abilities.Ability;
+import mage.abilities.common.PutIntoGraveFromBattlefieldSourceTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.ExileTopCardOfGraveyardCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.costs.mana.ColoredManaCost;
 import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.ReturnToHandSourceEffect;
 import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
 import mage.abilities.keyword.EnchantAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.ColoredManaSymbol;
 import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
@@ -48,31 +50,33 @@ import mage.target.common.TargetCreaturePermanent;
  *
  * @author fireshoes
  */
-public class NaturesKiss extends CardImpl {
+public class FieryMantle extends CardImpl {
 
-    public NaturesKiss(UUID ownerId) {
-        super(ownerId, 78, "Nature's Kiss", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
-        this.expansionSetCode = "WTH";
+    public FieryMantle(UUID ownerId) {
+        super(ownerId, 186, "Fiery Mantle", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{R}");
+        this.expansionSetCode = "USG";
         this.subtype.add("Aura");
 
         // Enchant creature
         TargetPermanent auraTarget = new TargetCreaturePermanent();
         this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-        
-        // {1}, Exile the top card of your graveyard: Enchanted creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.EndOfTurn), new ManaCostsImpl("{1}"));
-        ability.addCost(new ExileTopCardOfGraveyardCost(1));
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
+        
+        // {R}: Enchanted creature gets +1/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 0, Duration.EndOfTurn), new ColoredManaCost(ColoredManaSymbol.R)));
+        
+        // When Fiery Mantle is put into a graveyard from the battlefield, return Fiery Mantle to its owner's hand.
+        this.addAbility(new PutIntoGraveFromBattlefieldSourceTriggeredAbility(new ReturnToHandSourceEffect()));
     }
 
-    public NaturesKiss(final NaturesKiss card) {
+    public FieryMantle(final FieryMantle card) {
         super(card);
     }
 
     @Override
-    public NaturesKiss copy() {
-        return new NaturesKiss(this);
+    public FieryMantle copy() {
+        return new FieryMantle(this);
     }
 }

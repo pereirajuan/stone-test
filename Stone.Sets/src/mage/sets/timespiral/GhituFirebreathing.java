@@ -25,18 +25,21 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.weatherlight;
+package mage.sets.timespiral;
 
 import java.util.UUID;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.ExileTopCardOfGraveyardCost;
+import mage.abilities.costs.mana.ColoredManaCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.ReturnToHandSourceEffect;
 import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
 import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.FlashAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.ColoredManaSymbol;
 import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
@@ -48,31 +51,36 @@ import mage.target.common.TargetCreaturePermanent;
  *
  * @author fireshoes
  */
-public class NaturesKiss extends CardImpl {
+public class GhituFirebreathing extends CardImpl {
 
-    public NaturesKiss(UUID ownerId) {
-        super(ownerId, 78, "Nature's Kiss", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
-        this.expansionSetCode = "WTH";
+    public GhituFirebreathing(UUID ownerId) {
+        super(ownerId, 158, "Ghitu Firebreathing", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{R}");
+        this.expansionSetCode = "TSP";
         this.subtype.add("Aura");
 
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        
         // Enchant creature
         TargetPermanent auraTarget = new TargetCreaturePermanent();
         this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-        
-        // {1}, Exile the top card of your graveyard: Enchanted creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.EndOfTurn), new ManaCostsImpl("{1}"));
-        ability.addCost(new ExileTopCardOfGraveyardCost(1));
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
+        
+        // {R}: Enchanted creature gets +1/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 0, Duration.EndOfTurn), new ColoredManaCost(ColoredManaSymbol.R)));
+        
+        // {R}: Return Ghitu Firebreathing to its owner's hand.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnToHandSourceEffect(), new ManaCostsImpl("{R}")));
     }
 
-    public NaturesKiss(final NaturesKiss card) {
+    public GhituFirebreathing(final GhituFirebreathing card) {
         super(card);
     }
 
     @Override
-    public NaturesKiss copy() {
-        return new NaturesKiss(this);
+    public GhituFirebreathing copy() {
+        return new GhituFirebreathing(this);
     }
 }

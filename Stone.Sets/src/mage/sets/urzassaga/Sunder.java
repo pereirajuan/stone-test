@@ -25,40 +25,65 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.urzassaga;
 
 import java.util.UUID;
-import mage.Mana;
 import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterLandPermanent;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class Sunder extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public Sunder(UUID ownerId) {
+        super(ownerId, 101, "Sunder", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{3}{U}");
+        this.expansionSetCode = "USG";
+
+        // Return all lands to their owners' hands.
+        this.getSpellAbility().addEffect(new SunderEffect());
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public Sunder(final Sunder card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public Sunder copy() {
+        return new Sunder(this);
+    }
+}
+
+class SunderEffect extends OneShotEffect {
+    
+    public SunderEffect() {
+        super(Outcome.ReturnToHand);
+        staticText = "Return all lands to their owners' hands";
+    }
+
+    public SunderEffect(final SunderEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        for (Permanent land : game.getBattlefield().getActivePermanents(new FilterLandPermanent(), source.getControllerId(), source.getSourceId(), game)) {
+            land.moveToZone(Zone.HAND, source.getSourceId(), game, true);
+        }
+        return true;
+    }
+
+    @Override
+    public SunderEffect copy() {
+        return new SunderEffect(this);
     }
 }

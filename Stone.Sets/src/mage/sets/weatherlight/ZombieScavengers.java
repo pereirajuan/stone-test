@@ -25,40 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.weatherlight;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.ExileTopCreatureCardOfGraveyardCost;
+import mage.abilities.effects.common.RegenerateSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class ZombieScavengers extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public ZombieScavengers(UUID ownerId) {
+        super(ownerId, 29, "Zombie Scavengers", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{B}");
+        this.expansionSetCode = "WTH";
+        this.subtype.add("Zombie");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
+
+        // Exile the top creature card of your graveyard: Regenerate Zombie Scavengers.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new RegenerateSourceEffect(), new ExileTopCreatureCardOfGraveyardCost(1)));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public ZombieScavengers(final ZombieScavengers card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public ZombieScavengers copy() {
+        return new ZombieScavengers(this);
     }
 }

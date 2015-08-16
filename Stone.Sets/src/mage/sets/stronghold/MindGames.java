@@ -25,40 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.stronghold;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.keyword.BuybackAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
-
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+public class MindGames extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("artifact, creature, or land");
+    
+    static {
+        filter.add(Predicates.or(
+                new CardTypePredicate(CardType.ARTIFACT),
+                new CardTypePredicate(CardType.CREATURE),
+                new CardTypePredicate(CardType.LAND)));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public MindGames(UUID ownerId) {
+        super(ownerId, 38, "Mind Games", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
+        this.expansionSetCode = "STH";
+
+        // Buyback {2}{U}
+        this.addAbility(new BuybackAbility("{3}"));
+        
+        // Tap target artifact, creature, or land.
+        this.getSpellAbility().addEffect(new TapTargetEffect());
+        this.getSpellAbility().addTarget(new TargetPermanent(filter));
+    }
+
+    public MindGames(final MindGames card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public MindGames copy() {
+        return new MindGames(this);
     }
 }

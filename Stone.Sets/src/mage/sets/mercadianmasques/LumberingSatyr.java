@@ -25,40 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.mercadianmasques;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
+import mage.abilities.keyword.ForestwalkAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class LumberingSatyr extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public LumberingSatyr(UUID ownerId) {
+        super(ownerId, 257, "Lumbering Satyr", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
+        this.expansionSetCode = "MMQ";
+        this.subtype.add("Satyr");
+        this.subtype.add("Beast");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(4);
+
+        // All creatures have forestwalk.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, 
+                new GainAbilityAllEffect(new ForestwalkAbility(), Duration.WhileOnBattlefield, new FilterCreaturePermanent())));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public LumberingSatyr(final LumberingSatyr card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public LumberingSatyr copy() {
+        return new LumberingSatyr(this);
     }
 }

@@ -25,14 +25,16 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.weatherlight;
+package mage.sets.mirage;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.ExileTopCardOfGraveyardCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.common.delayed.AtTheBeginOfNextUpkeepDelayedTriggeredAbility;
 import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
 import mage.abilities.keyword.EnchantAbility;
 import mage.cards.CardImpl;
@@ -48,31 +50,33 @@ import mage.target.common.TargetCreaturePermanent;
  *
  * @author fireshoes
  */
-public class NaturesKiss extends CardImpl {
+public class RitualOfSteel extends CardImpl {
 
-    public NaturesKiss(UUID ownerId) {
-        super(ownerId, 78, "Nature's Kiss", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
-        this.expansionSetCode = "WTH";
+    public RitualOfSteel(UUID ownerId) {
+        super(ownerId, 240, "Ritual of Steel", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}");
+        this.expansionSetCode = "MIR";
         this.subtype.add("Aura");
 
         // Enchant creature
         TargetPermanent auraTarget = new TargetCreaturePermanent();
         this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-        
-        // {1}, Exile the top card of your graveyard: Enchanted creature gets +1/+1 until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.EndOfTurn), new ManaCostsImpl("{1}"));
-        ability.addCost(new ExileTopCardOfGraveyardCost(1));
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
+        
+        // When Ritual of Steel enters the battlefield, draw a card at the beginning of the next turn's upkeep.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateDelayedTriggeredAbilityEffect(new AtTheBeginOfNextUpkeepDelayedTriggeredAbility(new DrawCardSourceControllerEffect(1)), false)));
+        
+        // Enchanted creature gets +0/+2.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(0,2, Duration.WhileOnBattlefield)));
     }
 
-    public NaturesKiss(final NaturesKiss card) {
+    public RitualOfSteel(final RitualOfSteel card) {
         super(card);
     }
 
     @Override
-    public NaturesKiss copy() {
-        return new NaturesKiss(this);
+    public RitualOfSteel copy() {
+        return new RitualOfSteel(this);
     }
 }

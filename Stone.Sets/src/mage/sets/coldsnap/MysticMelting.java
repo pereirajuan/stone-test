@@ -25,40 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fifthedition;
+package mage.sets.coldsnap;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.Ability;
-import mage.abilities.dynamicvalue.common.UrzaTerrainValue;
-import mage.abilities.mana.DynamicManaAbility;
+import mage.abilities.common.delayed.AtTheBeginOfNextUpkeepDelayedTriggeredAbility;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.common.FilterArtifactOrEnchantmentPermanent;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author Melkhior
+ * @author fireshoes
  */
-public class UrzasTower extends CardImpl {
-    public UrzasTower(UUID ownerId) {
-        super(ownerId, 449, "Urza's Tower", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
-        this.subtype.add("Urza's");
-        this.subtype.add("Tower");
-        this.expansionSetCode = "5ED";
+public class MysticMelting extends CardImpl {
 
-        // {T}: Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead.
-        Ability urzaManaAbility = new DynamicManaAbility(Mana.ColorlessMana, new UrzaTerrainValue(3),
-                "Add {1} to your mana pool. If you control an Urza's Mine and an Urza's Power-Plant, add {3} to your mana pool instead");
-        this.addAbility(urzaManaAbility);
+    public MysticMelting(UUID ownerId) {
+        super(ownerId, 114, "Mystic Melting", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{3}{G}");
+        this.expansionSetCode = "CSP";
+
+        // Destroy target artifact or enchantment.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        this.getSpellAbility().addTarget(new TargetPermanent(new FilterArtifactOrEnchantmentPermanent()));
+        
+        // Draw a card at the beginning of the next turn's upkeep.
+        this.getSpellAbility().addEffect(new CreateDelayedTriggeredAbilityEffect(
+                new AtTheBeginOfNextUpkeepDelayedTriggeredAbility(new DrawCardSourceControllerEffect(1)), false));
     }
 
-    public UrzasTower(final UrzasTower card) {
+    public MysticMelting(final MysticMelting card) {
         super(card);
     }
 
     @Override
-    public UrzasTower copy() {
-        return new UrzasTower(this);
+    public MysticMelting copy() {
+        return new MysticMelting(this);
     }
 }

@@ -25,36 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.MageInt;
+import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.IngestAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class MistIntruder extends CardImpl {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
+    public MistIntruder(UUID ownerId) {
+        super(ownerId, 61, "Mist Intruder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
 
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+        
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        
+        // Ingest
+        this.addAbility(new IngestAbility());
     }
 
-    public Sandblast(final Sandblast card) {
+    public MistIntruder(final MistIntruder card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public MistIntruder copy() {
+        return new MistIntruder(this);
     }
 }

@@ -25,36 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
+import mage.constants.Zone;
+import mage.target.common.TargetEnchantmentPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class FelidarCub extends CardImpl {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
+    public FelidarCub(UUID ownerId) {
+        super(ownerId, 25, "Felidar Cub", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{W}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Cat");
+        this.subtype.add("Beast");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+        // Sacrifice Felidar Cub: Destroy target enchantment.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DestroyTargetEffect(), new SacrificeSourceCost());
+        ability.addTarget(new TargetEnchantmentPermanent());
+        this.addAbility(ability);
     }
 
-    public Sandblast(final Sandblast card) {
+    public FelidarCub(final FelidarCub card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public FelidarCub copy() {
+        return new FelidarCub(this);
     }
 }

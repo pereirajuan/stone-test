@@ -25,36 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.MageInt;
+import mage.Mana;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.mana.SimpleManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class KozileksChanneler extends CardImpl {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
+    public KozileksChanneler(UUID ownerId) {
+        super(ownerId, 10, "Kozilek's Channeler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{5}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+        // {T}: Add {2} to your mana pool.
+        this.addAbility(new SimpleManaAbility(Zone.BATTLEFIELD, Mana.ColorlessMana(2), new TapSourceCost()));
     }
 
-    public Sandblast(final Sandblast card) {
+    public KozileksChanneler(final KozileksChanneler card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public KozileksChanneler copy() {
+        return new KozileksChanneler(this);
     }
 }

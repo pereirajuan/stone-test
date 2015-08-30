@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.abilities.effects.common.DamageTargetEffect;
@@ -38,23 +38,23 @@ import mage.target.common.TargetAttackingOrBlockingCreature;
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class GideonsReproach extends CardImpl {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
+    public GideonsReproach(UUID ownerId) {
+        super(ownerId, 30, "Gideon's Reproach", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{W}");
+        this.expansionSetCode = "BFZ";
 
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
+        // Gideon's Reproach deals 4 damage to target attacking or blocking creature.
+        getSpellAbility().addEffect(new DamageTargetEffect(4));
         getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
     }
 
-    public Sandblast(final Sandblast card) {
+    public GideonsReproach(final GideonsReproach card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public GideonsReproach copy() {
+        return new GideonsReproach(this);
     }
 }

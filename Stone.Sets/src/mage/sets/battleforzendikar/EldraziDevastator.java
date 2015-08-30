@@ -25,36 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.MageInt;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class EldraziDevastator extends CardImpl {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
+    public EldraziDevastator(UUID ownerId) {
+        super(ownerId, 7, "Eldrazi Devastator", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{8}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.power = new MageInt(8);
+        this.toughness = new MageInt(9);
 
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
     }
 
-    public Sandblast(final Sandblast card) {
+    public EldraziDevastator(final EldraziDevastator card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public EldraziDevastator copy() {
+        return new EldraziDevastator(this);
     }
 }

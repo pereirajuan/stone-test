@@ -25,36 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
+import mage.game.permanent.token.EldraziScionToken;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class IncubatorDrone extends CardImpl {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
+    public IncubatorDrone(UUID ownerId) {
+        super(ownerId, 60, "Incubator Drone", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+        
+        // Whenever Incubator Drone enters the battlefield, put a 1/1 colorless Eldrazi Scion creature token onto the battlefield. It has "Sacrifice this creature: Add {1} to your mana pool."
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new EldraziScionToken())));
     }
 
-    public Sandblast(final Sandblast card) {
+    public IncubatorDrone(final IncubatorDrone card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public IncubatorDrone copy() {
+        return new IncubatorDrone(this);
     }
 }

@@ -25,36 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.EntersBattlefieldAbility;
+import mage.abilities.condition.Condition;
+import mage.abilities.condition.InvertCondition;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.TapSourceEffect;
+import mage.abilities.mana.BlueManaAbility;
+import mage.abilities.mana.WhiteManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.mageobject.SupertypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
-
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
-
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+public class PrairieStream extends CardImpl {
+    
+    private static final FilterLandPermanent filter = new FilterLandPermanent();
+    
+    static {
+        filter.add(new SupertypePredicate("Basic"));
     }
 
-    public Sandblast(final Sandblast card) {
+    public PrairieStream(UUID ownerId) {
+        super(ownerId, 241, "Prairie Stream", Rarity.RARE, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Plains");
+        this.subtype.add("Island");
+
+        // Prairie Stream enters the battlefield tapped unless you control two or more basic lands.
+        Condition controls = new InvertCondition(new PermanentsOnTheBattlefieldCondition(filter, PermanentsOnTheBattlefieldCondition.CountType.MORE_THAN, 1));
+        String abilityText = "tapped unless you control two or more basic lands";
+        this.addAbility(new EntersBattlefieldAbility(new ConditionalOneShotEffect(new TapSourceEffect(), controls, abilityText), abilityText));
+        this.addAbility(new WhiteManaAbility());
+        this.addAbility(new BlueManaAbility());
+    }
+
+    public PrairieStream(final PrairieStream card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public PrairieStream copy() {
+        return new PrairieStream(this);
     }
 }

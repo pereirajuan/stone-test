@@ -25,36 +25,27 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.target.common.TargetAttackingOrBlockingCreature;
 
 /**
  *
  * @author fireshoes
  */
-public class Sandblast extends CardImpl {
+public class Island4 extends mage.cards.basiclands.Island {
 
-    public Sandblast(UUID ownerId) {
-        super(ownerId, 24, "Sandblast", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
-        this.expansionSetCode = "FRF";
-
-        // Sandblast deals 5 damage to target attacking or blocking creature.
-        getSpellAbility().addEffect(new DamageTargetEffect(5));
-        getSpellAbility().addTarget(new TargetAttackingOrBlockingCreature());
+    public Island4(UUID ownerId) {
+        super(ownerId, 258);
+        this.expansionSetCode = "BFZ";
     }
 
-    public Sandblast(final Sandblast card) {
+    public Island4(final Island4 card) {
         super(card);
     }
 
     @Override
-    public Sandblast copy() {
-        return new Sandblast(this);
+    public Island4 copy() {
+        return new Island4(this);
     }
 }

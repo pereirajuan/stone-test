@@ -25,72 +25,63 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.championsofkamigawa;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.ActivateIfConditionActivatedAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.dynamicvalue.DynamicValue;
-import mage.abilities.dynamicvalue.common.CountersCount;
-import mage.abilities.dynamicvalue.common.SignInversionDynamicValue;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.game.permanent.token.EldraziScionToken;
+import mage.target.common.TargetControlledCreaturePermanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX
+ * @author fireshoes
  */
-public class BloodthirstyOgre extends CardImpl {
-
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("you control a Demon");
+public class BroodButcher extends CardImpl {
     
-    static {
-        filter.add(new SubtypePredicate("Demon"));
-    }
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("a creature");
 
-    public BloodthirstyOgre(UUID ownerId) {
-        super(ownerId, 104, "Bloodthirsty Ogre", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{B}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Ogre");
-        this.subtype.add("Warrior");
-        this.subtype.add("Shaman");
-
+    public BroodButcher(UUID ownerId) {
+        super(ownerId, 199, "Brood Butcher", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{B}{G}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
         this.power = new MageInt(3);
-        this.toughness = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-        // {T}: Put a devotion counter on Bloodthirsty Ogre
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersSourceEffect(CounterType.DEVOTION.createInstance()),new TapSourceCost()));
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
 
-        // {T}: Target creature gets -X/-X until end of turn, where X is the number of devotion counters on Bloodthirsty Ogre. Activate this ability only if you control a Demon.
-        DynamicValue devotionCounters = new SignInversionDynamicValue(new CountersCount(CounterType.DEVOTION));
-        Ability ability = new ActivateIfConditionActivatedAbility(Zone.BATTLEFIELD,
-                new BoostTargetEffect(devotionCounters,devotionCounters, Duration.EndOfTurn, true),
-                new TapSourceCost(),
-                new PermanentsOnTheBattlefieldCondition(filter));
+        // When Brood Butcher enters the battlefield, put a 1/1 colorless Eldrazi Scion creature token onto the battlefield. It has "Sacrifice this creature: Add {1} to your mana pool."
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new EldraziScionToken()), false));
+
+        // {B}{G}, Sacrifice a creature: Target creature gets -2/-2 until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostTargetEffect(-2, -2, Duration.EndOfTurn), new ManaCostsImpl("{B}{G}"));
+        ability.addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent(filter)));
         ability.addTarget(new TargetCreaturePermanent());
         this.addAbility(ability);
     }
 
-    public BloodthirstyOgre(final BloodthirstyOgre card) {
+    public BroodButcher(final BroodButcher card) {
         super(card);
     }
 
     @Override
-    public BloodthirstyOgre copy() {
-        return new BloodthirstyOgre(this);
+    public BroodButcher copy() {
+        return new BroodButcher(this);
     }
-
 }

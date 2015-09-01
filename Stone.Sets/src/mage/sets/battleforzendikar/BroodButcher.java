@@ -25,64 +25,63 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.returntoravnica;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.common.SacrificeTargetCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.EnchantAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.target.TargetPermanent;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.game.permanent.token.EldraziScionToken;
+import mage.target.common.TargetControlledCreaturePermanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class DeviantGlee extends CardImpl {
+public class BroodButcher extends CardImpl {
+    
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("a creature");
 
-    static final String rule = "and has \"{R}: This creature gains trample until end of turn.\"";
+    public BroodButcher(UUID ownerId) {
+        super(ownerId, 199, "Brood Butcher", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{B}{G}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-    public DeviantGlee (UUID ownerId) {
-        super(ownerId, 65, "Deviant Glee", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{B}");
-        this.expansionSetCode = "RTR";
-        this.subtype.add("Aura");
-        this.color.setBlack(true);
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        // When Brood Butcher enters the battlefield, put a 1/1 colorless Eldrazi Scion creature token onto the battlefield. It has "Sacrifice this creature: Add {1} to your mana pool."
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new EldraziScionToken()), false));
+
+        // {B}{G}, Sacrifice a creature: Target creature gets -2/-2 until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostTargetEffect(-2, -2, Duration.EndOfTurn), new ManaCostsImpl("{B}{G}"));
+        ability.addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent(filter)));
+        ability.addTarget(new TargetCreaturePermanent());
         this.addAbility(ability);
-
-        // Enchanted creature gets +2/+1 and has "{R}: This creature gains trample until end of turn."
-        SimpleStaticAbility ability2 = new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(2, 1, Duration.WhileOnBattlefield));
-        Ability gainedAbility = new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilitySourceEffect(TrampleAbility.getInstance(),Duration.EndOfTurn),new ManaCostsImpl("{R}"));
-        ability2.addEffect(new GainAbilityAttachedEffect(gainedAbility, AttachmentType.AURA, Duration.WhileOnBattlefield, rule));
-        this.addAbility(ability2);
     }
 
-    public DeviantGlee (final DeviantGlee card) {
+    public BroodButcher(final BroodButcher card) {
         super(card);
     }
 
     @Override
-    public DeviantGlee copy() {
-        return new DeviantGlee(this);
+    public BroodButcher copy() {
+        return new BroodButcher(this);
     }
 }

@@ -25,67 +25,66 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shadowmoor;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.ObjectColor;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.common.ActivateIfConditionActivatedAbility;
+import mage.abilities.common.CantBlockAbility;
 import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
-import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition.CountType;
-import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalActivatedAbility;
-import mage.abilities.effects.common.LookLibraryTopCardTargetPlayerEffect;
-import mage.abilities.mana.BlueManaAbility;
+import mage.abilities.effects.common.RegenerateSourceEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.ColorPredicate;
-import mage.target.TargetPlayer;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.mageobject.ColorlessPredicate;
+import mage.filter.predicate.permanent.AnotherPredicate;
 
 /**
  *
- * @author jeffwadsworth
+ * @author fireshoes
  */
-public class MoonringIsland extends CardImpl {
+public class Skitterskin extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("if you control two or more blue permanents");
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("you control another colorless creature");
 
     static {
-        filter.add(new ColorPredicate(ObjectColor.BLUE));
+        filter.add(new AnotherPredicate());
+        filter.add(new ColorlessPredicate());
     }
 
-    public MoonringIsland(UUID ownerId) {
-        super(ownerId, 276, "Moonring Island", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
-        this.expansionSetCode = "SHM";
-        this.subtype.add("Island");
+    public Skitterskin(UUID ownerId) {
+        super(ownerId, 97, "Skitterskin", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{B}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
 
-        // <i>({tap}: Add {U} to your mana pool.)</i>
-        this.addAbility(new BlueManaAbility());
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
 
-        // Moonring Island enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // Skitterskin can't block.
+        this.addAbility(new CantBlockAbility());
 
-        // {U}, {tap}: Look at the top card of target player's library. Activate this ability only if you control two or more blue permanents.
-        Ability ability = new ConditionalActivatedAbility(Zone.BATTLEFIELD,
-                new LookLibraryTopCardTargetPlayerEffect(),
-                new ManaCostsImpl("{U}"),
-                new PermanentsOnTheBattlefieldCondition(filter, CountType.MORE_THAN, 1));
-        ability.addCost(new TapSourceCost());
-        ability.addTarget(new TargetPlayer());
+        // {1}{B}: Regenerate Skitterskin. Activate this ability only if you control another colorless creature.
+        Ability ability = new ActivateIfConditionActivatedAbility(Zone.BATTLEFIELD,
+                new RegenerateSourceEffect(),
+                new ManaCostsImpl("{1}{B}"),
+                new PermanentsOnTheBattlefieldCondition(filter));
         this.addAbility(ability);
-
     }
 
-    public MoonringIsland(final MoonringIsland card) {
+    public Skitterskin(final Skitterskin card) {
         super(card);
     }
 
     @Override
-    public MoonringIsland copy() {
-        return new MoonringIsland(this);
+    public Skitterskin copy() {
+        return new Skitterskin(this);
     }
 }

@@ -25,67 +25,61 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shadowmoor;
+package mage.sets.coldsnap;
 
 import java.util.UUID;
-import mage.ObjectColor;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.common.ActivateIfConditionActivatedAbility;
 import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
 import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition.CountType;
 import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalActivatedAbility;
-import mage.abilities.effects.common.LookLibraryTopCardTargetPlayerEffect;
-import mage.abilities.mana.BlueManaAbility;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.MayTapOrUntapTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.ColorPredicate;
-import mage.target.TargetPlayer;
+import mage.filter.predicate.mageobject.SupertypePredicate;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author jeffwadsworth
+ * @author fireshoes
  */
-public class MoonringIsland extends CardImpl {
+public class RimewindTaskmage extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("if you control two or more blue permanents");
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("you control four or more snow permanents");
 
     static {
-        filter.add(new ColorPredicate(ObjectColor.BLUE));
+        filter.add(new SupertypePredicate("Snow"));
     }
 
-    public MoonringIsland(UUID ownerId) {
-        super(ownerId, 276, "Moonring Island", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
-        this.expansionSetCode = "SHM";
-        this.subtype.add("Island");
+    public RimewindTaskmage(UUID ownerId) {
+        super(ownerId, 44, "Rimewind Taskmage", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "CSP";
+        this.subtype.add("Human");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
 
-        // <i>({tap}: Add {U} to your mana pool.)</i>
-        this.addAbility(new BlueManaAbility());
-
-        // Moonring Island enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
-
-        // {U}, {tap}: Look at the top card of target player's library. Activate this ability only if you control two or more blue permanents.
-        Ability ability = new ConditionalActivatedAbility(Zone.BATTLEFIELD,
-                new LookLibraryTopCardTargetPlayerEffect(),
-                new ManaCostsImpl("{U}"),
-                new PermanentsOnTheBattlefieldCondition(filter, CountType.MORE_THAN, 1));
+        // {1}, {tap}: You may tap or untap target permanent. Activate this ability only if you control four or more snow permanents.
+        Ability ability = new ActivateIfConditionActivatedAbility(Zone.BATTLEFIELD,
+                new MayTapOrUntapTargetEffect(),
+                new GenericManaCost(1),
+                new PermanentsOnTheBattlefieldCondition(filter, CountType.MORE_THAN, 3));
         ability.addCost(new TapSourceCost());
-        ability.addTarget(new TargetPlayer());
+        ability.addTarget(new TargetPermanent());
         this.addAbility(ability);
-
     }
 
-    public MoonringIsland(final MoonringIsland card) {
+    public RimewindTaskmage(final RimewindTaskmage card) {
         super(card);
     }
 
     @Override
-    public MoonringIsland copy() {
-        return new MoonringIsland(this);
+    public RimewindTaskmage copy() {
+        return new RimewindTaskmage(this);
     }
 }

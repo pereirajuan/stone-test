@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,36 +20,53 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.iceage;
 
-package mage.game.permanent.token;
-
+import java.util.UUID;
 import mage.MageInt;
-import mage.Mana;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.mana.SimpleManaAbility;
+import mage.abilities.keyword.LandwalkAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Zone;
+import mage.constants.Rarity;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.mageobject.SupertypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class EldraziScionToken extends Token {
-
-    public EldraziScionToken() {
-        super("Eldrazi Scion", "1/1 colorless Eldrazi Scion creature token with \"Sacrifice this creature: Add {1} to your mana pool.\"");
-        cardType.add(CardType.CREATURE);
-        subtype.add("Eldrazi");
-        subtype.add("Scion");
-        power = new MageInt(1);
-        toughness = new MageInt(1);
-        addAbility(new SimpleManaAbility(Zone.BATTLEFIELD, Mana.ColorlessMana, new SacrificeSourceCost()));
-        this.setOriginalExpansionSetCode("BFZ");
+public class LegionsOfLimDul extends CardImpl {
+    
+    private static final FilterLandPermanent filter = new FilterLandPermanent("snow swamp");
+    
+    static {
+        filter.add(new SupertypePredicate("Snow"));
+        filter.add(new SubtypePredicate("Swamp"));
     }
 
+    public LegionsOfLimDul(UUID ownerId) {
+        super(ownerId, 30, "Legions of Lim-Dul", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{B}");
+        this.expansionSetCode = "ICE";
+        this.subtype.add("Zombie");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // Snow swampwalk
+        this.addAbility(new LandwalkAbility(filter));
+    }
+
+    public LegionsOfLimDul(final LegionsOfLimDul card) {
+        super(card);
+    }
+
+    @Override
+    public LegionsOfLimDul copy() {
+        return new LegionsOfLimDul(this);
+    }
 }

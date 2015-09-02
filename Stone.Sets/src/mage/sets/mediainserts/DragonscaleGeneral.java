@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class DragonscaleGeneral extends mage.sets.fatereforged.DragonscaleGeneral {
 
-    public RelicSeeker(UUID ownerId) {
+    public DragonscaleGeneral(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 107;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public DragonscaleGeneral(final DragonscaleGeneral card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public DragonscaleGeneral copy() {
+        return new DragonscaleGeneral(this);
     }
 }

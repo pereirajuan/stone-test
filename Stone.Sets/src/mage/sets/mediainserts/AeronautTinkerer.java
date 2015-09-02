@@ -28,28 +28,25 @@
 package mage.sets.mediainserts;
 
 import java.util.UUID;
-import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class AeronautTinkerer extends mage.sets.magic2015.AeronautTinkerer {
 
-    public RelicSeeker(UUID ownerId) {
+    public AeronautTinkerer(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 118;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public AeronautTinkerer(final AeronautTinkerer card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public AeronautTinkerer copy() {
+        return new AeronautTinkerer(this);
     }
 }

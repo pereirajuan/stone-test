@@ -25,31 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.mediainserts;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.keyword.AwakenAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class CoastalDiscovery extends CardImpl {
 
-    public RelicSeeker(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 123;
-        this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+    public CoastalDiscovery(UUID ownerId) {
+        super(ownerId, 73, "Coastal Discovery", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{3}{U}");
+        this.expansionSetCode = "BFZ";
+
+        // Draw two cards.
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(2));
+
+        // Awaken 4 - {5}U}
+        this.addAbility(new AwakenAbility(this, 4, "{5}{U}"));
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public CoastalDiscovery(final CoastalDiscovery card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public CoastalDiscovery copy() {
+        return new CoastalDiscovery(this);
     }
 }

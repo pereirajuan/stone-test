@@ -25,31 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.mediainserts;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class SheerDrop extends mage.sets.zendikarvseldrazi.SheerDrop {
 
-    public RelicSeeker(UUID ownerId) {
+    public SheerDrop(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
-        this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.cardNumber = 48;
+        this.expansionSetCode = "BFZ";
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public SheerDrop(final SheerDrop card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public SheerDrop copy() {
+        return new SheerDrop(this);
     }
 }

@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class ArashinSovereign extends mage.sets.dragonsoftarkir.ArashinSovereign {
 
-    public RelicSeeker(UUID ownerId) {
+    public ArashinSovereign(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 112;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public ArashinSovereign(final ArashinSovereign card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public ArashinSovereign copy() {
+        return new ArashinSovereign(this);
     }
 }

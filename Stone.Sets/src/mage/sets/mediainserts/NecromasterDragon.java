@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class NecromasterDragon extends mage.sets.dragonsoftarkir.NecromasterDragon {
 
-    public RelicSeeker(UUID ownerId) {
+    public NecromasterDragon(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 114;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public NecromasterDragon(final NecromasterDragon card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public NecromasterDragon copy() {
+        return new NecromasterDragon(this);
     }
 }

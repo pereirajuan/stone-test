@@ -28,28 +28,25 @@
 package mage.sets.mediainserts;
 
 import java.util.UUID;
-import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class DragonFodder extends mage.sets.shardsofalara.DragonFodder {
 
-    public RelicSeeker(UUID ownerId) {
+    public DragonFodder(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 119;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public DragonFodder(final DragonFodder card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public DragonFodder copy() {
+        return new DragonFodder(this);
     }
 }

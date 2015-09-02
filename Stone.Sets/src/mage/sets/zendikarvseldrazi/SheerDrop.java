@@ -25,31 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.mediainserts;
+package mage.sets.zendikarvseldrazi;
 
 import java.util.UUID;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.keyword.AwakenAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.TappedPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
-
-    public RelicSeeker(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 123;
-        this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+public class SheerDrop extends CardImpl {
+    
+    private final static FilterCreaturePermanent filter = new FilterCreaturePermanent("tapped creature");
+    
+    static {
+        filter.add(new TappedPredicate());
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public SheerDrop(UUID ownerId) {
+        super(ownerId, 9, "Sheer Drop", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{W}");
+        this.expansionSetCode = "DDP";
+
+        // Destroy target tapped creature.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(filter));
+        
+        // Awaken 3-{5}{W} <i>(If you cast this spell for {5}{W}, also put three +1/+1 counters on target land you control and it becomes a 0/0 Elemental creature with haste. It's still a land.)<i>
+        this.addAbility(new AwakenAbility(this, 3, "{5}{W}"));
+    }
+
+    public SheerDrop(final SheerDrop card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public SheerDrop copy() {
+        return new SheerDrop(this);
     }
 }

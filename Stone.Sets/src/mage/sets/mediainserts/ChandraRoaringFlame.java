@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class ChandraRoaringFlame extends mage.sets.magicorigins.ChandraRoaringFlame {
 
-    public RelicSeeker(UUID ownerId) {
+    public ChandraRoaringFlame(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 127;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public ChandraRoaringFlame(final ChandraRoaringFlame card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public ChandraRoaringFlame copy() {
+        return new ChandraRoaringFlame(this);
     }
 }

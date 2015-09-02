@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class NissaSageAnimist extends mage.sets.magicorigins.NissaSageAnimist {
 
-    public RelicSeeker(UUID ownerId) {
+    public NissaSageAnimist(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 128;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public NissaSageAnimist(final NissaSageAnimist card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public NissaSageAnimist copy() {
+        return new NissaSageAnimist(this);
     }
 }

@@ -28,28 +28,25 @@
 package mage.sets.mediainserts;
 
 import java.util.UUID;
-import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class EvolvingWilds extends mage.sets.riseoftheeldrazi.EvolvingWilds {
 
-    public RelicSeeker(UUID ownerId) {
+    public EvolvingWilds(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 121;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public EvolvingWilds(final EvolvingWilds card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public EvolvingWilds copy() {
+        return new EvolvingWilds(this);
     }
 }

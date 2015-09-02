@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class BoltwingMarauder extends mage.sets.dragonsoftarkir.BoltwingMarauder {
 
-    public RelicSeeker(UUID ownerId) {
+    public BoltwingMarauder(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 115;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public BoltwingMarauder(final BoltwingMarauder card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public BoltwingMarauder copy() {
+        return new BoltwingMarauder(this);
     }
 }

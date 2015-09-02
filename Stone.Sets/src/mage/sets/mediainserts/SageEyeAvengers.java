@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class SageEyeAvengers extends mage.sets.fatereforged.SageEyeAvengers {
 
-    public RelicSeeker(UUID ownerId) {
+    public SageEyeAvengers(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 108;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public SageEyeAvengers(final SageEyeAvengers card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public SageEyeAvengers copy() {
+        return new SageEyeAvengers(this);
     }
 }

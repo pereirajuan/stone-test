@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class JaceTelepathUnbound extends mage.sets.magicorigins.JaceTelepathUnbound {
 
-    public RelicSeeker(UUID ownerId) {
+    public JaceTelepathUnbound(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 125;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public JaceTelepathUnbound(final JaceTelepathUnbound card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public JaceTelepathUnbound copy() {
+        return new JaceTelepathUnbound(this);
     }
 }

@@ -32,24 +32,23 @@ import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RelicSeeker extends mage.sets.magicorigins.RelicSeeker {
+public class KytheonHeroOfAkros extends mage.sets.magicorigins.KytheonHeroOfAkros {
 
-    public RelicSeeker(UUID ownerId) {
+    public KytheonHeroOfAkros(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 123;
+        this.cardNumber = 124;
         this.expansionSetCode = "MBP";
-        this.rarity = Rarity.RARE;
-        
+        this.rarity = Rarity.SPECIAL;
     }
 
-    public RelicSeeker(final RelicSeeker card) {
+    public KytheonHeroOfAkros(final KytheonHeroOfAkros card) {
         super(card);
     }
 
     @Override
-    public RelicSeeker copy() {
-        return new RelicSeeker(this);
+    public KytheonHeroOfAkros copy() {
+        return new KytheonHeroOfAkros(this);
     }
 }

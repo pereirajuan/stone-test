@@ -51,10 +51,10 @@ import mage.players.Player;
  *
  * @author fireshoes
  */
-public class DeepSeaScavenger extends CardImpl {
+public class FathomFeeder extends CardImpl {
 
-    public DeepSeaScavenger(UUID ownerId) {
-        super(ownerId, 203, "Deep-Sea Scavenger", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{U}{B}");
+    public FathomFeeder(UUID ownerId) {
+        super(ownerId, 203, "Fathom Feeder", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{U}{B}");
         this.expansionSetCode = "BFZ";
         this.subtype.add("Eldrazi");
         this.subtype.add("Drone");
@@ -71,35 +71,35 @@ public class DeepSeaScavenger extends CardImpl {
         this.addAbility(DeathtouchAbility.getInstance());
 
         // {3}{U}{B}: Draw a card. Each opponent exiles the top card of his or her library.
-        Effect effect = new DeepSeaScavengerEffect();
+        Effect effect = new FathomFeederEffect();
         Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1), new ManaCostsImpl("{3}{U}{B}"));
         ability.addEffect(effect);
         this.addAbility(ability);
     }
 
-    public DeepSeaScavenger(final DeepSeaScavenger card) {
+    public FathomFeeder(final FathomFeeder card) {
         super(card);
     }
 
     @Override
-    public DeepSeaScavenger copy() {
-        return new DeepSeaScavenger(this);
+    public FathomFeeder copy() {
+        return new FathomFeeder(this);
     }
 }
 
-class DeepSeaScavengerEffect extends OneShotEffect {
-    public DeepSeaScavengerEffect() {
+class FathomFeederEffect extends OneShotEffect {
+    public FathomFeederEffect() {
         super(Outcome.Exile);
         this.staticText = "Each opponent exiles the top card of his or her library";
     }
 
-    public DeepSeaScavengerEffect(final DeepSeaScavengerEffect effect) {
+    public FathomFeederEffect(final FathomFeederEffect effect) {
         super(effect);
     }
 
     @Override
-    public DeepSeaScavengerEffect copy() {
-        return new DeepSeaScavengerEffect(this);
+    public FathomFeederEffect copy() {
+        return new FathomFeederEffect(this);
     }
 
     @Override

@@ -25,63 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.common.LandfallAbility;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class BelligerentWhiptail extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
+    public BelligerentWhiptail(UUID ownerId) {
+        super(ownerId, 141, "Belligerent Whiptail", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{R}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Wurm");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(2);
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
+        // <i>Landfall</i> — Whenever a land enters the battlefield under your control, Belligerent Whiptail gains first strike until end of turn.
+        this.addAbility(new LandfallAbility(new GainAbilitySourceEffect(FirstStrikeAbility.getInstance(), Duration.EndOfTurn), false));
 
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public BelligerentWhiptail(final BelligerentWhiptail card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public BelligerentWhiptail copy() {
+        return new BelligerentWhiptail(this);
     }
 }

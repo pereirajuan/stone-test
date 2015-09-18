@@ -25,63 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
+import mage.constants.Zone;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class LavastepRaider extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
-
-        this.power = new MageInt(2);
+    public LavastepRaider(UUID ownerId) {
+        super(ownerId, 147, "Lavastep Raider", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{R}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Goblin");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(1);
         this.toughness = new MageInt(1);
 
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
-
+        // {2}{R}: Lavastep Raider gets +2/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(2, 0, Duration.EndOfTurn), new ManaCostsImpl<>("{2}{R}")));
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public LavastepRaider(final LavastepRaider card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public LavastepRaider copy() {
+        return new LavastepRaider(this);
     }
 }

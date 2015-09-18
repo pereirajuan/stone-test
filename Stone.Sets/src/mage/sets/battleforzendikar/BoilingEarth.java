@@ -25,63 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.effects.common.DamageAllEffect;
+import mage.abilities.keyword.AwakenAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class BoilingEarth extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
+    private final static FilterCreaturePermanent filter = new FilterCreaturePermanent("creature your opponents control");
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
-
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public BoilingEarth(UUID ownerId) {
+        super(ownerId, 142, "Boiling Earth", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{1}{R}");
+        this.expansionSetCode = "BFZ";
+
+        // Boiling Earth deals 1 damage to each creature your opponents control.
+        this.getSpellAbility().addEffect(new DamageAllEffect(1, filter));
+
+        // Awaken 4—{6}{R}
+        this.addAbility(new AwakenAbility(this, 4, "{6}{R}"));
+    }
+
+    public BoilingEarth(final BoilingEarth card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public BoilingEarth copy() {
+        return new BoilingEarth(this);
     }
 }

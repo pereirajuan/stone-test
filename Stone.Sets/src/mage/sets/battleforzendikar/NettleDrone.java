@@ -25,63 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.DamagePlayersEffect;
+import mage.abilities.effects.common.UntapSourceEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
+import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.mageobject.ColorlessPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class NettleDrone extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
+    private static final FilterSpell filterSpell = new FilterSpell("a colorless spell");
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
-
+    static {
+        filterSpell.add(new ColorlessPredicate());
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public NettleDrone(UUID ownerId) {
+        super(ownerId, 131, "Nettle Drone", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
+
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+
+        // {T}: Nettle Drone deals 1 damage to each opponent.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamagePlayersEffect(1, TargetController.OPPONENT), new TapSourceCost()));
+
+        // Whenever you cast a colorless spell, untap Nettle Drone.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new UntapSourceEffect(), filterSpell, false));
+    }
+
+    public NettleDrone(final NettleDrone card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public NettleDrone copy() {
+        return new NettleDrone(this);
     }
 }

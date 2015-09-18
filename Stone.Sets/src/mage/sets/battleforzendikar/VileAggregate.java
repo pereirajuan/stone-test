@@ -25,63 +25,63 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.SetPowerSourceEffect;
+import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.keyword.IngestAbility;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
+import mage.constants.Zone;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.mageobject.ColorlessPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class VileAggregate extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
+    private final static FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("colorless creatures you control");
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
-
+    static {
+        filter.add(new ColorlessPredicate());
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public VileAggregate(UUID ownerId) {
+        super(ownerId, 137, "Vile Aggregate", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(5);
+
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+        // Vile Aggregate's power is equal to the number of colorless creatures you control.
+        Effect effect = new SetPowerSourceEffect(new PermanentsOnBattlefieldCount(filter), Duration.EndOfGame);
+        this.addAbility(new SimpleStaticAbility(Zone.ALL, effect));
+
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+        // Ingest
+        this.addAbility(new IngestAbility());
+    }
+
+    public VileAggregate(final VileAggregate card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public VileAggregate copy() {
+        return new VileAggregate(this);
     }
 }

@@ -25,63 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.common.AllyEntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
+import mage.abilities.keyword.MenaceAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class FiremantleMage extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
+    public FiremantleMage(UUID ownerId) {
+        super(ownerId, 145, "Firemantle Mage", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Human");
         this.subtype.add("Shaman");
-
+        this.subtype.add("Ally");
         this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
+        this.toughness = new MageInt(2);
 
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
-
+        // <i>Rally</i> — Whenver Firemantle Mage or another Ally enters the battlefield under your control, creatures you control gain menace until end of turn.
+        this.addAbility(new AllyEntersBattlefieldTriggeredAbility(new GainAbilityControlledEffect(new MenaceAbility(), Duration.EndOfTurn), false));
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public FiremantleMage(final FiremantleMage card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public FiremantleMage copy() {
+        return new FiremantleMage(this);
     }
 }

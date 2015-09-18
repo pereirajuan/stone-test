@@ -25,63 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.replacement.DealtDamageToCreatureBySourceDies;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
+import mage.target.common.TargetCreatureOrPlayer;
+import mage.watchers.common.DamagedByWatcher;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class TouchOfTheVoid extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
+    public TouchOfTheVoid(UUID ownerId) {
+        super(ownerId, 134, "Touch of the Void", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{R}");
+        this.expansionSetCode = "BFZ";
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
-
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+        // Touch of the Void deals 3 damage to target creature or player. If a creature dealt damage this way would die this turn, exile it instead.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(3));
+        this.getSpellAbility().addTarget(new TargetCreatureOrPlayer());
+        Effect effect = new DealtDamageToCreatureBySourceDies(this, Duration.EndOfTurn);
+        effect.setText("If a creature dealt damage this way would die this turn, exile it instead");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addWatcher(new DamagedByWatcher());
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public TouchOfTheVoid(final TouchOfTheVoid card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public TouchOfTheVoid copy() {
+        return new TouchOfTheVoid(this);
     }
 }

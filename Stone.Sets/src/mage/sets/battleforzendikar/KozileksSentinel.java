@@ -25,63 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.bornofthegods;
+package mage.sets.battleforzendikar;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.DoIfCostPaid;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.InspiredAbility;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.Token;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.mageobject.ColorlessPredicate;
 
 /**
  *
  * @author LevelX2
  */
-public class SatyrNyxSmith extends CardImpl {
+public class KozileksSentinel extends CardImpl {
 
-    public SatyrNyxSmith(UUID ownerId) {
-        super(ownerId, 109, "Satyr Nyx-Smith", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
-        this.expansionSetCode = "BNG";
-        this.subtype.add("Satyr");
-        this.subtype.add("Shaman");
+    private static final FilterSpell filterSpell = new FilterSpell("a colorless spell");
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
+    static {
+        filterSpell.add(new ColorlessPredicate());
+    }
 
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // <i>Inspired</i> - Whenever Satyr Nyx-Smith becomes untapped, you may pay {2}{R}. If you do, put a 3/1 red Elemental enchantment creature token with haste onto the battlefield.
-        this.addAbility(new InspiredAbility(new DoIfCostPaid(new CreateTokenEffect(new SatyrNyxSmithElementalToken()), new ManaCostsImpl("{2}{R}"))));
+    public KozileksSentinel(UUID ownerId) {
+        super(ownerId, 129, "Kozilek's Sentinel", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
+        this.expansionSetCode = "BFZ";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(4);
+
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+
+        // Whenever you cast a colorless spell, Kozilek's Sentinel gets +1/+0 until end of turn.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new BoostSourceEffect(1, 0, Duration.EndOfTurn), filterSpell, false));
 
     }
 
-    public SatyrNyxSmith(final SatyrNyxSmith card) {
+    public KozileksSentinel(final KozileksSentinel card) {
         super(card);
     }
 
     @Override
-    public SatyrNyxSmith copy() {
-        return new SatyrNyxSmith(this);
-    }
-}
-
-class SatyrNyxSmithElementalToken extends Token {
-
-    public SatyrNyxSmithElementalToken() {
-        super("Elemental", "3/1 red Elemental enchantment creature token with haste");
-        cardType.add(CardType.ENCHANTMENT);
-        cardType.add(CardType.CREATURE);
-        color.setRed(true);
-        subtype.add("Elemental");
-        power = new MageInt(3);
-        toughness = new MageInt(1);
-        this.addAbility(HasteAbility.getInstance());
-        this.setOriginalExpansionSetCode("BNG");
+    public KozileksSentinel copy() {
+        return new KozileksSentinel(this);
     }
 }

@@ -1,9 +1,8 @@
 /*
- *  
- * Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
+ *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
+ *  Redistribution and use in source and binary forms, with or without modification, are
+ *  permitted provided that the following conditions are met:
  *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
@@ -25,41 +24,29 @@
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
- * 
  */
-package mage.sets.championsofkamigawa;
+package mage.sets;
 
-import java.util.UUID;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Rarity;
-import mage.abilities.effects.common.combat.CantBlockTargetEffect;
-import mage.cards.CardImpl;
-import mage.target.common.TargetCreaturePermanent;
+import java.util.GregorianCalendar;
+import mage.cards.ExpansionSet;
+import mage.constants.SetType;
 
 /**
- * @author LevelX
+ *
+ * @author fireshoes
  */
-public class UnearthlyBlizzard extends CardImpl {
 
-    public UnearthlyBlizzard(UUID ownerId) {
-        super(ownerId, 196, "Unearthly Blizzard", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{R}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Arcane");
+public class Commander2015 extends ExpansionSet {
 
+    private static final Commander2015 fINSTANCE =  new Commander2015();
 
-        // Up to three target creatures can't block this turn.
-        this.getSpellAbility().addEffect(new CantBlockTargetEffect(Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 3));
-
+    public static Commander2015 getInstance() {
+        return fINSTANCE;
     }
 
-    public UnearthlyBlizzard(final UnearthlyBlizzard card) {
-        super(card);
+    private Commander2015() {
+        super("Commander 2015 Edition", "C15", "mage.sets.commander2015", new GregorianCalendar(2015, 11, 13).getTime(), SetType.SUPPLEMENTAL);
+        this.blockName = "Command Zone";
     }
 
-    @Override
-    public UnearthlyBlizzard copy() {
-        return new UnearthlyBlizzard(this);
-    }
 }

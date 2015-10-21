@@ -25,49 +25,35 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.stronghold;
+package org.mage.test.cards.abilities.enters;
 
-import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.effects.common.RedirectDamageFromSourceToTargetEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Rarity;
+import mage.constants.PhaseStep;
 import mage.constants.Zone;
-import mage.target.common.TargetControlledCreaturePermanent;
+import org.junit.Test;
+import org.mage.test.serverside.base.CardTestPlayerBase;
 
 /**
  *
- * @author emerald000
+ * @author LevelX2
  */
-public class NomadsEnKor extends CardImpl {
+public class SearchEntersBattlefieldTest extends CardTestPlayerBase {
 
-    public NomadsEnKor(UUID ownerId) {
-        super(ownerId, 109, "Nomads en-Kor", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
-        this.expansionSetCode = "STH";
-        this.subtype.add("Kor");
-        this.subtype.add("Nomad");
-        this.subtype.add("Soldier");
+    @Test
+    public void testLandAfterFetchUntapped() {
+        addCard(Zone.HAND, playerA, "Verdant Catacombs");
+        addCard(Zone.LIBRARY, playerA, "Forest");
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+        playLand(1, PhaseStep.PRECOMBAT_MAIN, playerA, "Verdant Catacombs");
 
-        // {0}: The next 1 damage that would be dealt to Nomads en-Kor this turn is dealt to target creature you control instead.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new RedirectDamageFromSourceToTargetEffect(Duration.EndOfTurn, 1, true), new GenericManaCost(0));
-        ability.addTarget(new TargetControlledCreaturePermanent());
-        this.addAbility(ability);
+        activateAbility(1, PhaseStep.PRECOMBAT_MAIN, playerA, "{T}, Pay");
+        setChoice(playerA, "Forest");
+        setStopAt(1, PhaseStep.END_TURN);
+        execute();
+
+        assertGraveyardCount(playerA, "Verdant Catacombs", 1);
+        assertPermanentCount(playerA, "Forest", 1);
+        assertTapped("Forest", false);
+
     }
 
-    public NomadsEnKor(final NomadsEnKor card) {
-        super(card);
-    }
-
-    @Override
-    public NomadsEnKor copy() {
-        return new NomadsEnKor(this);
-    }
 }

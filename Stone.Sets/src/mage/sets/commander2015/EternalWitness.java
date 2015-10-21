@@ -1,9 +1,8 @@
 /*
- *  
- * Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
+ *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
+ *  Redistribution and use in source and binary forms, with or without modification, are
+ *  permitted provided that the following conditions are met:
  *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
@@ -25,41 +24,29 @@
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
- * 
  */
-package mage.sets.championsofkamigawa;
+package mage.sets.commander2015;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Rarity;
-import mage.abilities.effects.common.combat.CantBlockTargetEffect;
-import mage.cards.CardImpl;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
- * @author LevelX
+ *
+ * @author fireshoes
  */
-public class UnearthlyBlizzard extends CardImpl {
+public class EternalWitness extends mage.sets.fifthdawn.EternalWitness {
 
-    public UnearthlyBlizzard(UUID ownerId) {
-        super(ownerId, 196, "Unearthly Blizzard", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{R}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Arcane");
-
-
-        // Up to three target creatures can't block this turn.
-        this.getSpellAbility().addEffect(new CantBlockTargetEffect(Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 3));
-
+    public EternalWitness(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 183;
+        this.expansionSetCode = "C15";
     }
 
-    public UnearthlyBlizzard(final UnearthlyBlizzard card) {
+    public EternalWitness(final EternalWitness card) {
         super(card);
     }
 
     @Override
-    public UnearthlyBlizzard copy() {
-        return new UnearthlyBlizzard(this);
+    public EternalWitness copy() {
+        return new EternalWitness(this);
     }
 }

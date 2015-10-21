@@ -25,49 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.stronghold;
+package mage.filter.predicate.mageobject;
 
-import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.effects.common.RedirectDamageFromSourceToTargetEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.target.common.TargetControlledCreaturePermanent;
+import mage.MageObject;
+import mage.filter.predicate.ObjectSourcePlayer;
+import mage.filter.predicate.ObjectSourcePlayerPredicate;
+import mage.game.Game;
+import mage.game.stack.StackObject;
+import mage.target.Target;
 
 /**
+ * All targets that are already selected in other target definitions of the
+ * source are omitted To use this predicate you have to set the targetTag of all
+ * targets involved in the card constructor to a unique value (e.g. using 1,2,3
+ * for three targets)
  *
- * @author emerald000
+ * @author LevelX2
  */
-public class NomadsEnKor extends CardImpl {
+public class AnotherTargetPredicate implements ObjectSourcePlayerPredicate<ObjectSourcePlayer<MageObject>> {
 
-    public NomadsEnKor(UUID ownerId) {
-        super(ownerId, 109, "Nomads en-Kor", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
-        this.expansionSetCode = "STH";
-        this.subtype.add("Kor");
-        this.subtype.add("Nomad");
-        this.subtype.add("Soldier");
+    private final int targetTag;
 
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
-
-        // {0}: The next 1 damage that would be dealt to Nomads en-Kor this turn is dealt to target creature you control instead.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new RedirectDamageFromSourceToTargetEffect(Duration.EndOfTurn, 1, true), new GenericManaCost(0));
-        ability.addTarget(new TargetControlledCreaturePermanent());
-        this.addAbility(ability);
-    }
-
-    public NomadsEnKor(final NomadsEnKor card) {
-        super(card);
+    public AnotherTargetPredicate(int targetTag) {
+        this.targetTag = targetTag;
     }
 
     @Override
-    public NomadsEnKor copy() {
-        return new NomadsEnKor(this);
+    public boolean apply(ObjectSourcePlayer<MageObject> input, Game game) {
+        StackObject source = game.getStack().getStackObject(input.getSourceId());
+        if (source != null) {
+            for (Target target : source.getStackAbility().getTargets()) {
+                if (target.getTargetTag() > 0 // target is included in the target group to check
+                        && target.getTargetTag() != targetTag // it's not the target of this predicate
+                        && target.getTargets().contains(input.getObject().getId())) { // if the uuid already is used for another target in the group it's no allowed here
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Another target";
     }
 }

@@ -44,9 +44,9 @@ import mage.target.common.TargetCreatureOrPlayer;
  *
  * @author fireshoes
  */
-public class MeteorVolley extends CardImpl {
+public class MeteorBlast extends CardImpl {
 
-    public MeteorVolley(UUID ownerId) {
+    public MeteorBlast(UUID ownerId) {
         super(ownerId, 28, "Meteor Volley", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{X}{R}{R}{R}");
         this.expansionSetCode = "C15";
 
@@ -54,7 +54,7 @@ public class MeteorVolley extends CardImpl {
         this.getSpellAbility().addEffect(new MeteorVolleyEffect());
     }
 
-    public MeteorVolley(final MeteorVolley card) {
+    public MeteorBlast(final MeteorBlast card) {
         super(card);
     }
     
@@ -68,8 +68,8 @@ public class MeteorVolley extends CardImpl {
     }
 
     @Override
-    public MeteorVolley copy() {
-        return new MeteorVolley(this);
+    public MeteorBlast copy() {
+        return new MeteorBlast(this);
     }
 }
 

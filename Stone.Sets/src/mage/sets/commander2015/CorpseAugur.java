@@ -25,45 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzaslegacy;
+package mage.sets.commander2015;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.abilities.keyword.HasteAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.dynamicvalue.common.CardsInTargetPlayersGraveyardCount;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class ViashinoSandscout extends CardImpl {
+public class CorpseAugur extends CardImpl {
 
-    public ViashinoSandscout(UUID ownerId) {
-        super(ownerId, 96, "Viashino Sandscout", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
-        this.expansionSetCode = "ULG";
-        this.subtype.add("Viashino");
-        this.subtype.add("Scout");
+    public CorpseAugur(UUID ownerId) {
+        super(ownerId, 17, "Corpse Augur", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{B}");
+        this.expansionSetCode = "C15";
+        this.subtype.add("Zombie");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(2);
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, return Viashino Sandscout to its owner's hand.
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(new ReturnToHandSourceEffect(true), TargetController.ANY, false));
+        // When Corpse Augur dies, you draw X cards and you lose X life, where X is the number of creature cards in target player's graveyard.
+        Effect effect = new DrawCardSourceControllerEffect(new CardsInTargetPlayersGraveyardCount());
+        effect.setText("You draw X cards");
+        Ability ability = new DiesTriggeredAbility(effect, false);
+        effect = new LoseLifeSourceControllerEffect(new CardsInTargetPlayersGraveyardCount());
+        effect.setText("and you lose X life, where X is the number of creature cards in target player's graveyard");
+        ability.addEffect(effect);
+        ability.addTarget(new TargetPlayer());
+        this.addAbility(ability);
     }
 
-    public ViashinoSandscout(final ViashinoSandscout card) {
+    public CorpseAugur(final CorpseAugur card) {
         super(card);
     }
 
     @Override
-    public ViashinoSandscout copy() {
-        return new ViashinoSandscout(this);
+    public CorpseAugur copy() {
+        return new CorpseAugur(this);
     }
 }

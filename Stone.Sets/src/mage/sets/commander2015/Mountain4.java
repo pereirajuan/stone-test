@@ -25,45 +25,27 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzaslegacy;
+package mage.sets.commander2015;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.constants.TargetController;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class ViashinoSandscout extends CardImpl {
+public class Mountain4 extends mage.cards.basiclands.Mountain {
 
-    public ViashinoSandscout(UUID ownerId) {
-        super(ownerId, 96, "Viashino Sandscout", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
-        this.expansionSetCode = "ULG";
-        this.subtype.add("Viashino");
-        this.subtype.add("Scout");
-
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, return Viashino Sandscout to its owner's hand.
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(new ReturnToHandSourceEffect(true), TargetController.ANY, false));
+    public Mountain4(UUID ownerId) {
+        super(ownerId, 338);
+        this.expansionSetCode = "C15";
     }
 
-    public ViashinoSandscout(final ViashinoSandscout card) {
+    public Mountain4(final Mountain4 card) {
         super(card);
     }
 
     @Override
-    public ViashinoSandscout copy() {
-        return new ViashinoSandscout(this);
+    public Mountain4 copy() {
+        return new Mountain4(this);
     }
 }

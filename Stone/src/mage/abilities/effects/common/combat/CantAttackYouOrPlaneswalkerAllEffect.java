@@ -25,45 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.urzaslegacy;
+package mage.abilities.effects.common.combat;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.abilities.Ability;
+import mage.abilities.effects.RestrictionEffect;
+import mage.constants.Duration;
+import mage.constants.Outcome;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class ViashinoSandscout extends CardImpl {
+public class CantAttackYouOrPlaneswalkerAllEffect extends RestrictionEffect {
 
-    public ViashinoSandscout(UUID ownerId) {
-        super(ownerId, 96, "Viashino Sandscout", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
-        this.expansionSetCode = "ULG";
-        this.subtype.add("Viashino");
-        this.subtype.add("Scout");
+    private final FilterCreaturePermanent filterAttacker;
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // At the beginning of the end step, return Viashino Sandscout to its owner's hand.
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(new ReturnToHandSourceEffect(true), TargetController.ANY, false));
+    public CantAttackYouOrPlaneswalkerAllEffect(Duration duration) {
+        this(duration, new FilterCreaturePermanent());
     }
 
-    public ViashinoSandscout(final ViashinoSandscout card) {
-        super(card);
+    public CantAttackYouOrPlaneswalkerAllEffect(Duration duration, FilterCreaturePermanent filter) {
+        super(duration, Outcome.Benefit);
+        this.filterAttacker = filter;
+        staticText = "Creatures can't attack you";
+    }
+
+    CantAttackYouOrPlaneswalkerAllEffect(final CantAttackYouOrPlaneswalkerAllEffect effect) {
+        super(effect);
+        this.filterAttacker = effect.filterAttacker;
     }
 
     @Override
-    public ViashinoSandscout copy() {
-        return new ViashinoSandscout(this);
+    public boolean applies(Permanent permanent, Ability source, Game game) {
+        return filterAttacker.match(permanent, source.getSourceId(), source.getControllerId(), game);
+    }
+
+    @Override
+    public boolean canAttack(UUID defenderId, Ability source, Game game) {
+        if (defenderId.equals(source.getControllerId())) {
+            return false;
+        }
+        Permanent planeswalker = game.getPermanent(defenderId);
+        return planeswalker == null || !planeswalker.getControllerId().equals(source.getControllerId());
+    }
+
+    @Override
+    public CantAttackYouOrPlaneswalkerAllEffect copy() {
+        return new CantAttackYouOrPlaneswalkerAllEffect(this);
     }
 }

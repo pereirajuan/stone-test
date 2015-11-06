@@ -25,41 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.commander2015;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.ruleModifying.CastOnlyIfYouHaveCastAnotherSpellEffect;
+import mage.abilities.abilityword.ConstellationAbility;
+import mage.abilities.effects.common.continuous.BecomesCreatureSourceEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.Zone;
+import mage.game.permanent.token.Token;
 
 /**
  *
  * @author fireshoes
  */
-public class HewedStoneRetainers extends CardImpl {
+public class DaxossTorment extends CardImpl {
 
-    public HewedStoneRetainers(UUID ownerId) {
-        super(ownerId, 161, "Hewed Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Golem");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
+    public DaxossTorment(UUID ownerId) {
+        super(ownerId, 18, "Daxos's Torment", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{3}{B}");
+        this.expansionSetCode = "C15";
 
-        // Cast Hewed Stone Retainers only if you've cast another spell this turn.
-       this.addAbility(new SimpleStaticAbility(Zone.ALL, new CastOnlyIfYouHaveCastAnotherSpellEffect()));
+        // Constellation - Whenever Daxos's Torment or another enchantment enters the battlefield under your control, Daxos's Torment becomes a 5/5 Demon creature with flying and haste until end of turn in addition to its other types.
+        this.addAbility(new ConstellationAbility(new BecomesCreatureSourceEffect(new DaxossTormentToken(), "", Duration.EndOfTurn)));
     }
 
-    public HewedStoneRetainers(final HewedStoneRetainers card) {
+    public DaxossTorment(final DaxossTorment card) {
         super(card);
     }
 
     @Override
-    public HewedStoneRetainers copy() {
-        return new HewedStoneRetainers(this);
+    public DaxossTorment copy() {
+        return new DaxossTorment(this);
     }
 }
 
+class DaxossTormentToken extends Token {
+
+    public DaxossTormentToken() {
+        super("", "a 5/5 Demon creature with flying and haste");
+        cardType.add(CardType.CREATURE);
+        
+        subtype.add("Demon");
+        power = new MageInt(5);
+        toughness = new MageInt(5);
+        addAbility(FlyingAbility.getInstance());
+        addAbility(HasteAbility.getInstance());
+    }
+}

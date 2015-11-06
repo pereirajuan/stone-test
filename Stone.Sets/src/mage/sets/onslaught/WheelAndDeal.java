@@ -25,41 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.onslaught;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.ruleModifying.CastOnlyIfYouHaveCastAnotherSpellEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.DrawCardTargetEffect;
+import mage.abilities.effects.common.discard.DiscardHandTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
+import mage.constants.TargetController;
+import mage.filter.FilterPlayer;
+import mage.filter.predicate.other.PlayerPredicate;
+import mage.target.TargetPlayer;
 
 /**
  *
  * @author fireshoes
  */
-public class HewedStoneRetainers extends CardImpl {
-
-    public HewedStoneRetainers(UUID ownerId) {
-        super(ownerId, 161, "Hewed Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Golem");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
-
-        // Cast Hewed Stone Retainers only if you've cast another spell this turn.
-       this.addAbility(new SimpleStaticAbility(Zone.ALL, new CastOnlyIfYouHaveCastAnotherSpellEffect()));
+public class WheelAndDeal extends CardImpl {
+    
+    private static final FilterPlayer filter = new FilterPlayer("opponent");
+    
+    static {
+        filter.add(new PlayerPredicate(TargetController.OPPONENT));
     }
 
-    public HewedStoneRetainers(final HewedStoneRetainers card) {
+    public WheelAndDeal(UUID ownerId) {
+        super(ownerId, 121, "Wheel and Deal", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{3}{U}");
+        this.expansionSetCode = "ONS";
+
+        // Any number of target opponents each discards his or her hand and draws seven cards.
+        Effect effect = new DiscardHandTargetEffect();
+        effect.setText("Any number of target opponents each discards his or her hand");
+        this.getSpellAbility().addTarget(new TargetPlayer(0, Integer.MAX_VALUE, false, filter));
+        this.getSpellAbility().addEffect(effect);
+        effect = new DrawCardTargetEffect(7);
+        effect.setText("and draws seven cards");
+        this.getSpellAbility().addEffect(effect);
+        
+        // Draw a card.
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+    }
+
+    public WheelAndDeal(final WheelAndDeal card) {
         super(card);
     }
 
     @Override
-    public HewedStoneRetainers copy() {
-        return new HewedStoneRetainers(this);
+    public WheelAndDeal copy() {
+        return new WheelAndDeal(this);
     }
 }
-

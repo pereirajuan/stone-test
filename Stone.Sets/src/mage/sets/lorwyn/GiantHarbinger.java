@@ -25,41 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.lorwyn;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.ruleModifying.CastOnlyIfYouHaveCastAnotherSpellEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutOnLibraryEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
  * @author fireshoes
  */
-public class HewedStoneRetainers extends CardImpl {
-
-    public HewedStoneRetainers(UUID ownerId) {
-        super(ownerId, 161, "Hewed Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Golem");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
-
-        // Cast Hewed Stone Retainers only if you've cast another spell this turn.
-       this.addAbility(new SimpleStaticAbility(Zone.ALL, new CastOnlyIfYouHaveCastAnotherSpellEffect()));
+public class GiantHarbinger extends CardImpl {
+    
+    public static final FilterCard filter = new FilterCard("Giant card");
+    static {
+        filter.add(new SubtypePredicate("Giant"));
     }
 
-    public HewedStoneRetainers(final HewedStoneRetainers card) {
+    public GiantHarbinger(UUID ownerId) {
+        super(ownerId, 169, "Giant Harbinger", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
+        this.expansionSetCode = "LRW";
+        this.subtype.add("Giant");
+        this.subtype.add("Shaman");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
+
+        // When Giant Harbinger enters the battlefield, you may search your library for a Giant card, reveal it, then shuffle your library and put that card on top of it.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutOnLibraryEffect(new TargetCardInLibrary(filter), true, true), true));
+    }
+
+    public GiantHarbinger(final GiantHarbinger card) {
         super(card);
     }
 
     @Override
-    public HewedStoneRetainers copy() {
-        return new HewedStoneRetainers(this);
+    public GiantHarbinger copy() {
+        return new GiantHarbinger(this);
     }
 }
-

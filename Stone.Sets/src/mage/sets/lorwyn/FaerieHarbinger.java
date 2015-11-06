@@ -25,41 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.lorwyn;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.ruleModifying.CastOnlyIfYouHaveCastAnotherSpellEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutOnLibraryEffect;
+import mage.abilities.keyword.FlashAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
  * @author fireshoes
  */
-public class HewedStoneRetainers extends CardImpl {
-
-    public HewedStoneRetainers(UUID ownerId) {
-        super(ownerId, 161, "Hewed Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Golem");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
-
-        // Cast Hewed Stone Retainers only if you've cast another spell this turn.
-       this.addAbility(new SimpleStaticAbility(Zone.ALL, new CastOnlyIfYouHaveCastAnotherSpellEffect()));
+public class FaerieHarbinger extends CardImpl {
+    
+    public static final FilterCard filter = new FilterCard("Faerie card");
+    static {
+        filter.add(new SubtypePredicate("Faerie"));
     }
 
-    public HewedStoneRetainers(final HewedStoneRetainers card) {
+    public FaerieHarbinger(UUID ownerId) {
+        super(ownerId, 61, "Faerie Harbinger", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "LRW";
+        this.subtype.add("Faerie");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // When Faerie Harbinger enters the battlefield, you may search your library for a Faerie card, reveal it, then shuffle your library and put that card on top of it.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutOnLibraryEffect(new TargetCardInLibrary(filter), true, true), true));
+    }
+
+    public FaerieHarbinger(final FaerieHarbinger card) {
         super(card);
     }
 
     @Override
-    public HewedStoneRetainers copy() {
-        return new HewedStoneRetainers(this);
+    public FaerieHarbinger copy() {
+        return new FaerieHarbinger(this);
     }
 }
-

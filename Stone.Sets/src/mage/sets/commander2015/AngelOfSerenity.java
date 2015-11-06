@@ -25,41 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.fatereforged;
+package mage.sets.commander2015;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.ruleModifying.CastOnlyIfYouHaveCastAnotherSpellEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class HewedStoneRetainers extends CardImpl {
+public class AngelOfSerenity extends mage.sets.returntoravnica.AngelOfSerenity {
 
-    public HewedStoneRetainers(UUID ownerId) {
-        super(ownerId, 161, "Hewed Stone Retainers", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
-        this.expansionSetCode = "FRF";
-        this.subtype.add("Golem");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
-
-        // Cast Hewed Stone Retainers only if you've cast another spell this turn.
-       this.addAbility(new SimpleStaticAbility(Zone.ALL, new CastOnlyIfYouHaveCastAnotherSpellEffect()));
+    public AngelOfSerenity(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 58;
+        this.expansionSetCode = "C15";
     }
 
-    public HewedStoneRetainers(final HewedStoneRetainers card) {
+    public AngelOfSerenity(final AngelOfSerenity card) {
         super(card);
     }
 
     @Override
-    public HewedStoneRetainers copy() {
-        return new HewedStoneRetainers(this);
+    public AngelOfSerenity copy() {
+        return new AngelOfSerenity(this);
     }
 }
-

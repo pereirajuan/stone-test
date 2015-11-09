@@ -29,51 +29,61 @@ package mage.sets.commander2015;
 
 import java.util.UUID;
 import mage.abilities.Mode;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ExileTargetEffect;
-import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardTargetEffect;
+import mage.abilities.effects.common.LoseLifeTargetEffect;
+import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.game.permanent.token.KnightToken;
-import mage.target.common.TargetEnchantmentPermanent;
+import mage.filter.common.FilterCreatureCard;
+import mage.target.TargetPlayer;
+import mage.target.common.TargetCardInYourGraveyard;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RighteousConfluence extends CardImpl {
+public class WretchedConfluence extends CardImpl {
 
-    public RighteousConfluence(UUID ownerId) {
-        super(ownerId, 7, "Righteous Confluence", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
+    public WretchedConfluence(UUID ownerId) {
+        super(ownerId, 23, "Wretched Confluence", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{3}{B}{B}");
         this.expansionSetCode = "C15";
 
-        // Choose three - You may choose the same mode more than once.
+        // Choose three. You may choose the same mode more than once. 
         this.getSpellAbility().getModes().setMinModes(3);
         this.getSpellAbility().getModes().setMaxModes(3);
         this.getSpellAbility().getModes().setEachModeMoreThanOnce(true);
-
-        // - Put a 2/2 white Knight creature token with vigilance onto the battlefield;
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new KnightToken()));
-
-        //  - Exile target enchantment;
+        
+        // - Target player draws a card and loses 1 life; 
+        Effect effect = new LoseLifeTargetEffect(1);
+        effect.setText("and loses 1 life");
+        this.getSpellAbility().addEffect(new DrawCardTargetEffect(1));
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetPlayer());
+        
+        // Target creature gets -2/-2 until end of turn; 
         Mode mode = new Mode();
-        mode.getEffects().add(new ExileTargetEffect());
-        mode.getTargets().add(new TargetEnchantmentPermanent());
+        mode.getEffects().add(new BoostTargetEffect(-2, -2, Duration.EndOfTurn));
+        mode.getTargets().add(new TargetCreaturePermanent());
         this.getSpellAbility().getModes().addMode(mode);
-
-        // You gain 5 life;
+        
+        // Return target creature card from your graveyard to your hand.
         mode = new Mode();
-        mode.getEffects().add(new GainLifeEffect(5));
+        mode.getEffects().add(new ReturnFromGraveyardToHandTargetEffect());
+        mode.getTargets().add(new TargetCardInYourGraveyard(new FilterCreatureCard("creature card from your graveyard")));
         this.getSpellAbility().getModes().addMode(mode);
     }
 
-    public RighteousConfluence(final RighteousConfluence card) {
+    public WretchedConfluence(final WretchedConfluence card) {
         super(card);
     }
 
     @Override
-    public RighteousConfluence copy() {
-        return new RighteousConfluence(this);
+    public WretchedConfluence copy() {
+        return new WretchedConfluence(this);
     }
 }

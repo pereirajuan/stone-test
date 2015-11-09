@@ -29,51 +29,52 @@ package mage.sets.commander2015;
 
 import java.util.UUID;
 import mage.abilities.Mode;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ExileTargetEffect;
-import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.effects.common.DamageAllEffect;
+import mage.abilities.effects.common.DamagePlayersEffect;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.game.permanent.token.KnightToken;
-import mage.target.common.TargetEnchantmentPermanent;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.target.common.TargetArtifactPermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RighteousConfluence extends CardImpl {
+public class FieryConfluence extends CardImpl {
 
-    public RighteousConfluence(UUID ownerId) {
-        super(ownerId, 7, "Righteous Confluence", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
+    public FieryConfluence(UUID ownerId) {
+        super(ownerId, 26, "Fiery Confluence", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
         this.expansionSetCode = "C15";
 
-        // Choose three - You may choose the same mode more than once.
+        // Choose three. You may choose the same mode more than once.
         this.getSpellAbility().getModes().setMinModes(3);
         this.getSpellAbility().getModes().setMaxModes(3);
         this.getSpellAbility().getModes().setEachModeMoreThanOnce(true);
-
-        // - Put a 2/2 white Knight creature token with vigilance onto the battlefield;
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new KnightToken()));
-
-        //  - Exile target enchantment;
+        
+        // - Fiery Confluence deals 1 damage to each creature;
+        this.getSpellAbility().addEffect(new DamageAllEffect(1, new FilterCreaturePermanent()));
+        
+        // Fiery Confluence deals 2 damage to each opponent;
         Mode mode = new Mode();
-        mode.getEffects().add(new ExileTargetEffect());
-        mode.getTargets().add(new TargetEnchantmentPermanent());
+        mode.getEffects().add(new DamagePlayersEffect(2, TargetController.OPPONENT));
         this.getSpellAbility().getModes().addMode(mode);
-
-        // You gain 5 life;
+        
+        // Destroy target artifact.
         mode = new Mode();
-        mode.getEffects().add(new GainLifeEffect(5));
+        mode.getEffects().add(new DestroyTargetEffect());
+        mode.getTargets().add(new TargetArtifactPermanent());
         this.getSpellAbility().getModes().addMode(mode);
     }
 
-    public RighteousConfluence(final RighteousConfluence card) {
+    public FieryConfluence(final FieryConfluence card) {
         super(card);
     }
 
     @Override
-    public RighteousConfluence copy() {
-        return new RighteousConfluence(this);
+    public FieryConfluence copy() {
+        return new FieryConfluence(this);
     }
 }

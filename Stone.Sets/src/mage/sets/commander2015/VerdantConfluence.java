@@ -29,51 +29,57 @@ package mage.sets.commander2015;
 
 import java.util.UUID;
 import mage.abilities.Mode;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ExileTargetEffect;
-import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
+import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.game.permanent.token.KnightToken;
-import mage.target.common.TargetEnchantmentPermanent;
+import mage.counters.CounterType;
+import mage.filter.common.FilterBasicLandCard;
+import mage.filter.common.FilterPermanentCard;
+import mage.target.common.TargetCardInLibrary;
+import mage.target.common.TargetCardInYourGraveyard;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RighteousConfluence extends CardImpl {
+public class VerdantConfluence extends CardImpl {
 
-    public RighteousConfluence(UUID ownerId) {
-        super(ownerId, 7, "Righteous Confluence", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
+    public VerdantConfluence(UUID ownerId) {
+        super(ownerId, 40, "Verdant Confluence", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{G}{G}");
         this.expansionSetCode = "C15";
 
-        // Choose three - You may choose the same mode more than once.
+        // Choose three. You may choose the same mode more than once.
         this.getSpellAbility().getModes().setMinModes(3);
         this.getSpellAbility().getModes().setMaxModes(3);
         this.getSpellAbility().getModes().setEachModeMoreThanOnce(true);
-
-        // - Put a 2/2 white Knight creature token with vigilance onto the battlefield;
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new KnightToken()));
-
-        //  - Exile target enchantment;
+        
+        // - Put two +1/+1 counters on target creature;
+        this.getSpellAbility().addEffect(new AddCountersTargetEffect(CounterType.P1P1.createInstance(2)));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        
+        // Return target permanent card from your graveyard to your hand;
         Mode mode = new Mode();
-        mode.getEffects().add(new ExileTargetEffect());
-        mode.getTargets().add(new TargetEnchantmentPermanent());
+        mode.getEffects().add(new ReturnFromGraveyardToHandTargetEffect());
+        mode.getTargets().add(new TargetCardInYourGraveyard(new FilterPermanentCard()));
         this.getSpellAbility().getModes().addMode(mode);
-
-        // You gain 5 life;
+        
+        // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
+        TargetCardInLibrary target = new TargetCardInLibrary(new FilterBasicLandCard());
         mode = new Mode();
-        mode.getEffects().add(new GainLifeEffect(5));
+        mode.getEffects().add(new SearchLibraryPutInPlayEffect(target, true));
         this.getSpellAbility().getModes().addMode(mode);
     }
 
-    public RighteousConfluence(final RighteousConfluence card) {
+    public VerdantConfluence(final VerdantConfluence card) {
         super(card);
     }
 
     @Override
-    public RighteousConfluence copy() {
-        return new RighteousConfluence(this);
+    public VerdantConfluence copy() {
+        return new VerdantConfluence(this);
     }
 }

@@ -29,51 +29,53 @@ package mage.sets.commander2015;
 
 import java.util.UUID;
 import mage.abilities.Mode;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.ExileTargetEffect;
-import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.CounterUnlessPaysEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.ReturnToHandTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.game.permanent.token.KnightToken;
-import mage.target.common.TargetEnchantmentPermanent;
+import mage.target.TargetSpell;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RighteousConfluence extends CardImpl {
+public class MysticConfluence extends CardImpl {
 
-    public RighteousConfluence(UUID ownerId) {
-        super(ownerId, 7, "Righteous Confluence", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
+    public MysticConfluence(UUID ownerId) {
+        super(ownerId, 14, "Mystic Confluence", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{3}{U}{U}");
         this.expansionSetCode = "C15";
 
-        // Choose three - You may choose the same mode more than once.
+        // Choose three. You may choose the same mode more than once. 
         this.getSpellAbility().getModes().setMinModes(3);
         this.getSpellAbility().getModes().setMaxModes(3);
         this.getSpellAbility().getModes().setEachModeMoreThanOnce(true);
-
-        // - Put a 2/2 white Knight creature token with vigilance onto the battlefield;
-        this.getSpellAbility().addEffect(new CreateTokenEffect(new KnightToken()));
-
-        //  - Exile target enchantment;
+        
+        // - Counter target spell unless its controller pays {3};
+        this.getSpellAbility().addEffect(new CounterUnlessPaysEffect(new GenericManaCost(3)));
+        this.getSpellAbility().addTarget(new TargetSpell());
+        
+        //  Return target creature to its owner's hand;
         Mode mode = new Mode();
-        mode.getEffects().add(new ExileTargetEffect());
-        mode.getTargets().add(new TargetEnchantmentPermanent());
+        mode.getEffects().add(new ReturnToHandTargetEffect());
+        mode.getTargets().add(new TargetCreaturePermanent());
         this.getSpellAbility().getModes().addMode(mode);
-
-        // You gain 5 life;
+        
+         // Draw a card.
         mode = new Mode();
-        mode.getEffects().add(new GainLifeEffect(5));
+        mode.getEffects().add(new DrawCardSourceControllerEffect(1));
         this.getSpellAbility().getModes().addMode(mode);
     }
 
-    public RighteousConfluence(final RighteousConfluence card) {
+    public MysticConfluence(final MysticConfluence card) {
         super(card);
     }
 
     @Override
-    public RighteousConfluence copy() {
-        return new RighteousConfluence(this);
+    public MysticConfluence copy() {
+        return new MysticConfluence(this);
     }
 }

@@ -33,20 +33,20 @@ import java.util.UUID;
  *
  * @author Plopman
  */
-public class RagingGoblin extends mage.sets.tenthedition.RagingGoblin {
+public class Anaconda1 extends mage.sets.urzassaga.Anaconda {
 
-    public RagingGoblin(UUID ownerId) {
+    public Anaconda1(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 150;
+        this.cardNumber = 81;
         this.expansionSetCode = "POR";
     }
 
-    public RagingGoblin(final RagingGoblin card) {
+    public Anaconda1(final Anaconda1 card) {
         super(card);
     }
 
     @Override
-    public RagingGoblin copy() {
-        return new RagingGoblin(this);
+    public Anaconda1 copy() {
+        return new Anaconda1(this);
     }
 }

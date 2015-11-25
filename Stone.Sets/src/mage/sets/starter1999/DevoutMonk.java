@@ -25,28 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.portal;
+package mage.sets.starter1999;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class MonstrousGrowth extends mage.sets.seventhedition.MonstrousGrowth {
+public class DevoutMonk extends CardImpl {
 
-    public MonstrousGrowth(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 98;
-        this.expansionSetCode = "POR";
+    public DevoutMonk(UUID ownerId) {
+        super(ownerId, 14, "Devout Monk", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
+        this.expansionSetCode = "S99";
+        this.subtype.add("Human");
+        this.subtype.add("Monk");
+        this.subtype.add("Cleric");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // When Devout Monk enters the battlefield, you gain 1 life.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GainLifeEffect(1), false));
     }
 
-    public MonstrousGrowth(final MonstrousGrowth card) {
+    public DevoutMonk(final DevoutMonk card) {
         super(card);
     }
 
     @Override
-    public MonstrousGrowth copy() {
-        return new MonstrousGrowth(this);
+    public DevoutMonk copy() {
+        return new DevoutMonk(this);
     }
 }

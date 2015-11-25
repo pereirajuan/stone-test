@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,49 +20,48 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.magic2011;
+package mage.sets.portal;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.common.discard.DiscardEachPlayerEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.target.common.TargetLandPermanent;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class LilianasSpecter extends CardImpl {
+public class FireSnake extends CardImpl {
 
-    public LilianasSpecter(UUID ownerId) {
-        super(ownerId, 104, "Liliana's Specter", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{B}");
-        this.expansionSetCode = "M11";
-        this.subtype.add("Specter");
-
-        this.power = new MageInt(2);
+    public FireSnake(UUID ownerId) {
+        super(ownerId, 132, "Fire Snake", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
+        this.expansionSetCode = "POR";
+        this.subtype.add("Snake");
+        this.power = new MageInt(3);
         this.toughness = new MageInt(1);
 
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new DiscardEachPlayerEffect(TargetController.OPPONENT), false));
+        // When Fire Snake dies, destroy target land.
+        Ability ability = new DiesTriggeredAbility(new DestroyTargetEffect(), false);
+        ability.addTarget(new TargetLandPermanent());
+        this.addAbility(ability);
     }
 
-    public LilianasSpecter(final LilianasSpecter card) {
+    public FireSnake(final FireSnake card) {
         super(card);
     }
 
     @Override
-    public LilianasSpecter copy() {
-        return new LilianasSpecter(this);
+    public FireSnake copy() {
+        return new FireSnake(this);
     }
-
 }

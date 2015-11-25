@@ -28,25 +28,36 @@
 package mage.sets.portal;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class Blaze extends mage.sets.planechase.Blaze {
+public class SpiritualGuardian extends CardImpl {
 
-    public Blaze(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 122;
+    public SpiritualGuardian(UUID ownerId) {
+        super(ownerId, 189, "Spiritual Guardian", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{W}{W}");
         this.expansionSetCode = "POR";
+        this.subtype.add("Spirit");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
+
+        // When Spiritual Guardian enters the battlefield, you gain 4 life.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GainLifeEffect(4), false));
     }
 
-    public Blaze(final Blaze card) {
+    public SpiritualGuardian(final SpiritualGuardian card) {
         super(card);
     }
 
     @Override
-    public Blaze copy() {
-        return new Blaze(this);
+    public SpiritualGuardian copy() {
+        return new SpiritualGuardian(this);
     }
 }

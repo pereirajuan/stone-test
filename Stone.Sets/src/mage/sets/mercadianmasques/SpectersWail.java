@@ -25,40 +25,32 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.portal;
+package mage.sets.mercadianmasques;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.keyword.ForestwalkAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author Plopman
+ * @author fireshoes
  */
-public class EliteCatWarrior extends CardImpl {
+public class SpectersWail extends CardImpl {
 
-    public EliteCatWarrior(UUID ownerId) {
-        super(ownerId, 87, "Elite Cat Warrior", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{G}");
-        this.expansionSetCode = "POR";
-        this.subtype.add("Cat");
-        this.subtype.add("Warrior");
+    public SpectersWail(UUID ownerId) {
+        super(ownerId, 164, "Specter's Wail", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{1}{B}");
+        this.expansionSetCode = "MMQ";
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(3);
-
-        // Forestwalk
-        this.addAbility(new ForestwalkAbility());
+        // Target player discards a card at random.
     }
 
-    public EliteCatWarrior(final EliteCatWarrior card) {
+    public SpectersWail(final SpectersWail card) {
         super(card);
     }
 
     @Override
-    public EliteCatWarrior copy() {
-        return new EliteCatWarrior(this);
+    public SpectersWail copy() {
+        return new SpectersWail(this);
     }
 }

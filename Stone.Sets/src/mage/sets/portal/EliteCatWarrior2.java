@@ -33,20 +33,19 @@ import java.util.UUID;
  *
  * @author Plopman
  */
-public class Anaconda extends mage.sets.urzassaga.Anaconda {
+public class EliteCatWarrior2 extends mage.sets.portal.EliteCatWarrior1 {
 
-    public Anaconda(UUID ownerId) {
+    public EliteCatWarrior2(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 81;
-        this.expansionSetCode = "POR";
+        this.cardNumber = 88;
     }
 
-    public Anaconda(final Anaconda card) {
+    public EliteCatWarrior2(final EliteCatWarrior2 card) {
         super(card);
     }
 
     @Override
-    public Anaconda copy() {
-        return new Anaconda(this);
+    public EliteCatWarrior2 copy() {
+        return new EliteCatWarrior2(this);
     }
 }

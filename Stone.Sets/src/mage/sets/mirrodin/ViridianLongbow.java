@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,49 +20,58 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.sets.magic2011;
+package mage.sets.mirrodin;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.common.discard.DiscardEachPlayerEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EquipAbility;
 import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class LilianasSpecter extends CardImpl {
+public class ViridianLongbow extends CardImpl {
 
-    public LilianasSpecter(UUID ownerId) {
-        super(ownerId, 104, "Liliana's Specter", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{B}");
-        this.expansionSetCode = "M11";
-        this.subtype.add("Specter");
+    public ViridianLongbow(UUID ownerId) {
+        super(ownerId, 270, "Viridian Longbow", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{1}");
+        this.expansionSetCode = "MRD";
+        this.subtype.add("Equipment");
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        this.addAbility(FlyingAbility.getInstance());
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new DiscardEachPlayerEffect(TargetController.OPPONENT), false));
+        // Equipped creature has "{tap}: This creature deals 1 damage to target creature or player."
+        Effect effect = new DamageTargetEffect(1);
+        effect.setText("This creature deals 1 damage to target creature or player");
+        SimpleActivatedAbility ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, effect, new TapSourceCost());
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(ability, AttachmentType.EQUIPMENT)));
+        
+        // Equip {3}
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
     }
 
-    public LilianasSpecter(final LilianasSpecter card) {
+    public ViridianLongbow(final ViridianLongbow card) {
         super(card);
     }
 
-    @Override
-    public LilianasSpecter copy() {
-        return new LilianasSpecter(this);
+    @java.lang.Override
+    public ViridianLongbow copy() {
+        return new ViridianLongbow(this);
     }
-
 }

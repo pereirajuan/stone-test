@@ -25,66 +25,68 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.returntoravnica;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTappedAbility;
 import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CopyTargetSpellEffect;
-import mage.abilities.effects.common.DrawDiscardControllerEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.BecomesCreatureSourceEffect;
+import mage.abilities.keyword.DoubleStrikeAbility;
+import mage.abilities.mana.RedManaAbility;
+import mage.abilities.mana.WhiteManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.TargetSpell;
+import mage.game.permanent.token.Token;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class NivixGuildmage extends CardImpl {
+public class NeedleSpires extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("instant or sorcery spell");
+    public NeedleSpires(UUID ownerId) {
+        super(ownerId, 175, "Needle Spires", Rarity.RARE, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "OGW";
 
-    static {
-        filter.add(Predicates.or(
-                new CardTypePredicate(CardType.INSTANT),
-                new CardTypePredicate(CardType.SORCERY)));
-        filter.add(new ControllerPredicate(TargetController.YOU));
-    }
-    
-    public NivixGuildmage(UUID ownerId) {
-        super(ownerId, 182, "Nivix Guildmage", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{U}{R}");
-        this.expansionSetCode = "RTR";
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
-
-
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // {1}{U}{R}: Draw a card, then discard a card.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawDiscardControllerEffect(), new ManaCostsImpl("{1}{U}{R}")));
+        // Needle Spires enters the battlefield tapped.
+        this.addAbility(new EntersBattlefieldTappedAbility());
         
-        // {2}{U}{R}: Copy target instant or sorcery spell you control. You may choose new targets for the copy.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CopyTargetSpellEffect(), new ManaCostsImpl("{2}{U}{R}"));
-        ability.addTarget(new TargetSpell(filter));
-        this.addAbility(ability);
+        // {T}: Add {R} or {W} to your mana pool.
+        this.addAbility(new RedManaAbility());
+        this.addAbility(new WhiteManaAbility());
+        
+        // {2}{R}{W}: Needle Spires becomes a 2/1 red and white Elemental creature with double strike until end of turn. It's still a land.
+        Effect effect = new BecomesCreatureSourceEffect(new NeedleSpiresToken(), "land", Duration.EndOfTurn);
+        effect.setText("{this} becomes a 2/1 red and white Elemental creature with double strike until end of turn. It's still a land");
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, effect, new ManaCostsImpl("{2}{R}{W}")));
     }
 
-    public NivixGuildmage(final NivixGuildmage card) {
+    public NeedleSpires(final NeedleSpires card) {
         super(card);
     }
 
     @Override
-    public NivixGuildmage copy() {
-        return new NivixGuildmage(this);
+    public NeedleSpires copy() {
+        return new NeedleSpires(this);
+    }
+}
+
+class NeedleSpiresToken extends Token {
+
+    public NeedleSpiresToken() {
+        super("", "2/1 red and white Elemental creature with double strike");
+        cardType.add(CardType.CREATURE);
+        subtype.add("Elemental");
+        color.setRed(true);
+        color.setWhite(true);
+        power = new MageInt(2);
+        toughness = new MageInt(1);
+        addAbility(DoubleStrikeAbility.getInstance());
     }
 }

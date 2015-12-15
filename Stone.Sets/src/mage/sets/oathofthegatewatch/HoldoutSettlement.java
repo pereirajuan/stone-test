@@ -25,66 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.returntoravnica;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CopyTargetSpellEffect;
-import mage.abilities.effects.common.DrawDiscardControllerEffect;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.common.TapTargetCost;
+import mage.abilities.effects.common.AddManaOfAnyColorEffect;
+import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.FilterSpell;
+import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.TargetSpell;
+import mage.filter.predicate.permanent.TappedPredicate;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class NivixGuildmage extends CardImpl {
-
-    private static final FilterSpell filter = new FilterSpell("instant or sorcery spell");
-
-    static {
-        filter.add(Predicates.or(
-                new CardTypePredicate(CardType.INSTANT),
-                new CardTypePredicate(CardType.SORCERY)));
-        filter.add(new ControllerPredicate(TargetController.YOU));
-    }
+public class HoldoutSettlement extends CardImpl {
     
-    public NivixGuildmage(UUID ownerId) {
-        super(ownerId, 182, "Nivix Guildmage", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{U}{R}");
-        this.expansionSetCode = "RTR";
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("an untapped creature you control");
+    
+    static {
+        filter.add(Predicates.not(new TappedPredicate()));
+    }
 
+    public HoldoutSettlement(UUID ownerId) {
+        super(ownerId, 172, "Holdout Settlement", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "OGW";
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // {1}{U}{R}: Draw a card, then discard a card.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawDiscardControllerEffect(), new ManaCostsImpl("{1}{U}{R}")));
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
         
-        // {2}{U}{R}: Copy target instant or sorcery spell you control. You may choose new targets for the copy.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CopyTargetSpellEffect(), new ManaCostsImpl("{2}{U}{R}"));
-        ability.addTarget(new TargetSpell(filter));
+        // {T}, Tap an untapped creature you control: Add one mana of any color to your mana pool.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddManaOfAnyColorEffect(), new TapSourceCost());
+        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
         this.addAbility(ability);
     }
 
-    public NivixGuildmage(final NivixGuildmage card) {
+    public HoldoutSettlement(final HoldoutSettlement card) {
         super(card);
     }
 
     @Override
-    public NivixGuildmage copy() {
-        return new NivixGuildmage(this);
+    public HoldoutSettlement copy() {
+        return new HoldoutSettlement(this);
     }
 }

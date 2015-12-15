@@ -25,15 +25,18 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.returntoravnica;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTappedAbility;
 import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.common.CopyTargetSpellEffect;
-import mage.abilities.effects.common.DrawDiscardControllerEffect;
+import mage.abilities.effects.common.PutTokenOntoBattlefieldCopyTargetEffect;
+import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
@@ -44,14 +47,15 @@ import mage.filter.predicate.Predicates;
 import mage.filter.predicate.mageobject.CardTypePredicate;
 import mage.filter.predicate.permanent.ControllerPredicate;
 import mage.target.TargetSpell;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class NivixGuildmage extends CardImpl {
-
-    private static final FilterSpell filter = new FilterSpell("instant or sorcery spell");
+public class Mirrorpool extends CardImpl {
+    
+    private static final FilterSpell filter = new FilterSpell("instant or sorcery spell you control");
 
     static {
         filter.add(Predicates.or(
@@ -59,32 +63,38 @@ public class NivixGuildmage extends CardImpl {
                 new CardTypePredicate(CardType.SORCERY)));
         filter.add(new ControllerPredicate(TargetController.YOU));
     }
-    
-    public NivixGuildmage(UUID ownerId) {
-        super(ownerId, 182, "Nivix Guildmage", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{U}{R}");
-        this.expansionSetCode = "RTR";
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
 
+    public Mirrorpool(UUID ownerId) {
+        super(ownerId, 174, "Mirrorpool", Rarity.MYTHIC, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "OGW";
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // {1}{U}{R}: Draw a card, then discard a card.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawDiscardControllerEffect(), new ManaCostsImpl("{1}{U}{R}")));
+        // Mirrorpool enters the battlefield tapped.
+        this.addAbility(new EntersBattlefieldTappedAbility());
         
-        // {2}{U}{R}: Copy target instant or sorcery spell you control. You may choose new targets for the copy.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CopyTargetSpellEffect(), new ManaCostsImpl("{2}{U}{R}"));
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
+        
+            // {2}{C}, {T}, Sacrifice Mirrorpool: Copy target instant or sorcery spell you control. You may choose new targets for the copy.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CopyTargetSpellEffect(), new ManaCostsImpl("{2}{C}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
         ability.addTarget(new TargetSpell(filter));
+        this.addAbility(ability);
+        
+        // {4}{C}, {T}, Sacrifice Mirrorpool: Put a token onto the battlefield that's a copy of target creature you control.
+        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new PutTokenOntoBattlefieldCopyTargetEffect(), new ManaCostsImpl("{4}{C}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetControlledCreaturePermanent());
         this.addAbility(ability);
     }
 
-    public NivixGuildmage(final NivixGuildmage card) {
+    public Mirrorpool(final Mirrorpool card) {
         super(card);
     }
 
     @Override
-    public NivixGuildmage copy() {
-        return new NivixGuildmage(this);
+    public Mirrorpool copy() {
+        return new Mirrorpool(this);
     }
 }

@@ -25,55 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2014;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.mana.GreenManaAbility;
+import mage.abilities.mana.WhiteManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.FilterCard;
-import mage.filter.predicate.mageobject.AbilityPredicate;
-import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class WardenOfEvosIsle extends CardImpl {
+public class TranquilExpanse extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("Creature spells with flying");
-    static {
-        filter.add(new CardTypePredicate(CardType.CREATURE));
-        filter.add(new AbilityPredicate(FlyingAbility.class));
+    public TranquilExpanse(UUID ownerId) {
+        super(ownerId, 180, "Tranquil Expanse", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "OGW";
+
+        // Tranquil Expanse enters the battlefield tapped.
+        this.addAbility(new EntersBattlefieldTappedAbility());
+        
+        // {T}: Add {G} or {W} to your mana pool.
+        this.addAbility(new GreenManaAbility());
+        this.addAbility(new WhiteManaAbility());
     }
 
-    public WardenOfEvosIsle(UUID ownerId) {
-        super(ownerId, 79, "Warden of Evos Isle", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
-        this.expansionSetCode = "M14";
-        this.subtype.add("Bird");
-        this.subtype.add("Wizard");
-
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-        // Creature spells with flying you cast cost {1} less to cast.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 1)));
-
-    }
-
-    public WardenOfEvosIsle(final WardenOfEvosIsle card) {
+    public TranquilExpanse(final TranquilExpanse card) {
         super(card);
     }
 
     @Override
-    public WardenOfEvosIsle copy() {
-        return new WardenOfEvosIsle(this);
+    public TranquilExpanse copy() {
+        return new TranquilExpanse(this);
     }
 }

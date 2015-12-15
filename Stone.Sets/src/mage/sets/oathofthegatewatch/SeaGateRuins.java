@@ -25,66 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.returntoravnica;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.condition.common.HellbentCondition;
+import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CopyTargetSpellEffect;
-import mage.abilities.effects.common.DrawDiscardControllerEffect;
+import mage.abilities.decorator.ConditionalActivatedAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.TargetSpell;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class NivixGuildmage extends CardImpl {
+public class SeaGateRuins extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("instant or sorcery spell");
+    public SeaGateRuins(UUID ownerId) {
+        super(ownerId, 177, "Sea Gate Ruins", Rarity.RARE, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "OGW";
 
-    static {
-        filter.add(Predicates.or(
-                new CardTypePredicate(CardType.INSTANT),
-                new CardTypePredicate(CardType.SORCERY)));
-        filter.add(new ControllerPredicate(TargetController.YOU));
-    }
-    
-    public NivixGuildmage(UUID ownerId) {
-        super(ownerId, 182, "Nivix Guildmage", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{U}{R}");
-        this.expansionSetCode = "RTR";
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
-
-
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // {1}{U}{R}: Draw a card, then discard a card.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawDiscardControllerEffect(), new ManaCostsImpl("{1}{U}{R}")));
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
         
-        // {2}{U}{R}: Copy target instant or sorcery spell you control. You may choose new targets for the copy.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CopyTargetSpellEffect(), new ManaCostsImpl("{2}{U}{R}"));
-        ability.addTarget(new TargetSpell(filter));
+        // {2}{C}, {T}: Draw a card. Activate this ability only if you have no cards in hand.
+        Ability ability = new ConditionalActivatedAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1),
+            new ManaCostsImpl("{2}{C}"), HellbentCondition.getInstance());
+        ability.addCost(new TapSourceCost());
         this.addAbility(ability);
     }
 
-    public NivixGuildmage(final NivixGuildmage card) {
+    public SeaGateRuins(final SeaGateRuins card) {
         super(card);
     }
 
     @Override
-    public NivixGuildmage copy() {
-        return new NivixGuildmage(this);
+    public SeaGateRuins copy() {
+        return new SeaGateRuins(this);
     }
 }

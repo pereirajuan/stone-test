@@ -25,56 +25,37 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.oathofthegatewatch;
+
+import java.util.UUID;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class SpatialContortion extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public SpatialContortion(UUID ownerId) {
+        super(ownerId, 8, "Spatial Contortion", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{C}");
+        this.expansionSetCode = "OGW";
 
-    private final String text;
+        // Target creature gets +3/-3 until end of turn.
+        this.getSpellAbility().addEffect(new BoostTargetEffect(3, -3, Duration.EndOfTurn));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public SpatialContortion(final SpatialContortion card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public SpatialContortion copy() {
+        return new SpatialContortion(this);
     }
-
 }

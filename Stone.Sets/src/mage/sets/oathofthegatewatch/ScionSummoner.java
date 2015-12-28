@@ -25,56 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.oathofthegatewatch;
+
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.keyword.DevoidAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.game.permanent.token.EldraziScionToken;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class ScionSummoner extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public ScionSummoner(UUID ownerId) {
+        super(ownerId, 123, "Scion Summoner", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{G}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-    private final String text;
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+        
+        // When Scion Summoner enters the battlefield, put a 1/1 colorless Eldrazi Scion creature token onto the battlefield. 
+        // It has "Sacrifice this creature: Add {C} to your mana pool."
+        Effect effect = new CreateTokenEffect(new EldraziScionToken());
+        effect.setText("put a 1/1 colorless Eldrazi Scion creature token onto the battlefield. It has \"Sacrifice this creature: Add {C} to your mana pool.\"");
+        this.addAbility(new EntersBattlefieldTriggeredAbility(effect, false));
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public ScionSummoner(final ScionSummoner card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public ScionSummoner copy() {
+        return new ScionSummoner(this);
     }
-
 }

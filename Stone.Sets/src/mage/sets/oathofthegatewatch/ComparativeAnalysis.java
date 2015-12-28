@@ -25,56 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.oathofthegatewatch;
+
+import java.util.UUID;
+import mage.abilities.effects.common.DrawCardTargetEffect;
+import mage.abilities.keyword.SurgeAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class ComparativeAnalysis extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public ComparativeAnalysis(UUID ownerId) {
+        super(ownerId, 51, "Comparative Analysis", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{U}");
+        this.expansionSetCode = "OGW";
+        
+        // Target player draws two cards.
+        this.getSpellAbility().addEffect(new DrawCardTargetEffect(2));
+        this.getSpellAbility().addTarget(new TargetPlayer());
 
-    private final String text;
+        // Has to be placed last here, because added spellAbility objects (e.g. effects) have to be copied from this
+        // Surge {2}{U} <You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)</i>
+        addAbility(new SurgeAbility(this, "{2}{U}"));    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public ComparativeAnalysis(final ComparativeAnalysis card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public ComparativeAnalysis copy() {
+        return new ComparativeAnalysis(this);
     }
-
 }

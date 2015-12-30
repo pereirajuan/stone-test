@@ -25,40 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.keyword;
+package mage.sets.oathofthegatewatch;
 
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.keyword.SupportEffect;
-import mage.cards.Card;
+import java.util.UUID;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Rarity;
+import mage.filter.common.FilterPlaneswalkerCard;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class SupportAbility extends EntersBattlefieldTriggeredAbility {
+public class CallTheGatewatch extends CardImpl {
+    
+    private static final FilterPlaneswalkerCard filter = new FilterPlaneswalkerCard("planeswalker card");
 
-    public SupportAbility(Card card, int amount) {
-        super(new SupportEffect(card, amount), false);
-        if (!card.getCardType().contains(CardType.INSTANT) && !card.getCardType().contains(CardType.SORCERY)) {
-            FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
-            if (card.getCardType().contains(CardType.CREATURE)) {
-                filter.add(new AnotherPredicate());
-                filter.setMessage("other target creatures");
-            }
-            addTarget(new TargetCreaturePermanent(0, amount, filter, false));
-        }
+    public CallTheGatewatch(UUID ownerId) {
+        super(ownerId, 16, "Call the Gatewatch", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{2}{W}");
+        this.expansionSetCode = "OGW";
+
+        // Search your library for a planeswalker card, reveal it, and put it into your hand. Then shuffle your library.
+        this.getSpellAbility().addEffect(new SearchLibraryPutInHandEffect(new TargetCardInLibrary(filter), true));
     }
 
-    public SupportAbility(final SupportAbility ability) {
-        super(ability);
+    public CallTheGatewatch(final CallTheGatewatch card) {
+        super(card);
     }
 
     @Override
-    public SupportAbility copy() {
-        return new SupportAbility(this);
+    public CallTheGatewatch copy() {
+        return new CallTheGatewatch(this);
     }
 }

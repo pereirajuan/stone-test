@@ -25,40 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.keyword;
 
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.keyword.SupportEffect;
-import mage.cards.Card;
-import mage.constants.CardType;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetCreaturePermanent;
+package mage.abilities.condition.common;
+
+import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.condition.Condition;
+import mage.game.Game;
+import mage.players.Player;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class SupportAbility extends EntersBattlefieldTriggeredAbility {
 
-    public SupportAbility(Card card, int amount) {
-        super(new SupportEffect(card, amount), false);
-        if (!card.getCardType().contains(CardType.INSTANT) && !card.getCardType().contains(CardType.SORCERY)) {
-            FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
-            if (card.getCardType().contains(CardType.CREATURE)) {
-                filter.add(new AnotherPredicate());
-                filter.setMessage("other target creatures");
-            }
-            addTarget(new TargetCreaturePermanent(0, amount, filter, false));
-        }
+public class OpponentHasMoreLifeCondition implements Condition {
+
+    public OpponentHasMoreLifeCondition() {
     }
-
-    public SupportAbility(final SupportAbility ability) {
-        super(ability);
+    
+    @Override
+    public boolean apply(Game game, Ability source) {
+        Player controller = game.getPlayer(source.getControllerId());
+        if (controller != null) {
+            for (UUID uuid : game.getOpponents(controller.getId())) {
+                Player opponent = game.getPlayer(uuid);
+                if (opponent != null) {
+                    if (opponent.getLife() > controller.getLife()) {
+                         return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
-    public SupportAbility copy() {
-        return new SupportAbility(this);
+    public String toString() {
+        return "an opponent has more life than you";
     }
 }

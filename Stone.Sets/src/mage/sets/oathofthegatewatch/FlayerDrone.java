@@ -25,40 +25,63 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.keyword;
+package mage.sets.oathofthegatewatch;
 
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.keyword.SupportEffect;
-import mage.cards.Card;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldControlledTriggeredAbility;
+import mage.abilities.effects.common.LoseLifeTargetEffect;
+import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.keyword.FirstStrikeAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.ColorlessPredicate;
 import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.target.common.TargetOpponent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class SupportAbility extends EntersBattlefieldTriggeredAbility {
-
-    public SupportAbility(Card card, int amount) {
-        super(new SupportEffect(card, amount), false);
-        if (!card.getCardType().contains(CardType.INSTANT) && !card.getCardType().contains(CardType.SORCERY)) {
-            FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
-            if (card.getCardType().contains(CardType.CREATURE)) {
-                filter.add(new AnotherPredicate());
-                filter.setMessage("other target creatures");
-            }
-            addTarget(new TargetCreaturePermanent(0, amount, filter, false));
-        }
+public class FlayerDrone extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("another colorless creature");
+    
+    static {
+        filter.add(new AnotherPredicate());
+        filter.add(new ColorlessPredicate());
     }
 
-    public SupportAbility(final SupportAbility ability) {
-        super(ability);
+    public FlayerDrone(UUID ownerId) {
+        super(ownerId, 148, "Flayer Drone", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{R}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
+
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
+        
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+        
+        // Whenever another colorless creature enters the battlefield under your control, target opponent loses 1 life.
+        Ability ability = new EntersBattlefieldControlledTriggeredAbility(Zone.BATTLEFIELD, new LoseLifeTargetEffect(1), filter, false);
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
+    }
+
+    public FlayerDrone(final FlayerDrone card) {
+        super(card);
     }
 
     @Override
-    public SupportAbility copy() {
-        return new SupportAbility(this);
+    public FlayerDrone copy() {
+        return new FlayerDrone(this);
     }
 }

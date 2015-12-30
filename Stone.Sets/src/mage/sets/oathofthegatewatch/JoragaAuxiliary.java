@@ -25,40 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.keyword;
+package mage.sets.oathofthegatewatch;
 
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.keyword.SupportEffect;
-import mage.cards.Card;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class SupportAbility extends EntersBattlefieldTriggeredAbility {
+public class JoragaAuxiliary extends CardImpl {
 
-    public SupportAbility(Card card, int amount) {
-        super(new SupportEffect(card, amount), false);
-        if (!card.getCardType().contains(CardType.INSTANT) && !card.getCardType().contains(CardType.SORCERY)) {
-            FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
-            if (card.getCardType().contains(CardType.CREATURE)) {
-                filter.add(new AnotherPredicate());
-                filter.setMessage("other target creatures");
-            }
-            addTarget(new TargetCreaturePermanent(0, amount, filter, false));
-        }
+    public JoragaAuxiliary(UUID ownerId) {
+        super(ownerId, 154, "Joraga Auxiliary", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{G}{W}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Elf");
+        this.subtype.add("Soldier");
+        this.subtype.add("Ally");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // {4}{G}{W}: Support 2.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new SupportEffect(this, 2), new ManaCostsImpl("{4}{G}{W}")));
     }
 
-    public SupportAbility(final SupportAbility ability) {
-        super(ability);
+    public JoragaAuxiliary(final JoragaAuxiliary card) {
+        super(card);
     }
 
     @Override
-    public SupportAbility copy() {
-        return new SupportAbility(this);
+    public JoragaAuxiliary copy() {
+        return new JoragaAuxiliary(this);
     }
 }

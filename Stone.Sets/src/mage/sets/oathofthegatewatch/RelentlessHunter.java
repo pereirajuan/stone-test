@@ -25,40 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.keyword;
+package mage.sets.oathofthegatewatch;
 
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.keyword.SupportEffect;
-import mage.cards.Card;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.TrampleAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class SupportAbility extends EntersBattlefieldTriggeredAbility {
+public class RelentlessHunter extends CardImpl {
 
-    public SupportAbility(Card card, int amount) {
-        super(new SupportEffect(card, amount), false);
-        if (!card.getCardType().contains(CardType.INSTANT) && !card.getCardType().contains(CardType.SORCERY)) {
-            FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures");
-            if (card.getCardType().contains(CardType.CREATURE)) {
-                filter.add(new AnotherPredicate());
-                filter.setMessage("other target creatures");
-            }
-            addTarget(new TargetCreaturePermanent(0, amount, filter, false));
-        }
+    public RelentlessHunter(UUID ownerId) {
+        super(ownerId, 158, "Relentless Hunter", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{R}{G}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // {1}{R}{G}: Relentless Hunter gets +1/+1 and gains trample until end of turn.
+        Effect effect1 = new BoostSourceEffect(1, 1, Duration.EndOfTurn);
+        effect1.setText("{this} gets +1/+1");
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, effect1, new ManaCostsImpl("{1}{R}{G}"));
+        Effect effect2 = new GainAbilitySourceEffect(TrampleAbility.getInstance(), Duration.EndOfTurn);
+        effect2.setText("and gains trample until end of turn");
+        ability.addEffect(effect2);
+        this.addAbility(ability);
     }
 
-    public SupportAbility(final SupportAbility ability) {
-        super(ability);
+    public RelentlessHunter(final RelentlessHunter card) {
+        super(card);
     }
 
     @Override
-    public SupportAbility copy() {
-        return new SupportAbility(this);
+    public RelentlessHunter copy() {
+        return new RelentlessHunter(this);
     }
 }

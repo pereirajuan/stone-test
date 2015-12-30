@@ -28,44 +28,34 @@
 package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.condition.common.HellbentCondition;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalActivatedAbility;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.mana.ColorlessManaAbility;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
+import mage.filter.common.FilterAttackingCreature;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class SeaGateRuins extends CardImpl {
+public class ImmolatingGlare extends CardImpl {
 
-    public SeaGateRuins(UUID ownerId) {
-        super(ownerId, 177, "Sea Gate Ruins", Rarity.RARE, new CardType[]{CardType.LAND}, "");
+    public ImmolatingGlare(UUID ownerId) {
+        super(ownerId, 20, "Immolating Glare", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{W}");
         this.expansionSetCode = "OGW";
 
-        // {T}: Add {C} to your mana pool.
-        this.addAbility(new ColorlessManaAbility());
-        
-        // {2}{C}, {T}: Draw a card. Activate this ability only if you have no cards in hand.
-        Ability ability = new ConditionalActivatedAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1),
-            new ManaCostsImpl("{2}{C}"), HellbentCondition.getInstance());
-        ability.addCost(new TapSourceCost());
-        this.addAbility(ability);
+        // Destroy target attacking creature.
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(new FilterAttackingCreature()));
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
     }
 
-    public SeaGateRuins(final SeaGateRuins card) {
+    public ImmolatingGlare(final ImmolatingGlare card) {
         super(card);
     }
 
     @Override
-    public SeaGateRuins copy() {
-        return new SeaGateRuins(this);
+    public ImmolatingGlare copy() {
+        return new ImmolatingGlare(this);
     }
 }

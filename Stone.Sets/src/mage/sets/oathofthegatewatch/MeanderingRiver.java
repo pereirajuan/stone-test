@@ -29,8 +29,8 @@ package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.mana.BlackManaAbility;
-import mage.abilities.mana.RedManaAbility;
+import mage.abilities.mana.BlueManaAbility;
+import mage.abilities.mana.WhiteManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
@@ -39,26 +39,26 @@ import mage.constants.Rarity;
  *
  * @author fireshoes
  */
-public class AshenMoor extends CardImpl {
+public class MeanderingRiver extends CardImpl {
 
-    public AshenMoor(UUID ownerId) {
-        super(ownerId, 168, "Ashen Moor", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
+    public MeanderingRiver(UUID ownerId) {
+        super(ownerId, 173, "Meandering River", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
         this.expansionSetCode = "OGW";
 
-        // Ashen Moor enters the battlefield tapped.
+        // Meandering River enters the battlefield tapped.
         this.addAbility(new EntersBattlefieldTappedAbility());
         
-        // {T}: Add {B} or {R} to your mana pool.
-        this.addAbility(new BlackManaAbility());
-        this.addAbility(new RedManaAbility());
+        // {T}: Add {W} or {U} to your mana pool.
+        this.addAbility(new WhiteManaAbility());
+        this.addAbility(new BlueManaAbility());
     }
 
-    public AshenMoor(final AshenMoor card) {
+    public MeanderingRiver(final MeanderingRiver card) {
         super(card);
     }
 
     @Override
-    public AshenMoor copy() {
-        return new AshenMoor(this);
+    public MeanderingRiver copy() {
+        return new MeanderingRiver(this);
     }
 }

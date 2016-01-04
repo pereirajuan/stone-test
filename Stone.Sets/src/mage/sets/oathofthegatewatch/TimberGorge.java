@@ -29,8 +29,8 @@ package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.mana.BlueManaAbility;
-import mage.abilities.mana.WhiteManaAbility;
+import mage.abilities.mana.GreenManaAbility;
+import mage.abilities.mana.RedManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
@@ -39,26 +39,26 @@ import mage.constants.Rarity;
  *
  * @author fireshoes
  */
-public class MeanderingStream extends CardImpl {
+public class TimberGorge extends CardImpl {
 
-    public MeanderingStream(UUID ownerId) {
-        super(ownerId, 173, "Meandering Stream", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
+    public TimberGorge(UUID ownerId) {
+        super(ownerId, 179, "Timber Gorge", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
         this.expansionSetCode = "OGW";
 
-        // Meandering Stream enters the battlefield tapped.
+        // Timber Gorge enters the battlefield tapped.
         this.addAbility(new EntersBattlefieldTappedAbility());
         
-        // {T}: Add {W} or {U} to your mana pool.
-        this.addAbility(new WhiteManaAbility());
-        this.addAbility(new BlueManaAbility());
+        // {T}: Add {R} or {G} to your mana pool.
+        this.addAbility(new RedManaAbility());
+        this.addAbility(new GreenManaAbility());
     }
 
-    public MeanderingStream(final MeanderingStream card) {
+    public TimberGorge(final TimberGorge card) {
         super(card);
     }
 
     @Override
-    public MeanderingStream copy() {
-        return new MeanderingStream(this);
+    public TimberGorge copy() {
+        return new TimberGorge(this);
     }
 }

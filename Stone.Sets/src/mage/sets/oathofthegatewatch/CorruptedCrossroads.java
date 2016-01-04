@@ -47,10 +47,10 @@ import mage.game.Game;
  *
  * @author fireshoes
  */
-public class BlightedCrossroads extends CardImpl {
+public class CorruptedCrossroads extends CardImpl {
 
-    public BlightedCrossroads(UUID ownerId) {
-        super(ownerId, 169, "Blighted Crossroads", Rarity.RARE, new CardType[]{CardType.LAND}, "");
+    public CorruptedCrossroads(UUID ownerId) {
+        super(ownerId, 169, "Corrupted Crossroads", Rarity.RARE, new CardType[]{CardType.LAND}, "");
         this.expansionSetCode = "OGW";
 
         // {T}: Add {C} to your mana pool.
@@ -62,13 +62,13 @@ public class BlightedCrossroads extends CardImpl {
         this.addAbility(ability);
     }
 
-    public BlightedCrossroads(final BlightedCrossroads card) {
+    public CorruptedCrossroads(final CorruptedCrossroads card) {
         super(card);
     }
 
     @Override
-    public BlightedCrossroads copy() {
-        return new BlightedCrossroads(this);
+    public CorruptedCrossroads copy() {
+        return new CorruptedCrossroads(this);
     }
 }
 

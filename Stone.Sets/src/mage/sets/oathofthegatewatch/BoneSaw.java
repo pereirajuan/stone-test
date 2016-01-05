@@ -28,37 +28,25 @@
 package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardTargetEffect;
-import mage.abilities.keyword.SurgeAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.target.TargetPlayer;
 
 /**
  *
  * @author fireshoes
  */
-public class ComparativeAnalysis extends CardImpl {
+public class BoneSaw extends mage.sets.conflux.BoneSaw {
 
-    public ComparativeAnalysis(UUID ownerId) {
-        super(ownerId, 51, "Comparative Analysis", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{U}");
+    public BoneSaw(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 161;
         this.expansionSetCode = "OGW";
-        
-        // Target player draws two cards.
-        this.getSpellAbility().addEffect(new DrawCardTargetEffect(2));
-        this.getSpellAbility().addTarget(new TargetPlayer());
-        
-        // Surge {2}{U} <You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)</i>
-        addAbility(new SurgeAbility(this, "{2}{U}"));
     }
 
-    public ComparativeAnalysis(final ComparativeAnalysis card) {
+    public BoneSaw(final BoneSaw card) {
         super(card);
     }
 
     @Override
-    public ComparativeAnalysis copy() {
-        return new ComparativeAnalysis(this);
+    public BoneSaw copy() {
+        return new BoneSaw(this);
     }
 }

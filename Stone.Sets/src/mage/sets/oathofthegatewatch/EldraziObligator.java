@@ -51,10 +51,10 @@ import mage.target.common.TargetCreaturePermanent;
  *
  * @author fireshoes
  */
-public class ForcedWillEldrazi extends CardImpl {
+public class EldraziObligator extends CardImpl {
 
-    public ForcedWillEldrazi(UUID ownerId) {
-        super(ownerId, 96, "Forced-Will Eldrazi", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}");
+    public EldraziObligator(UUID ownerId) {
+        super(ownerId, 96, "Eldrazi Obligator", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}");
         this.expansionSetCode = "OGW";
         this.subtype.add("Eldrazi");
         this.subtype.add("Drone");
@@ -67,7 +67,7 @@ public class ForcedWillEldrazi extends CardImpl {
         // Haste
         this.addAbility(HasteAbility.getInstance());
         
-            // When you cast Forced-Will Eldrazi, you may pay {1}{C}. If you do, gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn.
+            // When you cast Eldrazi Obligator, you may pay {1}{C}. If you do, gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn.
         Ability ability = new CastSourceTriggeredAbility(new DoIfCostPaid(new GainControlTargetEffect(Duration.EndOfTurn), new ManaCostsImpl("{1}{C}")));
         Effect effect = new UntapTargetEffect();
         effect.setText("Untap that creature");
@@ -80,12 +80,12 @@ public class ForcedWillEldrazi extends CardImpl {
         this.addAbility(ability);
     }
 
-    public ForcedWillEldrazi(final ForcedWillEldrazi card) {
+    public EldraziObligator(final EldraziObligator card) {
         super(card);
     }
 
     @Override
-    public ForcedWillEldrazi copy() {
-        return new ForcedWillEldrazi(this);
+    public EldraziObligator copy() {
+        return new EldraziObligator(this);
     }
 }

@@ -28,37 +28,37 @@
 package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardTargetEffect;
+import mage.abilities.effects.common.DamageTargetEffect;
 import mage.abilities.keyword.SurgeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.TargetPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class ComparativeAnalysis extends CardImpl {
+public class BoulderSalvo extends CardImpl {
 
-    public ComparativeAnalysis(UUID ownerId) {
-        super(ownerId, 51, "Comparative Analysis", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{U}");
+    public BoulderSalvo(UUID ownerId) {
+        super(ownerId, 102, "Boulder Salvo", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{4}{R}");
         this.expansionSetCode = "OGW";
         
-        // Target player draws two cards.
-        this.getSpellAbility().addEffect(new DrawCardTargetEffect(2));
-        this.getSpellAbility().addTarget(new TargetPlayer());
-        
-        // Surge {2}{U} <You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)</i>
-        addAbility(new SurgeAbility(this, "{2}{U}"));
+        // Boulder Salvo deals 4 damage to target creature.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(4));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+
+        // Surge {1}{R}
+        addAbility(new SurgeAbility(this, "{1}{R}"));
     }
 
-    public ComparativeAnalysis(final ComparativeAnalysis card) {
+    public BoulderSalvo(final BoulderSalvo card) {
         super(card);
     }
 
     @Override
-    public ComparativeAnalysis copy() {
-        return new ComparativeAnalysis(this);
+    public BoulderSalvo copy() {
+        return new BoulderSalvo(this);
     }
 }

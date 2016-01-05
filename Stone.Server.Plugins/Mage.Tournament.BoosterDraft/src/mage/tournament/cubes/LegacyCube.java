@@ -34,9 +34,9 @@ import mage.game.draft.DraftCube;
  * @author LevelX2
  */
 
-public class MTGOLegacyCube extends DraftCube {
+public class LegacyCube extends DraftCube {
 
-    public MTGOLegacyCube() {
+    public LegacyCube() {
         super("MTGO Legacy Cube (600 cards)");
         cubeCards.add(new CardIdentity("Accorder Paladin",""));
         cubeCards.add(new CardIdentity("Abrupt Decay",""));

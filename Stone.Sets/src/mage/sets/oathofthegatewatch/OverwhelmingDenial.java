@@ -28,37 +28,44 @@
 package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DrawCardTargetEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.CantBeCounteredSourceEffect;
+import mage.abilities.effects.common.CounterTargetEffect;
 import mage.abilities.keyword.SurgeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
+import mage.target.TargetSpell;
 
 /**
  *
  * @author fireshoes
  */
-public class ComparativeAnalysis extends CardImpl {
+public class OverwhelmingDenial extends CardImpl {
 
-    public ComparativeAnalysis(UUID ownerId) {
-        super(ownerId, 51, "Comparative Analysis", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{U}");
+    public OverwhelmingDenial(UUID ownerId) {
+        super(ownerId, 61, "Overwhelming Denial", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{2}{U}{U}");
         this.expansionSetCode = "OGW";
+
+        // Overwhelming Denial can't be countered by spell or abilities.
+        this.addAbility(new SimpleStaticAbility(Zone.STACK, new CantBeCounteredSourceEffect()));
         
-        // Target player draws two cards.
-        this.getSpellAbility().addEffect(new DrawCardTargetEffect(2));
-        this.getSpellAbility().addTarget(new TargetPlayer());
+        // Counter target spell.
+        this.getSpellAbility().addTarget(new TargetSpell());
+        this.getSpellAbility().addEffect(new CounterTargetEffect());
         
-        // Surge {2}{U} <You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)</i>
-        addAbility(new SurgeAbility(this, "{2}{U}"));
+        // Has to be placed last here, because added spellAbility objects (e.g. effects) have to be copied from this
+        // Surge {U}{U} (You may cast this spell for its surge cost if you or a teammate has cast another spell this turn)
+        addAbility(new SurgeAbility(this, "{U}{U}"));
     }
 
-    public ComparativeAnalysis(final ComparativeAnalysis card) {
+    public OverwhelmingDenial(final OverwhelmingDenial card) {
         super(card);
     }
 
     @Override
-    public ComparativeAnalysis copy() {
-        return new ComparativeAnalysis(this);
+    public OverwhelmingDenial copy() {
+        return new OverwhelmingDenial(this);
     }
 }

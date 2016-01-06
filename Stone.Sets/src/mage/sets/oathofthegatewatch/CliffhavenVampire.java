@@ -29,60 +29,41 @@ package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.common.GainLifeControllerTriggeredAbility;
+import mage.abilities.effects.common.LoseLifeOpponentsEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MundasVanguard extends CardImpl {
+public class CliffhavenVampire extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an untapped Ally you control");
-
-    static {
-        filter.add(new SubtypePredicate("Ally"));
-        filter.add(Predicates.not(new TappedPredicate()));
-    }
-
-    public MundasVanguard(UUID ownerId) {
-        super(ownerId, 29, "Munda's Vanguard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}");
+    public CliffhavenVampire(UUID ownerId) {
+        super(ownerId, 153, "Cliffhaven Vampire", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}{B}");
         this.expansionSetCode = "OGW";
-        this.subtype.add("Kor");
-        this.subtype.add("Knight");
+        this.subtype.add("Vampire");
+        this.subtype.add("Warrior");
         this.subtype.add("Ally");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(4);
 
-        // <i>Cohort</i> &mdash; {T}, Tap an untapped Ally you control: Put a +1/+1 counter on each creature you control.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersAllEffect(CounterType.P1P1.createInstance(), new FilterControlledCreaturePermanent()),
-                new TapSourceCost());
-        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
-        ability.setAbilityWord(AbilityWord.COHORT);
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Whenever you gain life, each opponent loses 1 life.
+        this.addAbility(new GainLifeControllerTriggeredAbility(new LoseLifeOpponentsEffect(1), false));
     }
 
-    public MundasVanguard(final MundasVanguard card) {
+    public CliffhavenVampire(final CliffhavenVampire card) {
         super(card);
     }
 
     @Override
-    public MundasVanguard copy() {
-        return new MundasVanguard(this);
+    public CliffhavenVampire copy() {
+        return new CliffhavenVampire(this);
     }
 }

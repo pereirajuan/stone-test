@@ -29,60 +29,52 @@ package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.common.continuous.BoostControlledEffect;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
 import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MundasVanguard extends CardImpl {
+public class WeaponsTrainer extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an untapped Ally you control");
+    private static final String rule = "Other creatures you control get +1/+0 as long as you control an Equipment.";
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an Equipment");
 
     static {
-        filter.add(new SubtypePredicate("Ally"));
-        filter.add(Predicates.not(new TappedPredicate()));
+        filter.add(new SubtypePredicate("Equipment"));
     }
 
-    public MundasVanguard(UUID ownerId) {
-        super(ownerId, 29, "Munda's Vanguard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}");
+    public WeaponsTrainer(UUID ownerId) {
+        super(ownerId, 160, "Weapons Trainer", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{R}{W}");
         this.expansionSetCode = "OGW";
-        this.subtype.add("Kor");
-        this.subtype.add("Knight");
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
         this.subtype.add("Ally");
         this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
+        this.toughness = new MageInt(2);
 
-        // <i>Cohort</i> &mdash; {T}, Tap an untapped Ally you control: Put a +1/+1 counter on each creature you control.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersAllEffect(CounterType.P1P1.createInstance(), new FilterControlledCreaturePermanent()),
-                new TapSourceCost());
-        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
-        ability.setAbilityWord(AbilityWord.COHORT);
-        this.addAbility(ability);
+        // Other creatures you control get +1/+0 as long as you control an Equipment.
+        ConditionalContinuousEffect effect = new ConditionalContinuousEffect(new BoostControlledEffect(1, 0, Duration.WhileOnBattlefield, true),
+                new PermanentsOnTheBattlefieldCondition(filter), rule);
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
     }
 
-    public MundasVanguard(final MundasVanguard card) {
+    public WeaponsTrainer(final WeaponsTrainer card) {
         super(card);
     }
 
     @Override
-    public MundasVanguard copy() {
-        return new MundasVanguard(this);
+    public WeaponsTrainer copy() {
+        return new WeaponsTrainer(this);
     }
 }

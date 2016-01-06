@@ -30,59 +30,40 @@ package mage.sets.oathofthegatewatch;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.filter.common.FilterCreatureCard;
+import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
  * @author fireshoes
  */
-public class MundasVanguard extends CardImpl {
+public class BalothNull extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an untapped Ally you control");
-
-    static {
-        filter.add(new SubtypePredicate("Ally"));
-        filter.add(Predicates.not(new TappedPredicate()));
-    }
-
-    public MundasVanguard(UUID ownerId) {
-        super(ownerId, 29, "Munda's Vanguard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}");
+    public BalothNull(UUID ownerId) {
+        super(ownerId, 152, "Baloth Null", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{B}{G}");
         this.expansionSetCode = "OGW";
-        this.subtype.add("Kor");
-        this.subtype.add("Knight");
-        this.subtype.add("Ally");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
+        this.subtype.add("Zombie");
+        this.subtype.add("Beast");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(5);
 
-        // <i>Cohort</i> &mdash; {T}, Tap an untapped Ally you control: Put a +1/+1 counter on each creature you control.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersAllEffect(CounterType.P1P1.createInstance(), new FilterControlledCreaturePermanent()),
-                new TapSourceCost());
-        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
-        ability.setAbilityWord(AbilityWord.COHORT);
+        // When Baloth Null enters the battlefield, return up to two target creature cards from your graveyard to your hand.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new ReturnFromGraveyardToHandTargetEffect(), false);
+        ability.addTarget(new TargetCardInYourGraveyard(0, 2, new FilterCreatureCard("creature cards from your graveyard")));
         this.addAbility(ability);
     }
 
-    public MundasVanguard(final MundasVanguard card) {
+    public BalothNull(final BalothNull card) {
         super(card);
     }
 
     @Override
-    public MundasVanguard copy() {
-        return new MundasVanguard(this);
+    public BalothNull copy() {
+        return new BalothNull(this);
     }
 }

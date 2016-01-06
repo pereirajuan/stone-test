@@ -25,45 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.guildpact;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.effects.common.ExileCardYouChooseTargetOpponentEffect;
+import mage.abilities.dynamicvalue.common.ManacostVariableValue;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.keyword.SurgeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterCard;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.common.TargetOpponent;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author dustinconrad
+ * @author fireshoes
  */
-public class Castigate extends CardImpl {
+public class FallOfTheTitans extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("a nonland card");
+    public FallOfTheTitans(UUID ownerId) {
+        super(ownerId, 109, "Fall of the Titans", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{X}{X}{R}");
+        this.expansionSetCode = "OGW";
 
-    static {
-        filter.add(Predicates.not(new CardTypePredicate(CardType.LAND)));
+        // Fall of the Titans deals X damage to each of up to two target creatures and/or players.
+        this.getSpellAbility().addTarget(new TargetCreatureOrPlayer(0, 2));
+        this.getSpellAbility().addEffect(new DamageTargetEffect(new ManacostVariableValue()));
+
+        // Surge {X}{R}
+        addAbility(new SurgeAbility(this, "{X}{R}"));
     }
 
-    public Castigate(UUID ownerId) {
-        super(ownerId, 106, "Castigate", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{W}{B}");
-        this.expansionSetCode = "GPT";
-
-        // Target opponent reveals his or her hand. You choose a nonland card from it and exile that card.
-        this.getSpellAbility().addEffect(new ExileCardYouChooseTargetOpponentEffect(filter));
-        this.getSpellAbility().addTarget(new TargetOpponent());
-    }
-
-    public Castigate(final Castigate card) {
+    public FallOfTheTitans(final FallOfTheTitans card) {
         super(card);
     }
 
     @Override
-    public Castigate copy() {
-        return new Castigate(this);
+    public FallOfTheTitans copy() {
+        return new FallOfTheTitans(this);
     }
 }

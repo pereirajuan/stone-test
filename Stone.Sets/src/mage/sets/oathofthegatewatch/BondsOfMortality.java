@@ -28,61 +28,59 @@
 package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.continuous.LoseAbilityAllEffect;
+import mage.abilities.keyword.HexproofAbility;
+import mage.abilities.keyword.IndestructibleAbility;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class MundasVanguard extends CardImpl {
+public class BondsOfMortality extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an untapped Ally you control");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures your opponents control");
 
     static {
-        filter.add(new SubtypePredicate("Ally"));
-        filter.add(Predicates.not(new TappedPredicate()));
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public MundasVanguard(UUID ownerId) {
-        super(ownerId, 29, "Munda's Vanguard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}");
+    public BondsOfMortality(UUID ownerId) {
+        super(ownerId, 128, "Bonds of Mortality", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}");
         this.expansionSetCode = "OGW";
-        this.subtype.add("Kor");
-        this.subtype.add("Knight");
-        this.subtype.add("Ally");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
 
-        // <i>Cohort</i> &mdash; {T}, Tap an untapped Ally you control: Put a +1/+1 counter on each creature you control.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersAllEffect(CounterType.P1P1.createInstance(), new FilterControlledCreaturePermanent()),
-                new TapSourceCost());
-        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
-        ability.setAbilityWord(AbilityWord.COHORT);
+        // When Bonds of Mortality enters the battlefield, draw a card.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(1), false));
+
+        // {G}: Creatures your opponents control lose hexproof and indestructible until end of turn.
+        Effect effect = new LoseAbilityAllEffect(filter, HexproofAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("Creatures your opponents control lose hexproof");
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, effect, new ManaCostsImpl("{G}"));
+        effect = new LoseAbilityAllEffect(filter, IndestructibleAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("and indestructible until end of turn");
+        ability.addEffect(effect);
         this.addAbility(ability);
     }
 
-    public MundasVanguard(final MundasVanguard card) {
+    public BondsOfMortality(final BondsOfMortality card) {
         super(card);
     }
 
     @Override
-    public MundasVanguard copy() {
-        return new MundasVanguard(this);
+    public BondsOfMortality copy() {
+        return new BondsOfMortality(this);
     }
 }

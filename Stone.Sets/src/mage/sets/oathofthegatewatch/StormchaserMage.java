@@ -29,60 +29,41 @@ package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.HasteAbility;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MundasVanguard extends CardImpl {
+public class StormchaserMage extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an untapped Ally you control");
-
-    static {
-        filter.add(new SubtypePredicate("Ally"));
-        filter.add(Predicates.not(new TappedPredicate()));
-    }
-
-    public MundasVanguard(UUID ownerId) {
-        super(ownerId, 29, "Munda's Vanguard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}");
+    public StormchaserMage(UUID ownerId) {
+        super(ownerId, 159, "Stormchaser Mage", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{U}{R}");
         this.expansionSetCode = "OGW";
-        this.subtype.add("Kor");
-        this.subtype.add("Knight");
-        this.subtype.add("Ally");
-        this.power = new MageInt(3);
+        this.subtype.add("Human");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(1);
         this.toughness = new MageInt(3);
 
-        // <i>Cohort</i> &mdash; {T}, Tap an untapped Ally you control: Put a +1/+1 counter on each creature you control.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersAllEffect(CounterType.P1P1.createInstance(), new FilterControlledCreaturePermanent()),
-                new TapSourceCost());
-        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
-        ability.setAbilityWord(AbilityWord.COHORT);
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
+        // Prowess
+        this.addAbility(new ProwessAbility());
     }
 
-    public MundasVanguard(final MundasVanguard card) {
+    public StormchaserMage(final StormchaserMage card) {
         super(card);
     }
 
     @Override
-    public MundasVanguard copy() {
-        return new MundasVanguard(this);
+    public StormchaserMage copy() {
+        return new StormchaserMage(this);
     }
 }

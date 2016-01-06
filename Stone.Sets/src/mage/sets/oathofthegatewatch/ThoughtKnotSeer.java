@@ -30,59 +30,54 @@ package mage.sets.oathofthegatewatch;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.common.TapTargetCost;
-import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.LeavesBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.DrawCardTargetEffect;
+import mage.abilities.effects.common.ExileCardYouChooseTargetOpponentEffect;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterControlledPermanent;
+import mage.filter.FilterCard;
 import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.TappedPredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.common.TargetOpponent;
 
 /**
  *
  * @author fireshoes
  */
-public class MundasVanguard extends CardImpl {
+public class ThoughtKnotSeer extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("an untapped Ally you control");
+    private static final FilterCard filter = new FilterCard("a nonland card");
 
     static {
-        filter.add(new SubtypePredicate("Ally"));
-        filter.add(Predicates.not(new TappedPredicate()));
+        filter.add(Predicates.not(new CardTypePredicate(CardType.LAND)));
     }
 
-    public MundasVanguard(UUID ownerId) {
-        super(ownerId, 29, "Munda's Vanguard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{W}");
+    public ThoughtKnotSeer(UUID ownerId) {
+        super(ownerId, 9, "Thought-Knot Seer", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{C}");
         this.expansionSetCode = "OGW";
-        this.subtype.add("Kor");
-        this.subtype.add("Knight");
-        this.subtype.add("Ally");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(3);
+        this.subtype.add("Eldrazi");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-        // <i>Cohort</i> &mdash; {T}, Tap an untapped Ally you control: Put a +1/+1 counter on each creature you control.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersAllEffect(CounterType.P1P1.createInstance(), new FilterControlledCreaturePermanent()),
-                new TapSourceCost());
-        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
-        ability.setAbilityWord(AbilityWord.COHORT);
+        // When Thought-Knot Seer enters the battlefield, target opponent reveals his or her hand. You choose a nonland card from it and exile that card.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new ExileCardYouChooseTargetOpponentEffect(filter), false);
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
+
+        // When Thought-Knot Seer leaves the battlefield, target opponent draws a card.
+        ability = new LeavesBattlefieldTriggeredAbility(new DrawCardTargetEffect(1), false);
+        ability.addTarget(new TargetOpponent());
         this.addAbility(ability);
     }
 
-    public MundasVanguard(final MundasVanguard card) {
+    public ThoughtKnotSeer(final ThoughtKnotSeer card) {
         super(card);
     }
 
     @Override
-    public MundasVanguard copy() {
-        return new MundasVanguard(this);
+    public ThoughtKnotSeer copy() {
+        return new ThoughtKnotSeer(this);
     }
 }

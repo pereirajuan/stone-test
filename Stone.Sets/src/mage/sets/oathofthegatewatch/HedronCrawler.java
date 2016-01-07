@@ -25,45 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgment;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.MageInt;
+import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.TargetSpell;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class Envelop extends CardImpl {
+public class HedronCrawler extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("sorcery spell");
+    public HedronCrawler(UUID ownerId) {
+        super(ownerId, 164, "Hedron Crawler", Rarity.COMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{2}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Construct");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(1);
 
-    static {
-        filter.add(new CardTypePredicate(CardType.SORCERY));
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
     }
 
-    public Envelop(UUID ownerId) {
-        super(ownerId, 39, "Envelop", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "JUD";
-
-
-        // Counter target sorcery spell.
-        this.getSpellAbility().addEffect(new CounterTargetEffect());
-        this.getSpellAbility().addTarget(new TargetSpell(filter));
-    }
-
-    public Envelop(final Envelop card) {
+    public HedronCrawler(final HedronCrawler card) {
         super(card);
     }
 
     @Override
-    public Envelop copy() {
-        return new Envelop(this);
+    public HedronCrawler copy() {
+        return new HedronCrawler(this);
     }
 }

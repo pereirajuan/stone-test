@@ -25,45 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.judgment;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.common.TapForManaAllTriggeredManaAbility;
+import mage.abilities.effects.common.AddManaOfAnyTypeProducedEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.SetTargetPointer;
 import mage.filter.FilterSpell;
+import mage.filter.common.FilterControlledLandPermanent;
 import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.TargetSpell;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class Envelop extends CardImpl {
+public class ZendikarResurgent extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("sorcery spell");
+    private static final FilterSpell filter = new FilterSpell("a creature spell");
 
     static {
-        filter.add(new CardTypePredicate(CardType.SORCERY));
+        filter.add(new CardTypePredicate(CardType.CREATURE));
     }
 
-    public Envelop(UUID ownerId) {
-        super(ownerId, 39, "Envelop", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{U}");
-        this.expansionSetCode = "JUD";
+    public ZendikarResurgent(UUID ownerId) {
+        super(ownerId, 147, "Zendikar Resurgent", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{5}{G}{G}");
+        this.expansionSetCode = "OGW";
 
+        // Whenever you tap a land for mana, add one mana to your mana pool of any type that land produced. (<i>The types of mana are white, blue, black, red, green, and colorless.)</i>
+        AddManaOfAnyTypeProducedEffect effect = new AddManaOfAnyTypeProducedEffect();
+        effect.setText("add one mana to your mana pool of any type that land produced");
+        this.addAbility(new TapForManaAllTriggeredManaAbility(
+                effect,
+                new FilterControlledLandPermanent("you tap a land"),
+                SetTargetPointer.PERMANENT));
 
-        // Counter target sorcery spell.
-        this.getSpellAbility().addEffect(new CounterTargetEffect());
-        this.getSpellAbility().addTarget(new TargetSpell(filter));
+        // Whenever you cast a creature spell, draw a card.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new DrawCardSourceControllerEffect(1), filter, false));
     }
 
-    public Envelop(final Envelop card) {
+    public ZendikarResurgent(final ZendikarResurgent card) {
         super(card);
     }
 
     @Override
-    public Envelop copy() {
-        return new Envelop(this);
+    public ZendikarResurgent copy() {
+        return new ZendikarResurgent(this);
     }
 }

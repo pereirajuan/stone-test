@@ -25,57 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eventide;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.SourceHasCounterCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.PersistAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutOnLibraryEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.counters.CounterType;
+import mage.filter.common.FilterBasicLandCard;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class Thunderblust extends CardImpl {
+public class LoamLarva extends CardImpl {
 
-    private final String rule = "{this} has trample as long as it has a -1/-1 counter on it";
+    public LoamLarva(UUID ownerId) {
+        super(ownerId, 135, "Loam Larva", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Insect");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-    public Thunderblust(UUID ownerId) {
-        super(ownerId, 63, "Thunderblust", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}{R}{R}");
-        this.expansionSetCode = "EVE";
-        this.subtype.add("Elemental");
-
-        this.power = new MageInt(7);
-        this.toughness = new MageInt(2);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-
-        // Thunderblust has trample as long as it has a -1/-1 counter on it.
-        Effect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance()), new SourceHasCounterCondition(CounterType.M1M1), rule);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
-
-        // Persist
-        this.addAbility(new PersistAbility());
+        // When Loam Larva enters the battlefield, you may search your library for a basic land card, reveal it, then shuffle your library and put that card on top of it.
+        TargetCardInLibrary target = new TargetCardInLibrary(new FilterBasicLandCard());
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutOnLibraryEffect(target, true, true), true));
     }
 
-    public Thunderblust(final Thunderblust card) {
+    public LoamLarva(final LoamLarva card) {
         super(card);
     }
 
     @Override
-    public Thunderblust copy() {
-        return new Thunderblust(this);
+    public LoamLarva copy() {
+        return new LoamLarva(this);
     }
 }

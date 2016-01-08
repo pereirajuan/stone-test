@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eventide;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -34,8 +34,6 @@ import mage.abilities.condition.common.SourceHasCounterCondition;
 import mage.abilities.decorator.ConditionalContinuousEffect;
 import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.PersistAbility;
 import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
@@ -45,37 +43,30 @@ import mage.counters.CounterType;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class Thunderblust extends CardImpl {
+public class BalothPup extends CardImpl {
 
     private final String rule = "{this} has trample as long as it has a -1/-1 counter on it";
 
-    public Thunderblust(UUID ownerId) {
-        super(ownerId, 63, "Thunderblust", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}{R}{R}");
-        this.expansionSetCode = "EVE";
-        this.subtype.add("Elemental");
+    public BalothPup(UUID ownerId) {
+        super(ownerId, 127, "Baloth Pup", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{G}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Beast");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
 
-        this.power = new MageInt(7);
-        this.toughness = new MageInt(2);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-
-        // Thunderblust has trample as long as it has a -1/-1 counter on it.
-        Effect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance()), new SourceHasCounterCondition(CounterType.M1M1), rule);
+        // Baloth Pup has trample as long as it has a +1/+1 counter on it.
+        Effect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance()), new SourceHasCounterCondition(CounterType.P1P1), rule);
         this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
-
-        // Persist
-        this.addAbility(new PersistAbility());
     }
 
-    public Thunderblust(final Thunderblust card) {
+    public BalothPup(final BalothPup card) {
         super(card);
     }
 
     @Override
-    public Thunderblust copy() {
-        return new Thunderblust(this);
+    public BalothPup copy() {
+        return new BalothPup(this);
     }
 }

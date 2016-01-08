@@ -25,57 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eventide;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.SourceHasCounterCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.PersistAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.RegenerateSourceEffect;
+import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.counters.CounterType;
+import mage.game.permanent.token.EldraziScionToken;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class Thunderblust extends CardImpl {
+public class BirthingHulk extends CardImpl {
 
-    private final String rule = "{this} has trample as long as it has a -1/-1 counter on it";
+    public BirthingHulk(UUID ownerId) {
+        super(ownerId, 121, "Birthing Hulk", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{6}{G}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(4);
 
-    public Thunderblust(UUID ownerId) {
-        super(ownerId, 63, "Thunderblust", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}{R}{R}");
-        this.expansionSetCode = "EVE";
-        this.subtype.add("Elemental");
+        // Devoid
+        this.addAbility(new DevoidAbility(this.color));
 
-        this.power = new MageInt(7);
-        this.toughness = new MageInt(2);
+        // When Birthing Hulk enters the battlefield, put two 1/1 colorless Eldrazi Scion creature tokens onto the battlefield. They have "Sacrifice this creature: Add {C} to your mana pool."
+        Effect effect = new CreateTokenEffect(new EldraziScionToken(), 2);
+        effect.setText("put two 1/1 colorless Eldrazi Scion creature tokens onto the battlefield. They have \"Sacrifice this creature: Add {C} to your mana pool.\"");
+        this.addAbility(new EntersBattlefieldTriggeredAbility(effect, false));
 
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
+        // {1}{C}: Regenerate Birthing Hulk.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new RegenerateSourceEffect(), new ManaCostsImpl("{1}{C}")));
 
-        // Thunderblust has trample as long as it has a -1/-1 counter on it.
-        Effect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance()), new SourceHasCounterCondition(CounterType.M1M1), rule);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
-
-        // Persist
-        this.addAbility(new PersistAbility());
     }
 
-    public Thunderblust(final Thunderblust card) {
+    public BirthingHulk(final BirthingHulk card) {
         super(card);
     }
 
     @Override
-    public Thunderblust copy() {
-        return new Thunderblust(this);
+    public BirthingHulk copy() {
+        return new BirthingHulk(this);
     }
 }

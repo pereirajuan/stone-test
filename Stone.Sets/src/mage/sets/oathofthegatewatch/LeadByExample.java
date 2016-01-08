@@ -25,57 +25,34 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eventide;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.SourceHasCounterCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.PersistAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.keyword.SupportEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.counters.CounterType;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class Thunderblust extends CardImpl {
+public class LeadByExample extends CardImpl {
 
-    private final String rule = "{this} has trample as long as it has a -1/-1 counter on it";
+    public LeadByExample(UUID ownerId) {
+        super(ownerId, 134, "Lead by Example", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{G}");
+        this.expansionSetCode = "OGW";
 
-    public Thunderblust(UUID ownerId) {
-        super(ownerId, 63, "Thunderblust", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}{R}{R}");
-        this.expansionSetCode = "EVE";
-        this.subtype.add("Elemental");
-
-        this.power = new MageInt(7);
-        this.toughness = new MageInt(2);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-
-        // Thunderblust has trample as long as it has a -1/-1 counter on it.
-        Effect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance()), new SourceHasCounterCondition(CounterType.M1M1), rule);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
-
-        // Persist
-        this.addAbility(new PersistAbility());
+        // Support 2.
+        getSpellAbility().addEffect(new SupportEffect(this, 2));
     }
 
-    public Thunderblust(final Thunderblust card) {
+    public LeadByExample(final LeadByExample card) {
         super(card);
     }
 
     @Override
-    public Thunderblust copy() {
-        return new Thunderblust(this);
+    public LeadByExample copy() {
+        return new LeadByExample(this);
     }
 }

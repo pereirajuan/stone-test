@@ -25,57 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.eventide;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.SourceHasCounterCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.PersistAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.effects.common.DoIfCostPaid;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.Zone;
 import mage.counters.CounterType;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class Thunderblust extends CardImpl {
+public class HarvesterTroll extends CardImpl {
 
-    private final String rule = "{this} has trample as long as it has a -1/-1 counter on it";
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("a creature or land");
 
-    public Thunderblust(UUID ownerId) {
-        super(ownerId, 63, "Thunderblust", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}{R}{R}");
-        this.expansionSetCode = "EVE";
-        this.subtype.add("Elemental");
-
-        this.power = new MageInt(7);
-        this.toughness = new MageInt(2);
-
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-
-        // Thunderblust has trample as long as it has a -1/-1 counter on it.
-        Effect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance()), new SourceHasCounterCondition(CounterType.M1M1), rule);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
-
-        // Persist
-        this.addAbility(new PersistAbility());
+    static {
+        filter.add(Predicates.or(new CardTypePredicate(CardType.CREATURE), new CardTypePredicate(CardType.LAND)));
     }
 
-    public Thunderblust(final Thunderblust card) {
+    public HarvesterTroll(UUID ownerId) {
+        super(ownerId, 133, "Harvester Troll", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{G}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Troll");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // When Harvester Troll enters the battlefield, you may sacrifice a creature or land. If you do, put two +1/+1 counters on Harvester Troll.
+        EntersBattlefieldTriggeredAbility ability
+                = new EntersBattlefieldTriggeredAbility(new DoIfCostPaid(new AddCountersSourceEffect(CounterType.P1P1.createInstance(2)),
+                                new SacrificeTargetCost(new TargetControlledPermanent(filter))), false);
+        this.addAbility(ability);
+    }
+
+    public HarvesterTroll(final HarvesterTroll card) {
         super(card);
     }
 
     @Override
-    public Thunderblust copy() {
-        return new Thunderblust(this);
+    public HarvesterTroll copy() {
+        return new HarvesterTroll(this);
     }
 }

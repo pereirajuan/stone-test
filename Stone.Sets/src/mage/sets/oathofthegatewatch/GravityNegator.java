@@ -25,52 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.battleforzendikar;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DoIfCostPaid;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
 import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.mageobject.ColorlessPredicate;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MoltenNursery extends CardImpl {
+public class GravityNegator extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("a colorless spell");
-
-    static {
-        filter.add(new ColorlessPredicate());
-    }
-
-    public MoltenNursery(UUID ownerId) {
-        super(ownerId, 130, "Molten Nursery", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
-        this.expansionSetCode = "BFZ";
+    public GravityNegator(UUID ownerId) {
+        super(ownerId, 45, "Gravity Negator", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
         // Devoid
         this.addAbility(new DevoidAbility(this.color));
 
-        // Whenever you cast a colorless spell, Molten Nursery deals 1 damage to target creature or player.
-        Ability ability = new SpellCastControllerTriggeredAbility(new DamageTargetEffect(1), filter, false);
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
+        // Whenenever Gravity Negator attacks, you may pay {C}. If you do, another target creature gains flying until end of turn.
+        Ability ability = new AttacksTriggeredAbility(new DoIfCostPaid(new GainAbilityTargetEffect(FlyingAbility.getInstance(), Duration.EndOfTurn), new ManaCostsImpl("{C}")), false,
+                "Whenever {this} attacks you may pay {C}. If you do, another target creature gains flying until end of turn.");
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public MoltenNursery(final MoltenNursery card) {
+    public GravityNegator(final GravityNegator card) {
         super(card);
     }
 
     @Override
-    public MoltenNursery copy() {
-        return new MoltenNursery(this);
+    public GravityNegator copy() {
+        return new GravityNegator(this);
     }
 }

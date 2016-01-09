@@ -25,52 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.battleforzendikar;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.DontUntapInControllersUntapStepEnchantedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.SurgeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.mageobject.ColorlessPredicate;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.constants.Zone;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MoltenNursery extends CardImpl {
+public class ContainmentMembrane extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("a colorless spell");
+    public ContainmentMembrane(UUID ownerId) {
+        super(ownerId, 52, "Containment Membrane", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{U}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Aura");
 
-    static {
-        filter.add(new ColorlessPredicate());
-    }
-
-    public MoltenNursery(UUID ownerId) {
-        super(ownerId, 130, "Molten Nursery", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
-        this.expansionSetCode = "BFZ";
-
-        // Devoid
-        this.addAbility(new DevoidAbility(this.color));
-
-        // Whenever you cast a colorless spell, Molten Nursery deals 1 damage to target creature or player.
-        Ability ability = new SpellCastControllerTriggeredAbility(new DamageTargetEffect(1), filter, false);
-        ability.addTarget(new TargetCreatureOrPlayer());
+        // Enchant creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
 
-    }
+        // Enchanted creature doesn't untap during its controller's untap step.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new DontUntapInControllersUntapStepEnchantedEffect()));
 
-    public MoltenNursery(final MoltenNursery card) {
+        // Surge {U}
+        addAbility(new SurgeAbility(this, "{U}"));    }
+
+    public ContainmentMembrane(final ContainmentMembrane card) {
         super(card);
     }
 
     @Override
-    public MoltenNursery copy() {
-        return new MoltenNursery(this);
+    public ContainmentMembrane copy() {
+        return new ContainmentMembrane(this);
     }
 }

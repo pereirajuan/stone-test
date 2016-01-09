@@ -25,52 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.battleforzendikar;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.effects.common.UntapAllControllerEffect;
+import mage.abilities.effects.keyword.SupportEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.mageobject.ColorlessPredicate;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.counters.CounterType;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.CounterPredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class MoltenNursery extends CardImpl {
+public class UnityOfPurpose extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("a colorless spell");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("each creature you control with a +1/+1 counter on it");
 
     static {
-        filter.add(new ColorlessPredicate());
+        filter.add(new CounterPredicate(CounterType.P1P1));
     }
 
-    public MoltenNursery(UUID ownerId) {
-        super(ownerId, 130, "Molten Nursery", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
-        this.expansionSetCode = "BFZ";
+    public UnityOfPurpose(UUID ownerId) {
+        super(ownerId, 66, "Unity of Purpose", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{3}{U}");
+        this.expansionSetCode = "OGW";
 
-        // Devoid
-        this.addAbility(new DevoidAbility(this.color));
+        // Support 2.
+        getSpellAbility().addEffect(new SupportEffect(this, 2));
 
-        // Whenever you cast a colorless spell, Molten Nursery deals 1 damage to target creature or player.
-        Ability ability = new SpellCastControllerTriggeredAbility(new DamageTargetEffect(1), filter, false);
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
-
+        // Untap each creature you control with a +1/+1 counter on it.
+        this.getSpellAbility().addEffect(new UntapAllControllerEffect(filter, "Untap each creature you control with a +1/+1 counter on it"));
     }
 
-    public MoltenNursery(final MoltenNursery card) {
+    public UnityOfPurpose(final UnityOfPurpose card) {
         super(card);
     }
 
     @Override
-    public MoltenNursery copy() {
-        return new MoltenNursery(this);
+    public UnityOfPurpose copy() {
+        return new UnityOfPurpose(this);
     }
 }

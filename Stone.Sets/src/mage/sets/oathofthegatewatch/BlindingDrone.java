@@ -25,52 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.battleforzendikar;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.TapTargetEffect;
 import mage.abilities.keyword.DevoidAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.mageobject.ColorlessPredicate;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.constants.Zone;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MoltenNursery extends CardImpl {
+public class BlindingDrone extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("a colorless spell");
-
-    static {
-        filter.add(new ColorlessPredicate());
-    }
-
-    public MoltenNursery(UUID ownerId) {
-        super(ownerId, 130, "Molten Nursery", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
-        this.expansionSetCode = "BFZ";
+    public BlindingDrone(UUID ownerId) {
+        super(ownerId, 41, "Blinding Drone", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
         // Devoid
         this.addAbility(new DevoidAbility(this.color));
 
-        // Whenever you cast a colorless spell, Molten Nursery deals 1 damage to target creature or player.
-        Ability ability = new SpellCastControllerTriggeredAbility(new DamageTargetEffect(1), filter, false);
-        ability.addTarget(new TargetCreatureOrPlayer());
+        // {C}, {T}: Tap target creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new TapTargetEffect(), new ManaCostsImpl("{C}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
         this.addAbility(ability);
-
     }
 
-    public MoltenNursery(final MoltenNursery card) {
+    public BlindingDrone(final BlindingDrone card) {
         super(card);
     }
 
     @Override
-    public MoltenNursery copy() {
-        return new MoltenNursery(this);
+    public BlindingDrone copy() {
+        return new BlindingDrone(this);
     }
 }

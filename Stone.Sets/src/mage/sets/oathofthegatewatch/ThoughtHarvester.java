@@ -25,25 +25,27 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.battleforzendikar;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.ExileCardsFromTopOfLibraryTargetEffect;
 import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.filter.FilterSpell;
 import mage.filter.predicate.mageobject.ColorlessPredicate;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.target.common.TargetOpponent;
 
 /**
  *
  * @author fireshoes
  */
-public class MoltenNursery extends CardImpl {
+public class ThoughtHarvester extends CardImpl {
 
     private static final FilterSpell filter = new FilterSpell("a colorless spell");
 
@@ -51,26 +53,32 @@ public class MoltenNursery extends CardImpl {
         filter.add(new ColorlessPredicate());
     }
 
-    public MoltenNursery(UUID ownerId) {
-        super(ownerId, 130, "Molten Nursery", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
-        this.expansionSetCode = "BFZ";
+    public ThoughtHarvester(UUID ownerId) {
+        super(ownerId, 48, "Thought Harvester", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "OGW";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Drone");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(4);
 
         // Devoid
         this.addAbility(new DevoidAbility(this.color));
 
-        // Whenever you cast a colorless spell, Molten Nursery deals 1 damage to target creature or player.
-        Ability ability = new SpellCastControllerTriggeredAbility(new DamageTargetEffect(1), filter, false);
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
+        // Whenever you cast a colorless spell, target opponent exiles the top card of his or her library.
+        Ability ability = new SpellCastControllerTriggeredAbility(new ExileCardsFromTopOfLibraryTargetEffect(1, "target opponent"), filter, false);
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
     }
 
-    public MoltenNursery(final MoltenNursery card) {
+    public ThoughtHarvester(final ThoughtHarvester card) {
         super(card);
     }
 
     @Override
-    public MoltenNursery copy() {
-        return new MoltenNursery(this);
+    public ThoughtHarvester copy() {
+        return new ThoughtHarvester(this);
     }
 }

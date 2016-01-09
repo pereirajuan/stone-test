@@ -25,52 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.battleforzendikar;
+package mage.sets.oathofthegatewatch;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.keyword.DevoidAbility;
+import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.keyword.SurgeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.FilterSpell;
-import mage.filter.predicate.mageobject.ColorlessPredicate;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MoltenNursery extends CardImpl {
+public class GripOfTheRoil extends CardImpl {
 
-    private static final FilterSpell filter = new FilterSpell("a colorless spell");
+    public GripOfTheRoil(UUID ownerId) {
+        super(ownerId, 56, "Grip of the Roil", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
+        this.expansionSetCode = "OGW";
 
-    static {
-        filter.add(new ColorlessPredicate());
+        // Tap target creature. It doesn't untap during its controller's next untap step.
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        this.getSpellAbility().addEffect(new TapTargetEffect());
+        this.getSpellAbility().addEffect(new DontUntapInControllersNextUntapStepTargetEffect());
+
+        // Draw a card.
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+
+        // Surge {1}{U}
+        addAbility(new SurgeAbility(this, "{1}{U}"));
     }
 
-    public MoltenNursery(UUID ownerId) {
-        super(ownerId, 130, "Molten Nursery", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{R}");
-        this.expansionSetCode = "BFZ";
-
-        // Devoid
-        this.addAbility(new DevoidAbility(this.color));
-
-        // Whenever you cast a colorless spell, Molten Nursery deals 1 damage to target creature or player.
-        Ability ability = new SpellCastControllerTriggeredAbility(new DamageTargetEffect(1), filter, false);
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
-
-    }
-
-    public MoltenNursery(final MoltenNursery card) {
+    public GripOfTheRoil(final GripOfTheRoil card) {
         super(card);
     }
 
     @Override
-    public MoltenNursery copy() {
-        return new MoltenNursery(this);
+    public GripOfTheRoil copy() {
+        return new GripOfTheRoil(this);
     }
 }

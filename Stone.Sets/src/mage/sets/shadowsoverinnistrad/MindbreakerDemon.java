@@ -25,57 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class MindbreakerDemon extends mage.sets.blessedvscursed.MindbreakerDemon {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public MindbreakerDemon(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 998;
+        this.expansionSetCode = "SOI";
+    }
 
-    private final String text;
-
-    AbilityWord(String text) {
-        this.text = text;
+    public MindbreakerDemon(final MindbreakerDemon card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public MindbreakerDemon copy() {
+        return new MindbreakerDemon(this);
     }
-
 }

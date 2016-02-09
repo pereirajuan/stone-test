@@ -25,57 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.combat.CanBlockAdditionalCreatureEffect;
+import mage.abilities.keyword.ReachAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class WatcherInTheWeb extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public WatcherInTheWeb(UUID ownerId) {
+        super(ownerId, 239, "Watcher in the Web", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{G}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Spider");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(5);
 
-    private final String text;
+        // Reach
+        this.addAbility(ReachAbility.getInstance());
 
-    AbilityWord(String text) {
-        this.text = text;
+        // Watcher in the Web can block an additional seven creatures each combat.
+        Effect effect = new CanBlockAdditionalCreatureEffect(7);
+        effect.setText("{this} can block an additional seven creatures each combat");
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
+    }
+
+    public WatcherInTheWeb(final WatcherInTheWeb card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public WatcherInTheWeb copy() {
+        return new WatcherInTheWeb(this);
     }
-
 }

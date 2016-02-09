@@ -25,57 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterLandCard;
+import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class StoicBuilder extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public StoicBuilder(UUID ownerId) {
+        super(ownerId, 231, "Stoic Builder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{G}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Human");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
-    private final String text;
+        // When Stoic Builder enters the battlefield, you may return target land card from your graveyard to your hand.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new ReturnFromGraveyardToHandTargetEffect(), true);
+        ability.addTarget(new TargetCardInYourGraveyard(new FilterLandCard("land card from your graveyard")));
+        this.addAbility(ability);
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public StoicBuilder(final StoicBuilder card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public StoicBuilder copy() {
+        return new StoicBuilder(this);
     }
-
 }

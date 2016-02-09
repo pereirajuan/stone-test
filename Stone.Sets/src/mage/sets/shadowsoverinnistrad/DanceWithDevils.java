@@ -25,57 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.game.permanent.token.DevilToken;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class DanceWithDevils extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public DanceWithDevils(UUID ownerId) {
+        super(ownerId, 150, "Dance with Devils", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{3}{R}");
+        this.expansionSetCode = "SOI";
 
-    private final String text;
+        // Put two 1/1 red Devil creature tokens onto the battlefield. They have "When this creature dies, it deals 1 damage to target creature or player."
+        Effect effect = new CreateTokenEffect(new DevilToken(), 2);
+        effect.setText("Put two 1/1 red Devil creature tokens onto the battlefield. They have \"When this creature dies, it deals 1 damage to target creature or player.\"");
+        this.getSpellAbility().addEffect(effect);
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public DanceWithDevils(final DanceWithDevils card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public DanceWithDevils copy() {
+        return new DanceWithDevils(this);
     }
-
 }

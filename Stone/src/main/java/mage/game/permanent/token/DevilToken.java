@@ -25,57 +25,37 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.game.permanent.token;
+
+import java.util.ArrayList;
+import java.util.List;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.constants.CardType;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class DevilToken extends Token {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    final static private List<String> tokenImageSets = new ArrayList<>();
 
-    private final String text;
-
-    AbilityWord(String text) {
-        this.text = text;
+    public DevilToken() {
+        super("Devil", "1/1 red Devil creature with \"When this creature dies, it deals 1 damage to target creature or player.\"");
+        cardType.add(CardType.CREATURE);
+        subtype.add("Devil");
+        color.setRed(true);
+        power = new MageInt(1);
+        toughness = new MageInt(1);
+        Effect effect = new DamageTargetEffect(1);
+        effect.setText("When {this} dies, it deals 1 damage to target creature or player");
+        Ability ability = new DiesTriggeredAbility(effect);
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
-
-    @Override
-    public String toString() {
-        return text;
-    }
-
 }

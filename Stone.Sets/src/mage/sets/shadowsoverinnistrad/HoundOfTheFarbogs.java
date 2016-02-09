@@ -25,57 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.MenaceAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class HoundOfTheFarbogs extends CardImpl {
+    
+    final static private String rule = "{this} has menace as long as there are four or more card types among cards in your graveyard";
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public HoundOfTheFarbogs(UUID ownerId) {
+        super(ownerId, 117, "Hound of the Farbogs", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{B}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Zombie");
+        this.subtype.add("Hound");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(3);
 
-    private final String text;
+        // <i>Delirium</i> &mdash; Hound of the Farborgs has menace as long as there are four or more card types among cards in your graveyard.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, 
+                new ConditionalContinuousEffect(new GainAbilitySourceEffect(new MenaceAbility(), Duration.WhileOnBattlefield), new DeliriumCondition(), rule)));
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public HoundOfTheFarbogs(final HoundOfTheFarbogs card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public HoundOfTheFarbogs copy() {
+        return new HoundOfTheFarbogs(this);
     }
-
 }

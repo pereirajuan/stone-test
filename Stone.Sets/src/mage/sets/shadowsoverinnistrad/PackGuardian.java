@@ -25,57 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.DoIfCostPaid;
+import mage.abilities.keyword.FlashAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterLandCard;
+import mage.game.permanent.token.WolfToken;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class PackGuardian extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public PackGuardian(UUID ownerId) {
+        super(ownerId, 221, "Pack Guardian", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Wolf");
+        this.subtype.add("Spirit");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
 
-    private final String text;
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+        
+        // When Pack Guardian enters the battlefield, you may discard a land card. If you do, put a 2/2 green Wolf creature token onto the battlefield.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new DoIfCostPaid(new CreateTokenEffect(new WolfToken()), new DiscardCardCost(new FilterLandCard()))));
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public PackGuardian(final PackGuardian card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public PackGuardian copy() {
+        return new PackGuardian(this);
     }
-
 }

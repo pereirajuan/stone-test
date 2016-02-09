@@ -25,63 +25,65 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.blessedvscursed;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
+import mage.abilities.TriggeredAbility;
 import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.condition.InvertCondition;
-import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
-import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.common.TransformSourceEffect;
+import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
+import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class MindbreakerDemon extends CardImpl {
+public class KrallenhordeHowler extends CardImpl {
 
-    public MindbreakerDemon(UUID ownerId) {
-        super(ownerId, 41, "Mindbreaker Demon", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{B}{B}");
-        this.expansionSetCode = "DDQ";
-        this.subtype.add("Demon");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(5);
+    private static final FilterCard filter = new FilterCard("Creature spells");
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // When Mindbreaker Demon enters the battlefield, put the top four cards of your library into your graveyard.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new PutTopCardOfLibraryIntoGraveControllerEffect(4)));
-
-        // At the beginning of your upkeep, if you don't have 4 or more card types in your graveyard, you lose 4 life.
-        Ability ability = new ConditionalTriggeredAbility(
-                new BeginningOfUpkeepTriggeredAbility(new LoseLifeSourceControllerEffect(4), TargetController.YOU, false),
-                new InvertCondition(new DeliriumCondition()),
-                "At the beginning of your upkeep, if you don't have 4 or more card types in your graveyard, you lose 4 life.");
-        ability.setAbilityWord(AbilityWord.DELIRIUM);
-        this.addAbility(ability);
+    static {
+        filter.add(Predicates.or(new CardTypePredicate(CardType.CREATURE)));
     }
 
-    public MindbreakerDemon(final MindbreakerDemon card) {
+    public KrallenhordeHowler(UUID ownerId) {
+        super(ownerId, 203, "Krallenhorde Howler", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Werewolf");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+        this.color.setGreen(true);
+
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+        this.canTransform = true;
+
+        // Creature spells you cast cost {1} less to cast.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 1)));
+
+        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Krallenhorde Howler.
+        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
+        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+    }
+
+    public KrallenhordeHowler(final KrallenhordeHowler card) {
         super(card);
     }
 
     @Override
-    public MindbreakerDemon copy() {
-        return new MindbreakerDemon(this);
+    public KrallenhordeHowler copy() {
+        return new KrallenhordeHowler(this);
     }
 }

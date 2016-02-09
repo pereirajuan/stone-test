@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.theros;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.abilities.Ability;
@@ -34,7 +34,9 @@ import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.filter.common.FilterArtifactOrEnchantmentPermanent;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
 import mage.players.Player;
@@ -43,51 +45,57 @@ import mage.target.TargetPermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class DestructiveRevelry extends CardImpl {
+public class StructuralDistortion extends CardImpl {
+    
+    private static final FilterPermanent filter = new FilterPermanent("artifact or land");
+    
+    static {
+        filter.add(Predicates.or(new CardTypePredicate(CardType.ARTIFACT),new CardTypePredicate(CardType.LAND)));
+    }
 
-    public DestructiveRevelry(UUID ownerId) {
-        super(ownerId, 192, "Destructive Revelry", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{R}{G}");
-        this.expansionSetCode = "THS";
+    public StructuralDistortion(UUID ownerId) {
+        super(ownerId, 185, "Structural Distortion", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{3}{R}");
+        this.expansionSetCode = "SOI";
 
-        // Destroy target artifact or enchantment. Destructive Revelry deals 2 damage to that permanent's controller.
-        this.getSpellAbility().addEffect(new DestructiveRevelryEffect());
-        Target target = new TargetPermanent(new FilterArtifactOrEnchantmentPermanent());
+        // Exile target artifact or land. Structural Distortion deals 2 damage to that permanent's controller.
+        this.getSpellAbility().addEffect(new StructuralDistortionEffect());
+        Target target = new TargetPermanent(filter);
         this.getSpellAbility().addTarget(target);
     }
 
-    public DestructiveRevelry(final DestructiveRevelry card) {
+    public StructuralDistortion(final StructuralDistortion card) {
         super(card);
     }
 
     @Override
-    public DestructiveRevelry copy() {
-        return new DestructiveRevelry(this);
+    public StructuralDistortion copy() {
+        return new StructuralDistortion(this);
     }
 }
 
-class DestructiveRevelryEffect extends OneShotEffect {
+class StructuralDistortionEffect extends OneShotEffect {
 
-    public DestructiveRevelryEffect() {
+    public StructuralDistortionEffect() {
         super(Outcome.DestroyPermanent);
-        this.staticText = "Destroy target artifact or enchantment. {this} deals 2 damage to that permanent's controller";
+        this.staticText = "Exile target artifact or land. {this} deals 2 damage to that permanent's controller";
     }
 
-    public DestructiveRevelryEffect(final DestructiveRevelryEffect effect) {
+    public StructuralDistortionEffect(final StructuralDistortionEffect effect) {
         super(effect);
     }
 
     @Override
-    public DestructiveRevelryEffect copy() {
-        return new DestructiveRevelryEffect(this);
+    public StructuralDistortionEffect copy() {
+        return new StructuralDistortionEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Permanent permanent = game.getPermanent(this.getTargetPointer().getFirst(game, source));
         if (permanent != null) {
-            permanent.destroy(source.getSourceId(), game, false);
+            permanent.moveToExile(source.getSourceId(), null, source.getSourceId(), game);
             Player permController = game.getPlayer(permanent.getControllerId());
             if (permController != null) {
                 permController.damage(2, source.getSourceId(), game, false, true);

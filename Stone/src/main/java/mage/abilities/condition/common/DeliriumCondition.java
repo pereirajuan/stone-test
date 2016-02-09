@@ -25,57 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.abilities.condition.common;
+
+import java.util.HashSet;
+import mage.abilities.Ability;
+import mage.abilities.condition.Condition;
+import mage.cards.Card;
+import mage.constants.CardType;
+import mage.game.Game;
+import mage.players.Player;
 
 /**
  *
- * @author LevelX2
+ *
+ *  @author fireshoes
  */
-public enum AbilityWord {
+public class DeliriumCondition implements Condition {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    private static DeliriumCondition fInstance = new DeliriumCondition();
 
-    private final String text;
-
-    AbilityWord(String text) {
-        this.text = text;
+    public static Condition getInstance() {
+        return fInstance;
     }
 
     @Override
-    public String toString() {
-        return text;
+    public boolean apply(Game game, Ability source) {
+        Player controller = game.getPlayer(source.getControllerId());
+        if (controller != null) {
+            HashSet<CardType> foundCardTypes = new HashSet<>();
+            for (Card card : controller.getGraveyard().getCards(game)) {
+                foundCardTypes.addAll(card.getCardType());
+            }
+            int number = foundCardTypes.size();
+            return number > 3;
+        }
+        return false;
     }
-
 }

@@ -25,57 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.constants;
+package mage.sets.shadowsoverinnistrad;
+
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.SkulkAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public enum AbilityWord {
+public class FurtiveHomunculus extends CardImpl {
 
-    BATTALION("Battalion"),
-    BLOODRUSH("Bloodrush"),
-    CHANNEL("Channel"),
-    CHROMA("Chroma"),
-    COHORT("Cohort"),
-    CONSTELLATION("Constellation"),
-    CONVERGE("Converge"),
-    DELIRIUM("Delirium"),
-    DOMAIN("Domain"),
-    FATEFUL_HOUR("Fateful hour"),
-    FEROCIOUS("Ferocious"),
-    FORMIDABLE("Formidable"),
-    GRANDEUR("Grandeur"),
-    HELLBENT("Hellbent"),
-    HEROIC("Heroic"),
-    IMPRINT("Imprint"),
-    INSPIRED("Inspired"),
-    JOIN_FORCES("Join forces"),
-    KINSHIP("Kinship"),
-    LANDFALL("Landfall"),
-    LIEUTENANT("Lieutenant"),
-    METALCRAFT("Metalcraft"),
-    MORBID("Morbid"),
-    PARLEY("Parley"),
-    RADIANCE("Radiance"),
-    RAID("Raid"),
-    RALLY("Rally"),
-    SPELL_MASTERY("Spell mastery"),
-    STRIVE("Strive"),
-    SWEEP("Sweep"),
-    TEMPTING_OFFER("Tempting offer"),
-    THRESHOLD("Threshold"),
-    WILL_OF_THE_COUNCIL("Will of the council");
+    public FurtiveHomunculus(UUID ownerId) {
+        super(ownerId, 64, "Furtive Homunculus", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Homunculus");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-    private final String text;
+        // Skulk
+        this.addAbility(new SkulkAbility());
+    }
 
-    AbilityWord(String text) {
-        this.text = text;
+    public FurtiveHomunculus(final FurtiveHomunculus card) {
+        super(card);
     }
 
     @Override
-    public String toString() {
-        return text;
+    public FurtiveHomunculus copy() {
+        return new FurtiveHomunculus(this);
     }
-
 }

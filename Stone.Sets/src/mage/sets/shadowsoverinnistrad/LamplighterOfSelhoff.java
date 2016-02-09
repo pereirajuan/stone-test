@@ -25,63 +25,58 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.blessedvscursed;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
+import mage.abilities.TriggeredAbility;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.condition.InvertCondition;
-import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition.CountType;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
-import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.common.DrawDiscardControllerEffect;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.AnotherPredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class MindbreakerDemon extends CardImpl {
+public class LamplighterOfSelhoff extends CardImpl {
 
-    public MindbreakerDemon(UUID ownerId) {
-        super(ownerId, 41, "Mindbreaker Demon", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{B}{B}");
-        this.expansionSetCode = "DDQ";
-        this.subtype.add("Demon");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(5);
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("another Zombie");
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // When Mindbreaker Demon enters the battlefield, put the top four cards of your library into your graveyard.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new PutTopCardOfLibraryIntoGraveControllerEffect(4)));
-
-        // At the beginning of your upkeep, if you don't have 4 or more card types in your graveyard, you lose 4 life.
-        Ability ability = new ConditionalTriggeredAbility(
-                new BeginningOfUpkeepTriggeredAbility(new LoseLifeSourceControllerEffect(4), TargetController.YOU, false),
-                new InvertCondition(new DeliriumCondition()),
-                "At the beginning of your upkeep, if you don't have 4 or more card types in your graveyard, you lose 4 life.");
-        ability.setAbilityWord(AbilityWord.DELIRIUM);
-        this.addAbility(ability);
+    static {
+        filter.add(new AnotherPredicate());
+        filter.add(new SubtypePredicate("Zombie"));
     }
 
-    public MindbreakerDemon(final MindbreakerDemon card) {
+    public LamplighterOfSelhoff(UUID ownerId) {
+        super(ownerId, 72, "Lamplighter of Selhoff", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{U}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Zombie");
+        this.subtype.add("Horror");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(5);
+
+        // When Lamplighter of Selhoff enters the battlefield, if you control another Zombie, you may a draw card. If you do, discard a card.
+        TriggeredAbility triggeredAbility = new EntersBattlefieldTriggeredAbility(new DrawDiscardControllerEffect(1,1));
+        this.addAbility(new ConditionalTriggeredAbility(
+                triggeredAbility,
+                new PermanentsOnTheBattlefieldCondition(filter, CountType.MORE_THAN, 0),
+                "When {this} enters the battlefield, if you control another Zombie, you may a draw card. If you do, discard a card."));
+    }
+
+    public LamplighterOfSelhoff(final LamplighterOfSelhoff card) {
         super(card);
     }
 
     @Override
-    public MindbreakerDemon copy() {
-        return new MindbreakerDemon(this);
+    public LamplighterOfSelhoff copy() {
+        return new LamplighterOfSelhoff(this);
     }
 }

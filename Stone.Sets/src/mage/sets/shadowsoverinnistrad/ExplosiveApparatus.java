@@ -25,40 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.DamageTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class ExplosiveApparatus extends CardImpl {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Zombie");
+    public ExplosiveApparatus(UUID ownerId) {
+        super(ownerId, 255, "Explosive Apparatus", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{1}");
+        this.expansionSetCode = "SOI";
 
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // {3}, {T}, Sacrifice Explosive Apparatus: Explosive Apparatus deals 2 damage to target creature or player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(2), new GenericManaCost(3));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public ExplosiveApparatus(final ExplosiveApparatus card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public ExplosiveApparatus copy() {
+        return new ExplosiveApparatus(this);
     }
 }

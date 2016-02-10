@@ -25,40 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.dynamicvalue.common.StaticValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.LookLibraryAndPickControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class PiecesOfThePuzzle extends CardImpl {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Zombie");
+    private static final FilterCard FILTER = new FilterCard("up to two instant and/or sorcery cards");
 
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+    static {
+        FILTER.add(Predicates.or(new CardTypePredicate(CardType.INSTANT), new CardTypePredicate(CardType.SORCERY)));
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public PiecesOfThePuzzle(UUID ownerId) {
+        super(ownerId, 78, "Pieces of the Puzzle", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{2}{U}");
+        this.expansionSetCode = "SOI";
+
+        // Reveal the top five cards of your library. Put up to two instant and/or sorcery cards from among them into your hand and the rest into your graveyard.
+        Effect effect = new LookLibraryAndPickControllerEffect(new StaticValue(5), false, new StaticValue(2), FILTER, Zone.GRAVEYARD, false, true, true, Zone.HAND, false);
+        effect.setText("Reveal the top five cards of your library. Put up to two instant and/or sorcery cards from among them into your hand and the rest into your graveyard");
+        this.getSpellAbility().addEffect(effect);
+    }
+
+    public PiecesOfThePuzzle(final PiecesOfThePuzzle card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public PiecesOfThePuzzle copy() {
+        return new PiecesOfThePuzzle(this);
     }
 }

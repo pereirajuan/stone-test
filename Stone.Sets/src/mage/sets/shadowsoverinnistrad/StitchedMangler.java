@@ -25,40 +25,59 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
+import mage.abilities.effects.common.TapTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class StitchedMangler extends CardImpl {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Zombie");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
 
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public StitchedMangler(UUID ownerId) {
+        super(ownerId, 89, "Stitched Mangler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Zombie");
+        this.subtype.add("Horror");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // Stitched Mangler enters the battlefield tapped.
+        this.addAbility(new EntersBattlefieldTappedAbility());
+
+        // When Stitched Mangler enters the battlefield, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new TapTargetEffect());
+        ability.addEffect(new DontUntapInControllersNextUntapStepTargetEffect("That creature"));
+        ability.addTarget(new TargetCreaturePermanent(filter));
+        this.addAbility(ability);
+    }
+
+    public StitchedMangler(final StitchedMangler card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public StitchedMangler copy() {
+        return new StitchedMangler(this);
     }
 }

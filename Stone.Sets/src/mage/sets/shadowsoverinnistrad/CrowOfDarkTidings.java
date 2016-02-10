@@ -25,40 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.common.EntersBattlefieldOrDiesSourceTriggeredAbility;
+import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class CrowOfDarkTidings extends CardImpl {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
+    public CrowOfDarkTidings(UUID ownerId) {
+        super(ownerId, 105, "Crow of Dark Tidings", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{B}");
+        this.expansionSetCode = "SOI";
         this.subtype.add("Zombie");
-
-        this.color.setBlack(true);
+        this.subtype.add("Bird");
         this.power = new MageInt(2);
         this.toughness = new MageInt(2);
 
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // When Crow of Dark Tidings enters the battlefield or dies, put the top two cards of your library into your graveyard.
+        this.addAbility(new EntersBattlefieldOrDiesSourceTriggeredAbility(new PutTopCardOfLibraryIntoGraveControllerEffect(2), false));
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public CrowOfDarkTidings(final CrowOfDarkTidings card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public CrowOfDarkTidings copy() {
+        return new CrowOfDarkTidings(this);
     }
 }

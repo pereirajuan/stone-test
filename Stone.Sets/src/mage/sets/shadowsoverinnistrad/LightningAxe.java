@@ -25,40 +25,30 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class LightningAxe extends mage.sets.timespiral.LightningAxe {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Zombie");
-
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+    public LightningAxe(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 999;
+        this.expansionSetCode = "SOI";
+        this.rarity = Rarity.UNCOMMON;
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public LightningAxe(final LightningAxe card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public LightningAxe copy() {
+        return new LightningAxe(this);
     }
 }

@@ -25,40 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.ExileTargetEffect;
+import mage.abilities.effects.common.GainLifeEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.filter.common.FilterCreatureCard;
+import mage.game.permanent.token.ZombieToken;
+import mage.target.common.TargetCardInGraveyard;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class ShambleBack extends CardImpl {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Zombie");
+    public ShambleBack(UUID ownerId) {
+        super(ownerId, 134, "Shamble Back", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{B}");
+        this.expansionSetCode = "SOI";
 
-        this.color.setBlack(true);
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // Exile target creature card from a graveyard. Put a 2/2 black Zombie creature token onto the battlefield. You gain 2 life.
+        this.getSpellAbility().addEffect(new ExileTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCardInGraveyard(new FilterCreatureCard("creature card from a graveyard")));
+        this.getSpellAbility().addEffect(new CreateTokenEffect(new ZombieToken()));
+        this.getSpellAbility().addEffect(new GainLifeEffect(2));
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public ShambleBack(final ShambleBack card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public ShambleBack copy() {
+        return new ShambleBack(this);
     }
 }

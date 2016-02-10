@@ -25,40 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class DiregrafGhoul extends CardImpl {
+public class NiblisOfDusk extends CardImpl {
 
-    public DiregrafGhoul(UUID ownerId) {
-        super(ownerId, 97, "Diregraf Ghoul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{B}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Zombie");
-
-        this.color.setBlack(true);
+    public NiblisOfDusk(UUID ownerId) {
+        super(ownerId, 76, "Niblis of Dusk", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Spirit");
         this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        // Diregraf Ghoul enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // Prowess
+        this.addAbility(new ProwessAbility());
     }
 
-    public DiregrafGhoul(final DiregrafGhoul card) {
+    public NiblisOfDusk(final NiblisOfDusk card) {
         super(card);
     }
 
     @Override
-    public DiregrafGhoul copy() {
-        return new DiregrafGhoul(this);
+    public NiblisOfDusk copy() {
+        return new NiblisOfDusk(this);
     }
 }

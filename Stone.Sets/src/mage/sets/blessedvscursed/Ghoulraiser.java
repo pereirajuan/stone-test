@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shadowsoverinnistrad;
+package mage.sets.blessedvscursed;
 
 import java.util.UUID;
 
@@ -33,20 +33,20 @@ import java.util.UUID;
  *
  * @author fireshoes
  */
-public class MindbreakerDemon extends mage.sets.blessedvscursed.MindbreakerDemon {
+public class Ghoulraiser extends mage.sets.innistrad.Ghoulraiser {
 
-    public MindbreakerDemon(UUID ownerId) {
+    public Ghoulraiser(UUID ownerId) {
         super(ownerId);
-        this.cardNumber = 998;
-        this.expansionSetCode = "SOI";
+        this.cardNumber = 58;
+        this.expansionSetCode = "DDQ";
     }
 
-    public MindbreakerDemon(final MindbreakerDemon card) {
+    public Ghoulraiser(final Ghoulraiser card) {
         super(card);
     }
 
     @Override
-    public MindbreakerDemon copy() {
-        return new MindbreakerDemon(this);
+    public Ghoulraiser copy() {
+        return new Ghoulraiser(this);
     }
 }

@@ -40,7 +40,6 @@ import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffec
 import mage.abilities.keyword.FlyingAbility;
 import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
@@ -49,10 +48,10 @@ import mage.constants.TargetController;
  *
  * @author fireshoes
  */
-public class MindbreakerDemon extends CardImpl {
+public class MindwrackDemon extends CardImpl {
 
-    public MindbreakerDemon(UUID ownerId) {
-        super(ownerId, 41, "Mindbreaker Demon", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{B}{B}");
+    public MindwrackDemon(UUID ownerId) {
+        super(ownerId, 41, "Mindwrack Demon", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{B}{B}");
         this.expansionSetCode = "DDQ";
         this.subtype.add("Demon");
         this.power = new MageInt(4);
@@ -71,17 +70,16 @@ public class MindbreakerDemon extends CardImpl {
         Ability ability = new ConditionalTriggeredAbility(
                 new BeginningOfUpkeepTriggeredAbility(new LoseLifeSourceControllerEffect(4), TargetController.YOU, false),
                 new InvertCondition(new DeliriumCondition()),
-                "At the beginning of your upkeep, if you don't have 4 or more card types in your graveyard, you lose 4 life.");
-        ability.setAbilityWord(AbilityWord.DELIRIUM);
+                "<i>Delirium</i> &mdash; At the beginning of your upkeep, you lose 4 life unless there are four or more card types among cards in your graveyard.");
         this.addAbility(ability);
     }
 
-    public MindbreakerDemon(final MindbreakerDemon card) {
+    public MindwrackDemon(final MindwrackDemon card) {
         super(card);
     }
 
     @Override
-    public MindbreakerDemon copy() {
-        return new MindbreakerDemon(this);
+    public MindwrackDemon copy() {
+        return new MindwrackDemon(this);
     }
 }

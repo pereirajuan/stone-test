@@ -33,20 +33,20 @@ import java.util.UUID;
  *
  * @author fireshoes
  */
-public class GoblinWarchief extends mage.sets.scourge.GoblinWarchief {
+public class GoblinWarchief1 extends mage.sets.scourge.GoblinWarchief {
 
-    public GoblinWarchief(UUID ownerId) {
+    public GoblinWarchief1(UUID ownerId) {
         super(ownerId);
         this.cardNumber = 72;
         this.expansionSetCode = "FNMP";
     }
 
-    public GoblinWarchief(final GoblinWarchief card) {
+    public GoblinWarchief1(final GoblinWarchief1 card) {
         super(card);
     }
 
     @Override
-    public GoblinWarchief copy() {
-        return new GoblinWarchief(this);
+    public GoblinWarchief1 copy() {
+        return new GoblinWarchief1(this);
     }
 }

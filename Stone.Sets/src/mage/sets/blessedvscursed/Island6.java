@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.izzetvsgolgari;
+package mage.sets.blessedvscursed;
 
 import java.util.UUID;
 
@@ -33,19 +33,19 @@ import java.util.UUID;
  *
  * @author fireshoes
  */
-public class Mountain8 extends mage.cards.basiclands.Mountain {
+public class Island6 extends mage.cards.basiclands.Island {
 
-    public Mountain8(UUID ownerId) {
-        super(ownerId, 44);
-        this.expansionSetCode = "DDJ";
+    public Island6(UUID ownerId) {
+        super(ownerId, 73);
+        this.expansionSetCode = "DDQ";
     }
 
-    public Mountain8(final Mountain8 card) {
+    public Island6(final Island6 card) {
         super(card);
     }
 
     @Override
-    public Mountain8 copy() {
-        return new Mountain8(this);
+    public Island6 copy() {
+        return new Island6(this);
     }
 }

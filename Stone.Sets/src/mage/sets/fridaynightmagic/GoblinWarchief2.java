@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.izzetvsgolgari;
+package mage.sets.fridaynightmagic;
 
 import java.util.UUID;
 
@@ -33,19 +33,20 @@ import java.util.UUID;
  *
  * @author fireshoes
  */
-public class Mountain7 extends mage.cards.basiclands.Mountain {
+public class GoblinWarchief2 extends mage.sets.scourge.GoblinWarchief {
 
-    public Mountain7(UUID ownerId) {
-        super(ownerId, 43);
-        this.expansionSetCode = "DDJ";
+    public GoblinWarchief2(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 192;
+        this.expansionSetCode = "FNMP";
     }
 
-    public Mountain7(final Mountain7 card) {
+    public GoblinWarchief2(final GoblinWarchief2 card) {
         super(card);
     }
 
     @Override
-    public Mountain7 copy() {
-        return new Mountain7(this);
+    public GoblinWarchief2 copy() {
+        return new GoblinWarchief2(this);
     }
 }

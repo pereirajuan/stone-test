@@ -1,16 +1,16 @@
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without modification, are
  *  permitted provided that the following conditions are met:
- * 
+ *
  *     1. Redistributions of source code must retain the above copyright notice, this list of
  *        conditions and the following disclaimer.
- * 
+ *
  *     2. Redistributions in binary form must reproduce the above copyright notice, this list
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
@@ -20,41 +20,32 @@
  *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  *  The views and conclusions contained in the software and documentation are those of the
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.sets.blessedvscursed;
 
-package mage.client.util;
-
-import javax.swing.JOptionPane;
-import mage.client.MageFrame;
-import org.apache.log4j.Logger;
+import java.util.UUID;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class EDTExceptionHandler implements Thread.UncaughtExceptionHandler {
+public class Island6 extends mage.cards.basiclands.Island {
 
-    private static final Logger logger = Logger.getLogger(EDTExceptionHandler.class);
+    public Island6(UUID ownerId) {
+        super(ownerId, 73);
+        this.expansionSetCode = "DDQ";
+    }
+
+    public Island6(final Island6 card) {
+        super(card);
+    }
 
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        handle(e);
+    public Island6 copy() {
+        return new Island6(this);
     }
-
-    public void handle(Throwable throwable) {
-        try {
-            logger.fatal("MAGE Client UI error", throwable);
-            // JOptionPane.showMessageDialog(MageFrame.getDesktop(), throwable, "MAGE Client UI error", JOptionPane.ERROR_MESSAGE);
-        } catch (Throwable t) {}
-    }
-
-    public static void registerExceptionHandler() {
-        Thread.setDefaultUncaughtExceptionHandler(new EDTExceptionHandler());
-        System.setProperty("sun.awt.exception.handler", EDTExceptionHandler.class.getName());
-    }
-
 }

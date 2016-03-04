@@ -25,27 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.izzetvsgolgari;
+package mage.sets.pdsslivers;
 
 import java.util.UUID;
 
 /**
  *
- * @author fireshoes
+ * @author fenhl
  */
-public class Mountain8 extends mage.cards.basiclands.Mountain {
+public class WildPair extends mage.sets.planarchaos.WildPair {
 
-    public Mountain8(UUID ownerId) {
-        super(ownerId, 44);
-        this.expansionSetCode = "DDJ";
+    public WildPair(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 30;
+        this.expansionSetCode = "H09";
     }
 
-    public Mountain8(final Mountain8 card) {
+    public WildPair(final WildPair card) {
         super(card);
     }
 
     @Override
-    public Mountain8 copy() {
-        return new Mountain8(this);
+    public WildPair copy() {
+        return new WildPair(this);
     }
 }

@@ -25,28 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.pdsslivers;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.Filter;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
 
 /**
  *
- * @author fenhl
+ * @author fireshoes
  */
-public class WildPair extends mage.sets.planarchaos.WildPair {
+public class BygoneBishop extends CardImpl {
 
-    public WildPair(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 30;
-        this.expansionSetCode = "PDS";
+    private static final FilterSpell filterSpell = new FilterSpell("a creature spell with converted mana cost 3 or less");
+
+    static {
+        filterSpell.add(new CardTypePredicate(CardType.CREATURE));
+        filterSpell.add(new ConvertedManaCostPredicate(Filter.ComparisonType.LessThan, 4));
     }
 
-    public WildPair(final WildPair card) {
+    public BygoneBishop(UUID ownerId) {
+        super(ownerId, 8, "Bygone Bishop", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{W}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Spirit");
+        this.subtype.add("Cleric");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Whenever you cast a creature spell with converted mana cost 3 or less, investigate.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new InvestigateEffect(), filterSpell, false));
+    }
+
+    public BygoneBishop(final BygoneBishop card) {
         super(card);
     }
 
     @Override
-    public WildPair copy() {
-        return new WildPair(this);
+    public BygoneBishop copy() {
+        return new BygoneBishop(this);
     }
 }

@@ -25,28 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.pdsslivers;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.LimitedTimesPerTurnActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.effects.common.TransformSourceEffect;
+import mage.abilities.keyword.TransformAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author fenhl
+ * @author fireshoes
  */
-public class WildPair extends mage.sets.planarchaos.WildPair {
+public class HeirOfFalkenrath extends CardImpl {
 
-    public WildPair(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 30;
-        this.expansionSetCode = "PDS";
+    public HeirOfFalkenrath(UUID ownerId) {
+        super(ownerId, 116, "Heir of Falkenrath", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Vampire");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
+
+        this.canTransform = true;
+        this.secondSideCard = new HeirToTheNight(ownerId);
+
+        // Discard a card: Transform Heir of Falkenrath. Activate this ability only once each turn.
+        this.addAbility(new TransformAbility());
+        this.addAbility(new LimitedTimesPerTurnActivatedAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), new DiscardCardCost()));
     }
 
-    public WildPair(final WildPair card) {
+    public HeirOfFalkenrath(final HeirOfFalkenrath card) {
         super(card);
     }
 
     @Override
-    public WildPair copy() {
-        return new WildPair(this);
+    public HeirOfFalkenrath copy() {
+        return new HeirOfFalkenrath(this);
     }
 }

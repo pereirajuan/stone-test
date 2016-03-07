@@ -25,28 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.pdsslivers;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
- * @author fenhl
+ * @author fireshoes
  */
-public class WildPair extends mage.sets.planarchaos.WildPair {
+public class HeirToTheNight extends CardImpl {
 
-    public WildPair(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 30;
-        this.expansionSetCode = "PDS";
+    public HeirToTheNight(UUID ownerId) {
+        super(ownerId, 116, "Heir to the Night", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Vampire");
+        this.subtype.add("Berserker");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
+
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
     }
 
-    public WildPair(final WildPair card) {
+    public HeirToTheNight(final HeirToTheNight card) {
         super(card);
     }
 
     @Override
-    public WildPair copy() {
-        return new WildPair(this);
+    public HeirToTheNight copy() {
+        return new HeirToTheNight(this);
     }
 }

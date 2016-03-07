@@ -25,28 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.pdsslivers;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.InfoEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
- * @author fenhl
+ * @author fireshoes
  */
-public class WildPair extends mage.sets.planarchaos.WildPair {
+public class AvacynThePurifier extends CardImpl {
+    
+    private static final String rule = "Whenever this creature transforms into Avacyn, the Purifier, it deals 3 damage to each other creature and each opponent";
 
-    public WildPair(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 30;
-        this.expansionSetCode = "PDS";
+    public AvacynThePurifier(UUID ownerId) {
+        super(ownerId, 5, "Avacyn, the Purifier", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "");
+        this.expansionSetCode = "SOI";
+        this.supertype.add("Legendary");
+        this.subtype.add("Angel");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(5);
+
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // When this creature transforms into Avacyn, the Purifier, it deals 3 damage to each other creature and each opponent.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new InfoEffect(rule)));
     }
 
-    public WildPair(final WildPair card) {
+    public AvacynThePurifier(final AvacynThePurifier card) {
         super(card);
     }
 
     @Override
-    public WildPair copy() {
-        return new WildPair(this);
+    public AvacynThePurifier copy() {
+        return new AvacynThePurifier(this);
     }
 }

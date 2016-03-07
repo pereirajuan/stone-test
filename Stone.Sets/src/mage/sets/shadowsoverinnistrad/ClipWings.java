@@ -25,28 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.pdsslivers;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.effects.common.SacrificeOpponentsEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.AbilityPredicate;
 
 /**
  *
- * @author fenhl
+ * @author fireshoes
  */
-public class WildPair extends mage.sets.planarchaos.WildPair {
-
-    public WildPair(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 30;
-        this.expansionSetCode = "PDS";
+public class ClipWings extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature with flying");
+    
+    static {
+        filter.add(new AbilityPredicate(FlyingAbility.class));
     }
 
-    public WildPair(final WildPair card) {
+    public ClipWings(UUID ownerId) {
+        super(ownerId, 197, "Clip Wings", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{G}");
+        this.expansionSetCode = "SOI";
+
+        // Each opponent sacrifices a creature with flying.
+        this.getSpellAbility().addEffect(new SacrificeOpponentsEffect(filter));
+    }
+
+    public ClipWings(final ClipWings card) {
         super(card);
     }
 
     @Override
-    public WildPair copy() {
-        return new WildPair(this);
+    public ClipWings copy() {
+        return new ClipWings(this);
     }
 }

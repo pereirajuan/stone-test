@@ -25,28 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.pdsslivers;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
- * @author fenhl
+ * @author fireshoes
  */
-public class WildPair extends mage.sets.planarchaos.WildPair {
+public class PerfectedForm extends CardImpl {
 
-    public WildPair(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 30;
-        this.expansionSetCode = "PDS";
+    public PerfectedForm(UUID ownerId) {
+        super(ownerId, 49, "Perfected Form", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Insect");
+        this.subtype.add("Horror");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(4);
+
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
     }
 
-    public WildPair(final WildPair card) {
+    public PerfectedForm(final PerfectedForm card) {
         super(card);
     }
 
     @Override
-    public WildPair copy() {
-        return new WildPair(this);
+    public PerfectedForm copy() {
+        return new PerfectedForm(this);
     }
 }

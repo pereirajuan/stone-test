@@ -29,54 +29,42 @@ package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.common.LimitedTimesPerTurnActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.effects.common.TransformSourceEffect;
+import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Zone;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class StitchedMangler extends CardImpl {
+public class HeirOfFalkenrath extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
-
-    static {
-        filter.add(new ControllerPredicate(TargetController.OPPONENT));
-    }
-
-    public StitchedMangler(UUID ownerId) {
-        super(ownerId, 89, "Stiched Mangler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+    public HeirOfFalkenrath(UUID ownerId) {
+        super(ownerId, 116, "Heir of Falkenrath", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Zombie");
-        this.subtype.add("Horror");
+        this.subtype.add("Vampire");
         this.power = new MageInt(2);
-        this.toughness = new MageInt(3);
+        this.toughness = new MageInt(1);
 
-        // Stitched Mangler enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        this.canTransform = true;
+        this.secondSideCard = new HeirToTheNight(ownerId);
 
-        // When Stitched Mangler enters the battlefield, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.
-        EntersBattlefieldTriggeredAbility ability = new EntersBattlefieldTriggeredAbility(new TapTargetEffect());
-        ability.addEffect(new DontUntapInControllersNextUntapStepTargetEffect());
-        ability.addTarget(new TargetCreaturePermanent(filter));
-        this.addAbility(ability);
+        // Discard a card: Transform Heir of Falkenrath. Activate this ability only once each turn.
+        this.addAbility(new TransformAbility());
+        this.addAbility(new LimitedTimesPerTurnActivatedAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), new DiscardCardCost()));
     }
 
-    public StitchedMangler(final StitchedMangler card) {
+    public HeirOfFalkenrath(final HeirOfFalkenrath card) {
         super(card);
     }
 
     @Override
-    public StitchedMangler copy() {
-        return new StitchedMangler(this);
+    public HeirOfFalkenrath copy() {
+        return new HeirOfFalkenrath(this);
     }
 }

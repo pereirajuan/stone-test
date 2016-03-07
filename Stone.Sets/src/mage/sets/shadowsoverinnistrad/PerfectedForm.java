@@ -29,54 +29,38 @@ package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class StitchedMangler extends CardImpl {
+public class PerfectedForm extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
-
-    static {
-        filter.add(new ControllerPredicate(TargetController.OPPONENT));
-    }
-
-    public StitchedMangler(UUID ownerId) {
-        super(ownerId, 89, "Stiched Mangler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+    public PerfectedForm(UUID ownerId) {
+        super(ownerId, 49, "Perfected Form", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Zombie");
+        this.subtype.add("Insect");
         this.subtype.add("Horror");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(3);
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(4);
 
-        // Stitched Mangler enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // this card is the second face of double-faced card
+        this.nightCard = true;
 
-        // When Stitched Mangler enters the battlefield, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.
-        EntersBattlefieldTriggeredAbility ability = new EntersBattlefieldTriggeredAbility(new TapTargetEffect());
-        ability.addEffect(new DontUntapInControllersNextUntapStepTargetEffect());
-        ability.addTarget(new TargetCreaturePermanent(filter));
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
     }
 
-    public StitchedMangler(final StitchedMangler card) {
+    public PerfectedForm(final PerfectedForm card) {
         super(card);
     }
 
     @Override
-    public StitchedMangler copy() {
-        return new StitchedMangler(this);
+    public PerfectedForm copy() {
+        return new PerfectedForm(this);
     }
 }

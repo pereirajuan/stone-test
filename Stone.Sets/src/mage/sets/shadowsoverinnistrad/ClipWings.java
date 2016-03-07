@@ -28,55 +28,40 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.effects.common.SacrificeOpponentsEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.predicate.mageobject.AbilityPredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class StitchedMangler extends CardImpl {
-
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
-
+public class ClipWings extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature with flying");
+    
     static {
-        filter.add(new ControllerPredicate(TargetController.OPPONENT));
+        filter.add(new AbilityPredicate(FlyingAbility.class));
     }
 
-    public StitchedMangler(UUID ownerId) {
-        super(ownerId, 89, "Stiched Mangler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+    public ClipWings(UUID ownerId) {
+        super(ownerId, 197, "Clip Wings", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{G}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Zombie");
-        this.subtype.add("Horror");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(3);
 
-        // Stitched Mangler enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
-
-        // When Stitched Mangler enters the battlefield, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.
-        EntersBattlefieldTriggeredAbility ability = new EntersBattlefieldTriggeredAbility(new TapTargetEffect());
-        ability.addEffect(new DontUntapInControllersNextUntapStepTargetEffect());
-        ability.addTarget(new TargetCreaturePermanent(filter));
-        this.addAbility(ability);
+        // Each opponent sacrifices a creature with flying.
+        this.getSpellAbility().addEffect(new SacrificeOpponentsEffect(filter));
     }
 
-    public StitchedMangler(final StitchedMangler card) {
+    public ClipWings(final ClipWings card) {
         super(card);
     }
 
     @Override
-    public StitchedMangler copy() {
-        return new StitchedMangler(this);
+    public ClipWings copy() {
+        return new ClipWings(this);
     }
 }

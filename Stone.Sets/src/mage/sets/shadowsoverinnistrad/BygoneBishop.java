@@ -29,54 +29,51 @@ package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldTappedAbility;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.Filter;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class StitchedMangler extends CardImpl {
+public class BygoneBishop extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
+    private static final FilterSpell filterSpell = new FilterSpell("a creature spell with converted mana cost 3 or less");
 
     static {
-        filter.add(new ControllerPredicate(TargetController.OPPONENT));
+        filterSpell.add(new CardTypePredicate(CardType.CREATURE));
+        filterSpell.add(new ConvertedManaCostPredicate(Filter.ComparisonType.LessThan, 4));
     }
 
-    public StitchedMangler(UUID ownerId) {
-        super(ownerId, 89, "Stiched Mangler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+    public BygoneBishop(UUID ownerId) {
+        super(ownerId, 8, "Bygone Bishop", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{W}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Zombie");
-        this.subtype.add("Horror");
+        this.subtype.add("Spirit");
+        this.subtype.add("Cleric");
         this.power = new MageInt(2);
         this.toughness = new MageInt(3);
 
-        // Stitched Mangler enters the battlefield tapped.
-        this.addAbility(new EntersBattlefieldTappedAbility());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // When Stitched Mangler enters the battlefield, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.
-        EntersBattlefieldTriggeredAbility ability = new EntersBattlefieldTriggeredAbility(new TapTargetEffect());
-        ability.addEffect(new DontUntapInControllersNextUntapStepTargetEffect());
-        ability.addTarget(new TargetCreaturePermanent(filter));
-        this.addAbility(ability);
+        // Whenever you cast a creature spell with converted mana cost 3 or less, investigate.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new InvestigateEffect(), filterSpell, false));
     }
 
-    public StitchedMangler(final StitchedMangler card) {
+    public BygoneBishop(final BygoneBishop card) {
         super(card);
     }
 
     @Override
-    public StitchedMangler copy() {
-        return new StitchedMangler(this);
+    public BygoneBishop copy() {
+        return new BygoneBishop(this);
     }
 }

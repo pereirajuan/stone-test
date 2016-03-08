@@ -28,25 +28,42 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.abilities.mana.ColorlessManaAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class MagnifyingGlass extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public MagnifyingGlass(UUID ownerId) {
+        super(ownerId, 258, "Magnifying Glass", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
         this.expansionSetCode = "SOI";
+
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
+
+        // {4}, {T}: Investigate.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new InvestigateEffect(), new GenericManaCost(4));
+        ability.addCost(new TapSourceCost());
+        this.addAbility(ability);
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public MagnifyingGlass(final MagnifyingGlass card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public MagnifyingGlass copy() {
+        return new MagnifyingGlass(this);
     }
 }

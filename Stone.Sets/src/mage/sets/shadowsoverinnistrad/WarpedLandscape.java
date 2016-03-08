@@ -28,25 +28,48 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.abilities.mana.ColorlessManaAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterBasicLandCard;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class WarpedLandscape extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public WarpedLandscape(UUID ownerId) {
+        super(ownerId, 280, "Warped Landscape", Rarity.COMMON, new CardType[]{CardType.LAND}, "");
         this.expansionSetCode = "SOI";
+
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
+
+        // {2}, {T}, Sacrifice Warped Landscape: Search your library for a basic land card and put it onto the battlefield tapped. Then shuffle your library.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(0, 1, new FilterBasicLandCard()), true, true),
+                new GenericManaCost(2));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
+        this.addAbility(ability);
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public WarpedLandscape(final WarpedLandscape card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public WarpedLandscape copy() {
+        return new WarpedLandscape(this);
     }
 }

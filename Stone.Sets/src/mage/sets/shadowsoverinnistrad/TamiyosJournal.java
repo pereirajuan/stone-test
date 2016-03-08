@@ -25,47 +25,58 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.conflux;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.abilities.Ability;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.SacrificeTargetCost;
 import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.GenericManaCost;
 import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.abilities.effects.keyword.InvestigateEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.common.FilterBasicLandCard;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.NamePredicate;
 import mage.target.common.TargetCardInLibrary;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class ArmillarySphere extends CardImpl {
+public class TamiyosJournal extends CardImpl {
+    
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("three Clues");
+    
+    static {
+        filter.add(new NamePredicate("Clue"));
+    }
 
-    public ArmillarySphere(UUID ownerId) {
-        super(ownerId, 134, "Armillary Sphere", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{2}");
-        this.expansionSetCode = "CON";
+    public TamiyosJournal(UUID ownerId) {
+        super(ownerId, 265, "Tamiyo's Journal", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{5}");
+        this.expansionSetCode = "SOI";
+        this.supertype.add("Legendary");
 
-        // {2}, {tap}, Sacrifice Armillary Sphere: Search your library for up to two basic land cards, reveal them, and put them into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
-                new SearchLibraryPutInHandEffect(new TargetCardInLibrary(0, 2, new FilterBasicLandCard()), true, true),
-                new GenericManaCost(2));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
+        // At the beginning of your upkeep, investigate.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new InvestigateEffect(), TargetController.YOU, false));
+
+        // {T}, Sacrifice three Clues: Search your library for a card and put that card into your hand. Then shuffle your library.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new TapSourceCost());
+        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false)));
         this.addAbility(ability);
     }
 
-    public ArmillarySphere(final ArmillarySphere card) {
+    public TamiyosJournal(final TamiyosJournal card) {
         super(card);
     }
 
     @Override
-    public ArmillarySphere copy() {
-        return new ArmillarySphere(this);
+    public TamiyosJournal copy() {
+        return new TamiyosJournal(this);
     }
 }

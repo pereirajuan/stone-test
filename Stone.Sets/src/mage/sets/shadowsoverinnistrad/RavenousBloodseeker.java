@@ -28,25 +28,40 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class RavenousBloodseeker extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public RavenousBloodseeker(UUID ownerId) {
+        super(ownerId, 175, "Ravenous Bloodseeker", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{R}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Vampire");
+        this.subtype.add("Berserker");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
+
+        // Discard a card: Ravenous Bloodseeker gets +2/-2 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(2, -2, Duration.EndOfTurn), new DiscardCardCost()));
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public RavenousBloodseeker(final RavenousBloodseeker card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public RavenousBloodseeker copy() {
+        return new RavenousBloodseeker(this);
     }
 }

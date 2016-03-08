@@ -28,25 +28,43 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.InfoEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class LunarchInquisitors extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    private static final String rule = "Whenever this creature transforms into Lunarch Inquisitors, you may exile another target creature until Lunarch Inquisitors leaves the battlefield";
+
+    public LunarchInquisitors(UUID ownerId) {
+        super(ownerId, 6, "Lunarch Inquisitors", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Human");
+        this.subtype.add("Cleric");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
+
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // When this creature transforms into Lunarch Inquisitors, you may exile another target creature until Lunarch Inquisitors leaves the battlefield.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new InfoEffect(rule)));
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public LunarchInquisitors(final LunarchInquisitors card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public LunarchInquisitors copy() {
+        return new LunarchInquisitors(this);
     }
 }

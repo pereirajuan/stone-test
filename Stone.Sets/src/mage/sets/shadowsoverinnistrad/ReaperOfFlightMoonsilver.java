@@ -25,47 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.conflux;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.MageInt;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.decorator.ConditionalActivatedAbility;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterBasicLandCard;
-import mage.target.common.TargetCardInLibrary;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class ArmillarySphere extends CardImpl {
+public class ReaperOfFlightMoonsilver extends CardImpl {
 
-    public ArmillarySphere(UUID ownerId) {
-        super(ownerId, 134, "Armillary Sphere", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{2}");
-        this.expansionSetCode = "CON";
+    public ReaperOfFlightMoonsilver(UUID ownerId) {
+        super(ownerId, 36, "Reaper of Flight Moonsilver", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{W}{W}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Angel");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-        // {2}, {tap}, Sacrifice Armillary Sphere: Search your library for up to two basic land cards, reveal them, and put them into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
-                new SearchLibraryPutInHandEffect(new TargetCardInLibrary(0, 2, new FilterBasicLandCard()), true, true),
-                new GenericManaCost(2));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // <i>Delirium</i> &mdash; Sacrifice another creature: Reaper of Flight Moonsilver gets +2/+1 until end of turn.
+        // Activate this ability only if there are four or more card types among cards in your graveyard.
+        this.addAbility(new ConditionalActivatedAbility(Zone.BATTLEFIELD,
+                new BoostSourceEffect(2, 1, Duration.EndOfTurn),
+                new SacrificeTargetCost(new TargetControlledCreaturePermanent()),
+                new DeliriumCondition(),
+                "<i>Delirium</i> &mdash; Sacrifice another creature: Reaper of Flight Moonsilver gets +2/+1 until end of turn. "
+                        + "Activate this ability only if there are four or more card types among cards in your graveyard"));
     }
 
-    public ArmillarySphere(final ArmillarySphere card) {
+    public ReaperOfFlightMoonsilver(final ReaperOfFlightMoonsilver card) {
         super(card);
     }
 
     @Override
-    public ArmillarySphere copy() {
-        return new ArmillarySphere(this);
+    public ReaperOfFlightMoonsilver copy() {
+        return new ReaperOfFlightMoonsilver(this);
     }
 }

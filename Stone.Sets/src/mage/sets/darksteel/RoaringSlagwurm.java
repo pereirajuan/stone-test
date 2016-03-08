@@ -25,28 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shadowsoverinnistrad;
+package mage.sets.darksteel;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.effects.common.TapAllEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterArtifactPermanent;
 
 /**
  *
- * @author fireshoes
+ * @author djbrez
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class RoaringSlagwurm extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
-        this.expansionSetCode = "SOI";
+    public RoaringSlagwurm(UUID ownerId) {
+        super(ownerId, 83, "Roaring Slagwurm", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{G}{G}");
+        this.expansionSetCode = "DST";
+        this.subtype.add("Wurm");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(4);
+
+        // Whenever Roaring Slagwurm attacks, tap all artifacts.
+        Ability ability = new AttacksTriggeredAbility(new TapAllEffect(new FilterArtifactPermanent("artifacts")), false);
+        this.addAbility(ability);
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public RoaringSlagwurm(final RoaringSlagwurm card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public RoaringSlagwurm copy() {
+        return new RoaringSlagwurm(this);
     }
 }

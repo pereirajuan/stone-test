@@ -28,25 +28,49 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.decorator.ConditionalTriggeredAbility;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.keyword.TrampleAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.counters.CounterType;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class SoulSwallower extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public SoulSwallower(UUID ownerId) {
+        super(ownerId, 230, "Soul Swallower", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Wurm");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+
+        // <i>Delirium</i> &mdash; At the beginning of your upkeep, if there are four or more card types among cards in your graveyard, put three +1/+1 counters on Soul Swallower.
+        this.addAbility(new ConditionalTriggeredAbility(
+                new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new AddCountersSourceEffect(CounterType.P1P1.createInstance(3)), TargetController.YOU, false),
+                DeliriumCondition.getInstance(),
+                "<i>Delirium</i> &mdash; At the beginning of your upkeep, if there are four or more card types among cards in your graveyard, "
+                        + "put three +1/+1 counters on Soul Swallower."));
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public SoulSwallower(final SoulSwallower card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public SoulSwallower copy() {
+        return new SoulSwallower(this);
     }
 }

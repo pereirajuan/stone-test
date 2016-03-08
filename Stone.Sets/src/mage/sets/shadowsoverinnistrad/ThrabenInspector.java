@@ -28,25 +28,37 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class ThrabenInspector extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public ThrabenInspector(UUID ownerId) {
+        super(ownerId, 44, "Thraben Inspector", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{W}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
+
+        // When Thraben Inspector enters the battlefield, investigate.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new InvestigateEffect(), false));
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public ThrabenInspector(final ThrabenInspector card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public ThrabenInspector copy() {
+        return new ThrabenInspector(this);
     }
 }

@@ -28,25 +28,45 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.common.AttacksAttachedTriggeredAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffect;
+import mage.abilities.effects.common.continuous.BoostEquippedEffect;
+import mage.abilities.keyword.EquipAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Outcome;
+import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class ShardOfBrokenGlass extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public ShardOfBrokenGlass(UUID ownerId) {
+        super(ownerId, 262, "Shard of Broken Glass", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{1}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Equipment");
+
+        // Equipped creature gets +1/+0.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(1, 0)));
+
+        // Whenever equipped creature attacks, you may put the top two cards of your library into your graveyard.
+        this.addAbility(new AttacksAttachedTriggeredAbility(new PutTopCardOfLibraryIntoGraveControllerEffect(2), true));
+
+        // Equip {1}
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(1)));
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public ShardOfBrokenGlass(final ShardOfBrokenGlass card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public ShardOfBrokenGlass copy() {
+        return new ShardOfBrokenGlass(this);
     }
 }

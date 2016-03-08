@@ -28,25 +28,48 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.counters.CounterType;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class MarkovDreadknight extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public MarkovDreadknight(UUID ownerId) {
+        super(ownerId, 998, "Markov Dreadknight", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{B}{B}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Vampire");
+        this.subtype.add("Knight");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // {2}{B}, Discard a card: Put two +1/+1 counters on Markhov Dreadknight.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCountersSourceEffect(CounterType.P1P1.createInstance(2)), new ManaCostsImpl("{2}{B}"));
+        ability.addCost(new DiscardCardCost());
+        this.addAbility(ability);
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public MarkovDreadknight(final MarkovDreadknight card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public MarkovDreadknight copy() {
+        return new MarkovDreadknight(this);
     }
 }

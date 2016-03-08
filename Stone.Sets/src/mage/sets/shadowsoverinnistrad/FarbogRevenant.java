@@ -28,25 +28,39 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.keyword.SkulkAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class FarbogRevenant extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public FarbogRevenant(UUID ownerId) {
+        super(ownerId, 110, "Farbog Revenant", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{B}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Spirit");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
+
+        // Skulk
+        this.addAbility(new SkulkAbility());
+
+        // Lifelink
+        this.addAbility(LifelinkAbility.getInstance());
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public FarbogRevenant(final FarbogRevenant card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public FarbogRevenant copy() {
+        return new FarbogRevenant(this);
     }
 }

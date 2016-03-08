@@ -28,25 +28,38 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.ReturnToHandTargetEffect;
+import mage.abilities.keyword.MadnessAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class MindwrackDemon extends mage.sets.blessedvscursed.MindwrackDemon {
+public class JustTheWind extends CardImpl {
 
-    public MindwrackDemon(UUID ownerId) {
-        super(ownerId);
-        this.cardNumber = 124;
+    public JustTheWind(UUID ownerId) {
+        super(ownerId, 71, "Just the Wind", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{U}");
         this.expansionSetCode = "SOI";
+
+        // Return target creature to its owner's hand.
+        this.getSpellAbility().addEffect(new ReturnToHandTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+
+        // Madness {U}
+        this.addAbility(new MadnessAbility(this, new ManaCostsImpl("{U}")));
     }
 
-    public MindwrackDemon(final MindwrackDemon card) {
+    public JustTheWind(final JustTheWind card) {
         super(card);
     }
 
     @Override
-    public MindwrackDemon copy() {
-        return new MindwrackDemon(this);
+    public JustTheWind copy() {
+        return new JustTheWind(this);
     }
 }

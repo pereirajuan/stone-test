@@ -25,47 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.antiquities;
+package mage.sets.onslaught;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.LimitedTimesPerTurnActivatedAbility;
-import mage.abilities.condition.common.IsStepCondition;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.effects.common.discard.DiscardEachPlayerEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.PhaseStep;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.common.TargetArtifactPermanent;
-import mage.target.common.TargetControlledCreaturePermanent;
+import mage.constants.TargetController;
 
 /**
  *
- * @author fireshoes
+ * @author djbrez
  */
-public class GateToPhyrexia extends CardImpl {
+public class ScreechingBuzzard extends CardImpl {
 
-    public GateToPhyrexia(UUID ownerId) {
-        super(ownerId, 46, "Gate to Phyrexia", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{B}{B}");
-        this.expansionSetCode = "ATQ";
+    public ScreechingBuzzard(UUID ownerId) {
+        super(ownerId, 165, "Screeching Buzzard", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{B}");
+        this.expansionSetCode = "ONS";
+        this.subtype.add("Bird");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Sacrifice a creature: Destroy target artifact. Activate this ability only during your upkeep and only once each turn.
-        Ability ability = new LimitedTimesPerTurnActivatedAbility(Zone.BATTLEFIELD, new DestroyTargetEffect(),
-                new SacrificeTargetCost(new TargetControlledCreaturePermanent(new FilterControlledCreaturePermanent("a creature"))),
-                1, new IsStepCondition(PhaseStep.UPKEEP, true));
-        ability.addTarget(new TargetArtifactPermanent());
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // When Screeching Buzzard dies, each opponent discards a card.
+        this.addAbility(new DiesTriggeredAbility(new DiscardEachPlayerEffect(TargetController.OPPONENT), false));
     }
 
-    public GateToPhyrexia(final GateToPhyrexia card) {
+    public ScreechingBuzzard(final ScreechingBuzzard card) {
         super(card);
     }
 
     @Override
-    public GateToPhyrexia copy() {
-        return new GateToPhyrexia(this);
+    public ScreechingBuzzard copy() {
+        return new ScreechingBuzzard(this);
     }
 }

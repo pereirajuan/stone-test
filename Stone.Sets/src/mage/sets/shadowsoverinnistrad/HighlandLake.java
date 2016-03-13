@@ -25,47 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.antiquities;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.LimitedTimesPerTurnActivatedAbility;
-import mage.abilities.condition.common.IsStepCondition;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.mana.BlueManaAbility;
+import mage.abilities.mana.RedManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.PhaseStep;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.common.TargetArtifactPermanent;
-import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class GateToPhyrexia extends CardImpl {
+public class HighlandLake extends CardImpl {
 
-    public GateToPhyrexia(UUID ownerId) {
-        super(ownerId, 46, "Gate to Phyrexia", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{B}{B}");
-        this.expansionSetCode = "ATQ";
+    public HighlandLake(UUID ownerId) {
+        super(ownerId, 277, "Highland Lake", Rarity.UNCOMMON, new CardType[]{CardType.LAND}, "");
+        this.expansionSetCode = "SOI";
 
-        // Sacrifice a creature: Destroy target artifact. Activate this ability only during your upkeep and only once each turn.
-        Ability ability = new LimitedTimesPerTurnActivatedAbility(Zone.BATTLEFIELD, new DestroyTargetEffect(),
-                new SacrificeTargetCost(new TargetControlledCreaturePermanent(new FilterControlledCreaturePermanent("a creature"))),
-                1, new IsStepCondition(PhaseStep.UPKEEP, true));
-        ability.addTarget(new TargetArtifactPermanent());
-        this.addAbility(ability);
+        // Highland Lake enters the battlefield tapped.
+        this.addAbility(new EntersBattlefieldTappedAbility());
+
+        // {T}: Add {U} or {R} to your mana pool.
+        this.addAbility(new BlueManaAbility());
+        this.addAbility(new RedManaAbility());
     }
 
-    public GateToPhyrexia(final GateToPhyrexia card) {
+    public HighlandLake(final HighlandLake card) {
         super(card);
     }
 
     @Override
-    public GateToPhyrexia copy() {
-        return new GateToPhyrexia(this);
+    public HighlandLake copy() {
+        return new HighlandLake(this);
     }
 }

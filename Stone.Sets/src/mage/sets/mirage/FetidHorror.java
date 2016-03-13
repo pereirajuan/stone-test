@@ -25,47 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.antiquities;
+package mage.sets.mirage;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.LimitedTimesPerTurnActivatedAbility;
-import mage.abilities.condition.common.IsStepCondition;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ColoredManaCost;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.PhaseStep;
+import mage.constants.ColoredManaSymbol;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.common.TargetArtifactPermanent;
-import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author fireshoes
+ * @author djbrez
  */
-public class GateToPhyrexia extends CardImpl {
+public class FetidHorror extends CardImpl {
 
-    public GateToPhyrexia(UUID ownerId) {
-        super(ownerId, 46, "Gate to Phyrexia", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{B}{B}");
-        this.expansionSetCode = "ATQ";
+    public FetidHorror(UUID ownerId) {
+        super(ownerId, 21, "Fetid Horror", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{B}");
+        this.expansionSetCode = "MIR";
+        this.subtype.add("Shade");
+        this.subtype.add("Horror");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
 
-        // Sacrifice a creature: Destroy target artifact. Activate this ability only during your upkeep and only once each turn.
-        Ability ability = new LimitedTimesPerTurnActivatedAbility(Zone.BATTLEFIELD, new DestroyTargetEffect(),
-                new SacrificeTargetCost(new TargetControlledCreaturePermanent(new FilterControlledCreaturePermanent("a creature"))),
-                1, new IsStepCondition(PhaseStep.UPKEEP, true));
-        ability.addTarget(new TargetArtifactPermanent());
-        this.addAbility(ability);
+        // {B}: Fetid Horror gets +1/+1 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1, 1, Duration.EndOfTurn), new ColoredManaCost(ColoredManaSymbol.B)));
     }
 
-    public GateToPhyrexia(final GateToPhyrexia card) {
+    public FetidHorror(final FetidHorror card) {
         super(card);
     }
 
     @Override
-    public GateToPhyrexia copy() {
-        return new GateToPhyrexia(this);
+    public FetidHorror copy() {
+        return new FetidHorror(this);
     }
 }

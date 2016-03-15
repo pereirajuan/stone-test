@@ -25,35 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.betrayersofkamigawa;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.effects.common.ExileAllEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.costs.common.PayLifeCost;
+import mage.abilities.costs.common.PutTopCardOfYourLibraryToGraveyardCost;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.constants.Zone;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class FinalJudgment extends CardImpl {
+public class SinisterConcoction extends CardImpl {
 
-    public FinalJudgment(UUID ownerId) {
-        super(ownerId, 4, "Final Judgment", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{W}{W}");
-        this.expansionSetCode = "BOK";
+    public SinisterConcoction(UUID ownerId) {
+        super(ownerId, 135, "Sinister Concoction", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{B}");
+        this.expansionSetCode = "SOI";
 
-        // Exile all creatures.
-        this.getSpellAbility().addEffect(new ExileAllEffect(new FilterCreaturePermanent()));
+        // {B}, Pay 1 life, Put the top card of your library into your graveyard, Discard a card, Sacrifice Sinister Concoction: Destroy target creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DestroyTargetEffect(), new ManaCostsImpl("{B}"));
+        ability.addCost(new PayLifeCost(1));
+        ability.addCost(new PutTopCardOfYourLibraryToGraveyardCost());
+        ability.addCost(new DiscardCardCost());
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public FinalJudgment(final FinalJudgment card) {
+    public SinisterConcoction(final SinisterConcoction card) {
         super(card);
     }
 
     @Override
-    public FinalJudgment copy() {
-        return new FinalJudgment(this);
+    public SinisterConcoction copy() {
+        return new SinisterConcoction(this);
     }
 }

@@ -25,35 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.betrayersofkamigawa;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.abilities.effects.common.ExileAllEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.filter.common.FilterCreaturePermanent;
+import mage.game.permanent.token.AngelToken;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class FinalJudgment extends CardImpl {
+public class DescendUponTheSinful extends CardImpl {
 
-    public FinalJudgment(UUID ownerId) {
-        super(ownerId, 4, "Final Judgment", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{W}{W}");
-        this.expansionSetCode = "BOK";
+    public DescendUponTheSinful(UUID ownerId) {
+        super(ownerId, 13, "Descend upon the Sinful", Rarity.MYTHIC, new CardType[]{CardType.SORCERY}, "{4}{W}{W}");
+        this.expansionSetCode = "SOI";
 
-        // Exile all creatures.
+        // Exile all creatures
         this.getSpellAbility().addEffect(new ExileAllEffect(new FilterCreaturePermanent()));
+
+        // <i>Delirium</i> &mdash; Put a 4/4 white Angel creature token with flying onto the battlefield if there are four or more card types among cards in your graveyard.
+        Effect effect = new ConditionalOneShotEffect(new CreateTokenEffect(new AngelToken()), DeliriumCondition.getInstance());
+        effect.setText("<br/><i>Delirium</i> &mdash; Put a 4/4 white Angel creature token with flying onto the battlefield if there are four or more card types among cards in your graveyard");
+        this.getSpellAbility().addEffect(effect);
     }
 
-    public FinalJudgment(final FinalJudgment card) {
+    public DescendUponTheSinful(final DescendUponTheSinful card) {
         super(card);
     }
 
     @Override
-    public FinalJudgment copy() {
-        return new FinalJudgment(this);
+    public DescendUponTheSinful copy() {
+        return new DescendUponTheSinful(this);
     }
 }

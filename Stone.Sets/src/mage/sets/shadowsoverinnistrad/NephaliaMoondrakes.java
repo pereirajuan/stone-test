@@ -30,65 +30,56 @@ package mage.sets.shadowsoverinnistrad;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldControlledTriggeredAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.effects.common.GainLifeEffect;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.costs.common.ExileSourceFromGraveCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.FilterPermanent;
-import mage.filter.common.FilterControlledPermanent;
 import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class PiousEvangel extends CardImpl {
+public class NephaliaMoondrakes extends CardImpl {
+    
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("Creatures you control");
 
-    private static final FilterPermanent filter = new FilterCreaturePermanent("{this} or another creature");
-    private static final FilterControlledPermanent filter2 = new FilterControlledPermanent("another permanent");
-
-    static {
-        filter2.add(new AnotherPredicate());
-    }
-
-    public PiousEvangel(UUID ownerId) {
-        super(ownerId, 34, "Pious Evangel", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}");
+    public NephaliaMoondrakes(UUID ownerId) {
+        super(ownerId, 75, "Nephalia Moondrakes", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{U}{U}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Human");
-        this.subtype.add("Cleric");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+        this.subtype.add("Drake");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(5);
 
-        this.canTransform = true;
-        this.secondSideCard = new WaywardDisciple(ownerId);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // Whenever Pious Evangel or another creature enters the battlefield under your control, you gain 1 life.
-        this.addAbility(new EntersBattlefieldControlledTriggeredAbility(new GainLifeEffect(1), filter));
+        // When Nephalia Moondrakes enters the battlefield, target creature gains flying until end of turn.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new GainAbilityTargetEffect(FlyingAbility.getInstance(), Duration.EndOfTurn), false);
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
 
-        // {2}, {T}, Sacrifice another permanent: Transform Pious Evangel.
-        this.addAbility(new TransformAbility());
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), new GenericManaCost(2));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(filter2)));
+        // {4}{U}{U}, Exile Nephalia Moondrakes from your graveyard: Creatures you control gain flying until end of turn.
+        ability = new SimpleActivatedAbility(Zone.GRAVEYARD, new GainAbilityControlledEffect(FlyingAbility.getInstance(), Duration.EndOfTurn, filter), new ManaCostsImpl("{4}{U}{U}"));
+        ability.addCost(new ExileSourceFromGraveCost());
         this.addAbility(ability);
     }
 
-    public PiousEvangel(final PiousEvangel card) {
+    public NephaliaMoondrakes(final NephaliaMoondrakes card) {
         super(card);
     }
 
     @Override
-    public PiousEvangel copy() {
-        return new PiousEvangel(this);
+    public NephaliaMoondrakes copy() {
+        return new NephaliaMoondrakes(this);
     }
 }

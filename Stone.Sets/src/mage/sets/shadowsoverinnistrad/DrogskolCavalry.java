@@ -29,66 +29,58 @@ package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldControlledTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.abilities.effects.common.GainLifeEffect;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.filter.FilterPermanent;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 import mage.filter.predicate.permanent.AnotherPredicate;
-import mage.target.common.TargetControlledPermanent;
+import mage.game.permanent.token.SpiritWhiteToken;
 
 /**
  *
  * @author fireshoes
  */
-public class PiousEvangel extends CardImpl {
+public class DrogskolCavalry extends CardImpl {
 
-    private static final FilterPermanent filter = new FilterCreaturePermanent("{this} or another creature");
-    private static final FilterControlledPermanent filter2 = new FilterControlledPermanent("another permanent");
+    private static final FilterPermanent filter = new FilterPermanent("another Spirit");
 
     static {
-        filter2.add(new AnotherPredicate());
+        filter.add(new AnotherPredicate());
+        filter.add(new SubtypePredicate("Spirit"));
     }
 
-    public PiousEvangel(UUID ownerId) {
-        super(ownerId, 34, "Pious Evangel", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}");
+    public DrogskolCavalry(UUID ownerId) {
+        super(ownerId, 15, "Drogskol Cavalry", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{W}{W}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Human");
-        this.subtype.add("Cleric");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+        this.subtype.add("Spirit");
+        this.subtype.add("Knight");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-        this.canTransform = true;
-        this.secondSideCard = new WaywardDisciple(ownerId);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // Whenever Pious Evangel or another creature enters the battlefield under your control, you gain 1 life.
-        this.addAbility(new EntersBattlefieldControlledTriggeredAbility(new GainLifeEffect(1), filter));
+        // Whenever another Spirit enters the battlefield under your control, you gain 2 life.
+        this.addAbility(new EntersBattlefieldControlledTriggeredAbility(new GainLifeEffect(2), filter));
 
-        // {2}, {T}, Sacrifice another permanent: Transform Pious Evangel.
-        this.addAbility(new TransformAbility());
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), new GenericManaCost(2));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(filter2)));
-        this.addAbility(ability);
+        // {3}{W}: Put a 1/1 white Spirit creature token with flying onto the battlefield.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new CreateTokenEffect(new SpiritWhiteToken()), new ManaCostsImpl("{3}{W}")));
     }
 
-    public PiousEvangel(final PiousEvangel card) {
+    public DrogskolCavalry(final DrogskolCavalry card) {
         super(card);
     }
 
     @Override
-    public PiousEvangel copy() {
-        return new PiousEvangel(this);
+    public DrogskolCavalry copy() {
+        return new DrogskolCavalry(this);
     }
 }

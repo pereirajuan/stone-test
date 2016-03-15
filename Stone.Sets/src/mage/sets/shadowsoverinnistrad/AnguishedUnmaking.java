@@ -25,35 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.betrayersofkamigawa;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.effects.common.ExileAllEffect;
+import mage.abilities.effects.common.ExileTargetEffect;
+import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.target.common.TargetNonlandPermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class FinalJudgment extends CardImpl {
+public class AnguishedUnmaking extends CardImpl {
 
-    public FinalJudgment(UUID ownerId) {
-        super(ownerId, 4, "Final Judgment", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{W}{W}");
-        this.expansionSetCode = "BOK";
+    public AnguishedUnmaking(UUID ownerId) {
+        super(ownerId, 242, "Anguished Unmaking", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{1}{W}{B}");
+        this.expansionSetCode = "SOI";
 
-        // Exile all creatures.
-        this.getSpellAbility().addEffect(new ExileAllEffect(new FilterCreaturePermanent()));
+        // Exile target nonland permanent. You lose 3 life.
+        getSpellAbility().addEffect(new ExileTargetEffect());
+        getSpellAbility().addTarget(new TargetNonlandPermanent());
+        getSpellAbility().addEffect(new LoseLifeSourceControllerEffect(3));
     }
 
-    public FinalJudgment(final FinalJudgment card) {
+    public AnguishedUnmaking(final AnguishedUnmaking card) {
         super(card);
     }
 
     @Override
-    public FinalJudgment copy() {
-        return new FinalJudgment(this);
+    public AnguishedUnmaking copy() {
+        return new AnguishedUnmaking(this);
     }
 }

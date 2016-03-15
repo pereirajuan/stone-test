@@ -25,35 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.betrayersofkamigawa;
+package mage.sets.gameday;
 
 import java.util.UUID;
-import mage.abilities.effects.common.ExileAllEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.filter.common.FilterCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class FinalJudgment extends CardImpl {
+public class AnguishedUnmaking extends mage.sets.shadowsoverinnistrad.AnguishedUnmaking {
 
-    public FinalJudgment(UUID ownerId) {
-        super(ownerId, 4, "Final Judgment", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{W}{W}");
-        this.expansionSetCode = "BOK";
-
-        // Exile all creatures.
-        this.getSpellAbility().addEffect(new ExileAllEffect(new FilterCreaturePermanent()));
+    public AnguishedUnmaking(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = 52;
+        this.expansionSetCode = "MGDC";
     }
 
-    public FinalJudgment(final FinalJudgment card) {
+    public AnguishedUnmaking(final AnguishedUnmaking card) {
         super(card);
     }
 
     @Override
-    public FinalJudgment copy() {
-        return new FinalJudgment(this);
+    public AnguishedUnmaking copy() {
+        return new AnguishedUnmaking(this);
     }
 }

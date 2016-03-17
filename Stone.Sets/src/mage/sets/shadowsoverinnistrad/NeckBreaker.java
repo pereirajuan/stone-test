@@ -36,58 +36,51 @@ import mage.abilities.condition.common.TransformedCondition;
 import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
 import mage.abilities.decorator.ConditionalContinuousEffect;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.dynamicvalue.common.CardsInAllHandsCount;
 import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.effects.common.continuous.SetPowerToughnessSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.common.continuous.BoostControlledEffect;
 import mage.abilities.keyword.TransformAbility;
-import mage.abilities.keyword.VigilanceAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
 import mage.constants.Zone;
+import mage.filter.common.FilterAttackingCreature;
 
 /**
  *
  * @author fireshoes
  */
-public class WerewolfOfAncientHunger extends CardImpl {
+public class NeckBreaker extends CardImpl {
 
-    public WerewolfOfAncientHunger(UUID ownerId) {
-        super(ownerId, 225, "Werewolf of Ancient Hunger", Rarity.RARE, new CardType[]{CardType.CREATURE}, "");
+    public NeckBreaker(UUID ownerId) {
+        super(ownerId, 147, "Neck Breaker", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "SOI";
         this.subtype.add("Werewolf");
-        this.power = new MageInt(0);
-        this.toughness = new MageInt(0);
-        this.color.setGreen(true);
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
+        this.color.setRed(true);
 
+        // this card is the second face of double-faced card
         this.nightCard = true;
         this.canTransform = true;
 
-        // Vigilance
-        this.addAbility(VigilanceAbility.getInstance());
+        // Attacking creatures you control get +1/+0 and have trample.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
+                new ConditionalContinuousEffect(new BoostControlledEffect(1, 0, Duration.WhileOnBattlefield, new FilterAttackingCreature()),
+                new TransformedCondition(false), "Attacking creatures you control get +1/+0")));
 
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // Werewolf of Ancient Hunger's power and toughness are each equal to the total number of cards in all players' hands.
-        this.addAbility(new SimpleStaticAbility(Zone.ALL, 
-                new ConditionalContinuousEffect(new SetPowerToughnessSourceEffect(new CardsInAllHandsCount(), Duration.EndOfGame),
-                new TransformedCondition(false), "{this}'s power and toughness are each equal to the total number of cards in all players' hands")));
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Werewolf of Ancient Hunger.
+        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Neck Breaker.
         TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
         this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
     }
 
-    public WerewolfOfAncientHunger(final WerewolfOfAncientHunger card) {
+    public NeckBreaker(final NeckBreaker card) {
         super(card);
     }
 
     @Override
-    public WerewolfOfAncientHunger copy() {
-        return new WerewolfOfAncientHunger(this);
+    public NeckBreaker copy() {
+        return new NeckBreaker(this);
     }
 }

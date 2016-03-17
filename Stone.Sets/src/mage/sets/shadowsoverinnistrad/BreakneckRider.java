@@ -31,63 +31,45 @@ import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.TriggeredAbility;
 import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.TransformedCondition;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.condition.common.NoSpellsWereCastLastTurnCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.dynamicvalue.common.CardsInAllHandsCount;
 import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.effects.common.continuous.SetPowerToughnessSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
 import mage.abilities.keyword.TransformAbility;
-import mage.abilities.keyword.VigilanceAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.TargetController;
-import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class WerewolfOfAncientHunger extends CardImpl {
+public class BreakneckRider extends CardImpl {
 
-    public WerewolfOfAncientHunger(UUID ownerId) {
-        super(ownerId, 225, "Werewolf of Ancient Hunger", Rarity.RARE, new CardType[]{CardType.CREATURE}, "");
+    public BreakneckRider(UUID ownerId) {
+        super(ownerId, 147, "Breakneck Rider", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{R}{R}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Human");
+        this.subtype.add("Scout");
         this.subtype.add("Werewolf");
-        this.power = new MageInt(0);
-        this.toughness = new MageInt(0);
-        this.color.setGreen(true);
-
-        this.nightCard = true;
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+        
         this.canTransform = true;
+        this.secondSideCard = new NeckBreaker(ownerId);
 
-        // Vigilance
-        this.addAbility(VigilanceAbility.getInstance());
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // Werewolf of Ancient Hunger's power and toughness are each equal to the total number of cards in all players' hands.
-        this.addAbility(new SimpleStaticAbility(Zone.ALL, 
-                new ConditionalContinuousEffect(new SetPowerToughnessSourceEffect(new CardsInAllHandsCount(), Duration.EndOfGame),
-                new TransformedCondition(false), "{this}'s power and toughness are each equal to the total number of cards in all players' hands")));
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Werewolf of Ancient Hunger.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // At the beginning of each upkeep, if no spells were cast last turn, transform Breakneck Rider.
+        this.addAbility(new TransformAbility());
+        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(true), TargetController.ANY, false);
+        this.addAbility(new ConditionalTriggeredAbility(ability, NoSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.NO_SPELLS_TRANSFORM_RULE));
     }
 
-    public WerewolfOfAncientHunger(final WerewolfOfAncientHunger card) {
+    public BreakneckRider(final BreakneckRider card) {
         super(card);
     }
 
     @Override
-    public WerewolfOfAncientHunger copy() {
-        return new WerewolfOfAncientHunger(this);
+    public BreakneckRider copy() {
+        return new BreakneckRider(this);
     }
 }

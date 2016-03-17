@@ -28,55 +28,50 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
-import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.DeathtouchAbility;
+import mage.abilities.mana.BlackManaAbility;
+import mage.abilities.mana.GreenManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetCardInLibrary;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class TamiyosJournal extends CardImpl {
-    
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("three Clues");
-    
-    static {
-        filter.add(new SubtypePredicate("Clue"));
-    }
+public class DeathcapCultivator extends CardImpl {
 
-    public TamiyosJournal(UUID ownerId) {
-        super(ownerId, 265, "Tamiyo's Journal", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{5}");
+    public DeathcapCultivator(UUID ownerId) {
+        super(ownerId, 202, "Deathcap Cultivator", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}");
         this.expansionSetCode = "SOI";
-        this.supertype.add("Legendary");
+        this.subtype.add("Human");
+        this.subtype.add("Druid");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        // At the beginning of your upkeep, investigate.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new InvestigateEffect(), TargetController.YOU, false));
-
-        // {T}, Sacrifice three Clues: Search your library for a card and put that card into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false)));
-        this.addAbility(ability);
+        // {T}: Add {B} or {G} to your mana pool.
+        this.addAbility(new BlackManaAbility());
+        this.addAbility(new GreenManaAbility());
+        
+        // <i>Delirium</i> &mdash; Deathcap Cultivator has deathtouch as long as there are four or more card types among cards in your graveyard.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
+                new ConditionalContinuousEffect(new GainAbilitySourceEffect(DeathtouchAbility.getInstance(), Duration.WhileOnBattlefield),
+                new DeliriumCondition(), "<i>Delirium</i> &mdash; {this} has deathtouch as long as there are four or more card types among cards in your graveyard")));
     }
 
-    public TamiyosJournal(final TamiyosJournal card) {
+    public DeathcapCultivator(final DeathcapCultivator card) {
         super(card);
     }
 
     @Override
-    public TamiyosJournal copy() {
-        return new TamiyosJournal(this);
+    public DeathcapCultivator copy() {
+        return new DeathcapCultivator(this);
     }
 }

@@ -28,55 +28,45 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.MageInt;
+import mage.abilities.common.DealsCombatDamageToAPlayerTriggeredAbility;
 import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetCardInLibrary;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class TamiyosJournal extends CardImpl {
-    
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("three Clues");
-    
-    static {
-        filter.add(new SubtypePredicate("Clue"));
-    }
+public class BearerOfOverwhelmingTruths extends CardImpl {
 
-    public TamiyosJournal(UUID ownerId) {
-        super(ownerId, 265, "Tamiyo's Journal", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{5}");
+    public BearerOfOverwhelmingTruths(UUID ownerId) {
+        super(ownerId, 54, "Bearer of Overwhelming Truths", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "SOI";
-        this.supertype.add("Legendary");
+        this.subtype.add("Human");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
+        this.color.setBlue(true);
 
-        // At the beginning of your upkeep, investigate.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new InvestigateEffect(), TargetController.YOU, false));
+        // this card is the second face of double-faced card
+        this.nightCard = true;
 
-        // {T}, Sacrifice three Clues: Search your library for a card and put that card into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false)));
-        this.addAbility(ability);
+        // Prowess
+        this.addAbility(new ProwessAbility());
+
+        // Whenever Bearer of Overwhelming Truths deals combat damage to a player, investigate.
+        this.addAbility(new DealsCombatDamageToAPlayerTriggeredAbility(new InvestigateEffect(), false));
     }
 
-    public TamiyosJournal(final TamiyosJournal card) {
+    public BearerOfOverwhelmingTruths(final BearerOfOverwhelmingTruths card) {
         super(card);
     }
 
     @Override
-    public TamiyosJournal copy() {
-        return new TamiyosJournal(this);
+    public BearerOfOverwhelmingTruths copy() {
+        return new BearerOfOverwhelmingTruths(this);
     }
 }

@@ -28,55 +28,39 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.Mana;
 import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
-import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.BasicManaEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetCardInLibrary;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class TamiyosJournal extends CardImpl {
-    
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("three Clues");
-    
-    static {
-        filter.add(new SubtypePredicate("Clue"));
-    }
+public class VesselOfVolatility extends CardImpl {
 
-    public TamiyosJournal(UUID ownerId) {
-        super(ownerId, 265, "Tamiyo's Journal", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{5}");
+    public VesselOfVolatility(UUID ownerId) {
+        super(ownerId, 189, "Vessel of Volatility", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{R}");
         this.expansionSetCode = "SOI";
-        this.supertype.add("Legendary");
 
-        // At the beginning of your upkeep, investigate.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new InvestigateEffect(), TargetController.YOU, false));
-
-        // {T}, Sacrifice three Clues: Search your library for a card and put that card into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false)));
+        // {1}{R}, Sacrifice Vessel of Volatility: Add {R}{R}{R}{R} to your mana pool.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BasicManaEffect(Mana.RedMana(4)), new ManaCostsImpl("{1}{R}"));
+        ability.addCost(new SacrificeSourceCost());
         this.addAbility(ability);
     }
 
-    public TamiyosJournal(final TamiyosJournal card) {
+    public VesselOfVolatility(final VesselOfVolatility card) {
         super(card);
     }
 
     @Override
-    public TamiyosJournal copy() {
-        return new TamiyosJournal(this);
+    public VesselOfVolatility copy() {
+        return new VesselOfVolatility(this);
     }
 }

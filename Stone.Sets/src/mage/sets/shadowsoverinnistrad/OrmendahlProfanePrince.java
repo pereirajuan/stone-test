@@ -28,55 +28,49 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
-import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.MageInt;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.HasteAbility;
+import mage.abilities.keyword.IndestructibleAbility;
+import mage.abilities.keyword.LifelinkAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetCardInLibrary;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class TamiyosJournal extends CardImpl {
-    
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("three Clues");
-    
-    static {
-        filter.add(new SubtypePredicate("Clue"));
-    }
+public class OrmendahlProfanePrince extends CardImpl {
 
-    public TamiyosJournal(UUID ownerId) {
-        super(ownerId, 265, "Tamiyo's Journal", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{5}");
+    public OrmendahlProfanePrince(UUID ownerId) {
+        super(ownerId, 281, "Ormendahl, Profane Prince", Rarity.RARE, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "SOI";
         this.supertype.add("Legendary");
+        this.subtype.add("Demon");
+        this.power = new MageInt(9);
+        this.toughness = new MageInt(7);
+        this.color.setBlack(true);
 
-        // At the beginning of your upkeep, investigate.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new InvestigateEffect(), TargetController.YOU, false));
+        // this card is the second face of double-faced card
+        this.nightCard = true;
 
-        // {T}, Sacrifice three Clues: Search your library for a card and put that card into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false)));
-        this.addAbility(ability);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // Lifelink
+        this.addAbility(LifelinkAbility.getInstance());
+        // Indestructible
+        this.addAbility(IndestructibleAbility.getInstance());
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
     }
 
-    public TamiyosJournal(final TamiyosJournal card) {
+    public OrmendahlProfanePrince(final OrmendahlProfanePrince card) {
         super(card);
     }
 
     @Override
-    public TamiyosJournal copy() {
-        return new TamiyosJournal(this);
+    public OrmendahlProfanePrince copy() {
+        return new OrmendahlProfanePrince(this);
     }
 }

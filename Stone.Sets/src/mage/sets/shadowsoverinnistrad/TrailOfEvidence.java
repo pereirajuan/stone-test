@@ -28,55 +28,43 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
 import mage.abilities.effects.keyword.InvestigateEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.target.common.TargetCardInLibrary;
-import mage.target.common.TargetControlledPermanent;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class TamiyosJournal extends CardImpl {
-    
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("three Clues");
-    
+public class TrailOfEvidence extends CardImpl {
+
+    private static final FilterSpell filter = new FilterSpell("an instant or sorcery spell");
+
     static {
-        filter.add(new SubtypePredicate("Clue"));
+        filter.add(Predicates.or(
+                new CardTypePredicate(CardType.INSTANT),
+                new CardTypePredicate(CardType.SORCERY)));
     }
 
-    public TamiyosJournal(UUID ownerId) {
-        super(ownerId, 265, "Tamiyo's Journal", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{5}");
+    public TrailOfEvidence(UUID ownerId) {
+        super(ownerId, 93, "Trail of Evidence", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{U}");
         this.expansionSetCode = "SOI";
-        this.supertype.add("Legendary");
 
-        // At the beginning of your upkeep, investigate.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(Zone.BATTLEFIELD, new InvestigateEffect(), TargetController.YOU, false));
-
-        // {T}, Sacrifice three Clues: Search your library for a card and put that card into your hand. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false)));
-        this.addAbility(ability);
+        // Whenever you cast an instant or sorcery spell, investigate.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new InvestigateEffect(), filter, false));
     }
 
-    public TamiyosJournal(final TamiyosJournal card) {
+    public TrailOfEvidence(final TrailOfEvidence card) {
         super(card);
     }
 
     @Override
-    public TamiyosJournal copy() {
-        return new TamiyosJournal(this);
+    public TrailOfEvidence copy() {
+        return new TrailOfEvidence(this);
     }
 }

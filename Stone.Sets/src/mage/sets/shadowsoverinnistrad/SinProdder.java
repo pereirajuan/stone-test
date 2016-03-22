@@ -25,13 +25,15 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.ravnica;
+package mage.sets.shadowsoverinnistrad;
 
+import java.util.Set;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.effects.OneShotEffect;
+import mage.abilities.keyword.MenaceAbility;
 import mage.cards.Card;
 import mage.cards.CardImpl;
 import mage.cards.Cards;
@@ -47,42 +49,50 @@ import mage.players.Player;
 
 /**
  *
- * @author Loki
+ * @author fireshoes
  */
-public class DarkConfidant extends CardImpl {
+public class SinProdder extends CardImpl {
 
-    public DarkConfidant(UUID ownerId) {
-        super(ownerId, 81, "Dark Confidant", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{B}");
-        this.expansionSetCode = "RAV";
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
+    public SinProdder(UUID ownerId) {
+        super(ownerId, 181, "Sin Prodder", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Devil");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
+        // Menace
+        this.addAbility(new MenaceAbility());
 
-        // At the beginning of your upkeep, reveal the top card of your library and put that card into your hand. You lose life equal to its converted mana cost.
-        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new DarkConfidantEffect(), TargetController.YOU, false));
+        // At the beginning of your upkeep, reveal the top card of your library. Any opponent may have you put that card into your graveyard. If a player does,
+        // Sin Prodder deals damage to that player equal to that card's converted mana cost. Otherwise, put that card into your hand.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new SinProdderEffect(), TargetController.YOU, false));
     }
 
-    public DarkConfidant(final DarkConfidant card) {
+    public SinProdder(final SinProdder card) {
         super(card);
     }
 
     @Override
-    public DarkConfidant copy() {
-        return new DarkConfidant(this);
+    public SinProdder copy() {
+        return new SinProdder(this);
     }
 }
 
-class DarkConfidantEffect extends OneShotEffect {
+class SinProdderEffect extends OneShotEffect {
 
-    DarkConfidantEffect() {
+    public SinProdderEffect() {
         super(Outcome.DrawCard);
-        this.staticText = "reveal the top card of your library and put that card into your hand. You lose life equal to its converted mana cost";
+        this.staticText = "reveal the top card of your library. Any opponent may have you put that card into your graveyard. If a player does, "
+                + "{this} deals damage to that player equal to that card's converted mana cost. Otherwise, put that card into your hand";
     }
 
-    DarkConfidantEffect(final DarkConfidantEffect effect) {
+    public SinProdderEffect(final SinProdderEffect effect) {
         super(effect);
+    }
+
+    @Override
+    public SinProdderEffect copy() {
+        return new SinProdderEffect(this);
     }
 
     @Override
@@ -95,18 +105,26 @@ class DarkConfidantEffect extends OneShotEffect {
                 if (card != null) {
                     Cards cards = new CardsImpl(card);
                     controller.revealCards(sourcePermanent.getIdName(), cards, game);
-                    controller.moveCards(card, Zone.HAND, source, game);
-                    controller.loseLife(card.getManaCost().convertedManaCost(), game);
-
-                }
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Put ").append(card.getName()).append(" in ").append(controller.getLogName()).append("'s graveyard?");
+                    boolean putInGraveyard = false;
+                    Set<UUID> opponents = game.getOpponents(source.getControllerId());
+                    for (UUID opponentUuid : opponents) {
+                        Player opponent = game.getPlayer(opponentUuid);
+                        if (opponent != null && !putInGraveyard && opponent.chooseUse(Outcome.Damage, sb.toString(), source, game)) {
+                            putInGraveyard = true;
+                            opponent.damage(card.getManaCost().convertedManaCost(), source.getSourceId(), game, false, true);
+                        }
+                    }
+                    if (putInGraveyard) {
+                        controller.moveCards(card, Zone.GRAVEYARD, source, game);
+                    } else {
+                        controller.moveCards(card, Zone.HAND, source, game);
+                    }
                 return true;
+                }
             }
         }
         return false;
-    }
-
-    @Override
-    public DarkConfidantEffect copy() {
-        return new DarkConfidantEffect(this);
     }
 }

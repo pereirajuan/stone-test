@@ -27,74 +27,76 @@
  */
 package mage.sets.shadowsoverinnistrad;
 
-import java.util.Set;
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
 import mage.abilities.effects.OneShotEffect;
+import mage.abilities.effects.common.PutTokenOntoBattlefieldCopyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.permanent.TokenPredicate;
 import mage.game.Game;
+import mage.game.permanent.Permanent;
 import mage.players.Player;
+import mage.target.targetpointer.FixedTarget;
 
 /**
  *
  * @author fireshoes
  */
-public class FeveredVisions extends CardImpl {
+public class SecondHarvest extends CardImpl {
 
-    public FeveredVisions(UUID ownerId) {
-        super(ownerId, 244, "Fevered Visions", Rarity.RARE, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}{R}");
+    public SecondHarvest(UUID ownerId) {
+        super(ownerId, 227, "Second Harvest", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{2}{G}{G}");
         this.expansionSetCode = "SOI";
 
-        // At the beginning of each player's end step, that player draws a card. If the player is your opponent and has four or more cards in hand,
-        // Fevered Visions deals 2 damage to him or her.
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(new FeveredVisionsEffect(), TargetController.ANY, false));
+        // For each token you control, put a token onto the battlefield that's a copy of that permanent.
+        this.getSpellAbility().addEffect(new SecondHarvestEffect());
     }
 
-    public FeveredVisions(final FeveredVisions card) {
+    public SecondHarvest(final SecondHarvest card) {
         super(card);
     }
 
     @Override
-    public FeveredVisions copy() {
-        return new FeveredVisions(this);
+    public SecondHarvest copy() {
+        return new SecondHarvest(this);
     }
 }
 
-class FeveredVisionsEffect extends OneShotEffect {
+class SecondHarvestEffect extends OneShotEffect {
 
-    public FeveredVisionsEffect() {
-        super(Outcome.DrawCard);
-        staticText = "that player draws a card. If the player is your opponent and has four or more cards in hand, {this} deals 2 damage to him or her";
+    public SecondHarvestEffect() {
+        super(Outcome.Benefit);
+        this.staticText = "For each token you control, put a token onto the the battlefield that's a copy of that permanent";
     }
 
-    public FeveredVisionsEffect(final FeveredVisionsEffect effect) {
+    public SecondHarvestEffect(final SecondHarvestEffect effect) {
         super(effect);
+    }
+
+    @Override
+    public SecondHarvestEffect copy() {
+        return new SecondHarvestEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
-        UUID activePlayerId = game.getActivePlayerId();
-        Player player = game.getPlayer(activePlayerId);
-        if (controller != null && player != null) {
-            player.drawCards(1, game);
-            Set<UUID> opponents = game.getOpponents(source.getControllerId());
-            if (opponents.contains(player.getId()) && player.getHand().size() > 3) {
-                player.damage(2, source.getSourceId(), game, false, true);
+        if (controller != null) {
+            FilterControlledPermanent filter = new FilterControlledPermanent("each token you control");
+            filter.add(new TokenPredicate());
+            for (Permanent permanent : game.getBattlefield().getAllActivePermanents(filter, controller.getId(), game)) {
+                if (permanent != null) {
+                    PutTokenOntoBattlefieldCopyTargetEffect effect = new PutTokenOntoBattlefieldCopyTargetEffect();
+                    effect.setTargetPointer(new FixedTarget(permanent, game));
+                    effect.apply(game, source);
+                }
             }
             return true;
         }
         return false;
     }
-
-    @Override
-    public FeveredVisionsEffect copy() {
-        return new FeveredVisionsEffect(this);
-    }
-
 }

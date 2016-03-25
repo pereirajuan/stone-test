@@ -25,59 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.alarareborn;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardTargetCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.CyclingAbility;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.common.ReturnSourceFromGraveyardToBattlefieldEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.TargetPermanent;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.FilterCard;
+import mage.target.common.TargetCardInHand;
 
 /**
  *
- * @author North
+ * @author fireshoes
  */
-public class SigilOfTheNayanGods extends CardImpl {
+public class StitchwingSkaab extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
+    public StitchwingSkaab(UUID ownerId) {
+        super(ownerId, 90, "Stitchwing Skaab", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Zombie");
+        this.subtype.add("Horror");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
 
-    public SigilOfTheNayanGods(UUID ownerId) {
-        super(ownerId, 78, "Sigil of the Nayan Gods", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}{W}");
-        this.expansionSetCode = "ARB";
-        this.subtype.add("Aura");
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-
-        // Enchanted creature gets +1/+1 for each creature you control.
-        PermanentsOnBattlefieldCount amount = new PermanentsOnBattlefieldCount(filter, 1);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(amount, amount, Duration.WhileOnBattlefield)));
-
-        // Cycling {G/W}
-        this.addAbility(new CyclingAbility(new ManaCostsImpl("{G/W}")));
+        // {1}{U}, Discard two cards: Return Stitchwing Skaab from your graveyard to the battlefield tapped.
+        Ability ability = new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnSourceFromGraveyardToBattlefieldEffect(true), new ManaCostsImpl("{1}{U}"));
+        ability.addCost(new DiscardTargetCost(new TargetCardInHand(2, new FilterCard("two cards"))));
+        this.addAbility(ability);
     }
 
-    public SigilOfTheNayanGods(final SigilOfTheNayanGods card) {
+    public StitchwingSkaab(final StitchwingSkaab card) {
         super(card);
     }
 
     @Override
-    public SigilOfTheNayanGods copy() {
-        return new SigilOfTheNayanGods(this);
+    public StitchwingSkaab copy() {
+        return new StitchwingSkaab(this);
     }
 }

@@ -25,59 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.alarareborn;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.CyclingAbility;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.keyword.InvestigateEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.TargetPermanent;
+import mage.filter.Filter;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.PowerPredicate;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author North
+ * @author fireshoes
  */
-public class SigilOfTheNayanGods extends CardImpl {
+public class HumbleTheBrute extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature with power 4 or greater");
 
-    public SigilOfTheNayanGods(UUID ownerId) {
-        super(ownerId, 78, "Sigil of the Nayan Gods", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}{W}");
-        this.expansionSetCode = "ARB";
-        this.subtype.add("Aura");
-
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-
-        // Enchanted creature gets +1/+1 for each creature you control.
-        PermanentsOnBattlefieldCount amount = new PermanentsOnBattlefieldCount(filter, 1);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(amount, amount, Duration.WhileOnBattlefield)));
-
-        // Cycling {G/W}
-        this.addAbility(new CyclingAbility(new ManaCostsImpl("{G/W}")));
+    static {
+        filter.add(new PowerPredicate(Filter.ComparisonType.GreaterThan, 3));
     }
 
-    public SigilOfTheNayanGods(final SigilOfTheNayanGods card) {
+    public HumbleTheBrute(UUID ownerId) {
+        super(ownerId, 23, "Humble the Brute", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{4}{W}");
+        this.expansionSetCode = "SOI";
+
+        // Destroy target creature with power 4 or greater.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(filter));
+
+        // Investigate.
+        this.getSpellAbility().addEffect(new InvestigateEffect());
+    }
+
+    public HumbleTheBrute(final HumbleTheBrute card) {
         super(card);
     }
 
     @Override
-    public SigilOfTheNayanGods copy() {
-        return new SigilOfTheNayanGods(this);
+    public HumbleTheBrute copy() {
+        return new HumbleTheBrute(this);
     }
 }

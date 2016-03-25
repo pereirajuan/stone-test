@@ -25,59 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.alarareborn;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.CyclingAbility;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.effects.keyword.InvestigateEffect;
+import mage.abilities.keyword.IndestructibleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.TargetPermanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author North
+ * @author fireshoes
  */
-public class SigilOfTheNayanGods extends CardImpl {
+public class SurviveTheNight extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
+    public SurviveTheNight(UUID ownerId) {
+        super(ownerId, 41, "Survive the Night", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{W}");
+        this.expansionSetCode = "SOI";
 
-    public SigilOfTheNayanGods(UUID ownerId) {
-        super(ownerId, 78, "Sigil of the Nayan Gods", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}{W}");
-        this.expansionSetCode = "ARB";
-        this.subtype.add("Aura");
+        // Target creature gets +1/+0 and gains indestructible until end of turn.
+        Effect effect = new BoostTargetEffect(1, 0, Duration.EndOfTurn);
+        effect.setText("Target creature gets +1/+0");
+        this.getSpellAbility().addEffect(effect);
+        effect = new GainAbilityTargetEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("and gains indestructible until end of turn");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
-
-        // Enchanted creature gets +1/+1 for each creature you control.
-        PermanentsOnBattlefieldCount amount = new PermanentsOnBattlefieldCount(filter, 1);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(amount, amount, Duration.WhileOnBattlefield)));
-
-        // Cycling {G/W}
-        this.addAbility(new CyclingAbility(new ManaCostsImpl("{G/W}")));
+        // Investigate.
+        this.getSpellAbility().addEffect(new InvestigateEffect());
     }
 
-    public SigilOfTheNayanGods(final SigilOfTheNayanGods card) {
+    public SurviveTheNight(final SurviveTheNight card) {
         super(card);
     }
 
     @Override
-    public SigilOfTheNayanGods copy() {
-        return new SigilOfTheNayanGods(this);
+    public SurviveTheNight copy() {
+        return new SurviveTheNight(this);
     }
 }

@@ -25,59 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.alarareborn;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.CyclingAbility;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.UntapTargetEffect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.ReachAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.target.TargetPermanent;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author North
+ * @author fireshoes
  */
-public class SigilOfTheNayanGods extends CardImpl {
+public class AimHigh extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
+    public AimHigh(UUID ownerId) {
+        super(ownerId, 193, "Aim High", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{G}");
+        this.expansionSetCode = "SOI";
 
-    public SigilOfTheNayanGods(UUID ownerId) {
-        super(ownerId, 78, "Sigil of the Nayan Gods", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}{W}");
-        this.expansionSetCode = "ARB";
-        this.subtype.add("Aura");
+        // Untap target creature.
+        Effect effect = new UntapTargetEffect();
+        effect.setText("Untap target creature");
+        this.getSpellAbility().addEffect(effect);
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
+        // It gets +2/+2 and gains reach until of turn.
+        effect = new BoostTargetEffect(2, 2, Duration.EndOfTurn);
+        effect.setText("It gets +2/+2");
+        this.getSpellAbility().addEffect(effect);
+        effect = new GainAbilityTargetEffect(ReachAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("and gains reach until end of turn");
+        this.getSpellAbility().addEffect(effect);
 
-        // Enchanted creature gets +1/+1 for each creature you control.
-        PermanentsOnBattlefieldCount amount = new PermanentsOnBattlefieldCount(filter, 1);
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(amount, amount, Duration.WhileOnBattlefield)));
-
-        // Cycling {G/W}
-        this.addAbility(new CyclingAbility(new ManaCostsImpl("{G/W}")));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public SigilOfTheNayanGods(final SigilOfTheNayanGods card) {
+    public AimHigh(final AimHigh card) {
         super(card);
     }
 
     @Override
-    public SigilOfTheNayanGods copy() {
-        return new SigilOfTheNayanGods(this);
+    public AimHigh copy() {
+        return new AimHigh(this);
     }
 }

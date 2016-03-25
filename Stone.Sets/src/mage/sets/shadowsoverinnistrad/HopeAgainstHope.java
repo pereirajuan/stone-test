@@ -25,17 +25,20 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.alarareborn;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.condition.common.EnchantedCreatureSubtypeCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
 import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
 import mage.abilities.effects.common.AttachEffect;
 import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.CyclingAbility;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
 import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Outcome;
@@ -47,15 +50,13 @@ import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author North
+ * @author fireshoes
  */
-public class SigilOfTheNayanGods extends CardImpl {
+public class HopeAgainstHope extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
-
-    public SigilOfTheNayanGods(UUID ownerId) {
-        super(ownerId, 78, "Sigil of the Nayan Gods", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{G}{W}");
-        this.expansionSetCode = "ARB";
+    public HopeAgainstHope(UUID ownerId) {
+        super(ownerId, 22, "Hope Against Hope", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}");
+        this.expansionSetCode = "SOI";
         this.subtype.add("Aura");
 
         // Enchant creature
@@ -65,19 +66,22 @@ public class SigilOfTheNayanGods extends CardImpl {
         this.addAbility(new EnchantAbility(auraTarget.getTargetName()));
 
         // Enchanted creature gets +1/+1 for each creature you control.
-        PermanentsOnBattlefieldCount amount = new PermanentsOnBattlefieldCount(filter, 1);
+        PermanentsOnBattlefieldCount amount = new PermanentsOnBattlefieldCount(new FilterControlledCreaturePermanent(), 1);
         this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(amount, amount, Duration.WhileOnBattlefield)));
 
-        // Cycling {G/W}
-        this.addAbility(new CyclingAbility(new ManaCostsImpl("{G/W}")));
+        // As long as enchanted creature is a Human, it has first strike.
+        SimpleStaticAbility ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new ConditionalContinuousEffect(
+                new GainAbilityAttachedEffect(FirstStrikeAbility.getInstance(), AttachmentType.AURA), new EnchantedCreatureSubtypeCondition(String.valueOf("Human")), 
+                "As long as enchanted creature is a Human, it has first strike"));
+        this.addAbility(ability);
     }
 
-    public SigilOfTheNayanGods(final SigilOfTheNayanGods card) {
+    public HopeAgainstHope(final HopeAgainstHope card) {
         super(card);
     }
 
     @Override
-    public SigilOfTheNayanGods copy() {
-        return new SigilOfTheNayanGods(this);
+    public HopeAgainstHope copy() {
+        return new HopeAgainstHope(this);
     }
 }

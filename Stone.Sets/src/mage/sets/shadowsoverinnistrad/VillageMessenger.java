@@ -31,10 +31,10 @@ import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.TriggeredAbility;
 import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
+import mage.abilities.condition.common.NoSpellsWereCastLastTurnCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
 import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.keyword.HasteAbility;
 import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
@@ -45,34 +45,34 @@ import mage.constants.TargetController;
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class VillageMessenger extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public VillageMessenger(UUID ownerId) {
+        super(ownerId, 190, "Village Messenger", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{R}");
         this.expansionSetCode = "SOI";
+        this.subtype.add("Human");
         this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(2);
-        this.color.setGreen(true);
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // this card is the second face of double-faced card
-        this.nightCard = true;
         this.canTransform = true;
+        this.secondSideCard = new MoonriseIntruder(ownerId);
 
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
 
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // At the beginning of each upkeep, if no spells were cast last turn, transform Village Messenger.
+        this.addAbility(new TransformAbility());
+        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(true), TargetController.ANY, false);
+        this.addAbility(new ConditionalTriggeredAbility(ability, NoSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.NO_SPELLS_TRANSFORM_RULE));
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public VillageMessenger(final VillageMessenger card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public VillageMessenger copy() {
+        return new VillageMessenger(this);
     }
 }

@@ -28,51 +28,42 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.TriggeredAbility;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.game.permanent.token.SpiritWhiteToken;
 
 /**
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class VesselOfEphemera extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public VesselOfEphemera(UUID ownerId) {
+        super(ownerId, 48, "Vessel of Ephemera", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{W}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(2);
-        this.color.setGreen(true);
 
-        // this card is the second face of double-faced card
-        this.nightCard = true;
-        this.canTransform = true;
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // {2}{W}, Sacrifice Vessel of Ephemera: Put two 1/1 white Spirit creature tokens with flying onto the battlefield.
+        Effect effect = new CreateTokenEffect(new SpiritWhiteToken(), 2);
+        effect.setText("Put two 1/1 white Spirit creature tokens with flying onto the battlefield");
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, effect, new ManaCostsImpl("{2}{W}"));
+        ability.addCost(new SacrificeSourceCost());
+        this.addAbility(ability);
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public VesselOfEphemera(final VesselOfEphemera card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public VesselOfEphemera copy() {
+        return new VesselOfEphemera(this);
     }
 }

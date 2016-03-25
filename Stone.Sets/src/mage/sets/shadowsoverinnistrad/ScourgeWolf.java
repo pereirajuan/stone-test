@@ -29,50 +29,47 @@ package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.TriggeredAbility;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.DoubleStrikeAbility;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class ScourgeWolf extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public ScourgeWolf(UUID ownerId) {
+        super(ownerId, 179, "Scourge Wolf", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{R}{R}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
+        this.subtype.add("Wolf");
+        this.subtype.add("Horror");
+        this.power = new MageInt(2);
         this.toughness = new MageInt(2);
-        this.color.setGreen(true);
 
-        // this card is the second face of double-faced card
-        this.nightCard = true;
-        this.canTransform = true;
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
 
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // <i>Delirium</i> &mdash; Scourge Wolf has double strike as long as there are four or more card types among cards in your graveyard.
+        ConditionalContinuousEffect effect = new ConditionalContinuousEffect(new GainAbilitySourceEffect(DoubleStrikeAbility.getInstance(), Duration.WhileOnBattlefield),
+                DeliriumCondition.getInstance(), "<i>Delirium</i> &mdash; {this} has double strike as long as there are four or more card types among cards in your graveyard.");
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, effect));
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public ScourgeWolf(final ScourgeWolf card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public ScourgeWolf copy() {
+        return new ScourgeWolf(this);
     }
 }

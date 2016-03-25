@@ -34,7 +34,7 @@ import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
 import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.keyword.MenaceAbility;
 import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
@@ -45,34 +45,34 @@ import mage.constants.TargetController;
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class MoonriseIntruder extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public MoonriseIntruder(UUID ownerId) {
+        super(ownerId, 190, "Moonrise Intruder", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "SOI";
         this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
+        this.power = new MageInt(2);
         this.toughness = new MageInt(2);
-        this.color.setGreen(true);
+        this.color.setRed(true);
 
         // this card is the second face of double-faced card
         this.nightCard = true;
         this.canTransform = true;
 
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
+        // Menace
+        this.addAbility(new MenaceAbility());
 
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
+        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Moonrise Intruder.
         TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
         this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public MoonriseIntruder(final MoonriseIntruder card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public MoonriseIntruder copy() {
+        return new MoonriseIntruder(this);
     }
 }

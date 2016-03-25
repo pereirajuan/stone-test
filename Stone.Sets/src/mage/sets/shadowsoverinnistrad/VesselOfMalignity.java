@@ -28,51 +28,43 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.TriggeredAbility;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.ActivateAsSorceryActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.ExileFromZoneTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.target.common.TargetOpponent;
 
 /**
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class VesselOfMalignity extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public VesselOfMalignity(UUID ownerId) {
+        super(ownerId, 144, "Vessel of Malignity", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{B}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(2);
-        this.color.setGreen(true);
 
-        // this card is the second face of double-faced card
-        this.nightCard = true;
-        this.canTransform = true;
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // {1}{B}, Sacrifice Vessel of Malignity: Target opponent exiles two cards from his or her hand. Activate this ability only any time you could cast a sorcery.
+        Ability ability = new ActivateAsSorceryActivatedAbility(Zone.BATTLEFIELD,
+                new ExileFromZoneTargetEffect(Zone.HAND, null, "", new FilterCard("cards"), 2),
+                new ManaCostsImpl("{1}{B}"));
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public VesselOfMalignity(final VesselOfMalignity card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public VesselOfMalignity copy() {
+        return new VesselOfMalignity(this);
     }
 }

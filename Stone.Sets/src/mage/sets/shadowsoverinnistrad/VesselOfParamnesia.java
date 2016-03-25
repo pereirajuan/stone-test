@@ -28,51 +28,42 @@
 package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.TriggeredAbility;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.target.TargetPlayer;
 
 /**
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class VesselOfParamnesia extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public VesselOfParamnesia(UUID ownerId) {
+        super(ownerId, 95, "Vessel of Paramnesia", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{U}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(2);
-        this.color.setGreen(true);
 
-        // this card is the second face of double-faced card
-        this.nightCard = true;
-        this.canTransform = true;
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // {U}, Sacrifice Vessel of Paramnesia: Target player puts the top three cards of his or her library into his or her graveyard. Draw a card.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new PutTopCardOfLibraryIntoGraveTargetEffect(3), new ManaCostsImpl("{U}"));
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetPlayer());
+        ability.addEffect(new DrawCardSourceControllerEffect(1));
+        this.addAbility(ability);
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public VesselOfParamnesia(final VesselOfParamnesia card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public VesselOfParamnesia copy() {
+        return new VesselOfParamnesia(this);
     }
 }

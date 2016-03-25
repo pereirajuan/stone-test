@@ -29,50 +29,54 @@ package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.TriggeredAbility;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.TwoOrMoreSpellsWereCastLastTurnCondition;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.condition.common.DeliriumCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.TrampleAbility;
-import mage.abilities.keyword.TransformAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
+import mage.game.permanent.token.Token;
 
 /**
  *
  * @author fireshoes
  */
-public class TimberShredder extends CardImpl {
+public class InexorableBlob extends CardImpl {
 
-    public TimberShredder(UUID ownerId) {
-        super(ownerId, 210, "Timber Shredder", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public InexorableBlob(UUID ownerId) {
+        super(ownerId, 212, "Inexorable Blob", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{G}");
         this.expansionSetCode = "SOI";
-        this.subtype.add("Werewolf");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(2);
-        this.color.setGreen(true);
+        this.subtype.add("Oooze");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-        // this card is the second face of double-faced card
-        this.nightCard = true;
-        this.canTransform = true;
-
-        // Trample
-        this.addAbility(TrampleAbility.getInstance());
-
-        // At the beginning of each upkeep, if a player cast two or more spells last turn, transform Timber Shredder.
-        TriggeredAbility ability = new BeginningOfUpkeepTriggeredAbility(new TransformSourceEffect(false), TargetController.ANY, false);
-        this.addAbility(new ConditionalTriggeredAbility(ability, TwoOrMoreSpellsWereCastLastTurnCondition.getInstance(), TransformAbility.TWO_OR_MORE_SPELLS_TRANSFORM_RULE));
+        // <i>Delirium</i> &mdash; Whenever Inexorable Blob attacks and there are at least four card types among cards in your graveyard,
+        // put a 3/3 green Ooze creature token onto the battlefield tapped and attacking.
+        this.addAbility(new ConditionalTriggeredAbility(new AttacksTriggeredAbility(new CreateTokenEffect(new OozeToken(), 1, true, true), false),
+                DeliriumCondition.getInstance(),
+                "<i>Delirium</i> &mdash; Whenever {this} attacks and there are at least four card types among cards in your graveyard, "
+                        + "put a 3/3 green Ooze creature token onto the battlefield tapped and attacking."));
     }
 
-    public TimberShredder(final TimberShredder card) {
+    public InexorableBlob(final InexorableBlob card) {
         super(card);
     }
 
     @Override
-    public TimberShredder copy() {
-        return new TimberShredder(this);
+    public InexorableBlob copy() {
+        return new InexorableBlob(this);
+    }
+}
+
+class OozeToken extends Token {
+
+    public OozeToken() {
+        super("Ooze", "3/3 green Ooze creature token");
+        cardType.add(CardType.CREATURE);
+        subtype.add("Ooze");
+        color.setGreen(true);
+        power = new MageInt(3);
+        toughness = new MageInt(3);
     }
 }

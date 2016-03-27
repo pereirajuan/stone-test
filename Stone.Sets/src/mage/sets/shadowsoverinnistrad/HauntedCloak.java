@@ -25,17 +25,18 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.EquippedHasSubtypeCondition;
 import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostEquippedEffect;
+import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
 import mage.abilities.keyword.EquipAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.keyword.HasteAbility;
+import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.keyword.VigilanceAbility;
 import mage.cards.CardImpl;
 import mage.constants.AttachmentType;
 import mage.constants.CardType;
@@ -45,36 +46,37 @@ import mage.constants.Zone;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class ButchersCleaver extends CardImpl {
+public class HauntedCloak extends CardImpl {
 
-    private static final String staticText = "As long as equipped creature is a Human, it has lifelink";
-
-    public ButchersCleaver(UUID ownerId) {
-        super(ownerId, 217, "Butcher's Cleaver", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
-        this.expansionSetCode = "ISD";
+    public HauntedCloak(UUID ownerId) {
+        super(ownerId, 257, "Haunted Cloak", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
+        this.expansionSetCode = "SOI";
         this.subtype.add("Equipment");
 
-        // Equipped creature gets +3/+0.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(3, 0)));
+        // Equipped creature has vigilance, trample, and haste.
+        Effect effect = new GainAbilityAttachedEffect(VigilanceAbility.getInstance(), AttachmentType.EQUIPMENT);
+        effect.setText("Equipped creature has vigilance,");
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, effect);
+        effect = new GainAbilityAttachedEffect(TrampleAbility.getInstance(), AttachmentType.EQUIPMENT);
+        effect.setText(", trample");
+        ability.addEffect(effect);
+        effect = new GainAbilityAttachedEffect(HasteAbility.getInstance(), AttachmentType.EQUIPMENT);
+        effect.setText(", and haste");
+        ability.addEffect(effect);
+        this.addAbility(ability);
 
-        // As long as equipped creature is a Human, it has lifelink.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
-                new ConditionalContinuousEffect(new GainAbilityAttachedEffect(LifelinkAbility.getInstance(), AttachmentType.EQUIPMENT),
-                new EquippedHasSubtypeCondition("Human"), staticText)));
-
-        // Equip {3}
-        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
-
+        // Equip {1}
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(1)));
     }
 
-    public ButchersCleaver(final ButchersCleaver card) {
+    public HauntedCloak(final HauntedCloak card) {
         super(card);
     }
 
     @Override
-    public ButchersCleaver copy() {
-        return new ButchersCleaver(this);
+    public HauntedCloak copy() {
+        return new HauntedCloak(this);
     }
 }

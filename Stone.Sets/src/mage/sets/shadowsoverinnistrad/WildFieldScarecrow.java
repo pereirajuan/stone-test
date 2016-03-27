@@ -25,56 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.EquippedHasSubtypeCondition;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
 import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostEquippedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
-import mage.abilities.keyword.EquipAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.abilities.keyword.DefenderAbility;
 import mage.cards.CardImpl;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
+import mage.filter.common.FilterBasicLandCard;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class ButchersCleaver extends CardImpl {
+public class WildFieldScarecrow extends CardImpl {
 
-    private static final String staticText = "As long as equipped creature is a Human, it has lifelink";
+    public WildFieldScarecrow(UUID ownerId) {
+        super(ownerId, 269, "Wild-Field Scarecrow", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Scarecrow");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(4);
 
-    public ButchersCleaver(UUID ownerId) {
-        super(ownerId, 217, "Butcher's Cleaver", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Equipment");
+        // Defender
+        this.addAbility(DefenderAbility.getInstance());
 
-        // Equipped creature gets +3/+0.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(3, 0)));
-
-        // As long as equipped creature is a Human, it has lifelink.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
-                new ConditionalContinuousEffect(new GainAbilityAttachedEffect(LifelinkAbility.getInstance(), AttachmentType.EQUIPMENT),
-                new EquippedHasSubtypeCondition("Human"), staticText)));
-
-        // Equip {3}
-        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
-
+        // {2}, Sacrifice Wild-Field Scarecrow: Search your library for up to two basic land cards, reveal them, and put them into your hand. Then shuffle your library.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new SearchLibraryPutInHandEffect(new TargetCardInLibrary(0, 2, new FilterBasicLandCard()), true, true),
+                new GenericManaCost(2));
+        ability.addCost(new SacrificeSourceCost());
+        this.addAbility(ability);
     }
 
-    public ButchersCleaver(final ButchersCleaver card) {
+    public WildFieldScarecrow(final WildFieldScarecrow card) {
         super(card);
     }
 
     @Override
-    public ButchersCleaver copy() {
-        return new ButchersCleaver(this);
+    public WildFieldScarecrow copy() {
+        return new WildFieldScarecrow(this);
     }
 }

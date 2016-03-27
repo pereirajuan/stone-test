@@ -25,56 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.EquippedHasSubtypeCondition;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostEquippedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
-import mage.abilities.keyword.EquipAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.MageInt;
+import mage.abilities.common.AttacksOrBlocksTriggeredAbility;
+import mage.abilities.common.delayed.AtTheEndOfCombatDelayedTriggeredAbility;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.SacrificeSourceEffect;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class ButchersCleaver extends CardImpl {
+public class RunawayCarriage extends CardImpl {
 
-    private static final String staticText = "As long as equipped creature is a Human, it has lifelink";
+    public RunawayCarriage(UUID ownerId) {
+        super(ownerId, 261, "Runaway Carriage", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{4}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Construct");
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(6);
 
-    public ButchersCleaver(UUID ownerId) {
-        super(ownerId, 217, "Butcher's Cleaver", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
-        this.expansionSetCode = "ISD";
-        this.subtype.add("Equipment");
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
 
-        // Equipped creature gets +3/+0.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(3, 0)));
-
-        // As long as equipped creature is a Human, it has lifelink.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
-                new ConditionalContinuousEffect(new GainAbilityAttachedEffect(LifelinkAbility.getInstance(), AttachmentType.EQUIPMENT),
-                new EquippedHasSubtypeCondition("Human"), staticText)));
-
-        // Equip {3}
-        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
-
+        // When Runaway Carriage attacks or blocks, sacrifice it at end of combat.
+        this.addAbility(new AttacksOrBlocksTriggeredAbility(new CreateDelayedTriggeredAbilityEffect(
+                new AtTheEndOfCombatDelayedTriggeredAbility(new SacrificeSourceEffect())), false));
     }
 
-    public ButchersCleaver(final ButchersCleaver card) {
+    public RunawayCarriage(final RunawayCarriage card) {
         super(card);
     }
 
     @Override
-    public ButchersCleaver copy() {
-        return new ButchersCleaver(this);
+    public RunawayCarriage copy() {
+        return new RunawayCarriage(this);
     }
 }

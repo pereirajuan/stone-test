@@ -25,19 +25,14 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.EquippedHasSubtypeCondition;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.costs.common.DiscardCardCost;
 import mage.abilities.effects.common.continuous.BoostEquippedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
 import mage.abilities.keyword.EquipAbility;
-import mage.abilities.keyword.LifelinkAbility;
 import mage.cards.CardImpl;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
@@ -45,36 +40,28 @@ import mage.constants.Zone;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class ButchersCleaver extends CardImpl {
+public class MurderersAxe extends CardImpl {
 
-    private static final String staticText = "As long as equipped creature is a Human, it has lifelink";
-
-    public ButchersCleaver(UUID ownerId) {
-        super(ownerId, 217, "Butcher's Cleaver", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
-        this.expansionSetCode = "ISD";
+    public MurderersAxe(UUID ownerId) {
+        super(ownerId, 259, "Murderer's Axe", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{4}");
+        this.expansionSetCode = "SOI";
         this.subtype.add("Equipment");
 
-        // Equipped creature gets +3/+0.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(3, 0)));
+        // Equipped creature gets +2/+2.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(2, 2)));
 
-        // As long as equipped creature is a Human, it has lifelink.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
-                new ConditionalContinuousEffect(new GainAbilityAttachedEffect(LifelinkAbility.getInstance(), AttachmentType.EQUIPMENT),
-                new EquippedHasSubtypeCondition("Human"), staticText)));
-
-        // Equip {3}
-        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
-
+        // Equip &mdash; Discard a card.
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new DiscardCardCost()));
     }
 
-    public ButchersCleaver(final ButchersCleaver card) {
+    public MurderersAxe(final MurderersAxe card) {
         super(card);
     }
 
     @Override
-    public ButchersCleaver copy() {
-        return new ButchersCleaver(this);
+    public MurderersAxe copy() {
+        return new MurderersAxe(this);
     }
 }

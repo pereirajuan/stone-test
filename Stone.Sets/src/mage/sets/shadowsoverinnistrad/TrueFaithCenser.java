@@ -25,17 +25,19 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
 import mage.abilities.condition.common.EquippedHasSubtypeCondition;
 import mage.abilities.costs.mana.GenericManaCost;
 import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.continuous.BoostEquippedEffect;
 import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
 import mage.abilities.keyword.EquipAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.keyword.VigilanceAbility;
 import mage.cards.CardImpl;
 import mage.constants.AttachmentType;
 import mage.constants.CardType;
@@ -45,36 +47,41 @@ import mage.constants.Zone;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class ButchersCleaver extends CardImpl {
+public class TrueFaithCenser extends CardImpl {
 
-    private static final String staticText = "As long as equipped creature is a Human, it has lifelink";
+    private static final String staticText = "As long as equipped creature is a Human, it gets an addtional +1/+0";
 
-    public ButchersCleaver(UUID ownerId) {
-        super(ownerId, 217, "Butcher's Cleaver", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
-        this.expansionSetCode = "ISD";
+    public TrueFaithCenser(UUID ownerId) {
+        super(ownerId, 267, "True-Faith Censer", Rarity.COMMON, new CardType[]{CardType.ARTIFACT}, "{2}");
+        this.expansionSetCode = "SOI";
         this.subtype.add("Equipment");
 
-        // Equipped creature gets +3/+0.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(3, 0)));
+        // Equipped creature gets +1/+1 and has vigilance.
+        Effect effect = new BoostEquippedEffect(1, 1);
+        effect.setText("Equipped creature gets +1/+1");
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, effect);
+        effect = new GainAbilityAttachedEffect(VigilanceAbility.getInstance(), AttachmentType.EQUIPMENT);
+        effect.setText("and has vigilance");
+        ability.addEffect(effect);
+        this.addAbility(ability);
 
-        // As long as equipped creature is a Human, it has lifelink.
+        // As long as equipped creature is a Human, it gets an additional +1/+0.
         this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
-                new ConditionalContinuousEffect(new GainAbilityAttachedEffect(LifelinkAbility.getInstance(), AttachmentType.EQUIPMENT),
+                new ConditionalContinuousEffect(new BoostEquippedEffect(1, 0),
                 new EquippedHasSubtypeCondition("Human"), staticText)));
 
-        // Equip {3}
-        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
-
+        // Equip {2}
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(2)));
     }
 
-    public ButchersCleaver(final ButchersCleaver card) {
+    public TrueFaithCenser(final TrueFaithCenser card) {
         super(card);
     }
 
     @Override
-    public ButchersCleaver copy() {
-        return new ButchersCleaver(this);
+    public TrueFaithCenser copy() {
+        return new TrueFaithCenser(this);
     }
 }

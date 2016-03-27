@@ -25,17 +25,19 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.innistrad;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
+import mage.abilities.Ability;
+import mage.abilities.common.DealsDamageToAPlayerAttachedTriggeredAbility;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.condition.common.EquippedHasSubtypeCondition;
 import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostEquippedEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.effects.common.discard.DiscardControllerEffect;
 import mage.abilities.keyword.EquipAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.keyword.SkulkAbility;
 import mage.cards.CardImpl;
 import mage.constants.AttachmentType;
 import mage.constants.CardType;
@@ -45,36 +47,35 @@ import mage.constants.Zone;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class ButchersCleaver extends CardImpl {
+public class SkeletonKey extends CardImpl {
 
-    private static final String staticText = "As long as equipped creature is a Human, it has lifelink";
-
-    public ButchersCleaver(UUID ownerId) {
-        super(ownerId, 217, "Butcher's Cleaver", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{3}");
-        this.expansionSetCode = "ISD";
+    public SkeletonKey(UUID ownerId) {
+        super(ownerId, 263, "Skeleton Key", Rarity.UNCOMMON, new CardType[]{CardType.ARTIFACT}, "{1}");
+        this.expansionSetCode = "SOI";
         this.subtype.add("Equipment");
 
-        // Equipped creature gets +3/+0.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEquippedEffect(3, 0)));
+        // Equipped creature has skulk.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(new SkulkAbility(), AttachmentType.EQUIPMENT)));
 
-        // As long as equipped creature is a Human, it has lifelink.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
-                new ConditionalContinuousEffect(new GainAbilityAttachedEffect(LifelinkAbility.getInstance(), AttachmentType.EQUIPMENT),
-                new EquippedHasSubtypeCondition("Human"), staticText)));
+        // Whenever equipped creature deals combat damage to a player, you may draw a card. if you do, discard a card.
+        Ability ability = new DealsDamageToAPlayerAttachedTriggeredAbility(new DrawCardSourceControllerEffect(1), "equipped creature", true);
+        Effect effect = new DiscardControllerEffect(1);
+        effect.setText("If you do, discard a card");
+        ability.addEffect(effect);
+        this.addAbility(ability);
 
-        // Equip {3}
-        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(3)));
-
+        // Equip {2}
+        this.addAbility(new EquipAbility(Outcome.AddAbility, new GenericManaCost(2)));
     }
 
-    public ButchersCleaver(final ButchersCleaver card) {
+    public SkeletonKey(final SkeletonKey card) {
         super(card);
     }
 
     @Override
-    public ButchersCleaver copy() {
-        return new ButchersCleaver(this);
+    public SkeletonKey copy() {
+        return new SkeletonKey(this);
     }
 }

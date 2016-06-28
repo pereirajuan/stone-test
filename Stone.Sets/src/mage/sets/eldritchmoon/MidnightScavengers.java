@@ -25,39 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2012;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.ReturnFromGraveyardToHandTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.Filter;
+import mage.filter.common.FilterCreatureCard;
+import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
+import mage.target.Target;
+import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class FrostBreath extends CardImpl {
+public class MidnightScavengers extends CardImpl {
 
-    public FrostBreath(UUID ownerId) {
-        super(ownerId, 54, "Frost Breath", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
-        this.expansionSetCode = "M12";
+    private static final FilterCreatureCard filter = new FilterCreatureCard("creature card with converted mana cost 3 or less from your graveyard");
 
-
-        // Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.
-        this.getSpellAbility().addEffect(new TapTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
-        this.getSpellAbility().addEffect(new DontUntapInControllersNextUntapStepTargetEffect("Those creatures"));
+    static {
+        filter.add(new ConvertedManaCostPredicate(Filter.ComparisonType.LessThan, 4));
     }
 
-    public FrostBreath(final FrostBreath card) {
+    public MidnightScavengers(UUID ownerId) {
+        super(ownerId, 96, "Midnight Scavengers", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{B}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Human");
+        this.subtype.add("Rogue");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // When Midnight Scavengers enters the battlefield, you may return target creature card with converted mana cost 3 or less from your graveyard to your hand.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new ReturnFromGraveyardToHandTargetEffect(), true);
+        Target target = new TargetCardInYourGraveyard(filter);
+        ability.addTarget(target);
+        this.addAbility(ability);
+        
+        // <i>(Melds with Graf Rats.)</i>
+    }
+
+    public MidnightScavengers(final MidnightScavengers card) {
         super(card);
     }
 
     @Override
-    public FrostBreath copy() {
-        return new FrostBreath(this);
+    public MidnightScavengers copy() {
+        return new MidnightScavengers(this);
     }
 }

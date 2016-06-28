@@ -25,39 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2012;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.MageInt;
+import mage.ObjectColor;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
+import mage.game.permanent.token.Token;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class FrostBreath extends CardImpl {
+public class HanweirGarrison extends CardImpl {
 
-    public FrostBreath(UUID ownerId) {
-        super(ownerId, 54, "Frost Breath", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
-        this.expansionSetCode = "M12";
+    public HanweirGarrison(UUID ownerId) {
+        super(ownerId, 130, "Hanweir Garrison", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
+        // Whenever Hanweir Garrison attacks, put two 1/1 red Human creature tokens onto the battlefield tapped and attacking.
+        this.addAbility(new AttacksTriggeredAbility(new CreateTokenEffect(new RedHumanToken(), 2, true, true), false));
 
-        // Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.
-        this.getSpellAbility().addEffect(new TapTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
-        this.getSpellAbility().addEffect(new DontUntapInControllersNextUntapStepTargetEffect("Those creatures"));
+        // <i>(Melds with Hanweir Battlements.)</i>
     }
 
-    public FrostBreath(final FrostBreath card) {
+    public HanweirGarrison(final HanweirGarrison card) {
         super(card);
     }
 
     @Override
-    public FrostBreath copy() {
-        return new FrostBreath(this);
+    public HanweirGarrison copy() {
+        return new HanweirGarrison(this);
+    }
+}
+
+class RedHumanToken extends Token {
+
+    public RedHumanToken() {
+        super("Human", "1/1 red Human creature token");
+        this.cardType.add(CardType.CREATURE);
+        this.subtype.add("Human");
+
+        this.color = ObjectColor.RED;
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
     }
 }

@@ -25,39 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2012;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.effects.common.LoseLifeOpponentsEffect;
+import mage.abilities.keyword.DeathtouchAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class FrostBreath extends CardImpl {
+public class AuroraOfEmrakul extends CardImpl {
 
-    public FrostBreath(UUID ownerId) {
-        super(ownerId, 54, "Frost Breath", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
-        this.expansionSetCode = "M12";
+    public AuroraOfEmrakul(UUID ownerId) {
+        super(ownerId, 193, "Aurora of Emrakul", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Reflection");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(4);
 
+        // this card is the second face of double-faced card
+        this.nightCard = true;
 
-        // Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.
-        this.getSpellAbility().addEffect(new TapTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
-        this.getSpellAbility().addEffect(new DontUntapInControllersNextUntapStepTargetEffect("Those creatures"));
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Deathtouch
+        this.addAbility(DeathtouchAbility.getInstance());
+
+        // Whenever Aurora of Emrakul attacks, each opponent loses 3 life.
+        this.addAbility(new AttacksTriggeredAbility(new LoseLifeOpponentsEffect(3),false));
     }
 
-    public FrostBreath(final FrostBreath card) {
+    public AuroraOfEmrakul(final AuroraOfEmrakul card) {
         super(card);
     }
 
     @Override
-    public FrostBreath copy() {
-        return new FrostBreath(this);
+    public AuroraOfEmrakul copy() {
+        return new AuroraOfEmrakul(this);
     }
 }

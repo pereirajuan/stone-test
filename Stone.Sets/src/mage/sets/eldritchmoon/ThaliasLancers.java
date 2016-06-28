@@ -25,39 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2012;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.SupertypePredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class FrostBreath extends CardImpl {
+public class ThaliasLancers extends CardImpl {
 
-    public FrostBreath(UUID ownerId) {
-        super(ownerId, 54, "Frost Breath", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
-        this.expansionSetCode = "M12";
+    private static final FilterCard filter = new FilterCard("legendary card");
 
-
-        // Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.
-        this.getSpellAbility().addEffect(new TapTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
-        this.getSpellAbility().addEffect(new DontUntapInControllersNextUntapStepTargetEffect("Those creatures"));
+    static {
+        filter.add(new SupertypePredicate("Legendary"));
     }
 
-    public FrostBreath(final FrostBreath card) {
+    public ThaliasLancers(UUID ownerId) {
+        super(ownerId, 57, "Thalia's Lancers", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{W}{W}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Human");
+        this.subtype.add("Knight");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
+
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+
+        // When Thalia's Lancers enters the battlefield, you may search your library for a legendary card, reveal it, put it into your hand, then shuffle your library.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutInHandEffect(new TargetCardInLibrary(0, 1, filter), true, true), true));
+    }
+
+    public ThaliasLancers(final ThaliasLancers card) {
         super(card);
     }
 
     @Override
-    public FrostBreath copy() {
-        return new FrostBreath(this);
+    public ThaliasLancers copy() {
+        return new ThaliasLancers(this);
     }
 }

@@ -25,39 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2012;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
-import mage.abilities.effects.common.TapTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.DeathtouchAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Zone;
 
 /**
  *
- * @author nantuko
+ * @author fireshoes
  */
-public class FrostBreath extends CardImpl {
+public class GnarlwoodDryad extends CardImpl {
 
-    public FrostBreath(UUID ownerId) {
-        super(ownerId, 54, "Frost Breath", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{2}{U}");
-        this.expansionSetCode = "M12";
+    public GnarlwoodDryad(UUID ownerId) {
+        super(ownerId, 159, "Gnarlwood Dryad", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{G}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Dryad");
+        this.subtype.add("Horror");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
+        // Deathtouch
+        this.addAbility(DeathtouchAbility.getInstance());
 
-        // Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.
-        this.getSpellAbility().addEffect(new TapTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
-        this.getSpellAbility().addEffect(new DontUntapInControllersNextUntapStepTargetEffect("Those creatures"));
+        // <i>Delirium</i> &mdash Gnarlwood Dryad gets +2/+2 as long as there are four or more card types among cards in your graveyard.
+        ConditionalContinuousEffect effect = new ConditionalContinuousEffect(
+                new BoostSourceEffect(2, 2, Duration.WhileOnBattlefield), DeliriumCondition.getInstance(),
+                "<i>Delirium</i> &mdash; {this} gets +2/+2 as long as there are four or more card types among cards in your graveyard.");
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, effect);
+        this.addAbility(ability);
     }
 
-    public FrostBreath(final FrostBreath card) {
+    public GnarlwoodDryad(final GnarlwoodDryad card) {
         super(card);
     }
 
     @Override
-    public FrostBreath copy() {
-        return new FrostBreath(this);
+    public GnarlwoodDryad copy() {
+        return new GnarlwoodDryad(this);
     }
 }

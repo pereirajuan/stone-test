@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.tempest;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.abilities.Ability;
@@ -39,71 +39,66 @@ import mage.filter.FilterCard;
 import mage.filter.predicate.mageobject.NamePredicate;
 import mage.game.Game;
 import mage.players.Player;
-import mage.players.PlayerList;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class Kindle extends CardImpl {
+public class GalvanicBombardment extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("2 plus the number of cards named Kindle");
+    private static final FilterCard filter = new FilterCard("2 plus the number of cards named Galvanic Bombardment");
 
     static {
-        filter.add(new NamePredicate("Kindle"));
+        filter.add(new NamePredicate("Galvanic Bombardment"));
     }
 
-    public Kindle(UUID ownerId) {
-        super(ownerId, 184, "Kindle", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{R}");
-        this.expansionSetCode = "TMP";
+    public GalvanicBombardment(UUID ownerId) {
+        super(ownerId, 129, "Galvanic Bombardment", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+        this.expansionSetCode = "EMN";
 
-
-        // Kindle deals X damage to target creature or player, where X is 2 plus the number of cards named Kindle in all graveyards.
-        Effect effect = new DamageTargetEffect(new KindleCardsInAllGraveyardsCount(filter));
-        effect.setText("{this} deals X damage to target creature or player, where X is 2 plus the number of cards named {source} in all graveyards");
+        // Galvanic Bombardment deals X damage to target creature, where X is 2 plus the number of cards named Galvanic Bombardment in your graveyard.
+        Effect effect = new DamageTargetEffect(new GalvanicBombardmentCardsInControllerGraveyardCount(filter));
+        effect.setText("{this} deals X damage to target creature, where X is 2 plus the number of cards named {source} in your graveyard");
         this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlayer());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public Kindle(final Kindle card) {
+    public GalvanicBombardment(final GalvanicBombardment card) {
         super(card);
     }
 
     @Override
-    public Kindle copy() {
-        return new Kindle(this);
+    public GalvanicBombardment copy() {
+        return new GalvanicBombardment(this);
     }
 }
 
-class KindleCardsInAllGraveyardsCount implements DynamicValue {
+class GalvanicBombardmentCardsInControllerGraveyardCount implements DynamicValue {
 
     private final FilterCard filter;
 
-    public KindleCardsInAllGraveyardsCount(FilterCard filter) {
+    public GalvanicBombardmentCardsInControllerGraveyardCount(FilterCard filter) {
         this.filter = filter;
     }
 
-    private KindleCardsInAllGraveyardsCount(KindleCardsInAllGraveyardsCount dynamicValue) {
+    private GalvanicBombardmentCardsInControllerGraveyardCount(GalvanicBombardmentCardsInControllerGraveyardCount dynamicValue) {
         this.filter = dynamicValue.filter;
     }
 
     @Override
-    public int calculate(Game game, Ability sourceAbility, Effect effect) {
+    public int calculate(Game game, Ability source, Effect effect) {
         int amount = 0;
-        PlayerList playerList = game.getPlayerList();
-        for (UUID playerUUID : playerList) {
-            Player player = game.getPlayer(playerUUID);
-            if (player != null) {
-                amount += player.getGraveyard().count(filter, sourceAbility.getSourceId(), sourceAbility.getControllerId(), game);
+        Player controller = game.getPlayer(source.getControllerId());
+        if (controller != null) {
+                amount += controller.getGraveyard().count(filter, source.getSourceId(), source.getControllerId(), game);
             }
-        }
         return amount + 2;
     }
 
     @Override
-    public KindleCardsInAllGraveyardsCount copy() {
-        return new KindleCardsInAllGraveyardsCount(this);
+    public GalvanicBombardmentCardsInControllerGraveyardCount copy() {
+        return new GalvanicBombardmentCardsInControllerGraveyardCount(this);
     }
 
     @Override
@@ -113,6 +108,6 @@ class KindleCardsInAllGraveyardsCount implements DynamicValue {
 
     @Override
     public String getMessage() {
-        return filter.getMessage() + " in all graveyards";
+        return filter.getMessage() + " in your graveyard";
     }
 }

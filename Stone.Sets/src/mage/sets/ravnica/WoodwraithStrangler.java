@@ -25,54 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.ravnica;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.ExileFromGraveCost;
+import mage.abilities.effects.common.RegenerateSourceEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreatureCard;
+import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class ZombieToken extends Token {
+public class WoodwraithStrangler extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    public WoodwraithStrangler(UUID ownerId) {
+        super(ownerId, 241, "Woodwraith Strangler", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{B}{G}");
+        this.expansionSetCode = "RAV";
+        this.subtype.add("Plant");
+        this.subtype.add("Zombie");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-    static {
-        tokenImageSets.addAll(Arrays.asList("10E", "M10", "M11", "M12", "M13", "M14", "M15", "MBS", "ALA", "ISD", "C14", "C15", "CNS", "MMA", "BNG", "KTK", "DTK", "ORI", "OGW", "SOI", "EMN"));
+        // Exile a creature card from your graveyard: Regenerate Woodwraith Strangler.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new RegenerateSourceEffect(),
+                new ExileFromGraveCost(new TargetCardInYourGraveyard(new FilterCreatureCard("a creature card from your graveyard")))));
     }
 
-    public ZombieToken() {
-        super("Zombie", "2/2 black Zombie creature token");
-        availableImageSetCodes = tokenImageSets;
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Zombie");
-        power = new MageInt(2);
-        toughness = new MageInt(2);
-    }
-
-    @Override
-    public void setExpansionSetCodeForImage(String code) {
-        super.setExpansionSetCodeForImage(code);
-        if (getOriginalExpansionSetCode().equals("ISD")) {
-            this.setTokenType(new Random().nextInt(3) + 1);
-        }
-        if (getOriginalExpansionSetCode().equals("C14")) {
-            this.setTokenType(2);
-        }
-    }
-
-    public ZombieToken(final ZombieToken token) {
-        super(token);
+    public WoodwraithStrangler(final WoodwraithStrangler card) {
+        super(card);
     }
 
     @Override
-    public ZombieToken copy() {
-        return new ZombieToken(this); //To change body of generated methods, choose Tools | Templates.
+    public WoodwraithStrangler copy() {
+        return new WoodwraithStrangler(this);
     }
 }

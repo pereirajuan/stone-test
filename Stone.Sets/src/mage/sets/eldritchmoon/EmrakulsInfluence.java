@@ -25,54 +25,46 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.eldritchmoon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import mage.MageInt;
+import java.util.UUID;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.Filter;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class ZombieToken extends Token {
+public class EmrakulsInfluence extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private static final FilterSpell filterSpell = new FilterSpell("Eldrazi creature spell with converted mana cost 7 or greater");
 
     static {
-        tokenImageSets.addAll(Arrays.asList("10E", "M10", "M11", "M12", "M13", "M14", "M15", "MBS", "ALA", "ISD", "C14", "C15", "CNS", "MMA", "BNG", "KTK", "DTK", "ORI", "OGW", "SOI", "EMN"));
+        filterSpell.add(new SubtypePredicate("Eldrazi"));
+        filterSpell.add(new ConvertedManaCostPredicate(Filter.ComparisonType.GreaterThan, 6));
     }
 
-    public ZombieToken() {
-        super("Zombie", "2/2 black Zombie creature token");
-        availableImageSetCodes = tokenImageSets;
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Zombie");
-        power = new MageInt(2);
-        toughness = new MageInt(2);
+    public EmrakulsInfluence(UUID ownerId) {
+        super(ownerId, 157, "Emrakul's Influence", Rarity.UNCOMMON, new CardType[]{CardType.ENCHANTMENT}, "{2}{G}{G}");
+        this.expansionSetCode = "EMN";
+
+        // Whenever you cast an Eldrazi creature spell with converted mana cost 7 or greater, draw two cards.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new DrawCardSourceControllerEffect(2), filterSpell, false));
     }
 
-    @Override
-    public void setExpansionSetCodeForImage(String code) {
-        super.setExpansionSetCodeForImage(code);
-        if (getOriginalExpansionSetCode().equals("ISD")) {
-            this.setTokenType(new Random().nextInt(3) + 1);
-        }
-        if (getOriginalExpansionSetCode().equals("C14")) {
-            this.setTokenType(2);
-        }
-    }
-
-    public ZombieToken(final ZombieToken token) {
-        super(token);
+    public EmrakulsInfluence(final EmrakulsInfluence card) {
+        super(card);
     }
 
     @Override
-    public ZombieToken copy() {
-        return new ZombieToken(this); //To change body of generated methods, choose Tools | Templates.
+    public EmrakulsInfluence copy() {
+        return new EmrakulsInfluence(this);
     }
 }

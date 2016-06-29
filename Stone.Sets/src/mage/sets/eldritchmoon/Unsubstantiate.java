@@ -25,54 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.eldritchmoon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import mage.MageInt;
+import java.util.UUID;
+import mage.abilities.effects.common.ReturnToHandTargetEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.common.FilterSpellOrPermanent;
+import mage.target.common.TargetSpellOrPermanent;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class ZombieToken extends Token {
+public class Unsubstantiate extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private static final FilterSpellOrPermanent filter = new FilterSpellOrPermanent("spell or creature");
 
     static {
-        tokenImageSets.addAll(Arrays.asList("10E", "M10", "M11", "M12", "M13", "M14", "M15", "MBS", "ALA", "ISD", "C14", "C15", "CNS", "MMA", "BNG", "KTK", "DTK", "ORI", "OGW", "SOI", "EMN"));
+        filter.setPermanentFilter(new FilterCreaturePermanent());
     }
 
-    public ZombieToken() {
-        super("Zombie", "2/2 black Zombie creature token");
-        availableImageSetCodes = tokenImageSets;
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Zombie");
-        power = new MageInt(2);
-        toughness = new MageInt(2);
+    public Unsubstantiate(UUID ownerId) {
+        super(ownerId, 79, "Unsubstantiate", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}");
+        this.expansionSetCode = "EMN";
+
+        // Return target spell or creature to its owner's hand.
+        this.getSpellAbility().addTarget(new TargetSpellOrPermanent(1, 1, filter, false));
+        this.getSpellAbility().addEffect(new ReturnToHandTargetEffect());
     }
 
-    @Override
-    public void setExpansionSetCodeForImage(String code) {
-        super.setExpansionSetCodeForImage(code);
-        if (getOriginalExpansionSetCode().equals("ISD")) {
-            this.setTokenType(new Random().nextInt(3) + 1);
-        }
-        if (getOriginalExpansionSetCode().equals("C14")) {
-            this.setTokenType(2);
-        }
-    }
-
-    public ZombieToken(final ZombieToken token) {
-        super(token);
+    public Unsubstantiate(final Unsubstantiate card) {
+        super(card);
     }
 
     @Override
-    public ZombieToken copy() {
-        return new ZombieToken(this); //To change body of generated methods, choose Tools | Templates.
+    public Unsubstantiate copy() {
+        return new Unsubstantiate(this);
     }
 }

@@ -25,54 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.eldritchmoon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import mage.MageInt;
+import java.util.UUID;
+import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.NamePredicate;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class ZombieToken extends Token {
+public class TakeInventory extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private static final FilterCard filter = new FilterCard("card named Take Inventory");
 
     static {
-        tokenImageSets.addAll(Arrays.asList("10E", "M10", "M11", "M12", "M13", "M14", "M15", "MBS", "ALA", "ISD", "C14", "C15", "CNS", "MMA", "BNG", "KTK", "DTK", "ORI", "OGW", "SOI", "EMN"));
+        filter.add(new NamePredicate("Take Inventory"));
     }
 
-    public ZombieToken() {
-        super("Zombie", "2/2 black Zombie creature token");
-        availableImageSetCodes = tokenImageSets;
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Zombie");
-        power = new MageInt(2);
-        toughness = new MageInt(2);
+    public TakeInventory(UUID ownerId) {
+        super(ownerId, 76, "Take Inventory", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{1}{U}");
+        this.expansionSetCode = "EMN";
+
+        // Draw a card, then draw cards equal to the number of cards named Take Inventory in your graveyard.
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(1));
+        Effect effect = new DrawCardSourceControllerEffect(new CardsInControllerGraveyardCount(filter));
+        effect.setText(", then draw cards equal to the number of cards named {source} in your graveyard");
+        this.getSpellAbility().addEffect(effect);
     }
 
-    @Override
-    public void setExpansionSetCodeForImage(String code) {
-        super.setExpansionSetCodeForImage(code);
-        if (getOriginalExpansionSetCode().equals("ISD")) {
-            this.setTokenType(new Random().nextInt(3) + 1);
-        }
-        if (getOriginalExpansionSetCode().equals("C14")) {
-            this.setTokenType(2);
-        }
-    }
-
-    public ZombieToken(final ZombieToken token) {
-        super(token);
+    public TakeInventory(final TakeInventory card) {
+        super(card);
     }
 
     @Override
-    public ZombieToken copy() {
-        return new ZombieToken(this); //To change body of generated methods, choose Tools | Templates.
+    public TakeInventory copy() {
+        return new TakeInventory(this);
     }
 }

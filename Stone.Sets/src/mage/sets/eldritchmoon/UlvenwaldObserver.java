@@ -25,54 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.eldritchmoon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.common.DiesCreatureTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.TargetController;
+import mage.filter.Filter;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.ToughnessPredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class ZombieToken extends Token {
+public class UlvenwaldObserver extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("a creature you control with toughness 4 or greater");
 
     static {
-        tokenImageSets.addAll(Arrays.asList("10E", "M10", "M11", "M12", "M13", "M14", "M15", "MBS", "ALA", "ISD", "C14", "C15", "CNS", "MMA", "BNG", "KTK", "DTK", "ORI", "OGW", "SOI", "EMN"));
+        filter.add(new ToughnessPredicate(Filter.ComparisonType.GreaterThan, 3));
+        filter.add(new ControllerPredicate(TargetController.YOU));
     }
 
-    public ZombieToken() {
-        super("Zombie", "2/2 black Zombie creature token");
-        availableImageSetCodes = tokenImageSets;
-        cardType.add(CardType.CREATURE);
-        color.setBlack(true);
-        subtype.add("Zombie");
-        power = new MageInt(2);
-        toughness = new MageInt(2);
+    public UlvenwaldObserver(UUID ownerId) {
+        super(ownerId, 176, "Ulvenwald Observer", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{4}{G}{G}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Treefolk");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(6);
+
+        // Whenever a creature you control with toughness 4 or greater dies, draw a card.
+        this.addAbility(new DiesCreatureTriggeredAbility(new DrawCardSourceControllerEffect(1), false, filter));
     }
 
-    @Override
-    public void setExpansionSetCodeForImage(String code) {
-        super.setExpansionSetCodeForImage(code);
-        if (getOriginalExpansionSetCode().equals("ISD")) {
-            this.setTokenType(new Random().nextInt(3) + 1);
-        }
-        if (getOriginalExpansionSetCode().equals("C14")) {
-            this.setTokenType(2);
-        }
-    }
-
-    public ZombieToken(final ZombieToken token) {
-        super(token);
+    public UlvenwaldObserver(final UlvenwaldObserver card) {
+        super(card);
     }
 
     @Override
-    public ZombieToken copy() {
-        return new ZombieToken(this); //To change body of generated methods, choose Tools | Templates.
+    public UlvenwaldObserver copy() {
+        return new UlvenwaldObserver(this);
     }
 }

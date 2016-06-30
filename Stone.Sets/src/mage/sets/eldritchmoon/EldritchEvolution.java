@@ -25,16 +25,14 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.newphyrexia;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.ActivateAsSorceryActivatedAbility;
 import mage.abilities.costs.Cost;
 import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.OneShotEffect;
+import mage.abilities.effects.common.ExileSpellEffect;
 import mage.cards.Card;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
@@ -52,41 +50,43 @@ import mage.target.common.TargetCardInLibrary;
 import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
- * @author Loki
+ *
+ * @author fireshoes
  */
-public class BirthingPod extends CardImpl {
+public class EldritchEvolution extends CardImpl {
 
-    public BirthingPod(UUID ownerId) {
-        super(ownerId, 104, "Birthing Pod", Rarity.RARE, new CardType[]{CardType.ARTIFACT}, "{3}{GP}");
-        this.expansionSetCode = "NPH";
+    public EldritchEvolution(UUID ownerId) {
+        super(ownerId, 155, "Eldritch Evolution", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{1}{G}{G}");
+        this.expansionSetCode = "EMN";
 
-        // {1}{GP}, {tap}, Sacrifice a creature: Search your library for a creature card with converted mana cost equal to 1 plus the sacrificed creature's converted mana cost,
-        // put that card onto the battlefield, then shuffle your library. Activate this ability only any time you could cast a sorcery.
-        Ability ability = new ActivateAsSorceryActivatedAbility(Zone.BATTLEFIELD, new BirthingPodEffect(), new ManaCostsImpl("{1}{GP}"));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent()));
-        this.addAbility(ability);
+        // As an additional cost to cast Eldritch Evolution, sacrifice a creature.
+        this.getSpellAbility().addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent()));
+
+        // Search your library for a creature card with converted mana cost X or less, where X is 2 plus the sacrificed creature's converted mana cost.
+        // Put that card onto the battlefield, then shuffle your library. Exile Eldritch Evolution.
+        this.getSpellAbility().addEffect(new EldritchEvolutionEffect());
+        this.getSpellAbility().addEffect(ExileSpellEffect.getInstance());
     }
 
-    public BirthingPod(final BirthingPod card) {
+    public EldritchEvolution(final EldritchEvolution card) {
         super(card);
     }
 
     @Override
-    public BirthingPod copy() {
-        return new BirthingPod(this);
+    public EldritchEvolution copy() {
+        return new EldritchEvolution(this);
     }
 }
 
-class BirthingPodEffect extends OneShotEffect {
+class EldritchEvolutionEffect extends OneShotEffect {
 
-    BirthingPodEffect() {
+    EldritchEvolutionEffect() {
         super(Outcome.Benefit);
-        staticText = "Search your library for a creature card with converted mana cost equal to 1 plus the sacrificed creature's converted mana cost, put that card "
+        staticText = "Search your library for a creature card with converted mana cost X or less, where X is 2 plus the sacrificed creature's converted mana cost. Put that card "
                 + "onto the battlefield, then shuffle your library";
     }
 
-    BirthingPodEffect(final BirthingPodEffect effect) {
+    EldritchEvolutionEffect(final EldritchEvolutionEffect effect) {
         super(effect);
     }
 
@@ -104,9 +104,9 @@ class BirthingPodEffect extends OneShotEffect {
         }
         Player controller = game.getPlayer(source.getControllerId());
         if (sacrificedPermanent != null && controller != null) {
-            int newConvertedCost = sacrificedPermanent.getConvertedManaCost() + 1;
-            FilterCard filter = new FilterCard("creature card with converted mana cost " + newConvertedCost);
-            filter.add(new ConvertedManaCostPredicate(Filter.ComparisonType.Equal, newConvertedCost));
+            int newConvertedCost = sacrificedPermanent.getConvertedManaCost() + 2;
+            FilterCard filter = new FilterCard("creature card with converted mana cost " + newConvertedCost + "or less");
+            filter.add(new ConvertedManaCostPredicate(Filter.ComparisonType.LessThan, newConvertedCost+1));
             filter.add(new CardTypePredicate(CardType.CREATURE));
             TargetCardInLibrary target = new TargetCardInLibrary(filter);
             if (controller.searchLibrary(target, game)) {
@@ -120,7 +120,7 @@ class BirthingPodEffect extends OneShotEffect {
     }
 
     @Override
-    public BirthingPodEffect copy() {
-        return new BirthingPodEffect(this);
+    public EldritchEvolutionEffect copy() {
+        return new EldritchEvolutionEffect(this);
     }
 }

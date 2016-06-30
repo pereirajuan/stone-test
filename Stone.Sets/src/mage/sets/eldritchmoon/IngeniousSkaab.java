@@ -29,42 +29,43 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BlocksOrBecomesBlockedByCreatureTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageTargetControllerEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class AssembledAlphas extends CardImpl {
+public class IngeniousSkaab extends CardImpl {
 
-    public AssembledAlphas(UUID ownerId) {
-        super(ownerId, 117, "Assembled Alphas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{R}");
+    public IngeniousSkaab(UUID ownerId) {
+        super(ownerId, 66, "Ingenious Skaab", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Wolf");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Zombie");
+        this.subtype.add("Horror");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
-        // Whenever Assembled Alphas blocks or becomes blocked by a creature, Assembled Alphas deals 3 damage to that creature and 3 damage to that creature's controller.
-        Ability ability = new BlocksOrBecomesBlockedByCreatureTriggeredAbility(new DamageTargetEffect(3, true, "that creature"), false);
-        Effect effect = new DamageTargetControllerEffect(3);
-        effect.setText("and 3 damage to that creature's controller");
-        ability.addEffect(effect);
-        this.addAbility(ability);
+        // Prowess
+        this.addAbility(new ProwessAbility());
+
+        // {U}: Ingenius Skaab gets +1/-1 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1, -1, Duration.EndOfTurn), new ManaCostsImpl("{U}")));
     }
 
-    public AssembledAlphas(final AssembledAlphas card) {
+    public IngeniousSkaab(final IngeniousSkaab card) {
         super(card);
     }
 
     @Override
-    public AssembledAlphas copy() {
-        return new AssembledAlphas(this);
+    public IngeniousSkaab copy() {
+        return new IngeniousSkaab(this);
     }
 }

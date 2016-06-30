@@ -29,79 +29,52 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.condition.Condition;
-import mage.abilities.condition.IntCompareCondition;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.FirstStrikeAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.TrampleAbility;
 import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.game.Game;
-import mage.watchers.common.PlayerGainedLifeWatcher;
 
 /**
  *
  * @author fireshoes
  */
-public class LoneRider extends CardImpl {
+public class VildinPackOutcast extends CardImpl {
 
-    public LoneRider(UUID ownerId) {
-        super(ownerId, 33, "Lone Rider", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{W}");
+    public VildinPackOutcast(UUID ownerId) {
+        super(ownerId, 148, "Vildin-Pack Outcast", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{R}");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Human");
-        this.subtype.add("Knight");
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+        this.subtype.add("Werewolf");
+        this.subtype.add("Horror");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
         this.canTransform = true;
-        this.secondSideCard = new ItThatRidesAsOne(ownerId);
+        this.secondSideCard = new DronepackKindred(ownerId);
 
-        // First strike
-        this.addAbility(FirstStrikeAbility.getInstance());
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
 
-        // Lifelink
-        this.addAbility(LifelinkAbility.getInstance());
+        // {R}: Vildin-Pack Outcast gets +1/-1 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1, -1, Duration.EndOfTurn), new ManaCostsImpl("{R}")));
 
-        // At the beginning of the end step, if you gained 3 or more life this turn, transform Lone Rider.
+        // {5}{R}{R}: Transform Vildin-Pack Outcast.
         this.addAbility(new TransformAbility());
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), TargetController.ANY,
-                new YouGainedLifeCondition(Condition.ComparisonType.GreaterThan, 2), false), new PlayerGainedLifeWatcher());
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), new ManaCostsImpl("{5}{R}{R}")));
     }
 
-    public LoneRider(final LoneRider card) {
+    public VildinPackOutcast(final VildinPackOutcast card) {
         super(card);
     }
 
     @Override
-    public LoneRider copy() {
-        return new LoneRider(this);
-    }
-}
-
-class YouGainedLifeCondition extends IntCompareCondition {
-
-    public YouGainedLifeCondition(Condition.ComparisonType type, int value) {
-        super(type, value);
-    }
-
-    @Override
-    protected int getInputValue(Game game, Ability source) {
-        int gainedLife = 0;
-        PlayerGainedLifeWatcher watcher = (PlayerGainedLifeWatcher) game.getState().getWatchers().get("PlayerGainedLifeWatcher");
-        if (watcher != null) {
-            gainedLife = watcher.getLiveGained(source.getControllerId());
-        }
-        return gainedLife;
-    }
-
-    @Override
-    public String toString() {
-        return "if you gained 3 or more life this turn ";
+    public VildinPackOutcast copy() {
+        return new VildinPackOutcast(this);
     }
 }

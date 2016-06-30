@@ -29,42 +29,46 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BlocksOrBecomesBlockedByCreatureTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageTargetControllerEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class AssembledAlphas extends CardImpl {
+public class DronepackKindred extends CardImpl {
 
-    public AssembledAlphas(UUID ownerId) {
-        super(ownerId, 117, "Assembled Alphas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{R}");
+    public DronepackKindred(UUID ownerId) {
+        super(ownerId, 148, "Dronepack Kindred", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Wolf");
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Werewolf");
         this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+        this.toughness = new MageInt(7);
 
-        // Whenever Assembled Alphas blocks or becomes blocked by a creature, Assembled Alphas deals 3 damage to that creature and 3 damage to that creature's controller.
-        Ability ability = new BlocksOrBecomesBlockedByCreatureTriggeredAbility(new DamageTargetEffect(3, true, "that creature"), false);
-        Effect effect = new DamageTargetControllerEffect(3);
-        effect.setText("and 3 damage to that creature's controller");
-        ability.addEffect(effect);
-        this.addAbility(ability);
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+
+        // {1}: Dronepack Kindred gets +1/+0 until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new BoostSourceEffect(1, 0, Duration.EndOfTurn), new GenericManaCost(1)));
     }
 
-    public AssembledAlphas(final AssembledAlphas card) {
+    public DronepackKindred(final DronepackKindred card) {
         super(card);
     }
 
     @Override
-    public AssembledAlphas copy() {
-        return new AssembledAlphas(this);
+    public DronepackKindred copy() {
+        return new DronepackKindred(this);
     }
 }

@@ -30,41 +30,45 @@ package mage.sets.eldritchmoon;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.BlocksOrBecomesBlockedByCreatureTriggeredAbility;
+import mage.abilities.common.AttacksTriggeredAbility;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageTargetControllerEffect;
 import mage.abilities.effects.common.DamageTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
  * @author fireshoes
  */
-public class AssembledAlphas extends CardImpl {
+public class EruptingDreadwolf extends CardImpl {
 
-    public AssembledAlphas(UUID ownerId) {
-        super(ownerId, 117, "Assembled Alphas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{R}");
+    public EruptingDreadwolf(UUID ownerId) {
+        super(ownerId, 142, "Erupting Dreadwolf", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Wolf");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Werewolf");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(4);
 
-        // Whenever Assembled Alphas blocks or becomes blocked by a creature, Assembled Alphas deals 3 damage to that creature and 3 damage to that creature's controller.
-        Ability ability = new BlocksOrBecomesBlockedByCreatureTriggeredAbility(new DamageTargetEffect(3, true, "that creature"), false);
-        Effect effect = new DamageTargetControllerEffect(3);
-        effect.setText("and 3 damage to that creature's controller");
-        ability.addEffect(effect);
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Whenever Erupting Dreadwolf attacks, it deals 2 damage to target creature or player.
+        Effect effect = new DamageTargetEffect(2);
+        effect.setText("it deals 2 damage to target creature or player");
+        Ability ability = new AttacksTriggeredAbility(effect, false);
+        ability.addTarget(new TargetCreatureOrPlayer());
         this.addAbility(ability);
     }
 
-    public AssembledAlphas(final AssembledAlphas card) {
+    public EruptingDreadwolf(final EruptingDreadwolf card) {
         super(card);
     }
 
     @Override
-    public AssembledAlphas copy() {
-        return new AssembledAlphas(this);
+    public EruptingDreadwolf copy() {
+        return new EruptingDreadwolf(this);
     }
 }

@@ -29,42 +29,40 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BlocksOrBecomesBlockedByCreatureTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageTargetControllerEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.combat.CantBeBlockedByMoreThanOneSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
 
 /**
  *
  * @author fireshoes
  */
-public class AssembledAlphas extends CardImpl {
+public class SinousPredator extends CardImpl {
 
-    public AssembledAlphas(UUID ownerId) {
-        super(ownerId, 117, "Assembled Alphas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{R}");
+    public SinousPredator(UUID ownerId) {
+        super(ownerId, 163, "Sinous Predator", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Wolf");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Werewolf");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-        // Whenever Assembled Alphas blocks or becomes blocked by a creature, Assembled Alphas deals 3 damage to that creature and 3 damage to that creature's controller.
-        Ability ability = new BlocksOrBecomesBlockedByCreatureTriggeredAbility(new DamageTargetEffect(3, true, "that creature"), false);
-        Effect effect = new DamageTargetControllerEffect(3);
-        effect.setText("and 3 damage to that creature's controller");
-        ability.addEffect(effect);
-        this.addAbility(ability);
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Sinous Predator can't be blocked by more than one creature.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CantBeBlockedByMoreThanOneSourceEffect()));
     }
 
-    public AssembledAlphas(final AssembledAlphas card) {
+    public SinousPredator(final SinousPredator card) {
         super(card);
     }
 
     @Override
-    public AssembledAlphas copy() {
-        return new AssembledAlphas(this);
+    public SinousPredator copy() {
+        return new SinousPredator(this);
     }
 }

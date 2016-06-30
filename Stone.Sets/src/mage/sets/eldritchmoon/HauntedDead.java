@@ -30,41 +30,48 @@ package mage.sets.eldritchmoon;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.BlocksOrBecomesBlockedByCreatureTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageTargetControllerEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.DiscardTargetCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.ReturnSourceFromGraveyardToBattlefieldEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.game.permanent.token.SpiritWhiteToken;
+import mage.target.common.TargetCardInHand;
 
 /**
  *
  * @author fireshoes
  */
-public class AssembledAlphas extends CardImpl {
+public class HauntedDead extends CardImpl {
 
-    public AssembledAlphas(UUID ownerId) {
-        super(ownerId, 117, "Assembled Alphas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{R}");
+    public HauntedDead(UUID ownerId) {
+        super(ownerId, 92, "Haunted Dead", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{B}");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Wolf");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Zombie");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Whenever Assembled Alphas blocks or becomes blocked by a creature, Assembled Alphas deals 3 damage to that creature and 3 damage to that creature's controller.
-        Ability ability = new BlocksOrBecomesBlockedByCreatureTriggeredAbility(new DamageTargetEffect(3, true, "that creature"), false);
-        Effect effect = new DamageTargetControllerEffect(3);
-        effect.setText("and 3 damage to that creature's controller");
-        ability.addEffect(effect);
+        // When Haunted Dead enters the battlefield, put a 1/1 white Spirit creature token with flying onto the battlefield.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new SpiritWhiteToken())));
+
+        // {1}{B}, Discard two cards: Return Haunted Dead from your graveyard to the battlefield tapped.
+        Ability ability = new SimpleActivatedAbility(Zone.GRAVEYARD, new ReturnSourceFromGraveyardToBattlefieldEffect(true), new ManaCostsImpl("{1}{B}"));
+        ability.addCost(new DiscardTargetCost(new TargetCardInHand(2, new FilterCard("two cards"))));
         this.addAbility(ability);
     }
 
-    public AssembledAlphas(final AssembledAlphas card) {
+    public HauntedDead(final HauntedDead card) {
         super(card);
     }
 
     @Override
-    public AssembledAlphas copy() {
-        return new AssembledAlphas(this);
+    public HauntedDead copy() {
+        return new HauntedDead(this);
     }
 }

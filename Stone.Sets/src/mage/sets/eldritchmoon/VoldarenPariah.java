@@ -29,79 +29,62 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.condition.Condition;
-import mage.abilities.condition.IntCompareCondition;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.common.TransformSourceEffect;
-import mage.abilities.keyword.FirstStrikeAbility;
-import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.MadnessAbility;
 import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.game.Game;
-import mage.watchers.common.PlayerGainedLifeWatcher;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.permanent.AnotherPredicate;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class LoneRider extends CardImpl {
+public class VoldarenPariah extends CardImpl {
 
-    public LoneRider(UUID ownerId) {
-        super(ownerId, 33, "Lone Rider", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{W}");
-        this.expansionSetCode = "EMN";
-        this.subtype.add("Human");
-        this.subtype.add("Knight");
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("three other creatures");
 
-        this.canTransform = true;
-        this.secondSideCard = new ItThatRidesAsOne(ownerId);
-
-        // First strike
-        this.addAbility(FirstStrikeAbility.getInstance());
-
-        // Lifelink
-        this.addAbility(LifelinkAbility.getInstance());
-
-        // At the beginning of the end step, if you gained 3 or more life this turn, transform Lone Rider.
-        this.addAbility(new TransformAbility());
-        this.addAbility(new BeginningOfEndStepTriggeredAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true), TargetController.ANY,
-                new YouGainedLifeCondition(Condition.ComparisonType.GreaterThan, 2), false), new PlayerGainedLifeWatcher());
+    static {
+        filter.add(new AnotherPredicate());
     }
 
-    public LoneRider(final LoneRider card) {
+    public VoldarenPariah(UUID ownerId) {
+        super(ownerId, 111, "Voldaren Pariah", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{B}{B}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Vampire");
+        this.subtype.add("Horror");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        this.canTransform = true;
+        this.secondSideCard = new AbolisherOfBloodlines(ownerId);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Sacrifice three other creatures: Transform Voldaren Pariah.
+        this.addAbility(new TransformAbility());
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new TransformSourceEffect(true),
+                new SacrificeTargetCost(new TargetControlledPermanent(3, 3, filter, false))));
+
+        // Madness {B}{B}{B}
+        this.addAbility(new MadnessAbility(this, new ManaCostsImpl("{B}{B}{B}")));
+    }
+
+    public VoldarenPariah(final VoldarenPariah card) {
         super(card);
     }
 
     @Override
-    public LoneRider copy() {
-        return new LoneRider(this);
-    }
-}
-
-class YouGainedLifeCondition extends IntCompareCondition {
-
-    public YouGainedLifeCondition(Condition.ComparisonType type, int value) {
-        super(type, value);
-    }
-
-    @Override
-    protected int getInputValue(Game game, Ability source) {
-        int gainedLife = 0;
-        PlayerGainedLifeWatcher watcher = (PlayerGainedLifeWatcher) game.getState().getWatchers().get("PlayerGainedLifeWatcher");
-        if (watcher != null) {
-            gainedLife = watcher.getLiveGained(source.getControllerId());
-        }
-        return gainedLife;
-    }
-
-    @Override
-    public String toString() {
-        return "if you gained 3 or more life this turn ";
+    public VoldarenPariah copy() {
+        return new VoldarenPariah(this);
     }
 }

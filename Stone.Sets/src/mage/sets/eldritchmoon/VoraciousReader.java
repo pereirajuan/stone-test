@@ -29,42 +29,55 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.BlocksOrBecomesBlockedByCreatureTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DamageTargetControllerEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class AssembledAlphas extends CardImpl {
+public class VoraciousReader extends CardImpl {
 
-    public AssembledAlphas(UUID ownerId) {
-        super(ownerId, 117, "Assembled Alphas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{R}");
-        this.expansionSetCode = "EMN";
-        this.subtype.add("Wolf");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(5);
-
-        // Whenever Assembled Alphas blocks or becomes blocked by a creature, Assembled Alphas deals 3 damage to that creature and 3 damage to that creature's controller.
-        Ability ability = new BlocksOrBecomesBlockedByCreatureTriggeredAbility(new DamageTargetEffect(3, true, "that creature"), false);
-        Effect effect = new DamageTargetControllerEffect(3);
-        effect.setText("and 3 damage to that creature's controller");
-        ability.addEffect(effect);
-        this.addAbility(ability);
+    private static final FilterCard filter = new FilterCard("Instant and sorcery spells");
+    static {
+        filter.add(Predicates.or(
+            new CardTypePredicate(CardType.INSTANT),
+            new CardTypePredicate(CardType.SORCERY)
+        ));
     }
 
-    public AssembledAlphas(final AssembledAlphas card) {
+    public VoraciousReader(UUID ownerId) {
+        super(ownerId, 54, "Voracious Reader", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Eldrazi");
+        this.subtype.add("Homunculus");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
+
+        // this card is the second face of double-faced card
+        this.nightCard = true;
+
+        // Prowess
+        this.addAbility(new ProwessAbility());
+
+        // Instant and sorcery spells you cast cost {1} less to cast.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 1)));
+    }
+
+    public VoraciousReader(final VoraciousReader card) {
         super(card);
     }
 
     @Override
-    public AssembledAlphas copy() {
-        return new AssembledAlphas(this);
+    public VoraciousReader copy() {
+        return new VoraciousReader(this);
     }
 }

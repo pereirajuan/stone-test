@@ -25,45 +25,39 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.theros;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.DealsCombatDamageToAPlayerTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.PutTopCardOfLibraryIntoGraveControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class WarriorsLesson extends CardImpl {
+public class WailingGhoul extends CardImpl {
 
-    public WarriorsLesson(UUID ownerId) {
-        super(ownerId, 184, "Warriors' Lesson", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{G}");
-        this.expansionSetCode = "THS";
+    public WailingGhoul(UUID ownerId) {
+        super(ownerId, 112, "Wailing Ghoul", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Zombie");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-
-        // Until end of turn, up to two target creatures you control each gain "Whenever this creature deals combat damage to a player, draw a card."
-        Ability ability = new DealsCombatDamageToAPlayerTriggeredAbility(new DrawCardSourceControllerEffect(1),false);
-        Effect effect = new GainAbilityTargetEffect(ability, Duration.EndOfTurn);
-        effect.setText("Until end of turn, up to two target creatures you control each gain \"Whenever this creature deals combat damage to a player, draw a card.\"");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0,2));
+        // When Wailing Ghoul enters the battlefield, put the top two cards of your library into your graveyard.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new PutTopCardOfLibraryIntoGraveControllerEffect(2)));
     }
 
-    public WarriorsLesson(final WarriorsLesson card) {
+    public WailingGhoul(final WailingGhoul card) {
         super(card);
     }
 
     @Override
-    public WarriorsLesson copy() {
-        return new WarriorsLesson(this);
+    public WailingGhoul copy() {
+        return new WailingGhoul(this);
     }
 }

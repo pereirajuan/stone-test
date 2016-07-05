@@ -31,68 +31,77 @@ import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.condition.common.DeliriumCondition;
-import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.LoseLifeTargetEffect;
-import mage.abilities.keyword.ReachAbility;
+import mage.abilities.effects.RestrictionEffect;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.game.permanent.token.SpiderToken;
-import mage.target.common.TargetOpponent;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
 
 /**
  *
  * @author fireshoes
  */
-public class IshkanahGrafwidow extends CardImpl {
+public class Mournwillow extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("each Spider you control");
-
-    static {
-        filter.add(new SubtypePredicate("Spider"));
-    }
-
-    public IshkanahGrafwidow(UUID ownerId) {
-        super(ownerId, 162, "Ishkanah, Grafwidow", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{4}{G}");
+    public Mournwillow(UUID ownerId) {
+        super(ownerId, 187, "Mournwillow", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}{G}");
         this.expansionSetCode = "EMN";
-        this.supertype.add("Legendary");
-        this.subtype.add("Spider");
+        this.subtype.add("Plant");
+        this.subtype.add("Skeleton");
         this.power = new MageInt(3);
-        this.toughness = new MageInt(5);
+        this.toughness = new MageInt(2);
 
-        // Reach
-        this.addAbility(ReachAbility.getInstance());
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
 
-        // <i>Delirium</i> &mdash When Ishkanah, Grafwidow enters the battlefield, if there are four or more card types among cards in your graveyard,
-        // put three 1/2 green Spider creature tokens with reach onto the battlefield.
+        // <i>Delirium</i> &mdash; When Mournwillow enters the battlefield, if there are four or more card types among cards in your graveyard,
+        // creatures with power 2 or less can't block this turn.
         Ability ability = new ConditionalTriggeredAbility(
-                new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new SpiderToken(), 3), false),
+                new EntersBattlefieldTriggeredAbility(new MournwillowEffect(), false),
                 new DeliriumCondition(),
                 "<i>Delirium</i> &mdash; When {this} enters the battlefield, if there are four or more card types among cards in your graveyard, "
-                + "put three 1/2 green Spider creature tokens with reach onto the battlefield.");
-        this.addAbility(ability);
-
-        // {5}{B}: Target opponent loses 1 life for each Spider you control.
-        PermanentsOnBattlefieldCount count = new PermanentsOnBattlefieldCount(filter);
-        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new LoseLifeTargetEffect(count), new ManaCostsImpl("{6}{B}"));
-        ability.addTarget(new TargetOpponent());
+                + "creatures with power 2 or less can't block this turn.");
         this.addAbility(ability);
     }
 
-    public IshkanahGrafwidow(final IshkanahGrafwidow card) {
+    public Mournwillow(final Mournwillow card) {
         super(card);
     }
 
     @Override
-    public IshkanahGrafwidow copy() {
-        return new IshkanahGrafwidow(this);
+    public Mournwillow copy() {
+        return new Mournwillow(this);
+    }
+}
+
+class MournwillowEffect extends RestrictionEffect {
+
+    public MournwillowEffect() {
+        super(Duration.EndOfTurn);
+        staticText = "creatures with power 2 or less can't block this turn";
+    }
+
+    public MournwillowEffect(final MournwillowEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public MournwillowEffect copy() {
+        return new MournwillowEffect(this);
+    }
+
+    @Override
+    public boolean applies(Permanent permanent, Ability source, Game game) {
+        return permanent.getPower().getValue() <= 2;
+    }
+
+    @Override
+    public boolean canBlock(Permanent attacker, Permanent blocker, Ability source, Game game) {
+        return false;
     }
 }

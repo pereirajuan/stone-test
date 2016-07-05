@@ -30,69 +30,66 @@ package mage.sets.eldritchmoon;
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.condition.common.DeliriumCondition;
+import mage.abilities.costs.common.DiscardCardCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.common.TapTargetCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
+import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.LoseLifeTargetEffect;
-import mage.abilities.keyword.ReachAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.Predicates;
 import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.game.permanent.token.SpiderToken;
-import mage.target.common.TargetOpponent;
+import mage.filter.predicate.permanent.TappedPredicate;
+import mage.game.permanent.token.ZombieToken;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class IshkanahGrafwidow extends CardImpl {
+public class Cryptbreaker extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("each Spider you control");
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("untapped Zombies you control");
 
     static {
-        filter.add(new SubtypePredicate("Spider"));
+        filter.add(Predicates.not(new TappedPredicate()));
+        filter.add(new SubtypePredicate("Zombie"));
     }
 
-    public IshkanahGrafwidow(UUID ownerId) {
-        super(ownerId, 162, "Ishkanah, Grafwidow", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{4}{G}");
+    public Cryptbreaker(UUID ownerId) {
+        super(ownerId, 86, "Cryptbreaker", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{B}");
         this.expansionSetCode = "EMN";
-        this.supertype.add("Legendary");
-        this.subtype.add("Spider");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Zombie");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // Reach
-        this.addAbility(ReachAbility.getInstance());
-
-        // <i>Delirium</i> &mdash When Ishkanah, Grafwidow enters the battlefield, if there are four or more card types among cards in your graveyard,
-        // put three 1/2 green Spider creature tokens with reach onto the battlefield.
-        Ability ability = new ConditionalTriggeredAbility(
-                new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new SpiderToken(), 3), false),
-                new DeliriumCondition(),
-                "<i>Delirium</i> &mdash; When {this} enters the battlefield, if there are four or more card types among cards in your graveyard, "
-                + "put three 1/2 green Spider creature tokens with reach onto the battlefield.");
+        // {1}{B}, {T}, Discard a card: Put a 2/2 black Zombie creature token onto the battlefield.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CreateTokenEffect(new ZombieToken()), new ManaCostsImpl("{1}{B}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new DiscardCardCost());
         this.addAbility(ability);
 
-        // {5}{B}: Target opponent loses 1 life for each Spider you control.
-        PermanentsOnBattlefieldCount count = new PermanentsOnBattlefieldCount(filter);
-        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new LoseLifeTargetEffect(count), new ManaCostsImpl("{6}{B}"));
-        ability.addTarget(new TargetOpponent());
+        // Tap three untapped Zombies you control: You draw a card and you lose 1 life.
+        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1), new TapTargetCost(new TargetControlledCreaturePermanent(3, 3, filter, true)));
+        Effect effect = new LoseLifeSourceControllerEffect(1);
+        effect.setText("and you lose 1 life");
+        ability.addEffect(effect);
         this.addAbility(ability);
     }
 
-    public IshkanahGrafwidow(final IshkanahGrafwidow card) {
+    public Cryptbreaker(final Cryptbreaker card) {
         super(card);
     }
 
     @Override
-    public IshkanahGrafwidow copy() {
-        return new IshkanahGrafwidow(this);
+    public Cryptbreaker copy() {
+        return new Cryptbreaker(this);
     }
 }

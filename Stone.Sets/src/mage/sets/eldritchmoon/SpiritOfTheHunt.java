@@ -25,48 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.dragonsoftarkir;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.LookLibraryAndPickControllerEffect;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.continuous.BoostControlledEffect;
+import mage.abilities.keyword.FlashAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.Filter.ComparisonType;
-import mage.filter.FilterCard;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.SubtypePredicate;
 
 /**
  *
- * @author jeffwadsworth
+ * @author fireshoes
  */
-public class CollectedCompany extends CardImpl {
+public class SpiritOfTheHunt extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("up to two creature cards with converted mana cost 3 or less");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("each other creature you control that's a Wolf or Werewolf");
 
     static {
-        filter.add(new CardTypePredicate(CardType.CREATURE));
-        filter.add(new ConvertedManaCostPredicate(ComparisonType.LessThan, 4));
+        filter.add(Predicates.or(new SubtypePredicate("Wolf"),
+                new SubtypePredicate("Werewolf")));
     }
 
-    public CollectedCompany(UUID ownerId) {
-        super(ownerId, 177, "Collected Company", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{3}{G}");
-        this.expansionSetCode = "DTK";
+    public SpiritOfTheHunt(UUID ownerId) {
+        super(ownerId, 170, "Spirit of the Hunt", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{G}{G}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Wolf");
+        this.subtype.add("Spirit");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-        // Look at the top six cards of your library. Put up to two creature cards with converted mana cost 3 or less from among them onto the battlefield.
-        // Put the rest on the bottom of your library in any order.
-        this.getSpellAbility().addEffect(new LookLibraryAndPickControllerEffect(6, 2, filter, false, true, Zone.BATTLEFIELD, false));
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
 
+        // When Spirit of the Hunt enters the battlefield, each other creature you control that's a Wolf or a Werewolf gets +0/+3 until end of turn.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new BoostControlledEffect(0, 3, Duration.EndOfTurn, filter, true), false));
     }
 
-    public CollectedCompany(final CollectedCompany card) {
+    public SpiritOfTheHunt(final SpiritOfTheHunt card) {
         super(card);
     }
 
     @Override
-    public CollectedCompany copy() {
-        return new CollectedCompany(this);
+    public SpiritOfTheHunt copy() {
+        return new SpiritOfTheHunt(this);
     }
 }

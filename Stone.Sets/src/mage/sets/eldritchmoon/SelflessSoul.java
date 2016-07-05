@@ -25,48 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.dragonsoftarkir;
+package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.abilities.effects.common.LookLibraryAndPickControllerEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.IndestructibleAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.Filter.ComparisonType;
-import mage.filter.FilterCard;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
+import mage.filter.common.FilterControlledCreaturePermanent;
 
 /**
  *
- * @author jeffwadsworth
+ * @author fireshoes
  */
-public class CollectedCompany extends CardImpl {
+public class SelflessSoul extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("up to two creature cards with converted mana cost 3 or less");
+    public SelflessSoul(UUID ownerId) {
+        super(ownerId, 40, "Selfless Soul", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{W}");
+        this.expansionSetCode = "EMN";
+        this.subtype.add("Spirit");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-    static {
-        filter.add(new CardTypePredicate(CardType.CREATURE));
-        filter.add(new ConvertedManaCostPredicate(ComparisonType.LessThan, 4));
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Sacrifice Selfless Soul: Creatures you control gain indestructible until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityAllEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn,
+                        new FilterControlledCreaturePermanent("creatures you control")), new SacrificeSourceCost()));
     }
 
-    public CollectedCompany(UUID ownerId) {
-        super(ownerId, 177, "Collected Company", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{3}{G}");
-        this.expansionSetCode = "DTK";
-
-        // Look at the top six cards of your library. Put up to two creature cards with converted mana cost 3 or less from among them onto the battlefield.
-        // Put the rest on the bottom of your library in any order.
-        this.getSpellAbility().addEffect(new LookLibraryAndPickControllerEffect(6, 2, filter, false, true, Zone.BATTLEFIELD, false));
-
-    }
-
-    public CollectedCompany(final CollectedCompany card) {
+    public SelflessSoul(final SelflessSoul card) {
         super(card);
     }
 
     @Override
-    public CollectedCompany copy() {
-        return new CollectedCompany(this);
+    public SelflessSoul copy() {
+        return new SelflessSoul(this);
     }
 }

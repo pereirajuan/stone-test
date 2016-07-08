@@ -28,46 +28,64 @@
 package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
-import mage.abilities.keyword.FlyingAbility;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.abilities.Ability;
+import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.common.FilterLandCard;
+import mage.game.Game;
+import mage.players.Player;
 
 /**
  *
  * @author fireshoes
  */
-public class SelflessSoul extends CardImpl {
+public class SplendidReclamation extends CardImpl {
 
-    public SelflessSoul(UUID ownerId) {
-        super(ownerId, 40, "Selfless Soul", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{1}{W}");
+    public SplendidReclamation(UUID ownerId) {
+        super(ownerId, 171, "Splendid Reclamation", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{3}{G}");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Spirit");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
 
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-
-        // Sacrifice Selfless Soul: Creatures you control gain indestructible until end of turn.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityAllEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn,
-                        new FilterControlledCreaturePermanent("creatures you control")), new SacrificeSourceCost()));
+        // Return all land cards from your graveyard to the battlefield tapped.
+        this.getSpellAbility().addEffect(new ReplenishEffect());
     }
 
-    public SelflessSoul(final SelflessSoul card) {
+    public SplendidReclamation(final SplendidReclamation card) {
         super(card);
     }
 
     @Override
-    public SelflessSoul copy() {
-        return new SelflessSoul(this);
+    public SplendidReclamation copy() {
+        return new SplendidReclamation(this);
+    }
+}
+
+class ReplenishEffect extends OneShotEffect {
+
+    ReplenishEffect() {
+        super(Outcome.PutCardInPlay);
+        this.staticText = "Return all land cards from your graveyard to the battlefield tapped";
+    }
+
+    ReplenishEffect(final ReplenishEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public ReplenishEffect copy() {
+        return new ReplenishEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        Player controller = game.getPlayer(source.getControllerId());
+        if (controller != null) {
+            return controller.moveCards(controller.getGraveyard().getCards(new FilterLandCard(), source.getSourceId(),
+                    source.getControllerId(), game), Zone.BATTLEFIELD, source, game, true, false, false, null);
+        }
+        return false;
     }
 }

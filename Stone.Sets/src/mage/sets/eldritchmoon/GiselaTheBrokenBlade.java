@@ -29,54 +29,47 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.MenaceAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.InfoEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.LifelinkAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.constants.Zone;
 
 /**
  *
  * @author LevelX2
  */
-public class ChitteringHost extends CardImpl {
+public class GiselaTheBrokenBlade extends CardImpl {
 
-    public ChitteringHost(UUID ownerId) {
-        super(ownerId, 96, "Chittering Host", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public GiselaTheBrokenBlade(UUID ownerId) {
+        super(ownerId, 28, "Gisela, the Broken Blade", Rarity.MYTHIC, new CardType[]{CardType.CREATURE}, "{2}{W}{W}");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Eldrazi");
+        this.supertype.add("Legendary");
+        this.subtype.add("Angel");
         this.subtype.add("Horror");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(6);
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
 
-        this.nightCard = true; // Meld card
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // Menace <i>(This creature can't be blocked except by two or more creatures.
-        this.addAbility(new MenaceAbility());
-        // When Chittering Host enters the battlefield, other creatures you control get +1/+0 and gain menace until end of turn.
-        Effect effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, true);
-        effect.setText("other creatures you control get +1/+0");
-        Ability ability = new EntersBattlefieldTriggeredAbility(effect, false);
-        effect = new GainAbilityAllEffect(new MenaceAbility(), Duration.EndOfTurn, new FilterControlledCreaturePermanent("other creatures"), true);
-        effect.setText("and gain menace until end of turn");
-        this.addAbility(ability);
-
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+        // Lifelink
+        this.addAbility(LifelinkAbility.getInstance());
+        // At the beginning of your end step, if you both own and control Gisela, the Broken Blade and a creature named Bruna, the Fading Light, exile them, then meld them into Brisela, Voice of Nightmares.
+        this.addAbility(new SimpleStaticAbility(Zone.ALL, new InfoEffect("Meld ability not implemeted yet.")));
     }
 
-    public ChitteringHost(final ChitteringHost card) {
+    public GiselaTheBrokenBlade(final GiselaTheBrokenBlade card) {
         super(card);
     }
 
     @Override
-    public ChitteringHost copy() {
-        return new ChitteringHost(this);
+    public GiselaTheBrokenBlade copy() {
+        return new GiselaTheBrokenBlade(this);
     }
 }

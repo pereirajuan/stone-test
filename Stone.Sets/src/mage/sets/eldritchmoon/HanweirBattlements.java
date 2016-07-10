@@ -28,55 +28,50 @@
 package mage.sets.eldritchmoon;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.InfoEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
 import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.MenaceAbility;
+import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.constants.Zone;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class ChitteringHost extends CardImpl {
+public class HanweirBattlements extends CardImpl {
 
-    public ChitteringHost(UUID ownerId) {
-        super(ownerId, 96, "Chittering Host", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public HanweirBattlements(UUID ownerId) {
+        super(ownerId, 204, "Hanweir Battlements", Rarity.RARE, new CardType[]{CardType.LAND}, "");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Eldrazi");
-        this.subtype.add("Horror");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(6);
 
-        this.nightCard = true; // Meld card
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // Menace <i>(This creature can't be blocked except by two or more creatures.
-        this.addAbility(new MenaceAbility());
-        // When Chittering Host enters the battlefield, other creatures you control get +1/+0 and gain menace until end of turn.
-        Effect effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, true);
-        effect.setText("other creatures you control get +1/+0");
-        Ability ability = new EntersBattlefieldTriggeredAbility(effect, false);
-        effect = new GainAbilityAllEffect(new MenaceAbility(), Duration.EndOfTurn, new FilterControlledCreaturePermanent("other creatures"), true);
-        effect.setText("and gain menace until end of turn");
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
+        // {R},{T}: Target creature gains haste until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityTargetEffect(HasteAbility.getInstance(), Duration.EndOfTurn), new ManaCostsImpl("{R}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
         this.addAbility(ability);
 
+        // {3}{R}{R},{T}: If you both own and control Hanweir Battlements and a creature named Hanweir Garrison, exile them, then meld them into Hanweir, the Writhing Township.
+        this.addAbility(new SimpleStaticAbility(Zone.ALL, new InfoEffect("Meld ability not implemeted yet.")));
     }
 
-    public ChitteringHost(final ChitteringHost card) {
+    public HanweirBattlements(final HanweirBattlements card) {
         super(card);
     }
 
     @Override
-    public ChitteringHost copy() {
-        return new ChitteringHost(this);
+    public HanweirBattlements copy() {
+        return new HanweirBattlements(this);
     }
 }

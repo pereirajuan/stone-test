@@ -29,54 +29,36 @@ package mage.sets.eldritchmoon;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAllEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.MenaceAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.InfoEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.constants.Zone;
 
 /**
  *
  * @author LevelX2
  */
-public class ChitteringHost extends CardImpl {
+public class GrafRats extends CardImpl {
 
-    public ChitteringHost(UUID ownerId) {
-        super(ownerId, 96, "Chittering Host", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "");
+    public GrafRats(UUID ownerId) {
+        super(ownerId, 91, "Graf Rats", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
         this.expansionSetCode = "EMN";
-        this.subtype.add("Eldrazi");
-        this.subtype.add("Horror");
-        this.power = new MageInt(5);
-        this.toughness = new MageInt(6);
+        this.subtype.add("Rat");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        this.nightCard = true; // Meld card
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        // Menace <i>(This creature can't be blocked except by two or more creatures.
-        this.addAbility(new MenaceAbility());
-        // When Chittering Host enters the battlefield, other creatures you control get +1/+0 and gain menace until end of turn.
-        Effect effect = new BoostControlledEffect(1, 0, Duration.EndOfTurn, true);
-        effect.setText("other creatures you control get +1/+0");
-        Ability ability = new EntersBattlefieldTriggeredAbility(effect, false);
-        effect = new GainAbilityAllEffect(new MenaceAbility(), Duration.EndOfTurn, new FilterControlledCreaturePermanent("other creatures"), true);
-        effect.setText("and gain menace until end of turn");
-        this.addAbility(ability);
-
+        // At the beginning of combat on your turn, if you both own and control Graf Rats and a creature named Midnight Scavengers, exile them, then meld them into Chittering Host.
+        this.addAbility(new SimpleStaticAbility(Zone.ALL, new InfoEffect("Meld ability not implemeted yet.")));
     }
 
-    public ChitteringHost(final ChitteringHost card) {
+    public GrafRats(final GrafRats card) {
         super(card);
     }
 
     @Override
-    public ChitteringHost copy() {
-        return new ChitteringHost(this);
+    public GrafRats copy() {
+        return new GrafRats(this);
     }
 }

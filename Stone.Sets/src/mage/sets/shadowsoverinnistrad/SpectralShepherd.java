@@ -25,61 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.planeshift;
+package mage.sets.shadowsoverinnistrad;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.effects.common.ReturnToHandTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
 import mage.constants.Zone;
 import mage.filter.common.FilterControlledPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.TargetSpell;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author fireshoes
+ * @author escplan9 (Derek Monturo - dmontur1 at gmail dot com)
  */
-public class ErtaiTheCorrupted extends CardImpl {
+public class SpectralShepherd extends CardImpl {
     
-    private static final FilterControlledPermanent filter = new FilterControlledPermanent("a creature or enchantment");
-    
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("Spirit");
+
     static {
-        filter.add(Predicates.or(new CardTypePredicate(CardType.CREATURE), new CardTypePredicate(CardType.ENCHANTMENT)));
+        filter.add(new ControllerPredicate(TargetController.YOU));
+        filter.add(new SubtypePredicate("Spirit"));
     }
 
-    public ErtaiTheCorrupted(UUID ownerId) {
-        super(ownerId, 107, "Ertai, the Corrupted", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{W}{U}{B}");
-        this.expansionSetCode = "PLS";
-        this.supertype.add("Legendary");
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(4);
+    public SpectralShepherd(UUID ownerId) {
+        super(ownerId, 38, "Spectral Shepherd", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{W}");
+        this.expansionSetCode = "SOI";
+        this.subtype.add("Spirit");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // {U}, {tap}, Sacrifice a creature or enchantment: Counter target spell.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new CounterTargetEffect(), new ManaCostsImpl("{U}"));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(filter)));
-        ability.addTarget(new TargetSpell());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        
+        // {1}{U}: Return target Spirit you control to its owner's hand.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnToHandTargetEffect(), new ManaCostsImpl("{1}{U}"));
+        ability.addTarget(new TargetControlledPermanent(filter));
         this.addAbility(ability);
-}
+    }
 
-    public ErtaiTheCorrupted(final ErtaiTheCorrupted card) {
+    public SpectralShepherd(final SpectralShepherd card) {
         super(card);
     }
 
     @Override
-    public ErtaiTheCorrupted copy() {
-        return new ErtaiTheCorrupted(this);
+    public SpectralShepherd copy() {
+        return new SpectralShepherd(this);
     }
 }

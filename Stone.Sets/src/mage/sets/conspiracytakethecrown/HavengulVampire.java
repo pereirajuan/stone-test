@@ -25,22 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.conspiracytakethecrown;
 
-import mage.MageInt;
-import mage.constants.CardType;
+import java.util.UUID;
 
 /**
- * @author magenoxx_at_gmail.com
+ *
+ * @author fireshoes
  */
-public class WurmToken extends Token {
+public class HavengulVampire extends mage.sets.avacynrestored.HavengulVampire {
 
-    public WurmToken() {
-        super("Wurm", "a 6/6 green Wurm creature token");
-        cardType.add(CardType.CREATURE);
-        color.setGreen(true);
-        subtype.add("Wurm");
-        power = new MageInt(6);
-        toughness = new MageInt(6);
+    public HavengulVampire(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = "154";
+        this.expansionSetCode = "CN2";
+    }
+
+    public HavengulVampire(final HavengulVampire card) {
+        super(card);
+    }
+
+    @Override
+    public HavengulVampire copy() {
+        return new HavengulVampire(this);
     }
 }

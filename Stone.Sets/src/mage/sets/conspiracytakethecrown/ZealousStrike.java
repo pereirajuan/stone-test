@@ -25,22 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.conspiracytakethecrown;
 
-import mage.MageInt;
-import mage.constants.CardType;
+import java.util.UUID;
 
 /**
- * @author magenoxx_at_gmail.com
+ *
+ * @author fireshoes
  */
-public class WurmToken extends Token {
+public class ZealousStrike extends mage.sets.avacynrestored.ZealousStrike {
 
-    public WurmToken() {
-        super("Wurm", "a 6/6 green Wurm creature token");
-        cardType.add(CardType.CREATURE);
-        color.setGreen(true);
-        subtype.add("Wurm");
-        power = new MageInt(6);
-        toughness = new MageInt(6);
+    public ZealousStrike(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = "101";
+        this.expansionSetCode = "CN2";
+    }
+
+    public ZealousStrike(final ZealousStrike card) {
+        super(card);
+    }
+
+    @Override
+    public ZealousStrike copy() {
+        return new ZealousStrike(this);
     }
 }

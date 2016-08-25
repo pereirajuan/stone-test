@@ -25,22 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.guildpact;
 
+import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.BlocksCreatureTriggeredAbility;
+import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
+import mage.abilities.effects.common.TapTargetEffect;
+import mage.abilities.keyword.DefenderAbility;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
- * @author magenoxx_at_gmail.com
+ *
+ * @author fireshoes
  */
-public class WurmToken extends Token {
+public class VertigoSpawn extends CardImpl {
 
-    public WurmToken() {
-        super("Wurm", "a 6/6 green Wurm creature token");
-        cardType.add(CardType.CREATURE);
-        color.setGreen(true);
-        subtype.add("Wurm");
-        power = new MageInt(6);
-        toughness = new MageInt(6);
+    public VertigoSpawn(UUID ownerId) {
+        super(ownerId, 42, "Vertigo Spawn", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "GPT";
+        this.subtype.add("Illusion");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(3);
+
+        // Defender
+        this.addAbility(DefenderAbility.getInstance());
+
+        // Whenever Vertigo Spawn blocks a creature, tap that creature. That creature doesn't untap during its controller's next untap step.
+        Ability ability = new BlocksCreatureTriggeredAbility(new TapTargetEffect("that creature"), false, true);
+        ability.addEffect(new DontUntapInControllersNextUntapStepTargetEffect("that creature"));
+        this.addAbility(ability);
+    }
+
+    public VertigoSpawn(final VertigoSpawn card) {
+        super(card);
+    }
+
+    @Override
+    public VertigoSpawn copy() {
+        return new VertigoSpawn(this);
     }
 }

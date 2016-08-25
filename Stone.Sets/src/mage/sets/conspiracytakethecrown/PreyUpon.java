@@ -25,22 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.conspiracytakethecrown;
 
-import mage.MageInt;
-import mage.constants.CardType;
+import java.util.UUID;
 
 /**
- * @author magenoxx_at_gmail.com
+ *
+ * @author fireshoes
  */
-public class WurmToken extends Token {
+public class PreyUpon extends mage.sets.innistrad.PreyUpon {
 
-    public WurmToken() {
-        super("Wurm", "a 6/6 green Wurm creature token");
-        cardType.add(CardType.CREATURE);
-        color.setGreen(true);
-        subtype.add("Wurm");
-        power = new MageInt(6);
-        toughness = new MageInt(6);
+    public PreyUpon(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = "191";
+        this.expansionSetCode = "CN2";
+    }
+
+    public PreyUpon(final PreyUpon card) {
+        super(card);
+    }
+
+    @Override
+    public PreyUpon copy() {
+        return new PreyUpon(this);
     }
 }

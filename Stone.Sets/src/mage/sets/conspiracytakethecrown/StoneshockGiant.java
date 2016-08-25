@@ -25,22 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.conspiracytakethecrown;
 
-import mage.MageInt;
-import mage.constants.CardType;
+import java.util.UUID;
 
 /**
- * @author magenoxx_at_gmail.com
+ *
+ * @author fireshoes
  */
-public class WurmToken extends Token {
+public class StoneshockGiant extends mage.sets.theros.StoneshockGiant {
 
-    public WurmToken() {
-        super("Wurm", "a 6/6 green Wurm creature token");
-        cardType.add(CardType.CREATURE);
-        color.setGreen(true);
-        subtype.add("Wurm");
-        power = new MageInt(6);
-        toughness = new MageInt(6);
+    public StoneshockGiant(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = "169";
+        this.expansionSetCode = "CN2";
+    }
+
+    public StoneshockGiant(final StoneshockGiant card) {
+        super(card);
+    }
+
+    @Override
+    public StoneshockGiant copy() {
+        return new StoneshockGiant(this);
     }
 }

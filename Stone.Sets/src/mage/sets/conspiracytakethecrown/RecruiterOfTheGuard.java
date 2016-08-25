@@ -25,22 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.sets.conspiracytakethecrown;
 
+import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.Filter;
+import mage.filter.common.FilterCreatureCard;
+import mage.filter.predicate.mageobject.ToughnessPredicate;
+import mage.target.common.TargetCardInLibrary;
 
 /**
- * @author magenoxx_at_gmail.com
+ *
+ * @author escplan9 (Derek Monturo - dmontur1 at gmail dot com)
  */
-public class WurmToken extends Token {
+public class RecruiterOfTheGuard extends CardImpl {
+    
+    private static final FilterCreatureCard filter = new FilterCreatureCard("a creature card with toughness 2 or less");
+    static {
+        filter.add(new ToughnessPredicate(Filter.ComparisonType.LessThan, 3));
+    }
 
-    public WurmToken() {
-        super("Wurm", "a 6/6 green Wurm creature token");
-        cardType.add(CardType.CREATURE);
-        color.setGreen(true);
-        subtype.add("Wurm");
-        power = new MageInt(6);
-        toughness = new MageInt(6);
+    public RecruiterOfTheGuard(UUID ownerId) {
+        super(ownerId, 22, "Recruiter of the Guard", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{W}");
+        this.expansionSetCode = "CN2";
+        this.subtype.add("Human");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // When Recruiter of the Guard enters the battlefield, you may search your library for a creature card with toughness 2 or less, 
+        // reveal it, put it into your hand, then shuffle your library.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new SearchLibraryPutInHandEffect(
+                new TargetCardInLibrary(filter), true, true), true));
+    }
+
+    public RecruiterOfTheGuard(final RecruiterOfTheGuard card) {
+        super(card);
+    }
+
+    @Override
+    public RecruiterOfTheGuard copy() {
+        return new RecruiterOfTheGuard(this);
     }
 }

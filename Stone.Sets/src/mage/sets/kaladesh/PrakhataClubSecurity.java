@@ -25,58 +25,35 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets;
+package mage.sets.kaladesh;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import mage.cards.ExpansionSet;
-import mage.cards.repository.CardCriteria;
-import mage.cards.repository.CardInfo;
-import mage.cards.repository.CardRepository;
-import mage.constants.SetType;
+import java.util.UUID;
+import mage.MageInt;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
 
 /**
  *
  * @author fireshoes
  */
-public class BattleForZendikar extends ExpansionSet {
+public class PrakhataClubSecurity extends CardImpl {
 
-    private static final BattleForZendikar fINSTANCE = new BattleForZendikar();
-
-    public static BattleForZendikar getInstance() {
-        return fINSTANCE;
+    public PrakhataClubSecurity(UUID ownerId) {
+        super(ownerId, 98, "Prakhata Club Security", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{3}{B}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Aetherborn");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
     }
 
-    protected final List<CardInfo> savedSpecialLand = new ArrayList<>();
-
-    private BattleForZendikar() {
-        super("Battle for Zendikar", "BFZ", "mage.sets.battleforzendikar", new GregorianCalendar(2015, 10, 2).getTime(), SetType.EXPANSION);
-        this.blockName = "Battle for Zendikar";
-        this.hasBoosters = true;
-        this.hasBasicLands = true;
-        this.numBoosterLands = 1;
-        this.numBoosterCommon = 10;
-        this.numBoosterUncommon = 3;
-        this.numBoosterRare = 1;
-        this.ratioBoosterMythic = 8;
-        this.numBoosterSpecial = 0;
-
-        // Masterpiece Series 1-30
-        // Approximately as rare as opening a foil mythic = 144 packs
-        this.ratioBoosterSpecialLand = 144;
+    public PrakhataClubSecurity(final PrakhataClubSecurity card) {
+        super(card);
     }
 
     @Override
-    public List<CardInfo> getSpecialLand() {
-        if (savedSpecialLand.isEmpty()) {
-            CardCriteria criteria = new CardCriteria();
-            criteria.setCodes("EXP");
-            criteria.minCardNumber(1);
-            criteria.maxCardNumber(25);
-            savedSpecialLand.addAll(CardRepository.instance.findCards(criteria));
-        }
-
-        return new ArrayList<>(savedSpecialLand);
+    public PrakhataClubSecurity copy() {
+        return new PrakhataClubSecurity(this);
     }
 }

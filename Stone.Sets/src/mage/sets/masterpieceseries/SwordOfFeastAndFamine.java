@@ -25,58 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets;
+package mage.sets.masterpieceseries;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import mage.cards.ExpansionSet;
-import mage.cards.repository.CardCriteria;
-import mage.cards.repository.CardInfo;
-import mage.cards.repository.CardRepository;
-import mage.constants.SetType;
+import java.util.UUID;
 
 /**
  *
  * @author fireshoes
  */
-public class BattleForZendikar extends ExpansionSet {
+public class SwordOfFeastAndFamine extends mage.sets.mirrodinbesieged.SwordOfFeastAndFamine {
 
-    private static final BattleForZendikar fINSTANCE = new BattleForZendikar();
-
-    public static BattleForZendikar getInstance() {
-        return fINSTANCE;
+    public SwordOfFeastAndFamine(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = "28";
+        this.expansionSetCode = "MPS";
     }
 
-    protected final List<CardInfo> savedSpecialLand = new ArrayList<>();
-
-    private BattleForZendikar() {
-        super("Battle for Zendikar", "BFZ", "mage.sets.battleforzendikar", new GregorianCalendar(2015, 10, 2).getTime(), SetType.EXPANSION);
-        this.blockName = "Battle for Zendikar";
-        this.hasBoosters = true;
-        this.hasBasicLands = true;
-        this.numBoosterLands = 1;
-        this.numBoosterCommon = 10;
-        this.numBoosterUncommon = 3;
-        this.numBoosterRare = 1;
-        this.ratioBoosterMythic = 8;
-        this.numBoosterSpecial = 0;
-
-        // Masterpiece Series 1-30
-        // Approximately as rare as opening a foil mythic = 144 packs
-        this.ratioBoosterSpecialLand = 144;
+    public SwordOfFeastAndFamine(final SwordOfFeastAndFamine card) {
+        super(card);
     }
 
     @Override
-    public List<CardInfo> getSpecialLand() {
-        if (savedSpecialLand.isEmpty()) {
-            CardCriteria criteria = new CardCriteria();
-            criteria.setCodes("EXP");
-            criteria.minCardNumber(1);
-            criteria.maxCardNumber(25);
-            savedSpecialLand.addAll(CardRepository.instance.findCards(criteria));
-        }
-
-        return new ArrayList<>(savedSpecialLand);
+    public SwordOfFeastAndFamine copy() {
+        return new SwordOfFeastAndFamine(this);
     }
 }

@@ -25,58 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets;
+package mage.sets.kaladesh;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import mage.cards.ExpansionSet;
-import mage.cards.repository.CardCriteria;
-import mage.cards.repository.CardInfo;
-import mage.cards.repository.CardRepository;
-import mage.constants.SetType;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.dynamicvalue.common.StaticValue;
+import mage.abilities.effects.common.LookLibraryAndPickControllerEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.FilterCard;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class BattleForZendikar extends ExpansionSet {
+public class GlintNestCrane extends CardImpl {
 
-    private static final BattleForZendikar fINSTANCE = new BattleForZendikar();
+    private static final FilterCard filter = new FilterCard("an artifact card");
 
-    public static BattleForZendikar getInstance() {
-        return fINSTANCE;
+    static {
+            filter.add(new CardTypePredicate(CardType.ARTIFACT));
     }
 
-    protected final List<CardInfo> savedSpecialLand = new ArrayList<>();
+    public GlintNestCrane(UUID ownerId) {
+        super(ownerId, 50, "Glint-Nest Crane", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{U}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Bird");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-    private BattleForZendikar() {
-        super("Battle for Zendikar", "BFZ", "mage.sets.battleforzendikar", new GregorianCalendar(2015, 10, 2).getTime(), SetType.EXPANSION);
-        this.blockName = "Battle for Zendikar";
-        this.hasBoosters = true;
-        this.hasBasicLands = true;
-        this.numBoosterLands = 1;
-        this.numBoosterCommon = 10;
-        this.numBoosterUncommon = 3;
-        this.numBoosterRare = 1;
-        this.ratioBoosterMythic = 8;
-        this.numBoosterSpecial = 0;
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // Masterpiece Series 1-30
-        // Approximately as rare as opening a foil mythic = 144 packs
-        this.ratioBoosterSpecialLand = 144;
+        // When Glint-Nest Crane enters the battlefield, look at the top four cards of your library. You may reveal an artifact card from among them and
+        // put it into your hand. Put the rest on the bottom of your library in any order.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new LookLibraryAndPickControllerEffect(new StaticValue(4), false, new StaticValue(1), filter, false)));
+    }
+
+    public GlintNestCrane(final GlintNestCrane card) {
+        super(card);
     }
 
     @Override
-    public List<CardInfo> getSpecialLand() {
-        if (savedSpecialLand.isEmpty()) {
-            CardCriteria criteria = new CardCriteria();
-            criteria.setCodes("EXP");
-            criteria.minCardNumber(1);
-            criteria.maxCardNumber(25);
-            savedSpecialLand.addAll(CardRepository.instance.findCards(criteria));
-        }
-
-        return new ArrayList<>(savedSpecialLand);
+    public GlintNestCrane copy() {
+        return new GlintNestCrane(this);
     }
 }

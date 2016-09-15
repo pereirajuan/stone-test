@@ -48,7 +48,7 @@ import mage.game.permanent.token.ServoToken;
  *
  * @author fireshoes
  */
-public class MasterTrinketcrafter extends CardImpl {
+public class MasterTrinketeer extends CardImpl {
 
     private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("Servo and Thopter creatures");
 
@@ -57,7 +57,7 @@ public class MasterTrinketcrafter extends CardImpl {
                 new SubtypePredicate("Thopter")));
     }
 
-    public MasterTrinketcrafter(UUID ownerId) {
+    public MasterTrinketeer(UUID ownerId) {
         super(ownerId, 21, "Master Trinketcrafter", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{2}{W}");
         this.expansionSetCode = "KLD";
         this.subtype.add("Dwarf");
@@ -72,12 +72,12 @@ public class MasterTrinketcrafter extends CardImpl {
         this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new CreateTokenEffect(new ServoToken(), 1), new ManaCostsImpl("{3}{W}")));
     }
 
-    public MasterTrinketcrafter(final MasterTrinketcrafter card) {
+    public MasterTrinketeer(final MasterTrinketeer card) {
         super(card);
     }
 
     @Override
-    public MasterTrinketcrafter copy() {
-        return new MasterTrinketcrafter(this);
+    public MasterTrinketeer copy() {
+        return new MasterTrinketeer(this);
     }
 }

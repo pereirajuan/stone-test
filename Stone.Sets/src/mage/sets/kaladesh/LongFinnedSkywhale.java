@@ -28,39 +28,39 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.CanBlockOnlyFlyingAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledPermanent;
-import mage.target.TargetSpell;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class LongFinnedSkywhale extends CardImpl {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
+    public LongFinnedSkywhale(UUID ownerId) {
+        super(ownerId, 54, "Long-Finned Skywhale", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{U}{U}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Whale");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
 
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
+        // Long-Finned Skywhale can block only creatures with flying.
+        this.addAbility(new CanBlockOnlyFlyingAbility());
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public LongFinnedSkywhale(final LongFinnedSkywhale card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public LongFinnedSkywhale copy() {
+        return new LongFinnedSkywhale(this);
     }
 }

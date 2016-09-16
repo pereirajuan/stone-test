@@ -28,39 +28,44 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.effects.common.DoIfCostPaid;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledPermanent;
-import mage.target.TargetSpell;
-import mage.target.common.TargetControlledPermanent;
+import mage.counters.CounterType;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class ThrivingTurtle extends CardImpl {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
+    public ThrivingTurtle(UUID ownerId) {
+        super(ownerId, 66, "Thriving Turtle", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{U}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Turtle");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(3);
 
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
+        // When Thriving Turtle enters the battlefield, you get {E}{E}.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(2)));
 
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
+        // Whenever Thriving Turtle attacks, you may pay {E}{E}. If you do, put a +1/+1 counter on it.
+        this.addAbility(new AttacksTriggeredAbility(new DoIfCostPaid(new AddCountersSourceEffect(CounterType.P1P1.createInstance()), new PayEnergyCost(2)), false));
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public ThrivingTurtle(final ThrivingTurtle card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public ThrivingTurtle copy() {
+        return new ThrivingTurtle(this);
     }
 }

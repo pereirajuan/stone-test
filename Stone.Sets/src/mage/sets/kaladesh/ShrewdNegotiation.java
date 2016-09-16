@@ -28,39 +28,52 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.effects.common.continuous.ExchangeControlTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledPermanent;
-import mage.target.TargetSpell;
+import mage.constants.TargetController;
+import mage.filter.FilterPermanent;
+import mage.filter.common.FilterControlledArtifactPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.TargetPermanent;
 import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class ShrewdNegotiation extends CardImpl {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
-        this.expansionSetCode = "KLD";
+    private static final String rule = "Exchange control of target artifact you control and target artifact or creature you don't control";
 
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
+    private static final FilterPermanent filter = new FilterPermanent("artifact or creature you don't control");
 
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
+    static {
+        filter.add(new ControllerPredicate(TargetController.NOT_YOU));
+        filter.add(Predicates.or(new CardTypePredicate(CardType.ARTIFACT),
+                        new CardTypePredicate(CardType.CREATURE)));
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public ShrewdNegotiation(UUID ownerId) {
+        super(ownerId, 64, "Shrewd Negotiation", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{4}{U}");
+        this.expansionSetCode = "KLD";
+
+        // Exchange control of target artifact you control and target artifact or creature you don't control.
+        getSpellAbility().addEffect(new ExchangeControlTargetEffect(Duration.EndOfGame, rule, false, true));
+        getSpellAbility().addTarget(new TargetControlledPermanent(new FilterControlledArtifactPermanent("artifact you control")));
+        getSpellAbility().addTarget(new TargetPermanent(filter));
+    }
+
+    public ShrewdNegotiation(final ShrewdNegotiation card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public ShrewdNegotiation copy() {
+        return new ShrewdNegotiation(this);
     }
 }

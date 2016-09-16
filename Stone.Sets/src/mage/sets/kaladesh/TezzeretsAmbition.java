@@ -28,39 +28,45 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.discard.DiscardControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.filter.common.FilterControlledPermanent;
-import mage.target.TargetSpell;
-import mage.target.common.TargetControlledPermanent;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class TezzeretsAmbition extends CardImpl {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
-        this.expansionSetCode = "KLD";
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("you control no artifacts");
 
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
-
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
+    static {
+        filter.add(new CardTypePredicate(CardType.ARTIFACT));
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public TezzeretsAmbition(UUID ownerId) {
+        super(ownerId, 65, "Tezzeret's Ambition", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{3}{U}{U}");
+        this.expansionSetCode = "KLD";
+
+        // Draw three cards. If you control no artifacts, discard a card.
+        this.getSpellAbility().addEffect(new DrawCardSourceControllerEffect(3));
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(
+                new DiscardControllerEffect(1),
+                new PermanentsOnTheBattlefieldCondition(filter, PermanentsOnTheBattlefieldCondition.CountType.EQUAL_TO, 0)));
+    }
+
+    public TezzeretsAmbition(final TezzeretsAmbition card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public TezzeretsAmbition copy() {
+        return new TezzeretsAmbition(this);
     }
 }

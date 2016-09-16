@@ -28,39 +28,63 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
+import mage.abilities.Mode;
+import mage.abilities.effects.common.ChooseNewTargetsTargetEffect;
+import mage.abilities.effects.common.CopyTargetSpellEffect;
 import mage.abilities.effects.common.CounterTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledPermanent;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
 import mage.target.TargetSpell;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class InsidiousWill extends CardImpl {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
-        this.expansionSetCode = "KLD";
+    private static final FilterSpell filter = new FilterSpell("instant or sorcery spell");
 
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
-
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
+    static {
+        filter.add(Predicates.or(
+                new CardTypePredicate(CardType.INSTANT),
+                new CardTypePredicate(CardType.SORCERY)));
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public InsidiousWill(UUID ownerId) {
+        super(ownerId, 52, "Insidious Will", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{2}{U}{U}");
+        this.expansionSetCode = "KLD";
+
+        // Choose one &mdash
+        this.getSpellAbility().getModes().setMinModes(1);
+        this.getSpellAbility().getModes().setMaxModes(1);
+
+        // Counter target spell.;
+        getSpellAbility().addEffect(new CounterTargetEffect());
+        getSpellAbility().addTarget(new TargetSpell());
+
+        // You may choose new targets for target spell.;
+        Mode mode = new Mode();
+        mode.getEffects().add(new ChooseNewTargetsTargetEffect());
+        mode.getTargets().add(new TargetSpell());
+        this.getSpellAbility().addMode(mode);
+
+        // Copy target instant or sorcery spell. You may choose new targets for the copy.
+        mode = new Mode();
+        mode.getEffects().add(new CopyTargetSpellEffect());
+        mode.getTargets().add(new TargetSpell(filter));
+        this.getSpellAbility().getModes().addMode(mode);
+    }
+
+    public InsidiousWill(final InsidiousWill card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public InsidiousWill copy() {
+        return new InsidiousWill(this);
     }
 }

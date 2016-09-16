@@ -28,39 +28,25 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.effects.common.CounterTargetEffect;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Rarity;
-import mage.filter.common.FilterControlledPermanent;
-import mage.target.TargetSpell;
-import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class TorrentialGearhulk extends mage.sets.masterpieceseries.TorrentialGearhulk {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
+    public TorrentialGearhulk(UUID ownerId) {
+        super(ownerId);
+        this.cardNumber = "67";
         this.expansionSetCode = "KLD";
-
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
-
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public TorrentialGearhulk(final TorrentialGearhulk card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public TorrentialGearhulk copy() {
+        return new TorrentialGearhulk(this);
     }
 }

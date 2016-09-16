@@ -28,39 +28,56 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.ActivateAsSorceryActivatedAbility;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.effects.common.ReturnToHandFromBattlefieldAllEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
-import mage.filter.common.FilterControlledPermanent;
-import mage.target.TargetSpell;
-import mage.target.common.TargetControlledPermanent;
+import mage.constants.TargetController;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.AnotherPredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class DisappearingAct extends CardImpl {
+public class AethersquallAncient extends CardImpl {
 
-    public DisappearingAct(UUID ownerId) {
-        super(ownerId, 43, "Disappearing Act", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
-        this.expansionSetCode = "KLD";
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("other creatures");
 
-        // As an additional cost to cast Disappearing Act, return a permanent you control to its owner's hand.
-        this.getSpellAbility().addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(new FilterControlledPermanent("a permanent"))));
-
-        // Counter target spell.
-        getSpellAbility().addEffect(new CounterTargetEffect());
-        getSpellAbility().addTarget(new TargetSpell());
+    static {
+        filter.add(new AnotherPredicate());
     }
 
-    public DisappearingAct(final DisappearingAct card) {
+    public AethersquallAncient(UUID ownerId) {
+        super(ownerId, 39, "Aethersquall Ancient", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{5}{U}{U}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Leviathan");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(6);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // At the beginning of your upkeep, you get {E}{E}{E}.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new GetEnergyCountersControllerEffect(3), TargetController.YOU, false));
+
+        // Pay {E}{E}{E}{E}{E}{E}{E}{E}: Return all other creatures to their owners' hands. Activate this ability only any time you could cast a sorcery.
+        this.addAbility(new ActivateAsSorceryActivatedAbility(Zone.BATTLEFIELD, new ReturnToHandFromBattlefieldAllEffect(filter), new PayEnergyCost(8)));
+    }
+
+    public AethersquallAncient(final AethersquallAncient card) {
         super(card);
     }
 
     @Override
-    public DisappearingAct copy() {
-        return new DisappearingAct(this);
+    public AethersquallAncient copy() {
+        return new AethersquallAncient(this);
     }
 }

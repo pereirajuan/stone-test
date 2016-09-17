@@ -28,42 +28,44 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.constants.Zone;
+import mage.target.common.TargetArtifactPermanent;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class RuinousGremlin extends CardImpl {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+    public RuinousGremlin(UUID ownerId) {
+        super(ownerId, 128, "Ruinous Gremlin", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{R}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Gremlin");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+        // {2}{R}, Sacrifice Ruinous Gremlin: Destroy target artifact.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DestroyTargetEffect(), new ManaCostsImpl<>("{2}{R}"));
+        ability.addCost(new SacrificeSourceCost());
+        ability.addTarget(new TargetArtifactPermanent());
+        this.addAbility(ability);
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
+    public RuinousGremlin(final RuinousGremlin card) {
         super(card);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public RuinousGremlin copy() {
+        return new RuinousGremlin(this);
     }
 }

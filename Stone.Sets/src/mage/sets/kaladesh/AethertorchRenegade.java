@@ -25,56 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.championsofkamigawa;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.ReturnToHandChosenControlledPermanentCost;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.effects.common.discard.DiscardHandDrawSameNumberSourceEffect;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledLandPermanent;
-import mage.filter.common.FilterControlledPermanent;
-import mage.target.common.TargetControlledPermanent;
+import mage.target.TargetPlayer;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
- * @author Loki
+ *
+ * @author LevelX2
  */
-public class SoratamiSeer extends CardImpl {
+public class AethertorchRenegade extends CardImpl {
 
-    private static final FilterControlledPermanent filter = new FilterControlledLandPermanent("lands");
+    public AethertorchRenegade(UUID ownerId) {
+        super(ownerId, 106, "Aethertorch Renegade", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Human");
+        this.subtype.add("Rogue");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
 
-    public SoratamiSeer(UUID ownerId) {
-        super(ownerId, 91, "Soratami Seer", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{4}{U}");
-        this.expansionSetCode = "CHK";
-        this.subtype.add("Moonfolk");
-        this.subtype.add("Wizard");
+        // When Aethertorch Renegade enters the battlefield, you get {E}{E}{E}{E}
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(4)));
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(3);
-
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
-
-        // {4}, Return two lands you control to their owner's hand: Discard all the cards in your hand, then draw that many cards.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DiscardHandDrawSameNumberSourceEffect(), new GenericManaCost(4));
-        ability.addCost(new ReturnToHandChosenControlledPermanentCost(new TargetControlledPermanent(2, 2, filter, false)));
+        // {t}, Pay {E}{E} Aethertorch Renegade deals 1 damage to target creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(1), new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        ability.addCost(new PayEnergyCost(2));
         this.addAbility(ability);
+        // {t}, Pay {E}{E}{E}{E}{E}{E}{E}{E}: Aethertorch Renegade deals 6 damage to target player.
+        ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(6), new TapSourceCost());
+        ability.addTarget(new TargetPlayer());
+        ability.addCost(new PayEnergyCost(8));
+        this.addAbility(ability);
+
     }
 
-    public SoratamiSeer(final SoratamiSeer card) {
+    public AethertorchRenegade(final AethertorchRenegade card) {
         super(card);
     }
 
     @Override
-    public SoratamiSeer copy() {
-        return new SoratamiSeer(this);
+    public AethertorchRenegade copy() {
+        return new AethertorchRenegade(this);
     }
-
 }

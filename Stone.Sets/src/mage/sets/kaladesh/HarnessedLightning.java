@@ -31,13 +31,10 @@ import java.util.UUID;
 import mage.abilities.Ability;
 import mage.abilities.costs.Cost;
 import mage.abilities.costs.common.PayEnergyCost;
-import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.counters.CounterType;
@@ -45,63 +42,60 @@ import mage.game.Game;
 import mage.game.permanent.Permanent;
 import mage.players.Player;
 import mage.target.common.TargetCreaturePermanent;
-import mage.target.targetpointer.FixedTarget;
 
 /**
  *
  * @author LevelX2
  */
-public class DieYoung extends CardImpl {
+public class HarnessedLightning extends CardImpl {
 
-    public DieYoung(UUID ownerId) {
-        super(ownerId, 76, "Die Young", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{1}{B}");
+    public HarnessedLightning(UUID ownerId) {
+        super(ownerId, 117, "Harnessed Lightning", Rarity.UNCOMMON, new CardType[]{CardType.INSTANT}, "{1}{R}");
         this.expansionSetCode = "KLD";
 
-        // Choose target creature. You get {E}{E}, then you may pay any amount of {E}. The creature gets -1/-1 until end of turn for each {E} paid this way.
-        this.getSpellAbility().addEffect(new DieYoungEffect());
+        // Choose target creature.  You get {E}{E}{E}, then you may pay any amount of {E}. Harnessed Lightning deals that much damage to that creature.
+        this.getSpellAbility().addEffect(new HarnessedLightningEffect());
         this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public DieYoung(final DieYoung card) {
+    public HarnessedLightning(final HarnessedLightning card) {
         super(card);
     }
 
     @Override
-    public DieYoung copy() {
-        return new DieYoung(this);
+    public HarnessedLightning copy() {
+        return new HarnessedLightning(this);
     }
 }
 
-class DieYoungEffect extends OneShotEffect {
+class HarnessedLightningEffect extends OneShotEffect {
 
-    public DieYoungEffect() {
+    public HarnessedLightningEffect() {
         super(Outcome.UnboostCreature);
-        this.staticText = "Choose target creature. You get {E}{E}, then you may pay any amount of {E}. The creature gets -1/-1 until end of turn for each {E} paid this way";
+        this.staticText = "Choose target creature.  You get {E}{E}{E}, then you may pay any amount of {E}. Harnessed Lightning deals that much damage to that creature";
     }
 
-    public DieYoungEffect(final DieYoungEffect effect) {
+    public HarnessedLightningEffect(final HarnessedLightningEffect effect) {
         super(effect);
     }
 
     @Override
-    public DieYoungEffect copy() {
-        return new DieYoungEffect(this);
+    public HarnessedLightningEffect copy() {
+        return new HarnessedLightningEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            new GetEnergyCountersControllerEffect(2).apply(game, source);
+            new GetEnergyCountersControllerEffect(3).apply(game, source);
             int numberToPayed = controller.getAmount(0, controller.getCounters().getCount(CounterType.ENERGY), "How many {E} do you like to pay?", game);
             if (numberToPayed > 0) {
                 Cost cost = new PayEnergyCost(numberToPayed);
                 if (cost.pay(source, game, source.getSourceId(), source.getControllerId(), true)) {
                     Permanent targetCreature = game.getPermanent(getTargetPointer().getFirst(game, source));
                     if (targetCreature != null) {
-                        ContinuousEffect effect = new BoostTargetEffect(numberToPayed, numberToPayed, Duration.EndOfTurn);
-                        effect.setTargetPointer(new FixedTarget(targetCreature, game));
-                        game.addEffect(effect, source);
+                        targetCreature.damage(numberToPayed, source.getSourceId(), game, false, true);
                     }
                 }
             }

@@ -28,42 +28,40 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.dynamicvalue.common.CardsInControllerHandCount;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.discard.DiscardHandDrawSameNumberSourceEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class FatefulShowdown extends CardImpl {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+    public FatefulShowdown(UUID ownerId) {
+        super(ownerId, 114, "Fateful Showdown", Rarity.RARE, new CardType[]{CardType.INSTANT}, "{2}{R}{R}");
         this.expansionSetCode = "KLD";
 
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+        // Fateful Showdown deals damage to target creature or player equal to the number of cards in your hand. Discard all the cards in your hand, then draw that many cards.
+        Effect effect = new DamageTargetEffect(new CardsInControllerHandCount());
+        effect.setText("{this} deals damage to target creature or player equal to the number of cards in your hand");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetCreatureOrPlayer());
+        this.getSpellAbility().addEffect(new DiscardHandDrawSameNumberSourceEffect());
+
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
+    public FatefulShowdown(final FatefulShowdown card) {
         super(card);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public FatefulShowdown copy() {
+        return new FatefulShowdown(this);
     }
 }

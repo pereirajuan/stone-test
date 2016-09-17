@@ -28,42 +28,55 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
+import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.MenaceAbility;
 import mage.cards.CardImpl;
+import mage.constants.AttachmentType;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.constants.Zone;
+import mage.target.TargetPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class GiantSpectacle extends CardImpl {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+    public GiantSpectacle(UUID ownerId) {
+        super(ownerId, 116, "Giant Spectacle", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{1}{R}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Aura");
 
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+        // Enchant Creature
+        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
+
+        // Enchanted creature gets +2/+1 and has menace.
+        ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(2, 1));
+        Effect effect = new GainAbilityAttachedEffect(new MenaceAbility(), AttachmentType.AURA);
+        effect.setText("and has menace");
+        ability.addEffect(effect);
+        this.addAbility(ability);
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
+    public GiantSpectacle(final GiantSpectacle card) {
         super(card);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public GiantSpectacle copy() {
+        return new GiantSpectacle(this);
     }
 }

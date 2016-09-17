@@ -25,16 +25,11 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.magic2015;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.MageInt;
 import mage.MageObject;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.OneShotEffect;
 import mage.cards.Card;
 import mage.cards.CardImpl;
@@ -43,77 +38,48 @@ import mage.constants.CardType;
 import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.common.FilterCreatureCard;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.SupertypePredicate;
-import mage.filter.predicate.permanent.AnotherPredicate;
 import mage.game.Game;
 import mage.players.Library;
 import mage.players.Player;
-import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class JaliraMasterPolymorphist extends CardImpl {
+public class MadcapExperiment extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("another creature");
+    public MadcapExperiment(UUID ownerId) {
+        super(ownerId, 122, "Madcap Experiment", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{3}{R}");
+        this.expansionSetCode = "KLD";
 
-    static {
-        filter.add(new AnotherPredicate());
+        // Reveal cards from the top of your library until you reveal an artifact card. Put that card onto the battlefield and the rest on the bottom of your library in a random order. Madcap Experiment deals damage to you equal to the number of cards revealed this way.
+        this.getSpellAbility().addEffect(new MadcapExperimentEffect());
     }
 
-    public JaliraMasterPolymorphist(UUID ownerId) {
-        super(ownerId, 64, "Jalira, Master Polymorphist", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{U}");
-        this.expansionSetCode = "M15";
-        this.supertype.add("Legendary");
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
-
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
-
-        // {2}{U}, {T}, Sacrifice another creature: Reveal cards from the top of your library until you reveal a nonlegendary creature card.
-        // Put that card onto the battlefield and the rest on the bottom of your library in a random order.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new JaliraMasterPolymorphistEffect(), new ManaCostsImpl("{2}{U}"));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent(1, 1, filter, true)));
-        this.addAbility(ability);
-
-    }
-
-    public JaliraMasterPolymorphist(final JaliraMasterPolymorphist card) {
+    public MadcapExperiment(final MadcapExperiment card) {
         super(card);
     }
 
     @Override
-    public JaliraMasterPolymorphist copy() {
-        return new JaliraMasterPolymorphist(this);
+    public MadcapExperiment copy() {
+        return new MadcapExperiment(this);
     }
 }
 
-class JaliraMasterPolymorphistEffect extends OneShotEffect {
+class MadcapExperimentEffect extends OneShotEffect {
 
-    private static final FilterCreatureCard filter = new FilterCreatureCard("nonlegendary creature card");
-
-    static {
-        filter.add(Predicates.not(new SupertypePredicate("Legendary")));
-    }
-
-    public JaliraMasterPolymorphistEffect() {
+    public MadcapExperimentEffect() {
         super(Outcome.PutCardInPlay);
-        this.staticText = "Reveal cards from the top of your library until you reveal a nonlegendary creature card. Put that card onto the battlefield and the rest on the bottom of your library in a random order";
+        this.staticText = "Reveal cards from the top of your library until you reveal an artifact card. Put that card onto the battlefield and the rest on the bottom of your library in a random order. {this} deals damage to you equal to the number of cards revealed this way";
     }
 
-    public JaliraMasterPolymorphistEffect(final JaliraMasterPolymorphistEffect effect) {
+    public MadcapExperimentEffect(final MadcapExperimentEffect effect) {
         super(effect);
     }
 
     @Override
-    public JaliraMasterPolymorphistEffect copy() {
-        return new JaliraMasterPolymorphistEffect(this);
+    public MadcapExperimentEffect copy() {
+        return new MadcapExperimentEffect(this);
     }
 
     @Override
@@ -129,13 +95,14 @@ class JaliraMasterPolymorphistEffect extends OneShotEffect {
                 if (card != null) {
                     cards.add(card);
                 }
-            } while (library.size() > 0 && card != null && !filter.match(card, game));
+            } while (library.size() > 0 && card != null && !card.getCardType().contains(CardType.ARTIFACT));
             // reveal cards
             if (!cards.isEmpty()) {
                 controller.revealCards(sourceObject.getIdName(), cards, game);
             }
-            if (card != null && filter.match(card, game)) {
-                // put nonlegendary creature card to battlefield
+            int revealed = cards.size();
+            if (card != null && card.getCardType().contains(CardType.ARTIFACT)) {
+                // put artifact card to battlefield
                 controller.moveCards(card, Zone.BATTLEFIELD, source, game);
                 // remove it from revealed card list
                 cards.remove(card);
@@ -148,6 +115,7 @@ class JaliraMasterPolymorphistEffect extends OneShotEffect {
                     controller.moveCardToLibraryWithInfo(card, source.getSourceId(), game, Zone.HAND, false, false);
                 }
             }
+            controller.damage(revealed, source.getSourceId(), game, false, true);
             return true;
         }
         return false;

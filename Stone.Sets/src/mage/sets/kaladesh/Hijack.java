@@ -28,42 +28,46 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.UntapTargetEffect;
 import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.effects.common.continuous.GainControlTargetEffect;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.filter.StaticFilters;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class Hijack extends CardImpl {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+    public Hijack(UUID ownerId) {
+        super(ownerId, 118, "Hijack", Rarity.COMMON, new CardType[]{CardType.SORCERY}, "{1}{R}{R}");
         this.expansionSetCode = "KLD";
 
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+        // Gain control of target artifact or creature until end of turn. Untap it. It gains haste until end of turn.
+        this.getSpellAbility().addTarget(new TargetPermanent(StaticFilters.FILTER_PERMANENT_ARTIFACT_OR_CREATURE));
+        this.getSpellAbility().addEffect(new GainControlTargetEffect(Duration.EndOfTurn));
+        Effect effect = new UntapTargetEffect();
+        effect.setText("Untap it");
+        this.getSpellAbility().addEffect(effect);
+        effect = new GainAbilityTargetEffect(HasteAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("It gains haste until end of turn");
+        this.getSpellAbility().addEffect(effect);
+
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
+    public Hijack(final Hijack card) {
         super(card);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public Hijack copy() {
+        return new Hijack(this);
     }
 }

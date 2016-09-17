@@ -25,45 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.kaladesh;
+package mage.abilities.effects.common.discard;
 
-import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
-import mage.cards.CardImpl;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.abilities.Ability;
+import mage.abilities.effects.OneShotEffect;
+import mage.constants.Outcome;
+import mage.game.Game;
+import mage.players.Player;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class DiscardHandDrawSameNumberSourceEffect extends OneShotEffect {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
-        this.expansionSetCode = "KLD";
-
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+    public DiscardHandDrawSameNumberSourceEffect() {
+        super(Outcome.DrawCard);
+        staticText = "Discard all the cards in your hand, then draw that many cards";
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
-        super(card);
+    public DiscardHandDrawSameNumberSourceEffect(final DiscardHandDrawSameNumberSourceEffect effect) {
+        super(effect);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public boolean apply(Game game, Ability source) {
+        Player player = game.getPlayer(source.getControllerId());
+        if (player != null) {
+            int amount = player.getHand().getCards(game).size();
+            player.discard(amount, false, source, game);
+            player.drawCards(amount, game);
+            return true;
+        }
+        return false;
     }
+
+    @Override
+    public DiscardHandDrawSameNumberSourceEffect copy() {
+        return new DiscardHandDrawSameNumberSourceEffect(this);
+    }
+
 }

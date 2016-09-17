@@ -28,42 +28,51 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.AttacksTriggeredAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.effects.common.DoIfCostPaid;
+import mage.abilities.effects.common.combat.CantBlockTargetEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class MaulfistDoorbuster extends CardImpl {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+    public MaulfistDoorbuster(UUID ownerId) {
+        super(ownerId, 123, "Maulfist Doorbuster", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{3}{R}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(2);
 
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+        // When Maulfist Doorbuster enters the battlefield, you get {E}{E}.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(2)));
+
+        // Whenever Maulfist Doorbuster attacks, you may pay {E}. If you do, target creature can't block this turn.
+        DoIfCostPaid doIfCostPaidEffect = new DoIfCostPaid(new CantBlockTargetEffect(Duration.EndOfTurn), new PayEnergyCost(1));
+        Ability ability = new AttacksTriggeredAbility(doIfCostPaidEffect, false,
+                "Whenever {this} attacks, you may pay {E}. If you do, target creature can't block this turn.");
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
+    public MaulfistDoorbuster(final MaulfistDoorbuster card) {
         super(card);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public MaulfistDoorbuster copy() {
+        return new MaulfistDoorbuster(this);
     }
 }

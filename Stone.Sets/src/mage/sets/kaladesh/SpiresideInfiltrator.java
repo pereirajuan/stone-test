@@ -28,42 +28,38 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.condition.LockedInCondition;
-import mage.abilities.condition.common.TargetHasCardTypeCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.TrampleAbility;
+import mage.MageInt;
+import mage.abilities.common.BecomesTappedSourceTriggeredAbility;
+import mage.abilities.effects.common.DamagePlayersEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.target.common.TargetAttackingCreature;
+import mage.constants.TargetController;
 
 /**
  *
- * @author spjspj
+ * @author LevelX2
  */
-public class BuiltToSmash extends CardImpl {
+public class SpiresideInfiltrator extends CardImpl {
 
-    public BuiltToSmash(UUID ownerId) {
-        super(ownerId, 108, "Built to Smash", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{R}");
+    public SpiresideInfiltrator(UUID ownerId) {
+        super(ownerId, 133, "Spireside Infiltrator", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{2}{R}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Human");
+        this.subtype.add("Rogue");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
 
-        // Target attacking creature gets +3/+3 until end of turn. If it's an artifact creature, it gains trample until end of turn.
-        this.getSpellAbility().addEffect(new BoostTargetEffect(3, 3, Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetAttackingCreature());
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(
-                new GainAbilityTargetEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), new LockedInCondition(new TargetHasCardTypeCondition(CardType.ARTIFACT)),
-                "If its an artifact creature, it gains trample until end of turn"));
+        // Whenever Spireside Infiltrator becomes tapped, it deals one damage to each opponent.
+        this.addAbility(new BecomesTappedSourceTriggeredAbility(new DamagePlayersEffect(1, TargetController.OPPONENT)));
     }
 
-    public BuiltToSmash(final BuiltToSmash card) {
+    public SpiresideInfiltrator(final SpiresideInfiltrator card) {
         super(card);
     }
 
     @Override
-    public BuiltToSmash copy() {
-        return new BuiltToSmash(this);
+    public SpiresideInfiltrator copy() {
+        return new SpiresideInfiltrator(this);
     }
 }

@@ -25,16 +25,19 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shardsofalara;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DontUntapInControllersUntapStepEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.MayTapOrUntapTargetEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
 import mage.filter.FilterPermanent;
@@ -44,40 +47,43 @@ import mage.target.TargetPermanent;
 
 /**
  *
- * @author Plopman
+ * @author LevelX2
  */
-public class ComaVeil extends CardImpl {
+public class JanjeetSentry extends CardImpl {
 
     private static final FilterPermanent filter = new FilterPermanent("artifact or creature");
 
     static {
         filter.add(Predicates.or(
                 new CardTypePredicate(CardType.ARTIFACT),
-                new CardTypePredicate(CardType.CREATURE)));
+                new CardTypePredicate(CardType.CREATURE)
+        ));
     }
 
-    public ComaVeil(UUID ownerId) {
-        super(ownerId, 36, "Coma Veil", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{4}{U}");
-        this.expansionSetCode = "ALA";
-        this.subtype.add("Aura");
+    public JanjeetSentry(UUID ownerId) {
+        super(ownerId, 53, "Janjeet Sentry", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{2}{U}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Vedalken");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
 
-        // Enchant artifact or creature
-        TargetPermanent auraTarget = new TargetPermanent(filter);
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Detriment));
-        EnchantAbility ability = new EnchantAbility(auraTarget.getTargetName());
+        // When Janjeet Sentry enters the battlefield, you get {E}{E}.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(2)));
+
+        // Tap, Pay {E}{E}: You may tap or untap target artifact or creature.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new MayTapOrUntapTargetEffect(), new TapSourceCost());
+        ability.addCost(new PayEnergyCost(2));
         this.addAbility(ability);
-
-        // Enchanted permanent doesn't untap during its controller's untap step.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new DontUntapInControllersUntapStepEnchantedEffect("permanent")));
+        this.getSpellAbility().addTarget(new TargetPermanent(filter));
     }
 
-    public ComaVeil(final ComaVeil card) {
+    public JanjeetSentry(final JanjeetSentry card) {
         super(card);
     }
 
     @Override
-    public ComaVeil copy() {
-        return new ComaVeil(this);
+    public JanjeetSentry copy() {
+        return new JanjeetSentry(this);
     }
 }

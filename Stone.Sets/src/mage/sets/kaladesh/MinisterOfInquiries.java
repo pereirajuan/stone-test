@@ -25,59 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shardsofalara;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DontUntapInControllersUntapStepEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.PutLibraryIntoGraveTargetEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.FilterPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.TargetPermanent;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author Plopman
+ * @author LevelX2
  */
-public class ComaVeil extends CardImpl {
+public class MinisterOfInquiries extends CardImpl {
 
-    private static final FilterPermanent filter = new FilterPermanent("artifact or creature");
+    public MinisterOfInquiries(UUID ownerId) {
+        super(ownerId, 57, "Minister of Inquiries", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{U}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Vedalken");
+        this.subtype.add("Advisor");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(2);
 
-    static {
-        filter.add(Predicates.or(
-                new CardTypePredicate(CardType.ARTIFACT),
-                new CardTypePredicate(CardType.CREATURE)));
-    }
+        // When Minister of Inquiries enters the the battlefield, you get {E}{E}.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(2)));
 
-    public ComaVeil(UUID ownerId) {
-        super(ownerId, 36, "Coma Veil", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{4}{U}");
-        this.expansionSetCode = "ALA";
-        this.subtype.add("Aura");
-
-        // Enchant artifact or creature
-        TargetPermanent auraTarget = new TargetPermanent(filter);
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Detriment));
-        EnchantAbility ability = new EnchantAbility(auraTarget.getTargetName());
+        // {T}. Pay {E}: Target player puts the top three cards of his or her library into his or her graveyard.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new PutLibraryIntoGraveTargetEffect(3), new TapSourceCost());
+        ability.addCost(new PayEnergyCost(1));
+        ability.addTarget(new TargetPlayer());
         this.addAbility(ability);
 
-        // Enchanted permanent doesn't untap during its controller's untap step.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new DontUntapInControllersUntapStepEnchantedEffect("permanent")));
     }
 
-    public ComaVeil(final ComaVeil card) {
+    public MinisterOfInquiries(final MinisterOfInquiries card) {
         super(card);
     }
 
     @Override
-    public ComaVeil copy() {
-        return new ComaVeil(this);
+    public MinisterOfInquiries copy() {
+        return new MinisterOfInquiries(this);
     }
 }

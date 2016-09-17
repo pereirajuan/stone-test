@@ -25,59 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shardsofalara;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DontUntapInControllersUntapStepEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.Mode;
+import mage.abilities.effects.common.PutTokenOntoBattlefieldCopyTargetEffect;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Outcome;
 import mage.constants.Rarity;
-import mage.constants.Zone;
-import mage.filter.FilterPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.TargetPermanent;
+import mage.target.common.TargetArtifactPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Plopman
+ * @author LevelX2
  */
-public class ComaVeil extends CardImpl {
+public class SaheelisArtistry extends CardImpl {
 
-    private static final FilterPermanent filter = new FilterPermanent("artifact or creature");
+    public SaheelisArtistry(UUID ownerId) {
+        super(ownerId, 62, "Saheeli's Artistry", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{U}{U}");
+        this.expansionSetCode = "KLD";
 
-    static {
-        filter.add(Predicates.or(
-                new CardTypePredicate(CardType.ARTIFACT),
-                new CardTypePredicate(CardType.CREATURE)));
+        // Choose one or both —
+        this.getSpellAbility().getModes().setMinModes(1);
+        this.getSpellAbility().getModes().setMaxModes(2);
+        // • Create a token that's a copy of target artifact.
+        this.getSpellAbility().addTarget(new TargetArtifactPermanent());
+        PutTokenOntoBattlefieldCopyTargetEffect effect = new PutTokenOntoBattlefieldCopyTargetEffect();
+        effect.setText("Create a token that's a copy of target artifact");
+        this.getSpellAbility().addEffect(effect);
+        // • Create a token that's a copy of target creature, except that it's an artifact in addition to its other types.
+        Mode mode1 = new Mode();
+        mode1.getTargets().add(new TargetCreaturePermanent());
+        effect = new PutTokenOntoBattlefieldCopyTargetEffect();
+        effect.setBecomesArtifact(true);
+        effect.setText("Create a token that's a copy of target creature, except that it's an artifact in addition to its other types");
+        mode1.getEffects().add(effect);
+        this.getSpellAbility().addMode(mode1);
     }
 
-    public ComaVeil(UUID ownerId) {
-        super(ownerId, 36, "Coma Veil", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{4}{U}");
-        this.expansionSetCode = "ALA";
-        this.subtype.add("Aura");
-
-        // Enchant artifact or creature
-        TargetPermanent auraTarget = new TargetPermanent(filter);
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Detriment));
-        EnchantAbility ability = new EnchantAbility(auraTarget.getTargetName());
-        this.addAbility(ability);
-
-        // Enchanted permanent doesn't untap during its controller's untap step.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new DontUntapInControllersUntapStepEnchantedEffect("permanent")));
-    }
-
-    public ComaVeil(final ComaVeil card) {
+    public SaheelisArtistry(final SaheelisArtistry card) {
         super(card);
     }
 
     @Override
-    public ComaVeil copy() {
-        return new ComaVeil(this);
+    public SaheelisArtistry copy() {
+        return new SaheelisArtistry(this);
     }
 }

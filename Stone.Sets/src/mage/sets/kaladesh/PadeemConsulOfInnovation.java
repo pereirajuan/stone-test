@@ -25,44 +25,59 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.mirrodin;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.ControlsPermanentGreatestCMCCondition;
+import mage.abilities.decorator.ConditionalTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
 import mage.abilities.keyword.HexproofAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
+import mage.constants.TargetController;
 import mage.constants.Zone;
 import mage.filter.common.FilterArtifactPermanent;
 
 /**
- * @author Loki
+ *
+ * @author LevelX2
  */
-public class LeoninAbunas extends CardImpl {
+public class PadeemConsulOfInnovation extends CardImpl {
 
-    public LeoninAbunas(UUID ownerId) {
-        super(ownerId, 8, "Leonin Abunas", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        this.expansionSetCode = "MRD";
-        this.subtype.add("Cat");
-        this.subtype.add("Cleric");
-
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+    public PadeemConsulOfInnovation(UUID ownerId) {
+        super(ownerId, 59, "Padeem, Consul of Innovation", Rarity.RARE, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        this.expansionSetCode = "KLD";
+        this.supertype.add("Lengendary");
+        this.subtype.add("Veldalken");
+        this.subtype.add("Artificer");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(4);
 
         // Artifacts you control have hexproof.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(HexproofAbility.getInstance(), Duration.WhileOnBattlefield, new FilterArtifactPermanent(), false)));
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
+                new GainAbilityControlledEffect(HexproofAbility.getInstance(), Duration.WhileOnBattlefield, new FilterArtifactPermanent(), false)));
+
+        // At the beginning of your upkeep, if you control the artifact with the highest converted mana cost or tied for the highest converted mana cost, draw a card.
+        Ability ability = new ConditionalTriggeredAbility(new BeginningOfUpkeepTriggeredAbility(new DrawCardSourceControllerEffect(1), TargetController.YOU, false),
+                new ControlsPermanentGreatestCMCCondition(new FilterArtifactPermanent()),
+                "At the beginning of your upkeep, if you control the artifact with the highest converted mana cost or tied for the highest converted mana cost, draw a card.");
+
+        this.addAbility(ability);
     }
 
-    public LeoninAbunas(final LeoninAbunas card) {
+    public PadeemConsulOfInnovation(final PadeemConsulOfInnovation card) {
         super(card);
     }
 
-    @java.lang.Override
-    public LeoninAbunas copy() {
-        return new LeoninAbunas(this);
+    @Override
+    public PadeemConsulOfInnovation copy() {
+        return new PadeemConsulOfInnovation(this);
     }
 }

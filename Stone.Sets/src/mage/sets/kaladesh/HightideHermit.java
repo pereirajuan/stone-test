@@ -25,59 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets.shardsofalara;
+package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DontUntapInControllersUntapStepEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.effects.common.combat.CanAttackAsThoughItDidntHaveDefenderSourceEffect;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
+import mage.abilities.keyword.DefenderAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
-import mage.constants.Outcome;
+import mage.constants.Duration;
 import mage.constants.Rarity;
 import mage.constants.Zone;
-import mage.filter.FilterPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.target.TargetPermanent;
 
 /**
  *
- * @author Plopman
+ * @author LevelX2
  */
-public class ComaVeil extends CardImpl {
+public class HightideHermit extends CardImpl {
 
-    private static final FilterPermanent filter = new FilterPermanent("artifact or creature");
+    public HightideHermit(UUID ownerId) {
+        super(ownerId, 51, "Hightide Hermit", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{4}{U}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Crab");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-    static {
-        filter.add(Predicates.or(
-                new CardTypePredicate(CardType.ARTIFACT),
-                new CardTypePredicate(CardType.CREATURE)));
+        // Defender
+        this.addAbility(DefenderAbility.getInstance());
+        // When Hightide Hermit enters the battlefield, you get {E}{E}{E}{E}.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(4)));
+
+        // Pay {E}{E}: Hightide Hermit can attack this turn as though it didn't have defender.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new CanAttackAsThoughItDidntHaveDefenderSourceEffect(Duration.EndOfTurn), new PayEnergyCost(2)));
     }
 
-    public ComaVeil(UUID ownerId) {
-        super(ownerId, 36, "Coma Veil", Rarity.COMMON, new CardType[]{CardType.ENCHANTMENT}, "{4}{U}");
-        this.expansionSetCode = "ALA";
-        this.subtype.add("Aura");
-
-        // Enchant artifact or creature
-        TargetPermanent auraTarget = new TargetPermanent(filter);
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Detriment));
-        EnchantAbility ability = new EnchantAbility(auraTarget.getTargetName());
-        this.addAbility(ability);
-
-        // Enchanted permanent doesn't untap during its controller's untap step.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new DontUntapInControllersUntapStepEnchantedEffect("permanent")));
-    }
-
-    public ComaVeil(final ComaVeil card) {
+    public HightideHermit(final HightideHermit card) {
         super(card);
     }
 
     @Override
-    public ComaVeil copy() {
-        return new ComaVeil(this);
+    public HightideHermit copy() {
+        return new HightideHermit(this);
     }
 }

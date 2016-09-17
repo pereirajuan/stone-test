@@ -28,52 +28,56 @@
 package mage.sets.kaladesh;
 
 import java.util.UUID;
-import mage.abilities.effects.common.continuous.ExchangeControlTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.DeathtouchAbility;
 import mage.cards.CardImpl;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.Rarity;
-import mage.constants.TargetController;
-import mage.filter.FilterPermanent;
-import mage.filter.common.FilterControlledArtifactPermanent;
-import mage.filter.predicate.Predicates;
-import mage.filter.predicate.mageobject.CardTypePredicate;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.TargetPermanent;
-import mage.target.common.TargetControlledPermanent;
+import mage.constants.Zone;
+import mage.filter.StaticFilters;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class ShrewdNegotiation extends CardImpl {
+public class DhundOperative extends CardImpl {
 
-    private static final String rule = "Exchange control of target artifact you control and target artifact or creature you don't control";
-
-    private static final FilterPermanent filter = new FilterPermanent("artifact or creature you don't control");
-
-    static {
-        filter.add(new ControllerPredicate(TargetController.NOT_YOU));
-        filter.add(Predicates.or(new CardTypePredicate(CardType.ARTIFACT),
-                new CardTypePredicate(CardType.CREATURE)));
-    }
-
-    public ShrewdNegotiation(UUID ownerId) {
-        super(ownerId, 64, "Shrewd Negotiation", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{4}{U}");
+    public DhundOperative(UUID ownerId) {
+        super(ownerId, 74, "Dhund Operative", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
         this.expansionSetCode = "KLD";
+        this.subtype.add("Human");
+        this.subtype.add("Rogue");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Exchange control of target artifact you control and target artifact or creature you don't control.
-        getSpellAbility().addEffect(new ExchangeControlTargetEffect(Duration.EndOfGame, rule, false, true));
-        getSpellAbility().addTarget(new TargetControlledPermanent(new FilterControlledArtifactPermanent("artifact you control")));
-        getSpellAbility().addTarget(new TargetPermanent(filter));
+        // As long as you control an artifact, Dhund Operative gets +1/+0 and has deathtouch.
+        Effect boostEffect = new ConditionalContinuousEffect(
+                new BoostSourceEffect(2, 0, Duration.WhileOnBattlefield),
+                new PermanentsOnTheBattlefieldCondition(StaticFilters.FILTER_CONTROLLED_PERMANENT_ARTIFACT),
+                "As long as you control an artifact, {this} gets +1/+0");
+        Effect gainAbilityEffect = new ConditionalContinuousEffect(
+                new GainAbilitySourceEffect(DeathtouchAbility.getInstance(), Duration.WhileOnBattlefield),
+                new PermanentsOnTheBattlefieldCondition(StaticFilters.FILTER_CONTROLLED_PERMANENT_ARTIFACT),
+                "and has deathtouch");
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, boostEffect);
+        ability.addEffect(gainAbilityEffect);
+        this.addAbility(ability);
     }
 
-    public ShrewdNegotiation(final ShrewdNegotiation card) {
+    public DhundOperative(final DhundOperative card) {
         super(card);
     }
 
     @Override
-    public ShrewdNegotiation copy() {
-        return new ShrewdNegotiation(this);
+    public DhundOperative copy() {
+        return new DhundOperative(this);
     }
 }

@@ -25,52 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.costs.common;
+package mage.sets.kaladesh;
 
+import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.costs.Cost;
-import mage.abilities.costs.VariableCostImpl;
-import mage.filter.common.FilterControlledPermanent;
-import mage.game.Game;
-import mage.target.common.TargetControlledPermanent;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.PutOnLibraryTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.StaticFilters;
+import mage.target.common.TargetCardInYourGraveyard;
 
 /**
  *
  * @author LevelX2
  */
-public class SacrificeXTargetCost extends VariableCostImpl {
+public class DukharaScavenger extends CardImpl {
 
-    protected FilterControlledPermanent filter;
+    public DukharaScavenger(UUID ownerId) {
+        super(ownerId, 77, "Dukhara Scavenger", Rarity.COMMON, new CardType[]{CardType.CREATURE}, "{5}{B}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Crocodile");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(6);
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter) {
-        this(filter, false);
+        // When Dukhara Scavenger enters the battlefield, you may put target artifact or creature card from your graveyard on top of your library.
+        Effect effect = new PutOnLibraryTargetEffect(true);
+        effect.setText("you may put target artifact or creature card from your graveyard on top of your library");
+        Ability ability = new EntersBattlefieldTriggeredAbility(effect, true);
+        ability.addTarget(new TargetCardInYourGraveyard(StaticFilters.FILTER_CARD_ARTIFACT_OR_CREATURE));
+        this.addAbility(ability);
     }
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter, boolean additionalCostText) {
-        super(filter.getMessage() + " to sacrifice");
-        this.text = (additionalCostText ? "As an additional cost to cast {source}, sacrifice " : "Sacrifice ") + xText + " " + filter.getMessage();
-        this.filter = filter;
-    }
-
-    public SacrificeXTargetCost(final SacrificeXTargetCost cost) {
-        super(cost);
-        this.filter = cost.filter;
-    }
-
-    @Override
-    public SacrificeXTargetCost copy() {
-        return new SacrificeXTargetCost(this);
+    public DukharaScavenger(final DukharaScavenger card) {
+        super(card);
     }
 
     @Override
-    public int getMaxValue(Ability source, Game game) {
-        return game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game);
+    public DukharaScavenger copy() {
+        return new DukharaScavenger(this);
     }
-
-    @Override
-    public Cost getFixedCostsFromAnnouncedValue(int xValue) {
-        TargetControlledPermanent target = new TargetControlledPermanent(xValue, xValue, filter, true);
-        return new SacrificeTargetCost(target);
-    }
-
 }

@@ -25,52 +25,39 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.costs.common;
+package mage.sets.kaladesh;
 
-import mage.abilities.Ability;
-import mage.abilities.costs.Cost;
-import mage.abilities.costs.VariableCostImpl;
-import mage.filter.common.FilterControlledPermanent;
-import mage.game.Game;
-import mage.target.common.TargetControlledPermanent;
+import java.util.UUID;
+import mage.abilities.effects.common.discard.DiscardCardYouChooseTargetEffect;
+import mage.abilities.effects.keyword.ScryEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterCreatureCard;
+import mage.target.common.TargetOpponent;
 
 /**
  *
  * @author LevelX2
  */
-public class SacrificeXTargetCost extends VariableCostImpl {
+public class HarshScrutiny extends CardImpl {
 
-    protected FilterControlledPermanent filter;
+    public HarshScrutiny(UUID ownerId) {
+        super(ownerId, 85, "Harsh Scrutiny", Rarity.UNCOMMON, new CardType[]{CardType.SORCERY}, "{B}");
+        this.expansionSetCode = "KLD";
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter) {
-        this(filter, false);
+        // Target opponent reveals his or her hand. You choose a creature card from it. That player discards that card. Scry 1.
+        this.getSpellAbility().addTarget(new TargetOpponent());
+        this.getSpellAbility().addEffect(new DiscardCardYouChooseTargetEffect(new FilterCreatureCard("a creature card")));
+        this.getSpellAbility().addEffect(new ScryEffect(1));
     }
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter, boolean additionalCostText) {
-        super(filter.getMessage() + " to sacrifice");
-        this.text = (additionalCostText ? "As an additional cost to cast {source}, sacrifice " : "Sacrifice ") + xText + " " + filter.getMessage();
-        this.filter = filter;
-    }
-
-    public SacrificeXTargetCost(final SacrificeXTargetCost cost) {
-        super(cost);
-        this.filter = cost.filter;
+    public HarshScrutiny(final HarshScrutiny card) {
+        super(card);
     }
 
     @Override
-    public SacrificeXTargetCost copy() {
-        return new SacrificeXTargetCost(this);
+    public HarshScrutiny copy() {
+        return new HarshScrutiny(this);
     }
-
-    @Override
-    public int getMaxValue(Ability source, Game game) {
-        return game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game);
-    }
-
-    @Override
-    public Cost getFixedCostsFromAnnouncedValue(int xValue) {
-        TargetControlledPermanent target = new TargetControlledPermanent(xValue, xValue, filter, true);
-        return new SacrificeTargetCost(target);
-    }
-
 }

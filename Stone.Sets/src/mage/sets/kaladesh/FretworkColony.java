@@ -25,52 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.costs.common;
+package mage.sets.kaladesh;
 
+import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.costs.Cost;
-import mage.abilities.costs.VariableCostImpl;
-import mage.filter.common.FilterControlledPermanent;
-import mage.game.Game;
-import mage.target.common.TargetControlledPermanent;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
+import mage.abilities.common.CantBlockAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.constants.TargetController;
+import mage.counters.CounterType;
 
 /**
  *
  * @author LevelX2
  */
-public class SacrificeXTargetCost extends VariableCostImpl {
+public class FretworkColony extends CardImpl {
 
-    protected FilterControlledPermanent filter;
+    public FretworkColony(UUID ownerId) {
+        super(ownerId, 83, "Fretwork Colony", Rarity.UNCOMMON, new CardType[]{CardType.CREATURE}, "{1}{B}");
+        this.expansionSetCode = "KLD";
+        this.subtype.add("Insect");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter) {
-        this(filter, false);
+        // Fretwork Colony can't block.
+        this.addAbility(new CantBlockAbility());
+
+        // At the beginning of your upkeep, put a +1/+1 counter on Fretwork Colony and you lose 1 life.
+        Ability ability = new BeginningOfUpkeepTriggeredAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance()), TargetController.YOU, false);
+        Effect effect = new LoseLifeSourceControllerEffect(1);
+        effect.setText("and you lose 1 life");
+        ability.addEffect(effect);
+        this.addAbility(ability);
+
     }
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter, boolean additionalCostText) {
-        super(filter.getMessage() + " to sacrifice");
-        this.text = (additionalCostText ? "As an additional cost to cast {source}, sacrifice " : "Sacrifice ") + xText + " " + filter.getMessage();
-        this.filter = filter;
-    }
-
-    public SacrificeXTargetCost(final SacrificeXTargetCost cost) {
-        super(cost);
-        this.filter = cost.filter;
-    }
-
-    @Override
-    public SacrificeXTargetCost copy() {
-        return new SacrificeXTargetCost(this);
-    }
-
-    @Override
-    public int getMaxValue(Ability source, Game game) {
-        return game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game);
+    public FretworkColony(final FretworkColony card) {
+        super(card);
     }
 
     @Override
-    public Cost getFixedCostsFromAnnouncedValue(int xValue) {
-        TargetControlledPermanent target = new TargetControlledPermanent(xValue, xValue, filter, true);
-        return new SacrificeTargetCost(target);
+    public FretworkColony copy() {
+        return new FretworkColony(this);
     }
-
 }

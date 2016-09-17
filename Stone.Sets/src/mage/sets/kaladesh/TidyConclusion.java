@@ -25,52 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.costs.common;
+package mage.sets.kaladesh;
 
-import mage.abilities.Ability;
-import mage.abilities.costs.Cost;
-import mage.abilities.costs.VariableCostImpl;
-import mage.filter.common.FilterControlledPermanent;
-import mage.game.Game;
-import mage.target.common.TargetControlledPermanent;
+import java.util.UUID;
+import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterControlledArtifactPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class SacrificeXTargetCost extends VariableCostImpl {
+public class TidyConclusion extends CardImpl {
 
-    protected FilterControlledPermanent filter;
+    public TidyConclusion(UUID ownerId) {
+        super(ownerId, 103, "Tidy Conclusion", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{3}{B}{B}");
+        this.expansionSetCode = "KLD";
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter) {
-        this(filter, false);
+        // Destroy target creature. You gain 1 life for each artifact you control.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        this.getSpellAbility().addEffect(new GainLifeEffect(new PermanentsOnBattlefieldCount(new FilterControlledArtifactPermanent())));
     }
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter, boolean additionalCostText) {
-        super(filter.getMessage() + " to sacrifice");
-        this.text = (additionalCostText ? "As an additional cost to cast {source}, sacrifice " : "Sacrifice ") + xText + " " + filter.getMessage();
-        this.filter = filter;
-    }
-
-    public SacrificeXTargetCost(final SacrificeXTargetCost cost) {
-        super(cost);
-        this.filter = cost.filter;
+    public TidyConclusion(final TidyConclusion card) {
+        super(card);
     }
 
     @Override
-    public SacrificeXTargetCost copy() {
-        return new SacrificeXTargetCost(this);
+    public TidyConclusion copy() {
+        return new TidyConclusion(this);
     }
-
-    @Override
-    public int getMaxValue(Ability source, Game game) {
-        return game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game);
-    }
-
-    @Override
-    public Cost getFixedCostsFromAnnouncedValue(int xValue) {
-        TargetControlledPermanent target = new TargetControlledPermanent(xValue, xValue, filter, true);
-        return new SacrificeTargetCost(target);
-    }
-
 }

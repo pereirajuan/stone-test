@@ -25,52 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.costs.common;
+package mage.sets.kaladesh;
 
-import mage.abilities.Ability;
-import mage.abilities.costs.Cost;
-import mage.abilities.costs.VariableCostImpl;
-import mage.filter.common.FilterControlledPermanent;
-import mage.game.Game;
-import mage.target.common.TargetControlledPermanent;
+import java.util.UUID;
+import mage.abilities.Mode;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Rarity;
+import mage.counters.CounterType;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class SacrificeXTargetCost extends VariableCostImpl {
+public class SubtleStrike extends CardImpl {
 
-    protected FilterControlledPermanent filter;
+    public SubtleStrike(UUID ownerId) {
+        super(ownerId, 100, "Subtle Strike", Rarity.COMMON, new CardType[]{CardType.INSTANT}, "{1}{B}");
+        this.expansionSetCode = "KLD";
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter) {
-        this(filter, false);
+        // Choose one or both —
+        this.getSpellAbility().getModes().setMinModes(1);
+        this.getSpellAbility().getModes().setMaxModes(2);
+        // • Target creature gets -1/-1 until end of turn.
+        this.getSpellAbility().addEffect(new BoostTargetEffect(-1, -1, Duration.EndOfTurn));
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        // • Put a +1/+1 counter on target creature.
+        Mode mode1 = new Mode();
+        mode1.getEffects().add(new AddCountersTargetEffect(CounterType.P1P1.createInstance()));
+        mode1.getTargets().add(new TargetCreaturePermanent());
+        this.getSpellAbility().addMode(mode1);
+
     }
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter, boolean additionalCostText) {
-        super(filter.getMessage() + " to sacrifice");
-        this.text = (additionalCostText ? "As an additional cost to cast {source}, sacrifice " : "Sacrifice ") + xText + " " + filter.getMessage();
-        this.filter = filter;
-    }
-
-    public SacrificeXTargetCost(final SacrificeXTargetCost cost) {
-        super(cost);
-        this.filter = cost.filter;
-    }
-
-    @Override
-    public SacrificeXTargetCost copy() {
-        return new SacrificeXTargetCost(this);
-    }
-
-    @Override
-    public int getMaxValue(Ability source, Game game) {
-        return game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game);
+    public SubtleStrike(final SubtleStrike card) {
+        super(card);
     }
 
     @Override
-    public Cost getFixedCostsFromAnnouncedValue(int xValue) {
-        TargetControlledPermanent target = new TargetControlledPermanent(xValue, xValue, filter, true);
-        return new SacrificeTargetCost(target);
+    public SubtleStrike copy() {
+        return new SubtleStrike(this);
     }
-
 }

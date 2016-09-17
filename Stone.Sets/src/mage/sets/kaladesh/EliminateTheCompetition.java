@@ -25,52 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.costs.common;
+package mage.sets.kaladesh;
 
+import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.costs.Cost;
-import mage.abilities.costs.VariableCostImpl;
-import mage.filter.common.FilterControlledPermanent;
+import mage.abilities.costs.common.SacrificeXTargetCost;
+import mage.abilities.dynamicvalue.common.GetXValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.cards.CardImpl;
+import mage.constants.AbilityType;
+import mage.constants.CardType;
+import mage.constants.Rarity;
+import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.game.Game;
-import mage.target.common.TargetControlledPermanent;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
  * @author LevelX2
  */
-public class SacrificeXTargetCost extends VariableCostImpl {
+public class EliminateTheCompetition extends CardImpl {
 
-    protected FilterControlledPermanent filter;
+    public EliminateTheCompetition(UUID ownerId) {
+        super(ownerId, 78, "Eliminate the Competition", Rarity.RARE, new CardType[]{CardType.SORCERY}, "{4}{B}");
+        this.expansionSetCode = "KLD";
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter) {
-        this(filter, false);
+        // As an additional cost to cast Eliminate the Competition, sacrifice X creatures.
+        this.getSpellAbility().addCost(new SacrificeXTargetCost(new FilterControlledCreaturePermanent("creatures"), true));
+
+        // Destroy X target creatures.
+        Effect effect = new DestroyTargetEffect();
+        effect.setText("Destroy X target creatures");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public SacrificeXTargetCost(FilterControlledPermanent filter, boolean additionalCostText) {
-        super(filter.getMessage() + " to sacrifice");
-        this.text = (additionalCostText ? "As an additional cost to cast {source}, sacrifice " : "Sacrifice ") + xText + " " + filter.getMessage();
-        this.filter = filter;
-    }
-
-    public SacrificeXTargetCost(final SacrificeXTargetCost cost) {
-        super(cost);
-        this.filter = cost.filter;
-    }
-
-    @Override
-    public SacrificeXTargetCost copy() {
-        return new SacrificeXTargetCost(this);
+    public EliminateTheCompetition(final EliminateTheCompetition card) {
+        super(card);
     }
 
     @Override
-    public int getMaxValue(Ability source, Game game) {
-        return game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game);
+    public void adjustTargets(Ability ability, Game game) {
+        if (ability.getAbilityType().equals(AbilityType.SPELL)) {
+            ability.getTargets().clear();
+            int sac = new GetXValue().calculate(game, ability, null);
+            ability.addTarget(new TargetCreaturePermanent(sac, sac));
+        }
     }
 
     @Override
-    public Cost getFixedCostsFromAnnouncedValue(int xValue) {
-        TargetControlledPermanent target = new TargetControlledPermanent(xValue, xValue, filter, true);
-        return new SacrificeTargetCost(target);
+    public EliminateTheCompetition copy() {
+        return new EliminateTheCompetition(this);
     }
-
 }

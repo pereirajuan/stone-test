@@ -25,34 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets;
+package mage.cards.s;
 
-import mage.cards.ExpansionSet;
-import mage.constants.Rarity;
-import mage.constants.SetType;
+import java.util.UUID;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.ExileTargetEffect;
+import mage.abilities.keyword.BasicLandcyclingAbility;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
+import mage.constants.CardType;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.Target;
+import mage.target.TargetPermanent;
 
 /**
  *
  * @author fireshoes
  */
+public class SylvanReclamation extends CardImpl {
 
-public class Commander2016 extends ExpansionSet {
+    private static final FilterPermanent filter = new FilterPermanent("artifacts and/or enchantments");
 
-    private static final Commander2016 fINSTANCE = new Commander2016();
-
-    public static Commander2016 getInstance() {
-        return fINSTANCE;
+    static {
+        filter.add(Predicates.or(new CardTypePredicate(CardType.ARTIFACT), new CardTypePredicate(CardType.ENCHANTMENT)));
     }
 
-    private Commander2016() {
-        super("Commander 2016 Edition", "C16", ExpansionSet.buildDate(2016, 11, 11), SetType.SUPPLEMENTAL);
-        this.blockName = "Command Zone";
-        cards.add(new SetCardInfo("Atraxa, Praetors' Voice", 28, Rarity.MYTHIC, mage.cards.a.AtraxaPraetorsVoice.class));
-        cards.add(new SetCardInfo("Command Tower", 286, Rarity.COMMON, mage.cards.c.CommandTower.class));
-        cards.add(new SetCardInfo("Commander's Sphere", 248, Rarity.COMMON, mage.cards.c.CommandersSphere.class));
-        cards.add(new SetCardInfo("Grave Upheaval", 31, Rarity.UNCOMMON, mage.cards.g.GraveUpheaval.class));
-        cards.add(new SetCardInfo("Prismatic Geoscope", 55, Rarity.RARE, mage.cards.p.PrismaticGeoscope.class));
-        cards.add(new SetCardInfo("Sylvan Reclamation", 44, Rarity.UNCOMMON, mage.cards.s.SylvanReclamation.class));
+    public SylvanReclamation(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{3}{G}{W}");
+
+        // Exile up to two target artifacts and/or enchantments.
+        Effect effect = new ExileTargetEffect();
+        effect.setText("Exile up to two target artifacts and/or enchantments");
+        Target target = new TargetPermanent(0, 2, filter, false);
+        this.getSpellAbility().addTarget(target);
+        this.getSpellAbility().addEffect(effect);
+
+        // Basic landcycling {2}
+        this.addAbility(new BasicLandcyclingAbility(new ManaCostsImpl("{2}")));
     }
 
+    public SylvanReclamation(final SylvanReclamation card) {
+        super(card);
+    }
+
+    @Override
+    public SylvanReclamation copy() {
+        return new SylvanReclamation(this);
+    }
 }

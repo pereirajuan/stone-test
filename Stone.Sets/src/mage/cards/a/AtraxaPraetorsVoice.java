@@ -25,34 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets;
+package mage.cards.a;
 
-import mage.cards.ExpansionSet;
-import mage.constants.Rarity;
-import mage.constants.SetType;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
+import mage.abilities.effects.common.counter.ProliferateEffect;
+import mage.abilities.keyword.DeathtouchAbility;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.LifelinkAbility;
+import mage.abilities.keyword.VigilanceAbility;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
+import mage.constants.CardType;
+import mage.constants.TargetController;
 
 /**
  *
  * @author fireshoes
  */
+public class AtraxaPraetorsVoice extends CardImpl {
 
-public class Commander2016 extends ExpansionSet {
+    public AtraxaPraetorsVoice(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{G}{W}{U}{B}");
 
-    private static final Commander2016 fINSTANCE = new Commander2016();
+        this.supertype.add("Legendary");
+        this.subtype.add("Angel");
+        this.subtype.add("Horror");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
 
-    public static Commander2016 getInstance() {
-        return fINSTANCE;
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+        // Vigilance
+        this.addAbility(VigilanceAbility.getInstance());
+        // Deathtouch
+        this.addAbility(DeathtouchAbility.getInstance());
+        // Lifelink
+        this.addAbility(LifelinkAbility.getInstance());
+
+        // At the beginning of your end step, proliferate.
+        this.addAbility(new BeginningOfEndStepTriggeredAbility(new ProliferateEffect(), TargetController.YOU, false));
     }
 
-    private Commander2016() {
-        super("Commander 2016 Edition", "C16", ExpansionSet.buildDate(2016, 11, 11), SetType.SUPPLEMENTAL);
-        this.blockName = "Command Zone";
-        cards.add(new SetCardInfo("Atraxa, Praetors' Voice", 28, Rarity.MYTHIC, mage.cards.a.AtraxaPraetorsVoice.class));
-        cards.add(new SetCardInfo("Command Tower", 286, Rarity.COMMON, mage.cards.c.CommandTower.class));
-        cards.add(new SetCardInfo("Commander's Sphere", 248, Rarity.COMMON, mage.cards.c.CommandersSphere.class));
-        cards.add(new SetCardInfo("Grave Upheaval", 31, Rarity.UNCOMMON, mage.cards.g.GraveUpheaval.class));
-        cards.add(new SetCardInfo("Prismatic Geoscope", 55, Rarity.RARE, mage.cards.p.PrismaticGeoscope.class));
-        cards.add(new SetCardInfo("Sylvan Reclamation", 44, Rarity.UNCOMMON, mage.cards.s.SylvanReclamation.class));
+    public AtraxaPraetorsVoice(final AtraxaPraetorsVoice card) {
+        super(card);
     }
 
+    @Override
+    public AtraxaPraetorsVoice copy() {
+        return new AtraxaPraetorsVoice(this);
+    }
 }

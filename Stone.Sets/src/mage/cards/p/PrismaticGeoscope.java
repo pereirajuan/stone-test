@@ -25,34 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.sets;
+package mage.cards.p;
 
-import mage.cards.ExpansionSet;
-import mage.constants.Rarity;
-import mage.constants.SetType;
+import java.util.UUID;
+import mage.Mana;
+import mage.abilities.common.EntersBattlefieldTappedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.dynamicvalue.common.DomainValue;
+import mage.abilities.mana.DynamicManaAbility;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
+import mage.constants.CardType;
 
 /**
  *
  * @author fireshoes
  */
 
-public class Commander2016 extends ExpansionSet {
+public class PrismaticGeoscope extends CardImpl {
 
-    private static final Commander2016 fINSTANCE = new Commander2016();
+    public PrismaticGeoscope(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT}, "{5}");
 
-    public static Commander2016 getInstance() {
-        return fINSTANCE;
+        // Prismatic Geoscope enters the battlefield tapped.
+        this.addAbility(new EntersBattlefieldTappedAbility());
+
+        // <i>Domain</i> &mdash; {T}: Add X mana in any combination of colors to your mana pool, where X is the number of basic land types among lands you control.
+        this.addAbility(new DynamicManaAbility(new Mana(0,0,0,0,0,0,1, 0), new DomainValue(), new TapSourceCost(),
+        "Add X mana in any combination of colors to your mana pool, where X is the number of basic land types among lands you control."));
     }
 
-    private Commander2016() {
-        super("Commander 2016 Edition", "C16", ExpansionSet.buildDate(2016, 11, 11), SetType.SUPPLEMENTAL);
-        this.blockName = "Command Zone";
-        cards.add(new SetCardInfo("Atraxa, Praetors' Voice", 28, Rarity.MYTHIC, mage.cards.a.AtraxaPraetorsVoice.class));
-        cards.add(new SetCardInfo("Command Tower", 286, Rarity.COMMON, mage.cards.c.CommandTower.class));
-        cards.add(new SetCardInfo("Commander's Sphere", 248, Rarity.COMMON, mage.cards.c.CommandersSphere.class));
-        cards.add(new SetCardInfo("Grave Upheaval", 31, Rarity.UNCOMMON, mage.cards.g.GraveUpheaval.class));
-        cards.add(new SetCardInfo("Prismatic Geoscope", 55, Rarity.RARE, mage.cards.p.PrismaticGeoscope.class));
-        cards.add(new SetCardInfo("Sylvan Reclamation", 44, Rarity.UNCOMMON, mage.cards.s.SylvanReclamation.class));
+    public PrismaticGeoscope(final PrismaticGeoscope card) {
+        super(card);
     }
 
+    @Override
+    public PrismaticGeoscope copy() {
+        return new PrismaticGeoscope(this);
+    }
 }

@@ -25,14 +25,11 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.cards.w;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.Mode;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.effects.common.DestroyTargetEffect;
-import mage.abilities.effects.common.ExileGraveyardAllTargetPlayerEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
@@ -41,52 +38,39 @@ import mage.filter.FilterPermanent;
 import mage.filter.predicate.mageobject.CardTypePredicate;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
-import mage.players.Player;
-import mage.target.TargetPlayer;
-import mage.target.common.TargetArtifactPermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class RakdosCharm extends CardImpl {
+public class WaveOfReckoning extends CardImpl {
 
-    public RakdosCharm(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{B}{R}");
+    public WaveOfReckoning(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{4}{W}");
 
-        // Choose one — Exile all cards from target player's graveyard;
-        this.getSpellAbility().addEffect(new ExileGraveyardAllTargetPlayerEffect());
-        this.getSpellAbility().addTarget(new TargetPlayer());
 
-        // or destroy target artifact;
-        Mode mode = new Mode();
-        mode.getEffects().add(new DestroyTargetEffect());
-        mode.getTargets().add(new TargetArtifactPermanent());
-        this.getSpellAbility().addMode(mode);
-
-        // or each creature deals 1 damage to its controller.
-        mode = new Mode();
-        mode.getEffects().add(new RakdosCharmDamageEffect());
-        this.getSpellAbility().addMode(mode);
+        // Each creature deals damage to itself equal to its power.
+        getSpellAbility().addEffect(new WaveOfReckoningDamageEffect());
     }
 
-    public RakdosCharm(final RakdosCharm card) {
+    public WaveOfReckoning(final WaveOfReckoning card) {
         super(card);
     }
 
     @Override
-    public RakdosCharm copy() {
-        return new RakdosCharm(this);
+    public WaveOfReckoning copy() {
+        return new WaveOfReckoning(this);
     }
+}
 
-    private class RakdosCharmDamageEffect extends OneShotEffect {
+class WaveOfReckoningDamageEffect extends OneShotEffect {
 
-    public RakdosCharmDamageEffect() {
+    public WaveOfReckoningDamageEffect() {
             super(Outcome.Detriment);
-            staticText = "each creature deals 1 damage to its controller";
+            staticText = "each creature deals damage to itself equal to its power";
         }
 
-        public RakdosCharmDamageEffect(final RakdosCharmDamageEffect effect) {
+        public WaveOfReckoningDamageEffect(final WaveOfReckoningDamageEffect effect) {
             super(effect);
         }
 
@@ -97,18 +81,14 @@ public class RakdosCharm extends CardImpl {
             filter.add(new CardTypePredicate(CardType.CREATURE));
 
             for (Permanent permanent : game.getBattlefield().getActivePermanents(filter, source.getControllerId(), source.getSourceId(), game)) {
-                Player controller = game.getPlayer(permanent.getControllerId());
-                if (controller != null) {
-                    controller.damage(1, permanent.getId(), game, false, true);
-                    game.informPlayers("1 damage to " + controller.getLogName() + " from " + permanent.getName());
-                }
+                int amount = permanent.getPower().getValue();
+                permanent.damage(amount, permanent.getId(), game, false, true);
             }
             return true;
         }
 
         @Override
-        public RakdosCharmDamageEffect copy() {
-            return new RakdosCharmDamageEffect(this);
+        public WaveOfReckoningDamageEffect copy() {
+            return new WaveOfReckoningDamageEffect(this);
         }
     }
-}

@@ -25,51 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.o;
 
-import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.EntersBattlefieldAllTriggeredAbility;
-import mage.abilities.effects.common.ReturnToHandSourceEffect;
-import mage.cards.CardImpl;
-import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.SetTargetPointer;
-import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.filter.FilterPermanent;
-import mage.filter.common.FilterArtifactPermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
+package mage.abilities.effects.common;
+
+import mage.abilities.Ability;
+import mage.abilities.effects.OneShotEffect;
+import mage.constants.Outcome;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
+import mage.players.Player;
 
 /**
- *
- * @author fireshoes
+ * @author JRHerlehy
  */
-public class OvalchaseDaredevil extends CardImpl {
+public class SwordsToPlowsharesEffect extends OneShotEffect {
 
-    private static final FilterPermanent filter = new FilterArtifactPermanent("an artifact");
-
-    static {
-        filter.add(new ControllerPredicate(TargetController.YOU));
+    public SwordsToPlowsharesEffect() {
+        super(Outcome.GainLife);
+        staticText = "Its controller gains life equal to its power";
     }
 
-    public OvalchaseDaredevil(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{B}");
-        this.subtype.add("Human");
-        this.subtype.add("Pilot");
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(2);
-
-        // Whenever an artifact enters the battlefield under your control, you may return Ovalchase Daredevil from your graveyard to your hand.
-        this.addAbility(new EntersBattlefieldAllTriggeredAbility(Zone.GRAVEYARD, new ReturnToHandSourceEffect(), filter, true, SetTargetPointer.NONE, null, true));
-    }
-
-    public OvalchaseDaredevil(final OvalchaseDaredevil card) {
-        super(card);
+    public SwordsToPlowsharesEffect(final SwordsToPlowsharesEffect effect) {
+        super(effect);
     }
 
     @Override
-    public OvalchaseDaredevil copy() {
-        return new OvalchaseDaredevil(this);
+    public SwordsToPlowsharesEffect copy() {
+        return new SwordsToPlowsharesEffect(this);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        Permanent permanent = game.getPermanentOrLKIBattlefield(getTargetPointer().getFirst(game, source));
+        if (permanent != null) {
+            Player player = game.getPlayer(permanent.getControllerId());
+            if (player != null) {
+                player.gainLife(permanent.getPower().getValue(), game);
+            }
+            return true;
+        }
+        return false;
     }
 }

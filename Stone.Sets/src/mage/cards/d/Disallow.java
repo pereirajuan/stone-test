@@ -25,54 +25,36 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.j;
+package mage.cards.d;
 
-import java.util.UUID;
-import mage.MageInt;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.DynamicValue;
-import mage.abilities.dynamicvalue.common.AttackingCreatureCount;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
-import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.effects.common.CounterTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Zone;
-import mage.filter.common.FilterAttackingCreature;
+import mage.target.TargetStackObject;
+
+import java.util.UUID;
 
 /**
- *
- * @author LevelX2
+ * @author JRHerlehy
  */
-public class JazalGoldmane extends CardImpl {
+public class Disallow extends CardImpl {
 
-    public JazalGoldmane(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{W}{W}");
-        this.supertype.add("Legendary");
-        this.subtype.add("Cat");
-        this.subtype.add("Warrior");
+    public Disallow(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}{U}");
 
-        this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
 
-        // First strike
-        this.addAbility(FirstStrikeAbility.getInstance());
-        // {3}{W}{W}: Attacking creatures you control get +X/+X until end of turn, where X is the number of attacking creatures.
-        DynamicValue xValue = new AttackingCreatureCount("the number of attacking creatures");
-        this.addAbility(new SimpleActivatedAbility(
-                Zone.BATTLEFIELD,
-                new BoostControlledEffect(xValue, xValue, Duration.EndOfTurn, new FilterAttackingCreature("Attacking creatures"), false, true),
-                new ManaCostsImpl("{3}{W}{W}")));
+        // Counter target spell, activated ability, or triggered ability.
+        this.getSpellAbility().addEffect(new CounterTargetEffect());
+        this.getSpellAbility().addTarget(new TargetStackObject());
     }
 
-    public JazalGoldmane(final JazalGoldmane card) {
+    public Disallow(final Disallow card) {
         super(card);
     }
 
     @Override
-    public JazalGoldmane copy() {
-        return new JazalGoldmane(this);
+    public Disallow copy() {
+        return new Disallow(this);
     }
 }

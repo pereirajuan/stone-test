@@ -31,41 +31,54 @@ import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
+import mage.abilities.condition.common.RevoltCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.ReturnFromGraveyardToBattlefieldTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.filter.Filter;
+import mage.filter.common.FilterPermanentCard;
+import mage.filter.predicate.mageobject.ConvertedManaCostPredicate;
+import mage.target.common.TargetCardInYourGraveyard;
+import mage.watchers.common.RevoltWatcher;
 
 /**
  *
  * @author fireshoes
  */
-public class RogueRefiner extends CardImpl {
+public class RenegadeRallier extends CardImpl {
 
-    public RogueRefiner(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}{U}");
+    private static final FilterPermanentCard filter = new FilterPermanentCard("permanent card with converted mana cost 2 or less from your graveyard");
+
+    static {
+        filter.add(new ConvertedManaCostPredicate(Filter.ComparisonType.LessThan, 3));
+    }
+
+    public RenegadeRallier(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}{W}");
 
         this.subtype.add("Human");
-        this.subtype.add("Rogue");
+        this.subtype.add("Warrior");
         this.power = new MageInt(3);
         this.toughness = new MageInt(2);
 
-        // When Rogue Refiner enters the battlefield, draw a card and you get {E}{E}.
-        Ability ability = new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(1), false);
-        Effect effect = new GetEnergyCountersControllerEffect(2);
-        effect.setText("and you get {E}{E}");
-        ability.addEffect(effect);
+        // <i>Revolt</i> &mdash; When Renegade Rallier enters the battlefield, if a permanent you controlled left the battlefield this turn,
+        // return target permanent card with converted mana cost 2 or less from your graveyard to your battlefield.
+        Ability ability = new EntersBattlefieldTriggeredAbility(
+                new ConditionalOneShotEffect(new ReturnFromGraveyardToBattlefieldTargetEffect(), RevoltCondition.getInstance()),
+                false, "<i>Revolt</i> &mdash; ");
+        ability.addTarget(new TargetCardInYourGraveyard(filter));
+        ability.addWatcher(new RevoltWatcher());
         this.addAbility(ability);
     }
 
-    public RogueRefiner(final RogueRefiner card) {
+    public RenegadeRallier(final RenegadeRallier card) {
         super(card);
     }
 
     @Override
-    public RogueRefiner copy() {
-        return new RogueRefiner(this);
+    public RenegadeRallier copy() {
+        return new RenegadeRallier(this);
     }
 }

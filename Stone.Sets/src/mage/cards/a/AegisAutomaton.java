@@ -25,47 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.cards.a;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.DrawCardSourceControllerEffect;
-import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.ReturnToHandTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Zone;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.permanent.AnotherPredicate;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class RogueRefiner extends CardImpl {
+public class AegisAutomaton extends CardImpl {
 
-    public RogueRefiner(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}{U}");
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("another target creature");
 
-        this.subtype.add("Human");
-        this.subtype.add("Rogue");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(2);
+    static {
+        filter.add(new AnotherPredicate());
+    }
 
-        // When Rogue Refiner enters the battlefield, draw a card and you get {E}{E}.
-        Ability ability = new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(1), false);
-        Effect effect = new GetEnergyCountersControllerEffect(2);
-        effect.setText("and you get {E}{E}");
-        ability.addEffect(effect);
+    public AegisAutomaton(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{2}");
+
+        this.subtype.add("Construct");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(3);
+
+        // {4}{W}: Return another target creature you control to its owner's hand.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ReturnToHandTargetEffect(), new ManaCostsImpl("{4}{W}"));
+        ability.addTarget(new TargetControlledCreaturePermanent(filter));
         this.addAbility(ability);
     }
 
-    public RogueRefiner(final RogueRefiner card) {
+    public AegisAutomaton(final AegisAutomaton card) {
         super(card);
     }
 
     @Override
-    public RogueRefiner copy() {
-        return new RogueRefiner(this);
+    public AegisAutomaton copy() {
+        return new AegisAutomaton(this);
     }
 }

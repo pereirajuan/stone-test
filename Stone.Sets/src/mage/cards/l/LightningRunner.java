@@ -25,81 +25,96 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.l;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
+import mage.abilities.common.AttacksTriggeredAbility;
 import mage.abilities.costs.Cost;
 import mage.abilities.costs.common.PayEnergyCost;
 import mage.abilities.effects.OneShotEffect;
+import mage.abilities.effects.common.AdditionalCombatPhaseEffect;
+import mage.abilities.effects.common.UntapAllControllerEffect;
 import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
+import mage.abilities.keyword.DoubleStrikeAbility;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Outcome;
 import mage.counters.CounterType;
+import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.game.Game;
-import mage.game.permanent.Permanent;
 import mage.players.Player;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HarnessedLightning extends CardImpl {
+public class LightningRunner extends CardImpl {
 
-    public HarnessedLightning(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{R}");
+    public LightningRunner(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{R}{R}");
 
-        // Choose target creature.  You get {E}{E}{E}, then you may pay any amount of {E}. Harnessed Lightning deals that much damage to that creature.
-        this.getSpellAbility().addEffect(new HarnessedLightningEffect());
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Double strike
+        this.addAbility(DoubleStrikeAbility.getInstance());
+
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
+
+        // Whenever Lightning Runner attacks, you get {E}{E}, then you may pay {E}{E}{E}{E}{E}{E}{E}{E}. If you do,
+        // untap all creatures you control and after this phase, there is an additional combat phase.
+        this.addAbility(new AttacksTriggeredAbility(new LightningRunnerEffect(), false));
     }
 
-    public HarnessedLightning(final HarnessedLightning card) {
+    public LightningRunner(final LightningRunner card) {
         super(card);
     }
 
     @Override
-    public HarnessedLightning copy() {
-        return new HarnessedLightning(this);
+    public LightningRunner copy() {
+        return new LightningRunner(this);
     }
 }
 
-class HarnessedLightningEffect extends OneShotEffect {
+class LightningRunnerEffect extends OneShotEffect {
 
-    public HarnessedLightningEffect() {
-        super(Outcome.UnboostCreature);
-        this.staticText = "Choose target creature.  You get {E}{E}{E}, then you may pay any amount of {E}. Harnessed Lightning deals that much damage to that creature";
+    LightningRunnerEffect() {
+        super(Outcome.Benefit);
+        staticText = "you get {E}{E}, then you may pay {E}{E}{E}{E}{E}{E}{E}{E}. If you do, " +
+            "untap all creatures you control and after this phase, there is an additional combat phase";
     }
 
-    public HarnessedLightningEffect(final HarnessedLightningEffect effect) {
+    LightningRunnerEffect(final LightningRunnerEffect effect) {
         super(effect);
-    }
-
-    @Override
-    public HarnessedLightningEffect copy() {
-        return new HarnessedLightningEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            new GetEnergyCountersControllerEffect(3).apply(game, source);
-            int numberToPay = controller.getAmount(0, controller.getCounters().getCount(CounterType.ENERGY), "How many {E} do you like to pay?", game);
-            if (numberToPay > 0) {
-                Cost cost = new PayEnergyCost(numberToPay);
+            new GetEnergyCountersControllerEffect(2).apply(game, source);
+            if (controller.getCounters().getCount(CounterType.ENERGY) > 5) {
+                Cost cost = new PayEnergyCost(6);
                 if (cost.pay(source, game, source.getSourceId(), source.getControllerId(), true)) {
-                    Permanent targetCreature = game.getPermanent(getTargetPointer().getFirst(game, source));
-                    if (targetCreature != null) {
-                        targetCreature.damage(numberToPay, source.getSourceId(), game, false, true);
-                    }
+                    new UntapAllControllerEffect(new FilterControlledCreaturePermanent(), "untap all creatures you control").apply(game, source);
+                    new AdditionalCombatPhaseEffect("and after this phase, there is an additional combat phase").apply(game, source);
                 }
             }
             return true;
         }
         return false;
     }
+
+    @Override
+    public LightningRunnerEffect copy() {
+        return new LightningRunnerEffect(this);
+    }
+
 }

@@ -49,7 +49,7 @@ import mage.target.common.TargetControlledPermanent;
 /**
  * @author JRHerlehy
  */
-public class PeacekeeperColossus extends CardImpl {
+public class PeacewalkerColossus extends CardImpl {
 
     private static final FilterControlledArtifactPermanent filter = new FilterControlledArtifactPermanent("another target vehicle");
 
@@ -58,7 +58,7 @@ public class PeacekeeperColossus extends CardImpl {
         filter.add(new SubtypePredicate("Vehicle"));
     }
 
-    public PeacekeeperColossus(UUID ownerId, CardSetInfo setInfo) {
+    public PeacewalkerColossus(UUID ownerId, CardSetInfo setInfo) {
         super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT}, "{3}");
 
         this.subtype.add("Vehicle");
@@ -76,12 +76,12 @@ public class PeacekeeperColossus extends CardImpl {
         this.addAbility(new CrewAbility(4));
     }
 
-    public PeacekeeperColossus(final PeacekeeperColossus card) {
+    public PeacewalkerColossus(final PeacewalkerColossus card) {
         super(card);
     }
 
     @Override
-    public PeacekeeperColossus copy() {
-        return new PeacekeeperColossus(this);
+    public PeacewalkerColossus copy() {
+        return new PeacewalkerColossus(this);
     }
 }

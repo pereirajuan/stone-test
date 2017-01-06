@@ -29,56 +29,49 @@ package mage.cards.a;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
+import mage.abilities.common.AttacksTriggeredAbility;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.condition.common.RevoltCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.costs.common.PayEnergyCost;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.DoIfCostPaid;
+import mage.abilities.effects.common.counter.GetEnergyCountersControllerEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.TargetController;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.game.permanent.token.ServoToken;
 
 /**
  *
  * @author fireshoes
  */
-public class AetherbornWarrior extends CardImpl {
+public class AetherChaser extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
+    public AetherChaser(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{R}");
 
-    static {
-        filter.add(new ControllerPredicate(TargetController.OPPONENT));
+        this.subtype.add("Human");
+        this.subtype.add("Artificer");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
+
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+
+        // When Aether Chaser enters the battlefield, you get {E}{E}.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new GetEnergyCountersControllerEffect(2)));
+
+        // Whenever Aether Chaser attacks, you may pay {E}{E}. If you do, create a 1/1 colorless Servo artifact creature token.
+        this.addAbility(new AttacksTriggeredAbility(new DoIfCostPaid(new CreateTokenEffect(new ServoToken()), new PayEnergyCost(2)), false,
+                "Whenever {this} attacks you may pay {E}{E}. If you do, create a 1/1 colorless Servo artifact creature token."));
     }
 
-    public AetherbornWarrior(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}");
-
-        this.subtype.add("Aetherborn");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(2);
-
-        // <i>Revolt</i> &mdash; When Aetherborn Warrior enters the battlefield, if a permanent you controlled left the battlefield this turn,
-        // target creature an opponent controls gets -3/-3 until end of turn.
-        Ability ability = new ConditionalTriggeredAbility(
-                new EntersBattlefieldTriggeredAbility(new BoostTargetEffect(-3, -3, Duration.EndOfTurn), false),
-                new RevoltCondition(),
-                "When {this} enters the battlefield, if a permanent you controlled left the battlefield this turn, "
-                        + "target creature an opponent controls gets -3/-3 until end of turn");
-        ability.addTarget(new TargetCreaturePermanent(filter));
-        this.addAbility(ability);
-    }
-
-    public AetherbornWarrior(final AetherbornWarrior card) {
+    public AetherChaser(final AetherChaser card) {
         super(card);
     }
 
     @Override
-    public AetherbornWarrior copy() {
-        return new AetherbornWarrior(this);
+    public AetherChaser copy() {
+        return new AetherChaser(this);
     }
 }

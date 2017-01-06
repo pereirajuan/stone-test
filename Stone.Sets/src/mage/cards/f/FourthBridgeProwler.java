@@ -25,11 +25,14 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.f;
 
 import java.util.UUID;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
@@ -38,25 +41,32 @@ import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class WithstandDeath extends CardImpl {
+public class FourthBridgeProwler extends CardImpl {
 
-    public WithstandDeath(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{G}");
+    public FourthBridgeProwler(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{B}");
 
-        // Target creature is indestructible this turn.
-        this.getSpellAbility().addEffect(new GainAbilityTargetEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        this.subtype.add("Human");
+        this.subtype.add("Rogue");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // When Fourth Bridge Prowler enters the battlefield, you may have target creature get -1/-1 until end of turn.
+        Effect effect = new BoostTargetEffect(-1, -1, Duration.EndOfTurn);
+        effect.setText("have target creature get -1/-1 until end of turn");
+        Ability ability = new EntersBattlefieldTriggeredAbility(effect, true);
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public WithstandDeath(final WithstandDeath card) {
+    public FourthBridgeProwler(final FourthBridgeProwler card) {
         super(card);
     }
 
     @Override
-    public WithstandDeath copy() {
-        return new WithstandDeath(this);
+    public FourthBridgeProwler copy() {
+        return new FourthBridgeProwler(this);
     }
-
 }

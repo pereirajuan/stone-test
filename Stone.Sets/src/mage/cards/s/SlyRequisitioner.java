@@ -25,38 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.s;
 
 import java.util.UUID;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.MageInt;
+import mage.abilities.common.PutIntoGraveFromBattlefieldAllTriggeredAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.keyword.ImproviseAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.common.FilterControlledArtifactPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.permanent.TokenPredicate;
+import mage.game.permanent.token.ServoToken;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class WithstandDeath extends CardImpl {
+public class SlyRequisitioner extends CardImpl {
 
-    public WithstandDeath(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{G}");
+    public SlyRequisitioner(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{4}{B}");
 
-        // Target creature is indestructible this turn.
-        this.getSpellAbility().addEffect(new GainAbilityTargetEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        this.subtype.add("Human");
+        this.subtype.add("Artificer");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Improvise
+        this.addAbility(new ImproviseAbility());
+        // Whenever a nontoken artifact you control is put into a graveyard from the battlefield, create a 1/1 colorless Servo artifact creature token.
+        FilterControlledArtifactPermanent filter = new FilterControlledArtifactPermanent("a nontoken artifact you control");
+        filter.add(Predicates.not(new TokenPredicate()));
+        this.addAbility(new PutIntoGraveFromBattlefieldAllTriggeredAbility(new CreateTokenEffect(new ServoToken()), false, filter, false));
     }
 
-    public WithstandDeath(final WithstandDeath card) {
+    public SlyRequisitioner(final SlyRequisitioner card) {
         super(card);
     }
 
     @Override
-    public WithstandDeath copy() {
-        return new WithstandDeath(this);
+    public SlyRequisitioner copy() {
+        return new SlyRequisitioner(this);
     }
-
 }

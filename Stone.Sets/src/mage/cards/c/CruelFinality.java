@@ -25,11 +25,11 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.c;
 
 import java.util.UUID;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.keyword.ScryEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
@@ -38,25 +38,25 @@ import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class WithstandDeath extends CardImpl {
+public class CruelFinality extends CardImpl {
 
-    public WithstandDeath(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{G}");
+    public CruelFinality(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{B}");
 
-        // Target creature is indestructible this turn.
-        this.getSpellAbility().addEffect(new GainAbilityTargetEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        // Target creature gets -2/-2 until end of turn. Scry 1.
+        getSpellAbility().addEffect(new BoostTargetEffect(-2, -2, Duration.EndOfTurn));
+        getSpellAbility().addTarget(new TargetCreaturePermanent());
+        getSpellAbility().addEffect(new ScryEffect(1));
     }
 
-    public WithstandDeath(final WithstandDeath card) {
+    public CruelFinality(final CruelFinality card) {
         super(card);
     }
 
     @Override
-    public WithstandDeath copy() {
-        return new WithstandDeath(this);
+    public CruelFinality copy() {
+        return new CruelFinality(this);
     }
-
 }

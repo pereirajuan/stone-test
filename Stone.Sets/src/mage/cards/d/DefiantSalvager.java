@@ -25,38 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.d;
 
 import java.util.UUID;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.ActivateAsSorceryActivatedAbility;
+import mage.abilities.costs.common.SacrificeTargetCost;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.target.common.TargetCreaturePermanent;
+import mage.constants.Zone;
+import mage.counters.CounterType;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class WithstandDeath extends CardImpl {
+public class DefiantSalvager extends CardImpl {
 
-    public WithstandDeath(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{G}");
+    private final static FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("an artifact or creature");
 
-        // Target creature is indestructible this turn.
-        this.getSpellAbility().addEffect(new GainAbilityTargetEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+    static {
+        filter.add(new CardTypePredicate(CardType.ARTIFACT));
     }
 
-    public WithstandDeath(final WithstandDeath card) {
+    public DefiantSalvager(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}");
+
+        this.subtype.add("Aetherborn");
+        this.subtype.add("Artificer");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Sacrifice an artifact or creature: Put a +1/+1 counter on Defiant Salvager. Activate this ability only any time you could cast a sorcery.
+        Ability ability = new ActivateAsSorceryActivatedAbility(Zone.BATTLEFIELD, new AddCountersSourceEffect(CounterType.P1P1.createInstance()),
+                new SacrificeTargetCost(new TargetControlledPermanent(1, 1, filter, true)));
+        this.addAbility(ability);
+
+    }
+
+    public DefiantSalvager(final DefiantSalvager card) {
         super(card);
     }
 
     @Override
-    public WithstandDeath copy() {
-        return new WithstandDeath(this);
+    public DefiantSalvager copy() {
+        return new DefiantSalvager(this);
     }
-
 }

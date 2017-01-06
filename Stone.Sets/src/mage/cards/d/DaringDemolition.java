@@ -25,38 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.d;
 
 import java.util.UUID;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.abilities.effects.common.DestroyTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author Loki
+ * @author LevelX2
  */
-public class WithstandDeath extends CardImpl {
+public class DaringDemolition extends CardImpl {
 
-    public WithstandDeath(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{G}");
+    private final static FilterPermanent filter = new FilterPermanent("creature or Vehicle");
 
-        // Target creature is indestructible this turn.
-        this.getSpellAbility().addEffect(new GainAbilityTargetEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn));
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+    static {
+        Predicates.or(new CardTypePredicate(CardType.CREATURE), new SubtypePredicate("Vehicle"));
     }
 
-    public WithstandDeath(final WithstandDeath card) {
+    public DaringDemolition(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{2}{B}{B}");
+
+        // Destroy target creature or Vehicle.
+        getSpellAbility().addEffect(new DestroyTargetEffect());
+        getSpellAbility().addTarget(new TargetPermanent(filter));
+    }
+
+    public DaringDemolition(final DaringDemolition card) {
         super(card);
     }
 
     @Override
-    public WithstandDeath copy() {
-        return new WithstandDeath(this);
+    public DaringDemolition copy() {
+        return new DaringDemolition(this);
     }
-
 }

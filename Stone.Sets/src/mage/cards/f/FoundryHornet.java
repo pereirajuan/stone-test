@@ -25,63 +25,64 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.v;
+package mage.cards.f;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
+import mage.abilities.TriggeredAbility;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.condition.common.RevoltCondition;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.effects.common.continuous.BoostAllEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.AbilityWord;
 import mage.constants.CardType;
 import mage.constants.Duration;
 import mage.constants.TargetController;
+import mage.counters.CounterType;
+import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.filter.common.FilterCreaturePermanent;
 import mage.filter.predicate.permanent.ControllerPredicate;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.predicate.permanent.CounterPredicate;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class VengefulRebel extends CardImpl {
+public class FoundryHornet extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("a creature with a +1/+1 counter on it");
+    private final static FilterCreaturePermanent filterOpponent = new FilterCreaturePermanent();
 
     static {
+        filter.add(new CounterPredicate(CounterType.P1P1));
         filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public VengefulRebel(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}");
+    private static final String rule = "When {this} enters the battlefield, if you control a creature with a +1/+1 counter on it, creatures your opponents control get -1/-1 until end of turn.";
 
-        this.subtype.add("Aetherborn");
-        this.subtype.add("Warrior");
-        this.power = new MageInt(3);
-        this.toughness = new MageInt(2);
+    public FoundryHornet(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{B}");
 
-        // <i>Revolt</i> &mdash; When Vengeful Rebel enters the battlefield, if a permanent you controlled left the battlefield this turn,
-        // target creature an opponent controls gets -3/-3 until end of turn.
-        Ability ability = new ConditionalTriggeredAbility(
-                new EntersBattlefieldTriggeredAbility(new BoostTargetEffect(-3, -3, Duration.EndOfTurn), false),
-                new RevoltCondition(),
-                "When {this} enters the battlefield, if a permanent you controlled left the battlefield this turn, "
-                + "target creature an opponent controls gets -3/-3 until end of turn");
-        ability.addTarget(new TargetCreaturePermanent(filter));
-        ability.setAbilityWord(AbilityWord.REVOLT);
-        this.addAbility(ability);
+        this.subtype.add("Insect");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // When Foundry Hornet enters the battlefield, if you control a creature with a +1/+1 counter on it, creatures your opponents control get -1/-1 until end of turn.
+        TriggeredAbility ability = new EntersBattlefieldTriggeredAbility(new BoostAllEffect(-1, -1, Duration.EndOfTurn, filterOpponent, false), false);
+        this.addAbility(new ConditionalTriggeredAbility(ability, new PermanentsOnTheBattlefieldCondition(filter), rule));
     }
 
-    public VengefulRebel(final VengefulRebel card) {
+    public FoundryHornet(final FoundryHornet card) {
         super(card);
     }
 
     @Override
-    public VengefulRebel copy() {
-        return new VengefulRebel(this);
+    public FoundryHornet copy() {
+        return new FoundryHornet(this);
     }
 }

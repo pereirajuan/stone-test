@@ -25,7 +25,7 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.s;
 
 import java.util.UUID;
 import mage.MageInt;
@@ -35,54 +35,46 @@ import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Zone;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.predicate.permanent.AnotherPredicate;
+import mage.filter.common.FilterControlledArtifactPermanent;
 import mage.game.Game;
 import mage.game.events.GameEvent;
 import mage.game.events.GameEvent.EventType;
-import mage.target.common.TargetControlledCreaturePermanent;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author noxx
+ * @author fireshoes
  */
-public class HavengulSkaab extends CardImpl {
+public class SalvageScuttler extends CardImpl {
 
-    public HavengulSkaab(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.CREATURE},"{5}{U}");
-        this.subtype.add("Zombie");
-        this.subtype.add("Horror");
+    public SalvageScuttler(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{4}{U}");
 
+        this.subtype.add("Crab");
         this.power = new MageInt(4);
-        this.toughness = new MageInt(5);
+        this.toughness = new MageInt(4);
 
-        // Whenever Havengul Skaab attacks, return another creature you control to its owner's hand.
-        this.addAbility(new HavengulSkaabAbility());
+        // Whenever Salvage Scuttler attacks, return an artifact you control to its owner's hand.
+        this.addAbility(new SalvageScuttlerAbility());
     }
 
-    public HavengulSkaab(final HavengulSkaab card) {
+    public SalvageScuttler(final SalvageScuttler card) {
         super(card);
     }
 
     @Override
-    public HavengulSkaab copy() {
-        return new HavengulSkaab(this);
+    public SalvageScuttler copy() {
+        return new SalvageScuttler(this);
     }
 }
 
-class HavengulSkaabAbility extends TriggeredAbilityImpl {
+class SalvageScuttlerAbility extends TriggeredAbilityImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("another creature you control");
-
-    static {
-        filter.add(new AnotherPredicate());
-    }
-
-    public HavengulSkaabAbility() {
+    public SalvageScuttlerAbility() {
         super(Zone.BATTLEFIELD, new ReturnToHandTargetEffect());
     }
 
-    public HavengulSkaabAbility(final HavengulSkaabAbility ability) {
+    public SalvageScuttlerAbility(final SalvageScuttlerAbility ability) {
         super(ability);
     }
 
@@ -94,7 +86,7 @@ class HavengulSkaabAbility extends TriggeredAbilityImpl {
     @Override
     public boolean checkTrigger(GameEvent event, Game game) {
         if (event.getSourceId().equals(this.getSourceId())) {
-            TargetControlledCreaturePermanent target = new TargetControlledCreaturePermanent(1, 1, filter, false);
+            TargetControlledPermanent target = new TargetControlledPermanent(1, 1, new FilterControlledArtifactPermanent("artifact you control"), false);
             this.addTarget(target);
             return true;
         }
@@ -103,11 +95,11 @@ class HavengulSkaabAbility extends TriggeredAbilityImpl {
 
     @Override
     public String getRule() {
-        return "Whenever {this} attacks, return another creature you control to its owner's hand.";
+        return "Whenever {this} attacks, return an artifact you control to its owner's hand.";
     }
 
     @Override
-    public HavengulSkaabAbility copy() {
-        return new HavengulSkaabAbility(this);
+    public SalvageScuttlerAbility copy() {
+        return new SalvageScuttlerAbility(this);
     }
 }

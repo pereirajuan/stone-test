@@ -25,49 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.o;
+package mage.cards.w;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.SimpleEvasionAbility;
-import mage.abilities.effects.common.combat.CantBeBlockedByCreaturesSourceEffect;
+import mage.abilities.keyword.ImproviseAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.filter.Filter;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.mageobject.PowerPredicate;
 
 /**
  *
  * @author fireshoes
  */
-public class OutlandBoar extends CardImpl {
+public class WindKinRaiders extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures with power 2 or less");
+    public WindKinRaiders(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{4}{U}{U}");
 
-    static {
-        filter.add(new PowerPredicate(Filter.ComparisonType.LessThan, 3));
-    }
-
-    public OutlandBoar(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{R}{G}");
-
-        this.subtype.add("Boar");
+        this.subtype.add("Human");
+        this.subtype.add("Artificer");
         this.power = new MageInt(4);
-        this.toughness = new MageInt(4);
+        this.toughness = new MageInt(3);
 
-        // Outland Boar can't be blocked by creatures with power 2 or less.
-        this.addAbility(new SimpleEvasionAbility(new CantBeBlockedByCreaturesSourceEffect(filter, Duration.WhileOnBattlefield)));
+        // Improvise
+        this.addAbility(new ImproviseAbility());
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
     }
 
-    public OutlandBoar(final OutlandBoar card) {
+    public WindKinRaiders(final WindKinRaiders card) {
         super(card);
     }
 
     @Override
-    public OutlandBoar copy() {
-        return new OutlandBoar(this);
+    public WindKinRaiders copy() {
+        return new WindKinRaiders(this);
     }
 }

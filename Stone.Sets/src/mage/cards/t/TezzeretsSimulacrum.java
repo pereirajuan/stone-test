@@ -25,43 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.t;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.keyword.ImproviseAbility;
-import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.LoseLifeTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Zone;
+import mage.filter.common.FilterPlaneswalkerPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetOpponent;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class WindKingRaiders extends CardImpl {
+public class TezzeretsSimulacrum extends CardImpl {
 
-    public WindKingRaiders(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{4}{U}{U}");
+    public TezzeretsSimulacrum(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{3}");
 
-        this.subtype.add("Human");
-        this.subtype.add("Artificer");
-        this.power = new MageInt(4);
+        this.subtype.add("Golem");
+        this.power = new MageInt(2);
         this.toughness = new MageInt(3);
 
-        // Improvise
-        this.addAbility(new ImproviseAbility());
-
-        // Flying
-        this.addAbility(FlyingAbility.getInstance());
+        // {T}: Target opponent loses 1 life. If you control a Tezzeret planeswalker, that player loses 3 life instead.
+        FilterPlaneswalkerPermanent filter = new FilterPlaneswalkerPermanent();
+        filter.add(new SubtypePredicate("Tezzeret"));
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new ConditionalOneShotEffect(new LoseLifeTargetEffect(3), new LoseLifeTargetEffect(1),
+                        new PermanentsOnTheBattlefieldCondition(filter),
+                        "Target opponent loses 1 life. If you control a Tezzeret planeswalker, that player loses 3 life instead"), new TapSourceCost());
+        ability.addTarget(new TargetOpponent());
+        this.addAbility(ability);
     }
 
-    public WindKingRaiders(final WindKingRaiders card) {
+    public TezzeretsSimulacrum(final TezzeretsSimulacrum card) {
         super(card);
     }
 
     @Override
-    public WindKingRaiders copy() {
-        return new WindKingRaiders(this);
+    public TezzeretsSimulacrum copy() {
+        return new TezzeretsSimulacrum(this);
     }
 }

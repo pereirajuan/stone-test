@@ -25,67 +25,74 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.g;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.AttacksAllTriggeredAbility;
-import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
+import mage.abilities.common.DiesAttachedTriggeredAbility;
+import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.ExileAttachedEffect;
-import mage.abilities.effects.common.combat.CantAttackBlockAttachedEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.DamageAttachedControllerEffect;
 import mage.abilities.keyword.EnchantAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Outcome;
-import mage.constants.SetTargetPointer;
 import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.filter.common.FilterCreaturePermanent;
-import mage.filter.predicate.mageobject.SubtypePredicate;
-import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.game.permanent.token.Token;
 import mage.target.TargetPermanent;
-import mage.target.common.TargetCreaturePermanent;
+import mage.target.common.TargetArtifactPermanent;
 
 /**
  *
- * @author Styxo
+ * @author LevelX2
  */
-public class CaughtInTheBrights extends CardImpl {
+public class GremlinInfestation extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("Vehicle you control");
+    public GremlinInfestation(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{3}{R}");
 
-    static {
-        filter.add(new ControllerPredicate(TargetController.YOU));
-        filter.add(new SubtypePredicate("Vehicle"));
-    }
-
-    public CaughtInTheBrights(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}");
         this.subtype.add("Aura");
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
+        // Enchant artifact
+        TargetPermanent auraTarget = new TargetArtifactPermanent();
         this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Benefit));
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.Damage));
         Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
 
-        // Enchanted creature can't attack or block.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CantAttackBlockAttachedEffect(AttachmentType.AURA)));
+        // At the beginning of your end step, Gremlin Infestation deals 2 damage to enchanted artifact's controller.
+        Effect effect = new DamageAttachedControllerEffect(2);
+        effect.setText("{this} deals 2 damage to enchanted artifact's controller");
+        this.addAbility(new BeginningOfEndStepTriggeredAbility(new DamageAttachedControllerEffect(2), TargetController.YOU, false));
 
-        // When a Vehicle you control attacks, exile enchanted creature.
-        this.addAbility(new AttacksAllTriggeredAbility(new ExileAttachedEffect(), false, filter, SetTargetPointer.NONE, false));
+        // When enchanted artifact is put into a graveyard, create a 2/2 red Gremlin creature token.
+        this.addAbility(new DiesAttachedTriggeredAbility(new CreateTokenEffect(new GremlinInfestationToken()), "enchanted artifact", false, false));
     }
 
-    public CaughtInTheBrights(final CaughtInTheBrights card) {
+    public GremlinInfestation(final GremlinInfestation card) {
         super(card);
     }
 
     @Override
-    public CaughtInTheBrights copy() {
-        return new CaughtInTheBrights(this);
+    public GremlinInfestation copy() {
+        return new GremlinInfestation(this);
+    }
+}
+
+class GremlinInfestationToken extends Token {
+
+    GremlinInfestationToken() {
+        super("Gremlin", "2/2 red Gremlin creature token");
+        this.setOriginalExpansionSetCode("AER");
+        cardType.add(CardType.CREATURE);
+        color.setRed(true);
+        subtype.add("Gremlin");
+        power = new MageInt(2);
+        toughness = new MageInt(2);
+
     }
 }

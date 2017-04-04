@@ -25,62 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.o;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.ObjectColor;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.common.SpellCastControllerTriggeredAbility;
 import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
-import mage.constants.Outcome;
-import mage.target.TargetPermanent;
-import mage.abilities.keyword.EnchantAbility;
-import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.effects.common.cost.SpellsCostReductionControllerEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.SuperType;
 import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.FilterSpell;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.game.permanent.token.WarriorVigilantToken;
-import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class CartoucheOfSolidarity extends CardImpl {
+public class OketrasMonument extends CardImpl {
 
-    public CartoucheOfSolidarity(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{W}");
+    private static final FilterCard filter = new FilterCard("White creature spells");
+    private static final FilterSpell filter2 = new FilterSpell("a creature spell");
 
-        this.subtype.add("Aura");
-        this.subtype.add("Cartouche");
-
-        // Enchant creature you control
-        TargetPermanent auraTarget = new TargetControlledCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
-        this.addAbility(ability);
-
-        // When Cartouche of Solidarity enters the battlefield, create a 1/1 white Warrior creature token with vigilance.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new WarriorVigilantToken())));
-
-        // Enchanted creature gets +1/+1 and has first strike.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.WhileOnBattlefield)));
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(FirstStrikeAbility.getInstance(), AttachmentType.AURA)));
+    static {
+        filter.add(Predicates.and(new ColorPredicate(ObjectColor.WHITE), new CardTypePredicate(CardType.CREATURE)));
+    }
+    static {
+        filter2.add(new CardTypePredicate(CardType.CREATURE));
     }
 
-    public CartoucheOfSolidarity(final CartoucheOfSolidarity card) {
+    public OketrasMonument(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT}, "{3}");
+
+        addSuperType(SuperType.LEGENDARY);
+
+        // White creature spells you cast cost {1} less to cast.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new SpellsCostReductionControllerEffect(filter, 1)));
+
+        // Whenever you cast a creature spell, create 1/1 white Warrior creature token with vigilance.
+        this.addAbility(new SpellCastControllerTriggeredAbility(new CreateTokenEffect(new WarriorVigilantToken()), filter2, false));
+    }
+
+    public OketrasMonument(final OketrasMonument card) {
         super(card);
     }
 
     @Override
-    public CartoucheOfSolidarity copy() {
-        return new CartoucheOfSolidarity(this);
+    public OketrasMonument copy() {
+        return new OketrasMonument(this);
     }
 }

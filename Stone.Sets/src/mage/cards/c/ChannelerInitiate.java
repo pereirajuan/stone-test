@@ -28,59 +28,49 @@
 package mage.cards.c;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.CreateTokenEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
-import mage.constants.Outcome;
-import mage.target.TargetPermanent;
-import mage.abilities.keyword.EnchantAbility;
-import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.costs.common.RemoveCountersSourceCost;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
+import mage.abilities.mana.AnyColorManaAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Zone;
-import mage.game.permanent.token.WarriorVigilantToken;
+import mage.counters.CounterType;
 import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
  * @author fireshoes
  */
-public class CartoucheOfSolidarity extends CardImpl {
+public class ChannelerInitiate extends CardImpl {
 
-    public CartoucheOfSolidarity(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{W}");
+    public ChannelerInitiate(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}");
 
-        this.subtype.add("Aura");
-        this.subtype.add("Cartouche");
+        this.subtype.add("Human");
+        this.subtype.add("Druid");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
 
-        // Enchant creature you control
-        TargetPermanent auraTarget = new TargetControlledCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        // When Channeler Initiate enters the battlefield, put three -1/-1 counters on target creature you control.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new AddCountersTargetEffect(CounterType.M1M1.createInstance(3)));
+        ability.addTarget(new TargetControlledCreaturePermanent());
         this.addAbility(ability);
 
-        // When Cartouche of Solidarity enters the battlefield, create a 1/1 white Warrior creature token with vigilance.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new WarriorVigilantToken())));
-
-        // Enchanted creature gets +1/+1 and has first strike.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(1, 1, Duration.WhileOnBattlefield)));
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityAttachedEffect(FirstStrikeAbility.getInstance(), AttachmentType.AURA)));
+        // {T}, Remove a -1/-1 counter from Channeler Initiate: Add one mana of any color to your mana pool.
+        ability = new AnyColorManaAbility();
+        ability.addCost(new RemoveCountersSourceCost(CounterType.M1M1.createInstance(1)));
+        this.addAbility(ability);
     }
 
-    public CartoucheOfSolidarity(final CartoucheOfSolidarity card) {
+    public ChannelerInitiate(final ChannelerInitiate card) {
         super(card);
     }
 
     @Override
-    public CartoucheOfSolidarity copy() {
-        return new CartoucheOfSolidarity(this);
+    public ChannelerInitiate copy() {
+        return new ChannelerInitiate(this);
     }
 }

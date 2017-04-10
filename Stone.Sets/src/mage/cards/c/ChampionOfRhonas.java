@@ -25,36 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.c;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.BecomesExertSourceTriggeredAbility;
+import mage.abilities.effects.common.PutPermanentOnBattlefieldEffect;
+import mage.abilities.keyword.ExertAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
+import mage.filter.common.FilterCreatureCard;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class ChampionOfRhonas extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public ChampionOfRhonas(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{G}");
 
+        this.subtype.add("Jackal");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // You may exert Champion of Rhonas as it attacks. When you do, you may put a creature card from your hand onto the battlefield.
+        BecomesExertSourceTriggeredAbility ability = new BecomesExertSourceTriggeredAbility(new PutPermanentOnBattlefieldEffect(new FilterCreatureCard("a creature card")));
+        this.addAbility(new ExertAbility(ability));
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public ChampionOfRhonas(final ChampionOfRhonas card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public ChampionOfRhonas copy() {
+        return new ChampionOfRhonas(this);
     }
 }

@@ -25,36 +25,39 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.p;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.dynamicvalue.common.ManacostVariableValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.discard.DiscardControllerEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class PullFromTomorrow extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public PullFromTomorrow(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{X}{U}{U}");
 
-
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // Draw X cards, then discard a card.
+        getSpellAbility().addEffect(new DrawCardSourceControllerEffect(new ManacostVariableValue()));
+        Effect effect = new DiscardControllerEffect(1);
+        effect.setText(", then discard a card");
+        getSpellAbility().addEffect(effect);
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public PullFromTomorrow(final PullFromTomorrow card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public PullFromTomorrow copy() {
+        return new PullFromTomorrow(this);
     }
 }

@@ -25,36 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.f;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.ReturnToHandTargetEffect;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class Floodwaters extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public Floodwaters(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{4}{U}{U}");
 
+        // Return up to two target creatures to their owners' hands.
+        Effect effect = new ReturnToHandTargetEffect();
+        effect.setText("Return up to two target creatures to their owners' hands");
+        this.getSpellAbility().addEffect(effect);
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent(0, 2));
 
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // Cycling {2}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{2}")));
+
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public Floodwaters(final Floodwaters card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public Floodwaters copy() {
+        return new Floodwaters(this);
     }
 }

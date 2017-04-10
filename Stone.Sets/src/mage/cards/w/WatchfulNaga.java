@@ -25,36 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.w;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.BecomesExertSourceTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.keyword.ExertAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class WatchfulNaga extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public WatchfulNaga(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}");
 
+        this.subtype.add("Naga");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // You may exert Watchful Naga as it attacks. When you do, draw a card.
+        BecomesExertSourceTriggeredAbility ability = new BecomesExertSourceTriggeredAbility(new DrawCardSourceControllerEffect(1));
+        this.addAbility(new ExertAbility(ability));
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public WatchfulNaga(final WatchfulNaga card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public WatchfulNaga copy() {
+        return new WatchfulNaga(this);
     }
 }

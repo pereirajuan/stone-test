@@ -25,36 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.t;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.BecomesExertSourceTriggeredAbility;
+import mage.abilities.effects.common.continuous.BoostControlledEffect;
+import mage.abilities.keyword.ExertAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
+import mage.constants.Duration;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class TahCropElite extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public TahCropElite(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
 
+        this.subtype.add("Bird");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // You may exert Tah-Crop Elite as it attacks. When you do, creatures you control get +1/+1 until end of turn.
+        BecomesExertSourceTriggeredAbility ability = new BecomesExertSourceTriggeredAbility(new BoostControlledEffect(1, 1, Duration.EndOfTurn));
+        this.addAbility(new ExertAbility(ability));
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public TahCropElite(final TahCropElite card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public TahCropElite copy() {
+        return new TahCropElite(this);
     }
 }

@@ -25,58 +25,62 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.o;
-
-import mage.abilities.dynamicvalue.common.StaticValue;
-import mage.abilities.dynamicvalue.common.TargetPermanentPowerCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
-import mage.abilities.keyword.AftermathAbility;
-import mage.abilities.keyword.DoubleStrikeAbility;
-import mage.cards.CardImpl;
-import mage.cards.CardSetInfo;
-import mage.cards.SplitCard;
-import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.target.common.TargetCreaturePermanent;
+package mage.cards.c;
 
 import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.CountType;
+import mage.abilities.common.ActivateIfConditionActivatedAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.UntapTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
+import mage.constants.CardType;
+import mage.constants.Zone;
+import mage.filter.common.FilterPlaneswalkerPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author stravant
+ * @author fireshoes
  */
+public class CompanionOfTheTrials extends CardImpl {
 
-
-public class OnwardVictory extends SplitCard {
-
-    public OnwardVictory(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT}, new CardType[]{CardType.SORCERY},"{2}{R}","{2}{W}",false);
-
-        // Onward
-        // Target creature gets +X/+0 until end of turn where X is its power.
-        getLeftHalfCard().getSpellAbility().addTarget(new TargetCreaturePermanent());
-        getLeftHalfCard().getSpellAbility().addEffect(new BoostTargetEffect(new TargetPermanentPowerCount(), new StaticValue(0), Duration.EndOfTurn, true));
-
-        // to
-
-        // Victory
-        // Target creature gains double strike until end of turn.
-        ((CardImpl)(getRightHalfCard())).addAbility(new AftermathAbility());
-        Effect effect = new GainAbilityTargetEffect(DoubleStrikeAbility.getInstance(), Duration.EndOfTurn);
-        getRightHalfCard().getSpellAbility().addEffect(effect);
-        getRightHalfCard().getSpellAbility().addTarget(new TargetCreaturePermanent());
+    private static final FilterPlaneswalkerPermanent filter = new FilterPlaneswalkerPermanent("you control a Gideon planeswalker");
+    static {
+        filter.add(new SubtypePredicate("Gideon"));
     }
 
-    public OnwardVictory(final OnwardVictory card) {
+    public CompanionOfTheTrials(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{W}");
+
+        this.subtype.add("Bird");
+        this.subtype.add("Soldier");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // {1}{W}: Untap target creature. Activate this ability only if you control a Gideon planeswalker.
+        Ability ability = new ActivateIfConditionActivatedAbility(Zone.BATTLEFIELD,
+                new UntapTargetEffect(),
+                new ManaCostsImpl("{1}{W}"),
+                new PermanentsOnTheBattlefieldCondition(filter, CountType.MORE_THAN, 0));
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
+    }
+
+    public CompanionOfTheTrials(final CompanionOfTheTrials card) {
         super(card);
     }
 
     @Override
-    public OnwardVictory copy() {
-        return new OnwardVictory(this);
+    public CompanionOfTheTrials copy() {
+        return new CompanionOfTheTrials(this);
     }
 }
-

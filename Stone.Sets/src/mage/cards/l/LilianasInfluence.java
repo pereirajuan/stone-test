@@ -25,36 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.l;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.effects.common.counter.AddCountersAllEffect;
+import mage.abilities.effects.common.search.SearchLibraryGraveyardPutInHandEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
+import mage.constants.TargetController;
+import mage.counters.CounterType;
+import mage.filter.FilterCard;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.NamePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class LilianasInfluence extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    private final static FilterCard filter = new FilterCard("Liliana, Death Wielder");
+    private final static FilterCreaturePermanent filterCreatures = new FilterCreaturePermanent("creature you don't control");
 
-
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+    static {
+        filter.add(new NamePredicate("Liliana, Death Wielder"));
+        filterCreatures.add(new ControllerPredicate(TargetController.NOT_YOU));
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public LilianasInfluence(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{4}{B}{B}");
+
+        // Put a -1/-1 counter on each creature you don't control. You may search your library and/or graveyard for a card named Liliana, Death Wielder,
+        // reveal it, and put it into your hand. If you search your library this way, shuffle it.
+        getSpellAbility().addEffect(new AddCountersAllEffect(CounterType.M1M1.createInstance(1), filterCreatures));
+        getSpellAbility().addEffect(new SearchLibraryGraveyardPutInHandEffect(filter));
+    }
+
+    public LilianasInfluence(final LilianasInfluence card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public LilianasInfluence copy() {
+        return new LilianasInfluence(this);
     }
 }

@@ -25,36 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.t;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.common.EntersBattlefieldControlledTriggeredAbility;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.ReturnToHandSourceEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.game.permanent.token.BeastToken3;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class TrialOfStrength extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("a Cartouche");
 
-
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+    static {
+        filter.add(new SubtypePredicate("Cartouche"));
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public TrialOfStrength(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{2}{G}");
+
+        // When Trial of Strength enters the battlefield, create a 4/2 green Beast creature token.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new CreateTokenEffect(new BeastToken3())));
+
+        // When a Cartouche enters the battlefield under your control, return Trial of Strength to its owner's hand.
+        this.addAbility(new EntersBattlefieldControlledTriggeredAbility(new ReturnToHandSourceEffect(), filter,
+                "When a Cartouche enters the battlefield under your control, return {this} to its owner's hand"));
+    }
+
+    public TrialOfStrength(final TrialOfStrength card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public TrialOfStrength copy() {
+        return new TrialOfStrength(this);
     }
 }

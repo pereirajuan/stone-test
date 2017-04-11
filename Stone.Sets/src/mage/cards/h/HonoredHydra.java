@@ -28,33 +28,42 @@
 package mage.cards.h;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.MageInt;
+import mage.abilities.keyword.TrampleAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.keyword.EmbalmAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class HonoredHydra extends CardImpl {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public HonoredHydra(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{5}{G}");
+        
+        this.subtype.add("Snake");
+        this.subtype.add("Hydra");
+        this.power = new MageInt(6);
+        this.toughness = new MageInt(6);
 
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
 
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // Embalm {3}{G}
+        this.addAbility(new EmbalmAbility(new ManaCostsImpl("{3}{G}"), this));
+
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public HonoredHydra(final HonoredHydra card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public HonoredHydra copy() {
+        return new HonoredHydra(this);
     }
 }

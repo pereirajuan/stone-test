@@ -25,36 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CounterUnlessPaysEffect;
+import mage.abilities.effects.common.DontUntapInControllersNextUntapStepTargetEffect;
+import mage.abilities.keyword.AftermathAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
+import mage.cards.SplitCard;
 import mage.constants.CardType;
-import mage.target.common.TargetCreatureOrPlaneswalker;
+import mage.filter.common.FilterLandPermanent;
+import mage.target.TargetPermanent;
+import mage.target.TargetSpell;
 
 /**
  *
- * @author LevelX2
+ * @author fireshoes
  */
-public class HerosDownfall extends CardImpl {
+public class ReduceRubble extends SplitCard {
 
-    public HerosDownfall(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{1}{B}{B}");
+    public ReduceRubble(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, new CardType[]{CardType.SORCERY}, "{2}{U}", "{2}{R}", false);
 
+        // Reduce
+        // Counter target spell unless its controller pays {3}.
+        getLeftHalfCard().getSpellAbility().addTarget(new TargetSpell());
+        getLeftHalfCard().getSpellAbility().addEffect(new CounterUnlessPaysEffect(new GenericManaCost(3)));
 
-        // Destroy target creature or planeswalker.
-        this.getSpellAbility().addEffect(new DestroyTargetEffect());
-        this.getSpellAbility().addTarget(new TargetCreatureOrPlaneswalker());
+        // Rubble
+        // Up to three target lands don't untap during their controller's next untap step.
+        ((CardImpl)(getRightHalfCard())).addAbility(new AftermathAbility());
+        Effect effect = new DontUntapInControllersNextUntapStepTargetEffect();
+        effect.setText("Up to three target lands don't untap during their controller's next untap step");
+        getRightHalfCard().getSpellAbility().addEffect(effect);
+        getRightHalfCard().getSpellAbility().addTarget(new TargetPermanent(0, 3, new FilterLandPermanent(), false));
     }
 
-    public HerosDownfall(final HerosDownfall card) {
+    public ReduceRubble(final ReduceRubble card) {
         super(card);
     }
 
     @Override
-    public HerosDownfall copy() {
-        return new HerosDownfall(this);
+    public ReduceRubble copy() {
+        return new ReduceRubble(this);
     }
 }

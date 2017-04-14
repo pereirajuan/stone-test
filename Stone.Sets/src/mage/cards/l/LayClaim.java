@@ -25,36 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.r;
+package mage.cards.l;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.AttachEffect;
+import mage.constants.Outcome;
+import mage.target.TargetPermanent;
+import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.continuous.ControlEnchantedEffect;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.filter.common.FilterBasicLandCard;
-import mage.target.common.TargetCardInLibrary;
+import mage.constants.CardType;
+import mage.constants.Zone;
 
 /**
  *
- * @author LokiX
+ * @author fireshoes
  */
-public class RampantGrowth extends CardImpl {
+public class LayClaim extends CardImpl {
 
-    public RampantGrowth(UUID ownerId, CardSetInfo setInfo){
-        super(ownerId,setInfo,new CardType[]{CardType.SORCERY},"{1}{G}");
+    public LayClaim(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{5}{U}{U}");
 
-        // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
-        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+        this.subtype.add("Aura");
+
+        // Enchant permanent
+        TargetPermanent auraTarget = new TargetPermanent();
+        this.getSpellAbility().addTarget(auraTarget);
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.GainControl));
+        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        this.addAbility(ability);
+
+        // You control enchanted permanent.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new ControlEnchantedEffect("permanent")));
+
+        // Cycling {2}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{2}")));
+
     }
 
-    public RampantGrowth(final RampantGrowth card) {
+    public LayClaim(final LayClaim card) {
         super(card);
     }
 
     @Override
-    public RampantGrowth copy() {
-        return new RampantGrowth(this);
+    public LayClaim copy() {
+        return new LayClaim(this);
     }
 }

@@ -25,36 +25,62 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.r;
+package mage.cards.d;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.abilities.Ability;
+import mage.abilities.effects.common.NameACardEffect;
+import mage.abilities.effects.common.search.SearchTargetGraveyardHandLibraryForCardNameAndExileEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.filter.common.FilterBasicLandCard;
-import mage.target.common.TargetCardInLibrary;
+import mage.constants.CardType;
+import mage.game.Game;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author LokiX
+ * @author fireshoes
  */
-public class RampantGrowth extends CardImpl {
+public class Dispossess extends CardImpl {
 
-    public RampantGrowth(UUID ownerId, CardSetInfo setInfo){
-        super(ownerId,setInfo,new CardType[]{CardType.SORCERY},"{1}{G}");
+    public Dispossess(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{2}{B}");
 
-        // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
-        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+        // Name an artifact card. Search target player's graveyard, hand, and library for any number of cards with that name and exile them. Then that player shuffles his or her library.
+        this.getSpellAbility().addEffect((new NameACardEffect(NameACardEffect.TypeOfName.ARTIFACT_NAME)));
+        this.getSpellAbility().addTarget(new TargetPlayer());
+        this.getSpellAbility().addEffect(new DispossessEffect());
     }
 
-    public RampantGrowth(final RampantGrowth card) {
+    public Dispossess(final Dispossess card) {
         super(card);
     }
 
     @Override
-    public RampantGrowth copy() {
-        return new RampantGrowth(this);
+    public Dispossess copy() {
+        return new Dispossess(this);
     }
+}
+
+class DispossessEffect extends SearchTargetGraveyardHandLibraryForCardNameAndExileEffect {
+
+    public DispossessEffect() {
+        super(true, "target opponent's", "any number of cards with that name");
+    }
+
+    public DispossessEffect(final DispossessEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public boolean apply(Game game, Ability source) {
+        String cardName = (String) game.getState().getValue(source.getSourceId().toString() + NameACardEffect.INFO_KEY);
+        return super.applySearchAndExile(game, source, cardName, targetPointer.getFirst(game, source));
+    }
+
+    @Override
+    public DispossessEffect copy() {
+        return new DispossessEffect(this);
+    }
+
 }

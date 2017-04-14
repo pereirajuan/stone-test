@@ -25,36 +25,48 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.r;
+package mage.cards.b;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.filter.common.FilterBasicLandCard;
-import mage.target.common.TargetCardInLibrary;
+import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Zone;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LokiX
+ * @author fireshoes
  */
-public class RampantGrowth extends CardImpl {
+public class BloodlustInciter extends CardImpl {
 
-    public RampantGrowth(UUID ownerId, CardSetInfo setInfo){
-        super(ownerId,setInfo,new CardType[]{CardType.SORCERY},"{1}{G}");
+    public BloodlustInciter(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{R}");
 
-        // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
-        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // {T}: Target creature gains haste until end of turn.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainAbilityTargetEffect(HasteAbility.getInstance(), Duration.EndOfTurn), new TapSourceCost());
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public RampantGrowth(final RampantGrowth card) {
+    public BloodlustInciter(final BloodlustInciter card) {
         super(card);
     }
 
     @Override
-    public RampantGrowth copy() {
-        return new RampantGrowth(this);
+    public BloodlustInciter copy() {
+        return new BloodlustInciter(this);
     }
 }

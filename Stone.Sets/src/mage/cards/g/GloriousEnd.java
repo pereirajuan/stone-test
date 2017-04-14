@@ -25,36 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.r;
+package mage.cards.g;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.abilities.common.delayed.AtTheBeginOfNextEndStepDelayedTriggeredAbility;
+import mage.abilities.effects.common.CreateDelayedTriggeredAbilityEffect;
+import mage.abilities.effects.common.EndTurnEffect;
+import mage.abilities.effects.common.LoseGameSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.filter.common.FilterBasicLandCard;
-import mage.target.common.TargetCardInLibrary;
+import mage.constants.CardType;
+import mage.constants.TargetController;
 
 /**
  *
- * @author LokiX
+ * @author fireshoes
  */
-public class RampantGrowth extends CardImpl {
+public class GloriousEnd extends CardImpl {
 
-    public RampantGrowth(UUID ownerId, CardSetInfo setInfo){
-        super(ownerId,setInfo,new CardType[]{CardType.SORCERY},"{1}{G}");
+    public GloriousEnd(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{R}");
 
-        // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
-        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+        // End the turn.
+        getSpellAbility().addEffect(new EndTurnEffect());
+
+        // At the beginning of your next end step, you lose the game.
+        getSpellAbility().addEffect(new CreateDelayedTriggeredAbilityEffect(
+                new AtTheBeginOfNextEndStepDelayedTriggeredAbility(new LoseGameSourceControllerEffect(), TargetController.YOU)));
     }
 
-    public RampantGrowth(final RampantGrowth card) {
+    public GloriousEnd(final GloriousEnd card) {
         super(card);
     }
 
     @Override
-    public RampantGrowth copy() {
-        return new RampantGrowth(this);
+    public GloriousEnd copy() {
+        return new GloriousEnd(this);
     }
 }

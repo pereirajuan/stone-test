@@ -25,36 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.r;
+package mage.cards.s;
 
 import java.util.UUID;
-import mage.constants.CardType;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.abilities.keyword.AftermathAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
+import mage.cards.SplitCard;
+import mage.constants.CardType;
 import mage.filter.common.FilterBasicLandCard;
 import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author LokiX
+ * @author fireshoes
  */
-public class RampantGrowth extends CardImpl {
+public class SpringMind extends SplitCard {
 
-    public RampantGrowth(UUID ownerId, CardSetInfo setInfo){
-        super(ownerId,setInfo,new CardType[]{CardType.SORCERY},"{1}{G}");
+    public SpringMind(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, new CardType[]{CardType.INSTANT}, "{2}{G}", "{4}{U}{U}", false);
 
+        // Spring
         // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
-        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+        getLeftHalfCard().getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+
+        // Mind
+        // Aftermath
+        // Draw two cards.
+        ((CardImpl)(getRightHalfCard())).addAbility(new AftermathAbility());
+        getRightHalfCard().getSpellAbility().addEffect(new DrawCardSourceControllerEffect(2));
     }
 
-    public RampantGrowth(final RampantGrowth card) {
+    public SpringMind(final SpringMind card) {
         super(card);
     }
 
     @Override
-    public RampantGrowth copy() {
-        return new RampantGrowth(this);
+    public SpringMind copy() {
+        return new SpringMind(this);
     }
 }

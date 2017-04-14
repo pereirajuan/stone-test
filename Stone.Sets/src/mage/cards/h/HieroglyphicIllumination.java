@@ -25,36 +25,39 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
-package mage.cards.r;
+package mage.cards.h;
 
 import java.util.UUID;
-import mage.constants.CardType;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.filter.common.FilterBasicLandCard;
-import mage.target.common.TargetCardInLibrary;
+import mage.constants.CardType;
 
 /**
  *
- * @author LokiX
+ * @author fireshoes
  */
-public class RampantGrowth extends CardImpl {
+public class HieroglyphicIllumination extends CardImpl {
 
-    public RampantGrowth(UUID ownerId, CardSetInfo setInfo){
-        super(ownerId,setInfo,new CardType[]{CardType.SORCERY},"{1}{G}");
+    public HieroglyphicIllumination(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{3}{U}");
 
-        // Search your library for a basic land card, put it onto the battlefield tapped, then shuffle your library.
-        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(new FilterBasicLandCard()), true));
+        // Draw two cards.
+        getSpellAbility().addEffect(new DrawCardSourceControllerEffect(2));
+
+        // Cycling {U}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{U}")));
+
     }
 
-    public RampantGrowth(final RampantGrowth card) {
+    public HieroglyphicIllumination(final HieroglyphicIllumination card) {
         super(card);
     }
 
     @Override
-    public RampantGrowth copy() {
-        return new RampantGrowth(this);
+    public HieroglyphicIllumination copy() {
+        return new HieroglyphicIllumination(this);
     }
 }

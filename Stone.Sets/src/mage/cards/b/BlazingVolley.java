@@ -25,37 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.cards.b;
 
-package mage.cards.f;
-
-import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import java.util.UUID;
+import mage.abilities.effects.common.DamageAllEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-
-import java.util.UUID;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class BlazingVolley extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature your opponents control");
 
-        // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public Fog(final Fog card) {
+    public BlazingVolley(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{R}");
+
+        // Blazing Volley deals damage to each creature your opponents control.
+        getSpellAbility().addEffect(new DamageAllEffect(1, filter));
+    }
+
+    public BlazingVolley(final BlazingVolley card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public BlazingVolley copy() {
+        return new BlazingVolley(this);
     }
-
 }

@@ -25,37 +25,41 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.cards.n;
 
-package mage.cards.f;
-
-import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-
-import java.util.UUID;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class NefCropEntangler extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    public NefCropEntangler(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{R}");
+        
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+
+        // You may exert Nef-Crop Entangler as it attacks. When you do, it gets +1/+2 until end of turn.
     }
 
-    public Fog(final Fog card) {
+    public NefCropEntangler(final NefCropEntangler card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public NefCropEntangler copy() {
+        return new NefCropEntangler(this);
     }
-
 }

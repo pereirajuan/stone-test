@@ -25,37 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.cards.o;
 
-package mage.cards.f;
-
-import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-
-import java.util.UUID;
+import mage.counters.CounterType;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class OrneryKudu extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    public OrneryKudu(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}");
 
-        // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+        this.subtype.add("Antelope");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(4);
+
+        // When Ornery Kudu enters the battlefield, put a -1/-1 counter on target creature you control.
+        Ability ability = new EntersBattlefieldTriggeredAbility(new AddCountersTargetEffect(CounterType.M1M1.createInstance(1)));
+        ability.addTarget(new TargetControlledCreaturePermanent());
+        this.addAbility(ability);
     }
 
-    public Fog(final Fog card) {
+    public OrneryKudu(final OrneryKudu card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public OrneryKudu copy() {
+        return new OrneryKudu(this);
     }
-
 }

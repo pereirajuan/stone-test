@@ -25,37 +25,35 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-
 package mage.cards.f;
 
-import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import java.util.UUID;
+import mage.abilities.effects.common.ExileTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-
-import java.util.UUID;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class FinalReward extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    public FinalReward(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{4}{B}");
 
-        // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+        // Exile target creature.
+        getSpellAbility().addEffect(new ExileTargetEffect());
+        getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public Fog(final Fog card) {
+    public FinalReward(final FinalReward card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public FinalReward copy() {
+        return new FinalReward(this);
     }
-
 }

@@ -25,37 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.cards.a;
 
-package mage.cards.f;
-
-import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.keyword.EmbalmAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-
-import java.util.UUID;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class AvenInitiate extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    public AvenInitiate(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{U}");
+        
+        this.subtype.add("Bird");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
 
-        // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Embalm {6}{U}
+        this.addAbility(new EmbalmAbility(new ManaCostsImpl("{6}{U}"), this));
+
     }
 
-    public Fog(final Fog card) {
+    public AvenInitiate(final AvenInitiate card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public AvenInitiate copy() {
+        return new AvenInitiate(this);
     }
-
 }

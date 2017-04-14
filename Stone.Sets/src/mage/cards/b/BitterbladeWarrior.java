@@ -25,37 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.cards.b;
 
-package mage.cards.f;
-
-import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.BecomesExertSourceTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.DeathtouchAbility;
+import mage.abilities.keyword.ExertAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Duration;
 
-import java.util.UUID;
-
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class BitterbladeWarrior extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    public BitterbladeWarrior(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}");
 
-        // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+        this.subtype.add("Jackal");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // You may exert Bitterblade Warrior as it attacks. When you do, it gets +1/+0 and gains deathtouch until end of turn.
+        Effect effect = new BoostSourceEffect(1, 0, Duration.EndOfTurn);
+        effect.setText("it gets +1/+0");
+        BecomesExertSourceTriggeredAbility ability = new BecomesExertSourceTriggeredAbility(effect);
+        effect = new GainAbilitySourceEffect(DeathtouchAbility.getInstance(), Duration.EndOfTurn);
+        effect.setText("and gains deathtouch until end of turn");
+        ability.addEffect(effect);
+        this.addAbility(new ExertAbility(ability));
     }
 
-    public Fog(final Fog card) {
+    public BitterbladeWarrior(final BitterbladeWarrior card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public BitterbladeWarrior copy() {
+        return new BitterbladeWarrior(this);
     }
-
 }

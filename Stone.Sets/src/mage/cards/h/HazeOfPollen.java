@@ -25,37 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
+package mage.cards.h;
 
-package mage.cards.f;
-
+import java.util.UUID;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.PreventAllDamageByAllPermanentsEffect;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Duration;
 
-import java.util.UUID;
-
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author fireshoes
  */
-public class Fog extends CardImpl {
+public class HazeOfPollen extends CardImpl {
 
-    public Fog(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{G}");
+    public HazeOfPollen(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{G}");
+
 
         // Prevent all combat damage that would be dealt this turn.
-        this.getSpellAbility().addEffect(new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true));
+        Effect effect = new PreventAllDamageByAllPermanentsEffect(Duration.EndOfTurn, true);
+        effect.setText("Prevent all combat damage that would be dealt this turn");
+        getSpellAbility().addEffect(effect);
+
+        // Cycling {3}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{3}")));
+
     }
 
-    public Fog(final Fog card) {
+    public HazeOfPollen(final HazeOfPollen card) {
         super(card);
     }
 
     @Override
-    public Fog copy() {
-        return new Fog(this);
+    public HazeOfPollen copy() {
+        return new HazeOfPollen(this);
     }
-
 }

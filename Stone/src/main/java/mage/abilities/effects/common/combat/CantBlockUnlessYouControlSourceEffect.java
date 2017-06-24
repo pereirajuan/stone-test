@@ -25,49 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.q;
+package mage.abilities.effects.common.combat;
 
-import java.util.UUID;
-import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.keyword.ManifestEffect;
-import mage.cards.CardImpl;
-import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.Zone;
-import mage.filter.StaticFilters;
-import mage.target.common.TargetControlledCreaturePermanent;
+import mage.abilities.effects.RestrictionEffect;
+import mage.constants.Duration;
+import mage.filter.common.FilterControlledPermanent;
+import mage.game.Game;
+import mage.game.permanent.Permanent;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class QarsiHighPriest extends CardImpl {
+public class CantBlockUnlessYouControlSourceEffect extends RestrictionEffect {
 
-    public QarsiHighPriest(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{B}");
-        this.subtype.add("Human");
-        this.subtype.add("Cleric");
-        this.power = new MageInt(0);
-        this.toughness = new MageInt(2);
+    private final FilterControlledPermanent filter;
 
-        // {1}{B}, {t}, Sacrifice another creature: Manifest the top card of your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ManifestEffect(1), new ManaCostsImpl("{1}{B}"));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent(1, 1, StaticFilters.FILTER_CONTROLLED_ANOTHER_CREATURE, false)));
-        this.addAbility(ability);
+    public CantBlockUnlessYouControlSourceEffect(FilterControlledPermanent filter) {
+        super(Duration.WhileOnBattlefield);
+        this.filter = filter;
+        staticText = "{this} can't block unless you control" + filter.getMessage();
     }
 
-    public QarsiHighPriest(final QarsiHighPriest card) {
-        super(card);
+    public CantBlockUnlessYouControlSourceEffect(final CantBlockUnlessYouControlSourceEffect effect) {
+        super(effect);
+        this.filter = effect.filter;
     }
 
     @Override
-    public QarsiHighPriest copy() {
-        return new QarsiHighPriest(this);
+    public CantBlockUnlessYouControlSourceEffect copy() {
+        return new CantBlockUnlessYouControlSourceEffect(this);
+    }
+
+    @Override
+    public boolean canBlock(Permanent attacker, Permanent blocker, Ability source, Game game) {
+        return false;
+    }
+
+    @Override
+    public boolean applies(Permanent permanent, Ability source, Game game) {
+        return permanent.getId().equals(source.getSourceId())
+                && game.getBattlefield().count(filter, source.getSourceId(), source.getControllerId(), game) == 0;
     }
 }

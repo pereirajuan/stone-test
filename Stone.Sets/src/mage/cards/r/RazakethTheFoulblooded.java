@@ -25,64 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.y;
+package mage.cards.r;
 
+import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.common.DiesCreatureTriggeredAbility;
+import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.PayLifeCost;
 import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.IndestructibleAbility;
+import mage.abilities.effects.common.search.SearchLibraryPutInHandEffect;
+import mage.abilities.keyword.FlyingAbility;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.SubType;
 import mage.constants.SuperType;
 import mage.constants.Zone;
-import mage.counters.CounterType;
-import mage.filter.common.FilterOpponentsCreaturePermanent;
-import mage.target.common.TargetControlledPermanent;
-
-import java.util.UUID;
 import mage.filter.StaticFilters;
+import mage.target.common.TargetCardInLibrary;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class YahenniUndyingPartisan extends CardImpl {
+public class RazakethTheFoulblooded extends CardImpl {
 
-    public YahenniUndyingPartisan(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}");
+    public RazakethTheFoulblooded(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{5}{B}{B}{B}");
 
         addSuperType(SuperType.LEGENDARY);
-        this.subtype.add("Aetherborn");
-        this.subtype.add("Vampire");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(2);
+        this.subtype.add(SubType.DEMON.getDescription());
+        this.power = new MageInt(8);
+        this.toughness = new MageInt(8);
 
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        // Whenever a creature an opponent controls dies, put a +1/+1 counter on Yahenni, Undying Partisan.
-        this.addAbility(new DiesCreatureTriggeredAbility(new AddCountersSourceEffect(CounterType.P1P1.createInstance()), false, new FilterOpponentsCreaturePermanent()));
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
 
-        // Sacrifice another creature: Yahenni gains indestructible until end of turn.
-        this.addAbility(new SimpleActivatedAbility(
-                Zone.BATTLEFIELD,
-                new GainAbilitySourceEffect(IndestructibleAbility.getInstance(), Duration.EndOfTurn),
-                new SacrificeTargetCost(new TargetControlledPermanent(StaticFilters.FILTER_CONTROLLED_ANOTHER_CREATURE)))
-        );
+        // Pay 2 life, Sacrifice another creature: Search your library for a card and put that card into your hand. Then shuffle your library.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new SearchLibraryPutInHandEffect(new TargetCardInLibrary(), false, true), new PayLifeCost(2));
+        ability.addCost(new SacrificeTargetCost(
+                new TargetControlledCreaturePermanent(1, 1, StaticFilters.FILTER_CONTROLLED_ANOTHER_CREATURE, false)));
+        this.addAbility(ability);
     }
 
-    public YahenniUndyingPartisan(final YahenniUndyingPartisan card) {
+    public RazakethTheFoulblooded(final RazakethTheFoulblooded card) {
         super(card);
     }
 
     @Override
-    public YahenniUndyingPartisan copy() {
-        return new YahenniUndyingPartisan(this);
+    public RazakethTheFoulblooded copy() {
+        return new RazakethTheFoulblooded(this);
     }
 }

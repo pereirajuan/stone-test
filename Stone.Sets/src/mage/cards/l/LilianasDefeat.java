@@ -25,83 +25,77 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.l;
 
-import mage.MageInt;
+import java.util.UUID;
+import mage.ObjectColor;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
 import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.constants.SubType;
+import mage.filter.FilterPermanent;
+import mage.filter.common.FilterCreatureOrPlaneswalkerPermanent;
+import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.game.Game;
 import mage.game.permanent.Permanent;
 import mage.players.Player;
-import mage.target.Target;
-import mage.target.common.TargetControlledCreaturePermanent;
-
-import java.util.UUID;
-import mage.filter.StaticFilters;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author jeffwadsworth
+ * @author LevelX2
  */
-public class DiscipleOfBolas extends CardImpl {
+public class LilianasDefeat extends CardImpl {
 
-    public DiscipleOfBolas(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{B}");
-        this.subtype.add("Human");
-        this.subtype.add("Wizard");
+    public LilianasDefeat(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{B}");
 
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(1);
-
-        // When Disciple of Bolas enters the battlefield, sacrifice another creature. You gain X life and draw X cards, where X is that creature's power.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new DiscipleOfBolasEffect()));
+        FilterPermanent filter = new FilterCreatureOrPlaneswalkerPermanent("black creature or black planeswalker");
+        filter.add(new ColorPredicate(ObjectColor.BLACK));
+        // Destroy target black creature or black planeswalker. If that permanent was a Liliana planeswalker, her controller loses 3 life.
+        this.getSpellAbility().addTarget(new TargetPermanent(filter));
     }
 
-    public DiscipleOfBolas(final DiscipleOfBolas card) {
+    public LilianasDefeat(final LilianasDefeat card) {
         super(card);
     }
 
     @Override
-    public DiscipleOfBolas copy() {
-        return new DiscipleOfBolas(this);
+    public LilianasDefeat copy() {
+        return new LilianasDefeat(this);
     }
 }
 
-class DiscipleOfBolasEffect extends OneShotEffect {
+class LilianasDefeatEffect extends OneShotEffect {
 
-    public DiscipleOfBolasEffect() {
-        super(Outcome.Benefit);
-        this.staticText = "sacrifice another creature. You gain X life and draw X cards, where X is that creature's power";
+    public LilianasDefeatEffect() {
+        super(Outcome.DestroyPermanent);
+        this.staticText = "Destroy target black creature or black planeswalker. If that permanent was a Liliana planeswalker, her controller loses 3 life";
     }
 
-    public DiscipleOfBolasEffect(final DiscipleOfBolasEffect effect) {
+    public LilianasDefeatEffect(final LilianasDefeatEffect effect) {
         super(effect);
     }
 
     @Override
-    public DiscipleOfBolasEffect copy() {
-        return new DiscipleOfBolasEffect(this);
+    public LilianasDefeatEffect copy() {
+        return new LilianasDefeatEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
-        Player controller = game.getPlayer(source.getControllerId());
-        if (controller != null) {
-            Target target = new TargetControlledCreaturePermanent(1, 1, StaticFilters.FILTER_CONTROLLED_ANOTHER_CREATURE, true);
-            target.setRequired(true);
-            if (target.canChoose(source.getSourceId(), source.getControllerId(), game)) {
-                controller.chooseTarget(outcome, target, source, game);
-                Permanent sacrificed = game.getPermanent(target.getFirstTarget());
-                if (sacrificed != null) {
-                    sacrificed.sacrifice(source.getSourceId(), game);
-                    int power = sacrificed.getPower().getValue();
-                    controller.gainLife(power, game);
-                    controller.drawCards(power, game);
+        Player player = game.getPlayer(source.getControllerId());
+        Permanent permanent = game.getPermanent(getTargetPointer().getFirst(game, source));
+        if (player != null && permanent != null) {
+            permanent.destroy(source.getSourceId(), game, true);
+            game.applyEffects();
+            if (permanent.isPlaneswalker() && permanent.getSubtype(game).contains(SubType.LILIANA.getDescription())) {
+                Player permanentController = game.getPlayer(permanent.getControllerId());
+                if (permanentController != null) {
+                    permanentController.loseLife(3, game, false);
                 }
             }
             return true;

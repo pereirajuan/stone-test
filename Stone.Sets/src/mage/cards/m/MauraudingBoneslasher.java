@@ -25,49 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.q;
+package mage.cards.m;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeTargetCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.keyword.ManifestEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.combat.CantBlockUnlessYouControlSourceEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.SubType;
 import mage.constants.Zone;
-import mage.filter.StaticFilters;
-import mage.target.common.TargetControlledCreaturePermanent;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.AnotherPredicate;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class QarsiHighPriest extends CardImpl {
+public class MauraudingBoneslasher extends CardImpl {
 
-    public QarsiHighPriest(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{B}");
-        this.subtype.add("Human");
-        this.subtype.add("Cleric");
-        this.power = new MageInt(0);
-        this.toughness = new MageInt(2);
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("another Zombie");
 
-        // {1}{B}, {t}, Sacrifice another creature: Manifest the top card of your library.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new ManifestEffect(1), new ManaCostsImpl("{1}{B}"));
-        ability.addCost(new TapSourceCost());
-        ability.addCost(new SacrificeTargetCost(new TargetControlledCreaturePermanent(1, 1, StaticFilters.FILTER_CONTROLLED_ANOTHER_CREATURE, false)));
-        this.addAbility(ability);
+    static {
+        filter.add(new SubtypePredicate(SubType.ZOMBIE));
+        filter.add(new AnotherPredicate());
     }
 
-    public QarsiHighPriest(final QarsiHighPriest card) {
+    public MauraudingBoneslasher(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}");
+
+        this.subtype.add("Zombie");
+        this.subtype.add("Minotaur");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
+
+        // Marauding Boneslasher can't block unless you control another Zombie.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CantBlockUnlessYouControlSourceEffect(filter)));
+
+    }
+
+    public MauraudingBoneslasher(final MauraudingBoneslasher card) {
         super(card);
     }
 
     @Override
-    public QarsiHighPriest copy() {
-        return new QarsiHighPriest(this);
+    public MauraudingBoneslasher copy() {
+        return new MauraudingBoneslasher(this);
     }
 }

@@ -25,34 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.s;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.keyword.HexproofAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class DutifulServants extends CardImpl {
+public class StripedRiverwinder extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        
-        this.subtype.add("Zombie");
-        this.power = new MageInt(2);
+    public StripedRiverwinder(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{6}{U}");
+
+        this.subtype.add("Serpent");
+        this.power = new MageInt(5);
         this.toughness = new MageInt(5);
+
+        // Hexproof
+        this.addAbility(HexproofAbility.getInstance());
+
+        // Cycling {U}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{U}")));
+
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public StripedRiverwinder(final StripedRiverwinder card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public StripedRiverwinder copy() {
+        return new StripedRiverwinder(this);
     }
 }

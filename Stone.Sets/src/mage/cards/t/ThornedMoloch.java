@@ -25,34 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.t;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.condition.common.SourceAttackingCondition;
+import mage.abilities.decorator.ConditionalContinuousEffect;
+import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Zone;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class DutifulServants extends CardImpl {
+public class ThornedMoloch extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        
-        this.subtype.add("Zombie");
+    public ThornedMoloch(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{R}");
+
+        this.subtype.add("Lizard");
         this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+        this.toughness = new MageInt(2);
+
+        // Prowess
+        this.addAbility(new ProwessAbility());
+
+        // Thorned Moloch has first strike as long as it's attacking.
+        this.addAbility(
+                new SimpleStaticAbility(
+                        Zone.BATTLEFIELD,
+                        new ConditionalContinuousEffect(new GainAbilitySourceEffect(FirstStrikeAbility.getInstance()), SourceAttackingCondition.instance, "{this} has first strike as long as it's attacking")
+                )
+        );
+
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public ThornedMoloch(final ThornedMoloch card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public ThornedMoloch copy() {
+        return new ThornedMoloch(this);
     }
 }

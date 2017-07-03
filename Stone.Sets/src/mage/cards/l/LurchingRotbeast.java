@@ -25,34 +25,42 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.l;
 
 import java.util.UUID;
+
 import mage.MageInt;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 
 /**
  *
- * @author Archer262
+ * @author nickymikail
  */
-public class DutifulServants extends CardImpl {
+public class LurchingRotbeast extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
+    public LurchingRotbeast(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{B}");
         
         this.subtype.add("Zombie");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Beast");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(2);
+
+        // Cycling {B}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{B}")));
+
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public LurchingRotbeast(final LurchingRotbeast card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public LurchingRotbeast copy() {
+        return new LurchingRotbeast(this);
     }
 }

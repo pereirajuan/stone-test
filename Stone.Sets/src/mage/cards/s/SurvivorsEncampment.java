@@ -25,34 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.s;
 
 import java.util.UUID;
-import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.costs.common.TapTargetCost;
+import mage.abilities.mana.AnyColorManaAbility;
+import mage.abilities.mana.ColorlessManaAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
+import static mage.cards.s.SpellstutterSprite.filter;
 import mage.constants.CardType;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.permanent.TappedPredicate;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class DutifulServants extends CardImpl {
+public class SurvivorsEncampment extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        
-        this.subtype.add("Zombie");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("an untapped creature you control");
+
+    static {
+        filter.add(Predicates.not(new TappedPredicate()));
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public SurvivorsEncampment(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.LAND}, "");
+
+        this.subtype.add("Desert");
+
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
+
+        // {T}, Tap an untapped creature you control: Add one mana of any color to your mana pool.
+        Ability ability = new AnyColorManaAbility();
+        ability.addCost(new TapTargetCost(new TargetControlledPermanent(filter)));
+        this.addAbility(ability);
+    }
+
+    public SurvivorsEncampment(final SurvivorsEncampment card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public SurvivorsEncampment copy() {
+        return new SurvivorsEncampment(this);
     }
 }

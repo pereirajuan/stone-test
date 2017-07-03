@@ -25,34 +25,61 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.v;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.dynamicvalue.DynamicValue;
+import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
+import mage.abilities.dynamicvalue.common.StaticValue;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.CyclingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.Zone;
+import mage.filter.FilterCard;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.AbilityPredicate;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class DutifulServants extends CardImpl {
-
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        
-        this.subtype.add("Zombie");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+public class VileManifestation extends CardImpl {
+    
+    private static final FilterCard filter = new FilterCard();
+    
+    static {
+        filter.add(new AbilityPredicate(CyclingAbility.class));
     }
+    
+    public VileManifestation(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{B}");
+        
+        this.subtype.add("Horror");
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(4);
 
-    public DutifulServants(final DutifulServants card) {
+        // Vile Manifestation gets +1/+0 for each card with cycling in your graveyard.
+        DynamicValue amount = new CardsInControllerGraveyardCount(new FilterCard(filter));
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostSourceEffect(amount, new StaticValue(0), Duration.WhileOnBattlefield));
+        this.addAbility(ability);
+
+        // Cycling {2}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl("{2}")));        
+    }
+    
+    public VileManifestation(final VileManifestation card) {
         super(card);
     }
-
+    
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public VileManifestation copy() {
+        return new VileManifestation(this);
     }
 }

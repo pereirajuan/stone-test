@@ -25,34 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.o;
 
-import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.common.BecomesExertSourceTriggeredAbility;
+import mage.abilities.effects.common.PreventCombatDamageToSourceEffect;
+import mage.abilities.keyword.ExertAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Duration;
+
+import java.util.UUID;
 
 /**
  *
- * @author Archer262
+ * @author nickymikail
  */
-public class DutifulServants extends CardImpl {
+public class OketrasAvenger extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
+    public OketrasAvenger(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{W}");
         
-        this.subtype.add("Zombie");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
+
+        // You may exert Oketra's Avenger as it attacks. When you do, prevent all combat damage that would be dealt to it this turn.
+        BecomesExertSourceTriggeredAbility ability = new BecomesExertSourceTriggeredAbility(new PreventCombatDamageToSourceEffect(Duration.EndOfTurn));
+        this.addAbility(new ExertAbility(ability));
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public OketrasAvenger(final OketrasAvenger card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public OketrasAvenger copy() {
+        return new OketrasAvenger(this);
     }
 }

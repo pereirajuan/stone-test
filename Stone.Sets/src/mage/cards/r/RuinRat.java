@@ -25,34 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.r;
 
 import java.util.UUID;
+
 import mage.MageInt;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.filter.FilterCard;
+import mage.target.common.TargetCardInOpponentsGraveyard;
+import mage.abilities.effects.common.ExileTargetEffect;
+import mage.abilities.keyword.DeathtouchAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 
 /**
  *
- * @author Archer262
+ * @author nickymikail
  */
-public class DutifulServants extends CardImpl {
+public class RuinRat extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
+    public RuinRat(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{B}");
         
-        this.subtype.add("Zombie");
-        this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+        this.subtype.add("Rat");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // Deathtouch
+        this.addAbility(DeathtouchAbility.getInstance());
+
+        // When Ruin Rat dies, exile target card from an opponent's graveyard.
+        DiesTriggeredAbility ability = new DiesTriggeredAbility(new ExileTargetEffect());
+        ability.addTarget(new TargetCardInOpponentsGraveyard(new FilterCard()));
+        this.addAbility(ability);
+
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public RuinRat(final RuinRat card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public RuinRat copy() {
+        return new RuinRat(this);
     }
 }

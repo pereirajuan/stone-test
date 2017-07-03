@@ -25,34 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.s;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.keyword.AfflictAbility;
+import mage.abilities.keyword.ProwessAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class DutifulServants extends CardImpl {
+public class SpellweaverEternal extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        
+    public SpellweaverEternal(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{U}");
+
         this.subtype.add("Zombie");
+        this.subtype.add("Naga");
+        this.subtype.add("Wizard");
         this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+        this.toughness = new MageInt(1);
+
+        // Prowess
+        this.addAbility(new ProwessAbility());
+
+        // Afflict 2
+        this.addAbility(new AfflictAbility(2));
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public SpellweaverEternal(final SpellweaverEternal card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public SpellweaverEternal copy() {
+        return new SpellweaverEternal(this);
     }
 }

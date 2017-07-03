@@ -25,34 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.s;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.ExertSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Zone;
+import mage.game.permanent.token.WarriorVigilantToken;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class DutifulServants extends CardImpl {
+public class StewardOfSolidarity extends CardImpl {
 
-    public DutifulServants(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}");
-        
-        this.subtype.add("Zombie");
+    public StewardOfSolidarity(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{W}");
+
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
         this.power = new MageInt(2);
-        this.toughness = new MageInt(5);
+        this.toughness = new MageInt(2);
+
+        // {T}, Exert Steward of Solidarity: Create a 1/1 white Warrior creature token with vigilance. 
+        Effect effect = new CreateTokenEffect(new WarriorVigilantToken());
+        effect.setText("Create a 1/1 white Warrior creature token with vigilance");
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, effect, new ManaCostsImpl<>("{1}{W}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new ExertSourceCost());
+        this.addAbility(ability);
     }
 
-    public DutifulServants(final DutifulServants card) {
+    public StewardOfSolidarity(final StewardOfSolidarity card) {
         super(card);
     }
 
     @Override
-    public DutifulServants copy() {
-        return new DutifulServants(this);
+    public StewardOfSolidarity copy() {
+        return new StewardOfSolidarity(this);
     }
 }

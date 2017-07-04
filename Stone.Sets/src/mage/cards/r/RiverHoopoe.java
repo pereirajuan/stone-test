@@ -25,53 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.a;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.UntapTargetEffect;
-import mage.abilities.effects.common.combat.CanBlockAdditionalCreatureEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
 import mage.constants.Zone;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class ActOfHeroism extends CardImpl {
+public class RiverHoopoe extends CardImpl {
 
-    public ActOfHeroism(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{G}");
+    public RiverHoopoe(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{G}{U}");
 
-        // Untap target creature.
-        Effect effect = new UntapTargetEffect();
-        effect.setText("Untap target creature");
-        this.getSpellAbility().addEffect(effect);
+        this.subtype.add("Bird");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-        // It gets +2/+2 and can block an additional creature this turn.
-        effect = new BoostTargetEffect(2, 2, Duration.EndOfTurn);
-        effect.setText("It gets +2/+2");
-        this.getSpellAbility().addEffect(effect);
-        effect = new GainAbilityTargetEffect(new SimpleStaticAbility(Zone.BATTLEFIELD, new CanBlockAdditionalCreatureEffect()), Duration.EndOfTurn);
-        effect.setText("and can block an additional creature this turn");
-        this.getSpellAbility().addEffect(effect);
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
 
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        // {3}{G}{U}: You gain 2 life and draw a card.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new GainLifeEffect(2), new ManaCostsImpl<>("{3}{G}{U}"));
+        Effect effect = new DrawCardSourceControllerEffect(1);
+        effect.setText("and draw a card");
+        ability.addEffect(effect);
+        this.addAbility(ability);
     }
 
-    public ActOfHeroism(final ActOfHeroism card) {
+    public RiverHoopoe(final RiverHoopoe card) {
         super(card);
     }
 
     @Override
-    public ActOfHeroism copy() {
-        return new ActOfHeroism(this);
+    public RiverHoopoe copy() {
+        return new RiverHoopoe(this);
     }
 }

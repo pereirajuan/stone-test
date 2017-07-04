@@ -25,53 +25,59 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.a;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
+import mage.MageInt;
+import mage.abilities.common.BecomesExertSourceTriggeredAbility;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.UntapTargetEffect;
-import mage.abilities.effects.common.combat.CanBlockAdditionalCreatureEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.effects.common.combat.CantBeBlockedByAllTargetEffect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.keyword.ExertAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.ComparisonType;
 import mage.constants.Duration;
-import mage.constants.Zone;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.PowerPredicate;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class ActOfHeroism extends CardImpl {
+public class RhonassStalwart extends CardImpl {
 
-    public ActOfHeroism(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{G}");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures with power 2 or less");
 
-        // Untap target creature.
-        Effect effect = new UntapTargetEffect();
-        effect.setText("Untap target creature");
-        this.getSpellAbility().addEffect(effect);
-
-        // It gets +2/+2 and can block an additional creature this turn.
-        effect = new BoostTargetEffect(2, 2, Duration.EndOfTurn);
-        effect.setText("It gets +2/+2");
-        this.getSpellAbility().addEffect(effect);
-        effect = new GainAbilityTargetEffect(new SimpleStaticAbility(Zone.BATTLEFIELD, new CanBlockAdditionalCreatureEffect()), Duration.EndOfTurn);
-        effect.setText("and can block an additional creature this turn");
-        this.getSpellAbility().addEffect(effect);
-
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+    static {
+        filter.add(new PowerPredicate(ComparisonType.FEWER_THAN, 3));
     }
 
-    public ActOfHeroism(final ActOfHeroism card) {
+    public RhonassStalwart(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}");
+
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // You may exert Rhonas's Stalwart as it attacks. When you do, it gets +1/+1 until end of turn and can't be blocked by creatures with power 2 or less this turn.
+        Effect effect = new BoostSourceEffect(1, 1, Duration.EndOfTurn);
+        effect.setText("it gets +1/+1");
+        BecomesExertSourceTriggeredAbility ability = new BecomesExertSourceTriggeredAbility(effect);
+        effect = new CantBeBlockedByAllTargetEffect(filter, Duration.EndOfTurn);
+        effect.setText("and can't be blocked by creatures with power 2 or less this turn");
+        ability.addEffect(effect);
+        this.addAbility(new ExertAbility(ability));
+    }
+
+    public RhonassStalwart(final RhonassStalwart card) {
         super(card);
     }
 
     @Override
-    public ActOfHeroism copy() {
-        return new ActOfHeroism(this);
+    public RhonassStalwart copy() {
+        return new RhonassStalwart(this);
     }
 }

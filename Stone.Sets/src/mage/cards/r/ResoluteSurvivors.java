@@ -25,53 +25,53 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.a;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.ExertCreatureControllerTriggeredAbility;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.UntapTargetEffect;
-import mage.abilities.effects.common.combat.CanBlockAdditionalCreatureEffect;
-import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.abilities.effects.common.LoseLifeOpponentsEffect;
+import mage.abilities.keyword.ExertAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
-import mage.constants.Zone;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class ActOfHeroism extends CardImpl {
+public class ResoluteSurvivors extends CardImpl {
 
-    public ActOfHeroism(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{G}");
+    public ResoluteSurvivors(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{R}{W}");
 
-        // Untap target creature.
-        Effect effect = new UntapTargetEffect();
-        effect.setText("Untap target creature");
-        this.getSpellAbility().addEffect(effect);
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(3);
 
-        // It gets +2/+2 and can block an additional creature this turn.
-        effect = new BoostTargetEffect(2, 2, Duration.EndOfTurn);
-        effect.setText("It gets +2/+2");
-        this.getSpellAbility().addEffect(effect);
-        effect = new GainAbilityTargetEffect(new SimpleStaticAbility(Zone.BATTLEFIELD, new CanBlockAdditionalCreatureEffect()), Duration.EndOfTurn);
-        effect.setText("and can block an additional creature this turn");
-        this.getSpellAbility().addEffect(effect);
+        // You may exert Resolute Survivors as it attacks.
+        this.addAbility(new ExertAbility(null, false));
 
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        // Whenever you exert a creature, Resolute Survivors deals 1 damage to each opponent and you gain 1 life.
+        Effect effect = new LoseLifeOpponentsEffect(1);
+        effect.setText("Whenever you exert a creature, {this} deals 1 damage to each opponent");
+        Ability ability = new ExertCreatureControllerTriggeredAbility(effect);
+        effect = new GainLifeEffect(1);
+        effect.setText("and you gain 1 life");
+        ability.addEffect(effect);
+        this.addAbility(ability);
     }
 
-    public ActOfHeroism(final ActOfHeroism card) {
+    public ResoluteSurvivors(final ResoluteSurvivors card) {
         super(card);
     }
 
     @Override
-    public ActOfHeroism copy() {
-        return new ActOfHeroism(this);
+    public ResoluteSurvivors copy() {
+        return new ResoluteSurvivors(this);
     }
 }

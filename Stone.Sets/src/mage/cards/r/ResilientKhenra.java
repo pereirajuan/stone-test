@@ -25,53 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.a;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.UntapTargetEffect;
-import mage.abilities.effects.common.combat.CanBlockAdditionalCreatureEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.dynamicvalue.DynamicValue;
+import mage.abilities.dynamicvalue.common.SourcePermanentPowerCount;
 import mage.abilities.effects.common.continuous.BoostTargetEffect;
-import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.EternalizeAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Duration;
-import mage.constants.Zone;
 import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author Archer262
+ * @author spjspj
  */
-public class ActOfHeroism extends CardImpl {
+public class ResilientKhenra extends CardImpl {
 
-    public ActOfHeroism(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{G}");
+    public ResilientKhenra(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}");
 
-        // Untap target creature.
-        Effect effect = new UntapTargetEffect();
-        effect.setText("Untap target creature");
-        this.getSpellAbility().addEffect(effect);
+        this.subtype.add("Jackal");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // It gets +2/+2 and can block an additional creature this turn.
-        effect = new BoostTargetEffect(2, 2, Duration.EndOfTurn);
-        effect.setText("It gets +2/+2");
-        this.getSpellAbility().addEffect(effect);
-        effect = new GainAbilityTargetEffect(new SimpleStaticAbility(Zone.BATTLEFIELD, new CanBlockAdditionalCreatureEffect()), Duration.EndOfTurn);
-        effect.setText("and can block an additional creature this turn");
-        this.getSpellAbility().addEffect(effect);
+        // When Resilient Khenra enters the battlefield, you may have target creature get +X/+X until end of turn, where X is Resilient Khenra's power.
+        DynamicValue xValue = new SourcePermanentPowerCount();
+        Ability ability = new EntersBattlefieldTriggeredAbility(new BoostTargetEffect(xValue, xValue, Duration.EndOfTurn, true), true);
+        ability.addTarget(new TargetCreaturePermanent());
+        this.addAbility(ability);
 
-        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        // Eternalize {4}{G}{G}
+        this.addAbility(new EternalizeAbility(new ManaCostsImpl("{4}{G}{G}"), this));
+
     }
 
-    public ActOfHeroism(final ActOfHeroism card) {
+    public ResilientKhenra(final ResilientKhenra card) {
         super(card);
     }
 
     @Override
-    public ActOfHeroism copy() {
-        return new ActOfHeroism(this);
+    public ResilientKhenra copy() {
+        return new ResilientKhenra(this);
     }
 }

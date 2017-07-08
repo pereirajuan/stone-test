@@ -25,45 +25,65 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.n;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.CycleTriggeredAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.CounterTargetEffect;
 import mage.abilities.keyword.CyclingAbility;
+import mage.abilities.keyword.FlashAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
+import mage.constants.TargetController;
+import mage.filter.FilterStackObject;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.common.TargetActivatedOrTriggeredAbility;
 
 /**
  *
- * @author emerald000
+ * @author caldover
  */
-public class CountervailingWinds extends CardImpl {
+public class NimbleObstructionist extends CardImpl {
 
-    public CountervailingWinds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{U}");
-
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
-
-        // Cycling {2}
-        this.addAbility(new CyclingAbility(new GenericManaCost(2)));
-
+    private static final FilterStackObject filter = new FilterStackObject("activated or triggered ability you don't control");
+    static {
+        filter.add(new ControllerPredicate(TargetController.NOT_YOU));
     }
 
-    public CountervailingWinds(final CountervailingWinds card) {
+    public NimbleObstructionist(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{U}");
+
+        this.subtype.add("Bird");
+        this.subtype.add("Wizard");
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(1);
+
+        // Flash
+        this.addAbility(FlashAbility.getInstance());
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Cycling {2}{U}
+        this.addAbility(new CyclingAbility(new ManaCostsImpl<>("{2}{U}")));
+
+        // When you cycle Nimble Obstructionist, counter target activated or triggered ability you don't control.
+        Ability ability = new CycleTriggeredAbility(new CounterTargetEffect());
+        ability.addTarget(new TargetActivatedOrTriggeredAbility(filter));
+        this.addAbility(ability);
+    }
+
+    public NimbleObstructionist(final NimbleObstructionist card) {
         super(card);
     }
 
     @Override
-    public CountervailingWinds copy() {
-        return new CountervailingWinds(this);
+    public NimbleObstructionist copy() {
+        return new NimbleObstructionist(this);
     }
 }

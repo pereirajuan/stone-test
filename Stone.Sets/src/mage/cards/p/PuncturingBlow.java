@@ -25,44 +25,37 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.p;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.keyword.MadnessAbility;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.ExileTargetIfDiesEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author magenoxx_at_gmail.com
+ * @author spjspj
  */
-public class CircularLogic extends CardImpl {
+public class PuncturingBlow extends CardImpl {
 
-    public CircularLogic(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{2}{U}");
+    public PuncturingBlow(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{2}{R}{R}");
 
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
-
-        // Madness {U}
-        this.addAbility(new MadnessAbility(this, new ManaCostsImpl<>("{U}")));
+        // Puncturing Blow deals 5 damage to target creature. If that creature would die this turn, exile it instead.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(5));
+        this.getSpellAbility().addEffect(new ExileTargetIfDiesEffect());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
     }
 
-    public CircularLogic(final CircularLogic card) {
+    public PuncturingBlow(final PuncturingBlow card) {
         super(card);
     }
 
     @Override
-    public CircularLogic copy() {
-        return new CircularLogic(this);
+    public PuncturingBlow copy() {
+        return new PuncturingBlow(this);
     }
 }

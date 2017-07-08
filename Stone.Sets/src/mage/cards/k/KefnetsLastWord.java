@@ -25,44 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.k;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.keyword.MadnessAbility;
+import mage.abilities.effects.common.DontUntapInControllersUntapStepAllEffect;
+import mage.abilities.effects.common.continuous.GainControlTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
+import mage.constants.Duration;
+import mage.constants.TargetController;
+import mage.filter.StaticFilters;
+import mage.filter.common.FilterControlledLandPermanent;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author magenoxx_at_gmail.com
+ * @author fireshoes
  */
-public class CircularLogic extends CardImpl {
+public class KefnetsLastWord extends CardImpl {
 
-    public CircularLogic(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{2}{U}");
+    public KefnetsLastWord(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{2}{U}{U}");
 
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
-
-        // Madness {U}
-        this.addAbility(new MadnessAbility(this, new ManaCostsImpl<>("{U}")));
+        // Gain control of target artifact, creature or enchantment. Lands you control don't untap during your next untap step.
+        this.getSpellAbility().addTarget(new TargetPermanent(StaticFilters.FILTER_PERMANENT_ARTIFACT_CREATURE_OR_ENCHANTMENT));
+        this.getSpellAbility().addEffect(new GainControlTargetEffect(Duration.Custom));
+        this.getSpellAbility().addEffect(new DontUntapInControllersUntapStepAllEffect(
+                Duration.UntilYourNextTurn, TargetController.YOU, new FilterControlledLandPermanent("Lands you control"))
+                .setText("Lands you control don't untap during your next untap phase"));
     }
 
-    public CircularLogic(final CircularLogic card) {
+    public KefnetsLastWord(final KefnetsLastWord card) {
         super(card);
     }
 
     @Override
-    public CircularLogic copy() {
-        return new CircularLogic(this);
+    public KefnetsLastWord copy() {
+        return new KefnetsLastWord(this);
     }
 }

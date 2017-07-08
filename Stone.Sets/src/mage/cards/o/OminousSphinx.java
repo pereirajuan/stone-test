@@ -25,44 +25,59 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.o;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.keyword.MadnessAbility;
+import mage.MageInt;
+import mage.abilities.common.CycleOrDiscardControllerTriggeredAbility;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
+import mage.constants.Duration;
+import mage.constants.SubType;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author magenoxx_at_gmail.com
+ * @author spjspj
  */
-public class CircularLogic extends CardImpl {
+public class OminousSphinx extends CardImpl {
 
-    public CircularLogic(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.INSTANT},"{2}{U}");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creature an opponent controls");
 
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
-
-        // Madness {U}
-        this.addAbility(new MadnessAbility(this, new ManaCostsImpl<>("{U}")));
+    static {
+        filter.add(new ControllerPredicate(TargetController.OPPONENT));
     }
 
-    public CircularLogic(final CircularLogic card) {
+    public OminousSphinx(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{U}{U}");
+
+        this.subtype.add("Sphinx");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(4);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Whenever you cycle or discard a card,target creature an opponent controls gets -2/-0 until end of turn.
+        CycleOrDiscardControllerTriggeredAbility ability = new CycleOrDiscardControllerTriggeredAbility(new BoostTargetEffect(-2, -0, Duration.EndOfTurn));
+        ability.addTarget(new TargetCreaturePermanent(filter));
+        this.addAbility(ability);
+    }
+
+    public OminousSphinx(final OminousSphinx card) {
         super(card);
     }
 
     @Override
-    public CircularLogic copy() {
-        return new CircularLogic(this);
+    public OminousSphinx copy() {
+        return new OminousSphinx(this);
     }
 }

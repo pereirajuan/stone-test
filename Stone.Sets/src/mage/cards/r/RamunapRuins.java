@@ -25,23 +25,25 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.s;
+package mage.cards.r;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.ActivateAsSorceryActivatedAbility;
+import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.costs.common.PayLifeCost;
 import mage.abilities.costs.common.SacrificeTargetCost;
 import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
+import mage.abilities.dynamicvalue.common.StaticValue;
+import mage.abilities.effects.common.DamagePlayersEffect;
 import mage.abilities.mana.ColorlessManaAbility;
-import mage.abilities.mana.WhiteManaAbility;
+import mage.abilities.mana.RedManaAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.Outcome;
 import mage.constants.SubType;
+import mage.constants.TargetController;
 import mage.constants.Zone;
 import mage.filter.common.FilterControlledPermanent;
 import mage.filter.predicate.mageobject.SubtypePredicate;
@@ -49,45 +51,43 @@ import mage.target.common.TargetControlledPermanent;
 
 /**
  *
- * @author spjspj
+ * @author fireshoes
  */
-public class ShefetDunes extends CardImpl {
+public class RamunapRuins extends CardImpl {
 
-    private static final FilterControlledPermanent filterDesertPermanent = new FilterControlledPermanent("Desert");
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("Desert");
 
     static {
-        filterDesertPermanent.add(new SubtypePredicate(SubType.DESERT));
+        filter.add(new SubtypePredicate(SubType.DESERT));
     }
 
-    public ShefetDunes(UUID ownerId, CardSetInfo setInfo) {
+    public RamunapRuins(UUID ownerId, CardSetInfo setInfo) {
         super(ownerId, setInfo, new CardType[]{CardType.LAND}, "");
 
         this.subtype.add("Desert");
 
-        // {T}: Add {C} to your mana pool.
+        // {t}: Add {C} to your mana pool.
         this.addAbility(new ColorlessManaAbility());
 
-        // {T}, Pay 1 life: Add {W} to your mana pool.
-        Ability ability = new WhiteManaAbility();
-        ability.addCost(new PayLifeCost(1));
-        this.addAbility(ability);
+        // {t}, Pay 1 life: Add {R} to your mana pool.
+        Ability manaAbility = new RedManaAbility();
+        manaAbility.addCost(new PayLifeCost(1));
+        this.addAbility(manaAbility);
 
-        // {2}{W}{W}, {T}, Sacrifice a Desert: Creatures you control get +1/+1 until end of turn. Activate this ability only any time you could cast a sorcery.
-        Ability ability2 = new ActivateAsSorceryActivatedAbility(
-                Zone.BATTLEFIELD,
-                new BoostControlledEffect(1, 1, Duration.EndOfTurn),
-                new ManaCostsImpl("{2}{W}{W}"));
-        ability2.addCost(new TapSourceCost());
-        ability2.addCost(new SacrificeTargetCost(new TargetControlledPermanent(1, 1, filterDesertPermanent, true)));
-        this.addAbility(ability2);
+        // {2}{R}{R}, {t}, Sacrifice a Desert: Ramunap Ruins deals 2 damage to each opponent.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamagePlayersEffect(Outcome.Damage, new StaticValue(2), TargetController.OPPONENT),
+                new ManaCostsImpl("{2}{R}{R}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(1, 1, filter, true)));
+        this.addAbility(ability);
     }
 
-    public ShefetDunes(final ShefetDunes card) {
+    public RamunapRuins(final RamunapRuins card) {
         super(card);
     }
 
     @Override
-    public ShefetDunes copy() {
-        return new ShefetDunes(this);
+    public RamunapRuins copy() {
+        return new RamunapRuins(this);
     }
 }

@@ -25,45 +25,47 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.h;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.keyword.CyclingAbility;
+import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
+import mage.abilities.decorator.ConditionalOneShotEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
+import mage.constants.ComparisonType;
+import mage.constants.SubType;
+import mage.filter.FilterPermanent;
+import mage.filter.common.FilterLandCard;
+import mage.game.permanent.token.ZombieToken;
+import mage.target.common.TargetCardInLibrary;
 
 /**
  *
- * @author emerald000
+ * @author LevelX2
  */
-public class CountervailingWinds extends CardImpl {
+public class HourOfPromise extends CardImpl {
 
-    public CountervailingWinds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{U}");
+    public HourOfPromise(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{4}{G}");
 
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
-
-        // Cycling {2}
-        this.addAbility(new CyclingAbility(new GenericManaCost(2)));
+        // Search your library for up to two land cards and put them onto the battlefield tapped, then shuffle your library.
+        this.getSpellAbility().addEffect(new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(0, 2, new FilterLandCard("land cards")), true));
+        // Then if you control three or more Deserts, create two 2/2 black Zombie creature tokens.
+        this.getSpellAbility().addEffect(new ConditionalOneShotEffect(new CreateTokenEffect(new ZombieToken(), 2),
+                new PermanentsOnTheBattlefieldCondition(new FilterPermanent(SubType.DESERT, "three or more Deserts"), ComparisonType.MORE_THAN, 2, true),
+                "Then if you control three or more Deserts, create two 2/2 black Zombie creature tokens"));
 
     }
 
-    public CountervailingWinds(final CountervailingWinds card) {
+    public HourOfPromise(final HourOfPromise card) {
         super(card);
     }
 
     @Override
-    public CountervailingWinds copy() {
-        return new CountervailingWinds(this);
+    public HourOfPromise copy() {
+        return new HourOfPromise(this);
     }
 }

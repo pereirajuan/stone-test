@@ -28,42 +28,45 @@
 package mage.cards.c;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.CycleOrDiscardControllerTriggeredAbility;
 import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.keyword.CyclingAbility;
+import mage.abilities.effects.common.combat.CantBeBlockedSourceEffect;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
+import mage.constants.Duration;
 
 /**
  *
  * @author emerald000
  */
-public class CountervailingWinds extends CardImpl {
+public class CunningSurvivor extends CardImpl {
 
-    public CountervailingWinds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{U}");
+    public CunningSurvivor(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{U}");
 
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
+        this.subtype.add("Human");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-        // Cycling {2}
-        this.addAbility(new CyclingAbility(new GenericManaCost(2)));
-
+        // Whenever you cycle or discard a card, Cunning Survivor gets +1/+0 until end of turn and can't be blocked this turn.
+        Ability ability = new CycleOrDiscardControllerTriggeredAbility(new BoostSourceEffect(1, 0, Duration.EndOfTurn));
+        Effect effect = new CantBeBlockedSourceEffect(Duration.EndOfTurn);
+        effect.setText("and can't be blocked this turn");
+        ability.addEffect(effect);
+        this.addAbility(ability);
     }
 
-    public CountervailingWinds(final CountervailingWinds card) {
+    public CunningSurvivor(final CunningSurvivor card) {
         super(card);
     }
 
     @Override
-    public CountervailingWinds copy() {
-        return new CountervailingWinds(this);
+    public CunningSurvivor copy() {
+        return new CunningSurvivor(this);
     }
 }

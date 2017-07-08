@@ -25,45 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.c;
+package mage.cards.e;
 
 import java.util.UUID;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.dynamicvalue.common.CardsInControllerGraveyardCount;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CounterUnlessPaysEffect;
-import mage.abilities.keyword.CyclingAbility;
+import mage.MageInt;
+import mage.abilities.common.AttacksAndIsNotBlockedTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.keyword.AfflictAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.target.TargetSpell;
 
 /**
  *
  * @author emerald000
  */
-public class CountervailingWinds extends CardImpl {
+public class EternalOfHarshTruths extends CardImpl {
 
-    public CountervailingWinds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{U}");
+    public EternalOfHarshTruths(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{U}");
 
-        // Counter target spell unless its controller pays {1} for each card in your graveyard.
-        Effect effect = new CounterUnlessPaysEffect(new CardsInControllerGraveyardCount());
-        effect.setText("Counter target spell unless its controller pays {1} for each card in your graveyard");
-        this.getSpellAbility().addEffect(effect);
-        this.getSpellAbility().addTarget(new TargetSpell());
+        this.subtype.add("Zombie");
+        this.subtype.add("Cleric");
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
 
-        // Cycling {2}
-        this.addAbility(new CyclingAbility(new GenericManaCost(2)));
+        // Afflict 2
+        this.addAbility(new AfflictAbility(2));
 
+        // Whenever Eternal of Harsh Truths attacks and isn't blocked, draw a card.
+        this.addAbility(new AttacksAndIsNotBlockedTriggeredAbility(new DrawCardSourceControllerEffect(1)));
     }
 
-    public CountervailingWinds(final CountervailingWinds card) {
+    public EternalOfHarshTruths(final EternalOfHarshTruths card) {
         super(card);
     }
 
     @Override
-    public CountervailingWinds copy() {
-        return new CountervailingWinds(this);
+    public EternalOfHarshTruths copy() {
+        return new EternalOfHarshTruths(this);
     }
 }

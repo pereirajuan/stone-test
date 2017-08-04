@@ -24,26 +24,46 @@
 * The views and conclusions contained in the software and documentation are those of the
 * authors and should not be interpreted as representing official policies, either expressed
 * or implied, of BetaSteward_at_googlemail.com.
- */
-package mage.sets;
+*/
 
-import mage.cards.ExpansionSet;
-import mage.constants.Rarity;
-import mage.constants.SetType;
+package mage.game.permanent.token;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import mage.MageInt;
+import mage.abilities.keyword.FlyingAbility;
+import mage.constants.CardType;
 
 /**
  *
- * @author fireshoes
+ * @author Saga
  */
-public class Unstable extends ExpansionSet {
-    private static final Unstable instance = new Unstable();
+public class DragonTokenGold extends Token {
 
-    public static Unstable getInstance() {
-        return instance;
+    final static private List<String> tokenImageSets = new ArrayList<>();
+
+    static {
+        tokenImageSets.addAll(Arrays.asList("UST","H17"));
     }
 
-    private Unstable() {
-        super("Unstable", "UST", ExpansionSet.buildDate(2017, 12, 8), SetType.JOKESET);
-        cards.add(new SetCardInfo("Sword of Dungeons and Dragons", 1, Rarity.MYTHIC, mage.cards.s.SwordOfDungeonsAndDragons.class));
+    public DragonTokenGold() {
+        this(null, 0);
+    }
+
+    public DragonTokenGold(String setCode) {
+        this(setCode, 0);
+    }
+
+    public DragonTokenGold(String setCode, int tokenType) {
+        super("Dragon", "4/4 gold Dragon creature token with flying");
+        availableImageSetCodes = tokenImageSets;
+        setOriginalExpansionSetCode(setCode);
+        cardType.add(CardType.CREATURE);
+        color.setGold(true);
+        subtype.add("Dragon");
+        power = new MageInt(4);
+        toughness = new MageInt(4);
+        addAbility(FlyingAbility.getInstance());
     }
 }

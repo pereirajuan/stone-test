@@ -25,77 +25,95 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.n;
+package mage.cards.b;
 
 import java.util.UUID;
 import mage.MageInt;
+import mage.abilities.TriggeredAbility;
 import mage.abilities.TriggeredAbilityImpl;
-import mage.abilities.costs.mana.ColoredManaCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.DoIfCostPaid;
 import mage.abilities.effects.common.ReturnSourceFromGraveyardToBattlefieldEffect;
-import mage.abilities.keyword.HasteAbility;
-import mage.abilities.keyword.ShadowAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.ColoredManaSymbol;
+import mage.constants.SubType;
+import mage.constants.TargetController;
 import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 import mage.game.Game;
 import mage.game.events.GameEvent;
 import mage.game.events.ZoneChangeEvent;
 
 /**
  *
- * @author emerald000
+ * @author TheElk801
  */
-public class NetherTraitor extends CardImpl {
+public class BoneyardScourge extends CardImpl {
 
-    public NetherTraitor(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.CREATURE},"{B}{B}");
-        this.subtype.add("Spirit");
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("a Dragon you control");
 
-        // Haste
-        this.addAbility(HasteAbility.getInstance());
-        
-        // Shadow
-        this.addAbility(ShadowAbility.getInstance());
-        
-        // Whenever another creature is put into your graveyard from the battlefield, you may pay {B}. If you do, return Nether Traitor from your graveyard to the battlefield.
-        this.addAbility(new NetherTraitorTriggeredAbility());
+    static {
+        filter.add(new SubtypePredicate(SubType.DRAGON));
+        filter.add(new ControllerPredicate(TargetController.YOU));
     }
 
-    public NetherTraitor(final NetherTraitor card) {
+    public BoneyardScourge(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}{B}");
+
+        this.subtype.add("Zombie");
+        this.subtype.add("Dragon");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
+
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Whenever a Dragon you control dies while Boneyard Scourge is in your graveyard, you may pay 1B. If you do, return Boneyard Scourge from your graveyard to the battlefield.
+        TriggeredAbility ability = new DiesWhileInGraveyardTriggeredAbility(
+                new DoIfCostPaid(new ReturnSourceFromGraveyardToBattlefieldEffect(), new ManaCostsImpl("{1}{B}")),
+                filter);
+        this.addAbility(ability);
+    }
+
+    public BoneyardScourge(final BoneyardScourge card) {
         super(card);
     }
 
     @Override
-    public NetherTraitor copy() {
-        return new NetherTraitor(this);
+    public BoneyardScourge copy() {
+        return new BoneyardScourge(this);
     }
 }
 
-class NetherTraitorTriggeredAbility extends TriggeredAbilityImpl {
-    
-    NetherTraitorTriggeredAbility(){
-        super(Zone.GRAVEYARD, new DoIfCostPaid(new ReturnSourceFromGraveyardToBattlefieldEffect(), new ColoredManaCost(ColoredManaSymbol.B)));
+class DiesWhileInGraveyardTriggeredAbility extends TriggeredAbilityImpl {
+
+    protected FilterCreaturePermanent filter;
+
+    public DiesWhileInGraveyardTriggeredAbility(Effect effect, FilterCreaturePermanent filter) {
+        super(Zone.GRAVEYARD, effect, false);
+        this.filter = filter;
     }
-    
-    NetherTraitorTriggeredAbility(final NetherTraitorTriggeredAbility ability) {
+
+    public DiesWhileInGraveyardTriggeredAbility(final DiesWhileInGraveyardTriggeredAbility ability) {
         super(ability);
+        this.filter = ability.filter;
     }
-    
+
     @Override
-    public NetherTraitorTriggeredAbility copy(){
-        return new NetherTraitorTriggeredAbility(this);
+    public DiesWhileInGraveyardTriggeredAbility copy() {
+        return new DiesWhileInGraveyardTriggeredAbility(this);
     }
 
     @Override
     public boolean checkEventType(GameEvent event, Game game) {
         return event.getType() == GameEvent.EventType.ZONE_CHANGE;
     }
-    
+
     @Override
     public boolean checkTrigger(GameEvent event, Game game) {
         ZoneChangeEvent zEvent = (ZoneChangeEvent) event;
@@ -104,19 +122,17 @@ class NetherTraitorTriggeredAbility extends TriggeredAbilityImpl {
                 return false;
             }
         }
-        if (zEvent.getFromZone() == Zone.BATTLEFIELD && zEvent.getToZone() == Zone.GRAVEYARD) {            
-            if (zEvent.getTarget() != null &&
-                    zEvent.getTarget().getOwnerId().equals(this.getControllerId()) &&
-                    zEvent.getTarget().isCreature()&&
-                    !zEvent.getTarget().getId().equals(this.getSourceId())) {
+        if (zEvent.getFromZone() == Zone.BATTLEFIELD && zEvent.getToZone() == Zone.GRAVEYARD) {
+            if (filter.match(zEvent.getTarget(), sourceId, controllerId, game)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     @Override
     public String getRule() {
-        return "Whenever another creature is put into your graveyard from the battlefield, you may pay {B}. If you do, return {this} from your graveyard to the battlefield.";
+        return "Whenever " + filter.getMessage() + " dies while {this} is in your graveyard, " + super.getRule();
     }
+
 }

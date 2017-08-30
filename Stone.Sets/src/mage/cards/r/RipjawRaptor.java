@@ -25,54 +25,44 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.j;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.LoyaltyAbility;
-import mage.abilities.common.PlanswalkerEntersWithLoyalityCountersAbility;
-import mage.abilities.effects.common.DrawCardAllEffect;
-import mage.abilities.effects.common.DrawCardTargetEffect;
-import mage.abilities.effects.common.PutLibraryIntoGraveTargetEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.DealtDamageToSourceTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
+import mage.constants.AbilityWord;
 import mage.constants.CardType;
-import mage.constants.SuperType;
-import mage.target.TargetPlayer;
+import mage.constants.Zone;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author TheElk801
  */
-public class JaceBeleren extends CardImpl {
+public class RipjawRaptor extends CardImpl {
 
-    public JaceBeleren(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.PLANESWALKER},"{1}{U}{U}");
-        this.addSuperType(SuperType.LEGENDARY);
-        this.subtype.add("Jace");
+    public RipjawRaptor(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
 
-        this.addAbility(new PlanswalkerEntersWithLoyalityCountersAbility(3));
+        this.subtype.add("Dinosaur");
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(5);
 
-        // +2: Each player draws a card.
-        this.addAbility(new LoyaltyAbility(new DrawCardAllEffect(1), 2));
-
-        // -1: Target player draws a card.
-        LoyaltyAbility ability1 = new LoyaltyAbility(new DrawCardTargetEffect(1), -1);
-        ability1.addTarget(new TargetPlayer());
-        this.addAbility(ability1);
-
-        // -10: Target player puts the top twenty cards of his or her library into his or her graveyard.
-        LoyaltyAbility ability2 = new LoyaltyAbility(new PutLibraryIntoGraveTargetEffect(20), -10);
-        ability2.addTarget(new TargetPlayer());
-        this.addAbility(ability2);
+        // <i>Enrage</i> &mdash; Whenever Ripjaw Raptor is dealt damage, draw a card.
+        Ability ability = new DealtDamageToSourceTriggeredAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1), false);
+        ability.setAbilityWord(AbilityWord.ENRAGE);
+        this.addAbility(ability);
     }
 
-    public JaceBeleren(final JaceBeleren card) {
+    public RipjawRaptor(final RipjawRaptor card) {
         super(card);
     }
 
     @Override
-    public JaceBeleren copy() {
-        return new JaceBeleren(this);
+    public RipjawRaptor copy() {
+        return new RipjawRaptor(this);
     }
-
 }

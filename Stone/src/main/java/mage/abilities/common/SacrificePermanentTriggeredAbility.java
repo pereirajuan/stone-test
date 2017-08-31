@@ -25,49 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.abilities.common;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import mage.abilities.Ability;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.AddManaOfAnyColorEffect;
-import mage.abilities.mana.SimpleManaAbility;
-import mage.constants.CardType;
-import mage.constants.SubType;
+import mage.abilities.TriggeredAbilityImpl;
+import mage.abilities.effects.Effect;
 import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.game.Game;
+import mage.game.events.GameEvent;
 
 /**
  *
  * @author TheElk801
  */
-public class TreasureToken extends Token {
+public class SacrificePermanentTriggeredAbility extends TriggeredAbilityImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private FilterPermanent filter;
 
-    static {
-        tokenImageSets.addAll(Arrays.asList("XLN"));
+    public SacrificePermanentTriggeredAbility(Effect effect) {
+        this(effect, new FilterPermanent());
     }
 
-    public TreasureToken() {
-        this(null, 0);
+    public SacrificePermanentTriggeredAbility(Effect effect, FilterPermanent filter) {
+        super(Zone.BATTLEFIELD, effect);
+        setLeavesTheBattlefieldTrigger(true);
+        this.filter = filter;
     }
 
-    public TreasureToken(String setCode) {
-        this(setCode, 0);
+    public SacrificePermanentTriggeredAbility(final SacrificePermanentTriggeredAbility ability) {
+        super(ability);
+        this.filter = ability.filter;
     }
 
-    public TreasureToken(String setCode, int tokenType) {
-        super("Treasure", "colorless Treasure artifact token with \"{T}, Sacrifice this artifact: Add one mana of any color to your mana pool.\"");
-        availableImageSetCodes = tokenImageSets;
-        setOriginalExpansionSetCode(setCode);
-        cardType.add(CardType.ARTIFACT);
-        subtype.add(SubType.TREASURE);
+    @Override
+    public SacrificePermanentTriggeredAbility copy() {
+        return new SacrificePermanentTriggeredAbility(this);
+    }
 
-        Ability ability = new SimpleManaAbility(Zone.BATTLEFIELD, new AddManaOfAnyColorEffect(), new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
-        this.addAbility(ability);
+    @Override
+    public boolean checkEventType(GameEvent event, Game game) {
+        return event.getType() == GameEvent.EventType.SACRIFICED_PERMANENT;
+    }
+
+    @Override
+    public boolean checkTrigger(GameEvent event, Game game) {
+        return event.getPlayerId().equals(this.getControllerId())
+                && filter.match(game.getPermanentOrLKIBattlefield(event.getTargetId()), game);
+    }
+
+    @Override
+    public String getRule() {
+        return "Whenever you sacrifice" + filter.getMessage() + ", " + super.getRule();
     }
 }

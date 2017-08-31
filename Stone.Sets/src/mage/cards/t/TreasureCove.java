@@ -25,49 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.cards.t;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeTargetCost;
 import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.AddManaOfAnyColorEffect;
-import mage.abilities.mana.SimpleManaAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.mana.ColorlessManaAbility;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.SubType;
 import mage.constants.Zone;
+import mage.filter.common.FilterControlledPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.target.common.TargetControlledPermanent;
 
 /**
  *
  * @author TheElk801
  */
-public class TreasureToken extends Token {
+public class TreasureCove extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private static final FilterControlledPermanent filter = new FilterControlledPermanent("a Treasure");
 
     static {
-        tokenImageSets.addAll(Arrays.asList("XLN"));
+        filter.add(new SubtypePredicate(SubType.TREASURE));
     }
 
-    public TreasureToken() {
-        this(null, 0);
-    }
+    public TreasureCove(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.LAND}, "");
 
-    public TreasureToken(String setCode) {
-        this(setCode, 0);
-    }
+        this.nightCard = true;
 
-    public TreasureToken(String setCode, int tokenType) {
-        super("Treasure", "colorless Treasure artifact token with \"{T}, Sacrifice this artifact: Add one mana of any color to your mana pool.\"");
-        availableImageSetCodes = tokenImageSets;
-        setOriginalExpansionSetCode(setCode);
-        cardType.add(CardType.ARTIFACT);
-        subtype.add(SubType.TREASURE);
+        // {T}: Add {C} to your mana pool.
+        this.addAbility(new ColorlessManaAbility());
 
-        Ability ability = new SimpleManaAbility(Zone.BATTLEFIELD, new AddManaOfAnyColorEffect(), new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
+        // {T}, Sacrifice a Treasure: Draw a card.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DrawCardSourceControllerEffect(1), new TapSourceCost());
+        ability.addCost(new SacrificeTargetCost(new TargetControlledPermanent(filter)));
         this.addAbility(ability);
+    }
+
+    public TreasureCove(final TreasureCove card) {
+        super(card);
+    }
+
+    @Override
+    public TreasureCove copy() {
+        return new TreasureCove(this);
     }
 }

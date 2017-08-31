@@ -25,49 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.cards.h;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import mage.abilities.Ability;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.AddManaOfAnyColorEffect;
-import mage.abilities.mana.SimpleManaAbility;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.combat.CantBeBlockedAllEffect;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.SubType;
+import mage.constants.Duration;
 import mage.constants.Zone;
+import mage.counters.CounterType;
+import mage.filter.common.FilterControlledCreaturePermanent;
+import mage.filter.predicate.permanent.CounterPredicate;
 
 /**
  *
  * @author TheElk801
  */
-public class TreasureToken extends Token {
+public class HeraldOfSecretStreams extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("creatures you control with +1/+1 counters on them");
 
     static {
-        tokenImageSets.addAll(Arrays.asList("XLN"));
+        filter.add(new CounterPredicate(CounterType.P1P1));
     }
 
-    public TreasureToken() {
-        this(null, 0);
+    public HeraldOfSecretStreams(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{U}");
+
+        this.subtype.add("Merfolk");
+        this.subtype.add("Warrior");
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(3);
+
+        // Creatures you control with +1/+1 counters on them can't be blocked.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CantBeBlockedAllEffect(filter, Duration.WhileOnBattlefield)));
     }
 
-    public TreasureToken(String setCode) {
-        this(setCode, 0);
+    public HeraldOfSecretStreams(final HeraldOfSecretStreams card) {
+        super(card);
     }
 
-    public TreasureToken(String setCode, int tokenType) {
-        super("Treasure", "colorless Treasure artifact token with \"{T}, Sacrifice this artifact: Add one mana of any color to your mana pool.\"");
-        availableImageSetCodes = tokenImageSets;
-        setOriginalExpansionSetCode(setCode);
-        cardType.add(CardType.ARTIFACT);
-        subtype.add(SubType.TREASURE);
-
-        Ability ability = new SimpleManaAbility(Zone.BATTLEFIELD, new AddManaOfAnyColorEffect(), new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
-        this.addAbility(ability);
+    @Override
+    public HeraldOfSecretStreams copy() {
+        return new HeraldOfSecretStreams(this);
     }
 }

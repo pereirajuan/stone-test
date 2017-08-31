@@ -25,49 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.game.permanent.token;
+package mage.cards.s;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import mage.abilities.Ability;
-import mage.abilities.costs.common.SacrificeSourceCost;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.AddManaOfAnyColorEffect;
-import mage.abilities.mana.SimpleManaAbility;
+import java.util.UUID;
+import mage.abilities.effects.common.DamageAllEffect;
+import mage.abilities.effects.common.DestroyTargetEffect;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.SubType;
-import mage.constants.Zone;
+import mage.filter.common.FilterCreatureOrPlaneswalkerPermanent;
+import mage.target.common.TargetLandPermanent;
 
 /**
  *
  * @author TheElk801
  */
-public class TreasureToken extends Token {
+public class StarOfExtinction extends CardImpl {
 
-    final static private List<String> tokenImageSets = new ArrayList<>();
+    public StarOfExtinction(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{5}{R}{R}");
 
-    static {
-        tokenImageSets.addAll(Arrays.asList("XLN"));
+        // Destroy target land. Star of Extinction deals 20 damage to each creature and each planeswalker.
+        this.getSpellAbility().addEffect(new DestroyTargetEffect());
+        this.getSpellAbility().addEffect(new DamageAllEffect(20, new FilterCreatureOrPlaneswalkerPermanent("each creature and each planeswalker")));
+        this.getSpellAbility().addTarget(new TargetLandPermanent());
     }
 
-    public TreasureToken() {
-        this(null, 0);
+    public StarOfExtinction(final StarOfExtinction card) {
+        super(card);
     }
 
-    public TreasureToken(String setCode) {
-        this(setCode, 0);
-    }
-
-    public TreasureToken(String setCode, int tokenType) {
-        super("Treasure", "colorless Treasure artifact token with \"{T}, Sacrifice this artifact: Add one mana of any color to your mana pool.\"");
-        availableImageSetCodes = tokenImageSets;
-        setOriginalExpansionSetCode(setCode);
-        cardType.add(CardType.ARTIFACT);
-        subtype.add(SubType.TREASURE);
-
-        Ability ability = new SimpleManaAbility(Zone.BATTLEFIELD, new AddManaOfAnyColorEffect(), new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
-        this.addAbility(ability);
+    @Override
+    public StarOfExtinction copy() {
+        return new StarOfExtinction(this);
     }
 }

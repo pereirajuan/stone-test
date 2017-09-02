@@ -25,73 +25,64 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.i;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.MageObject;
 import mage.abilities.Ability;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.keyword.StormAbility;
-import mage.cards.Card;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.cards.Cards;
-import mage.cards.CardsImpl;
 import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.constants.Zone;
+import mage.filter.common.FilterNonlandPermanent;
+import mage.filter.predicate.permanent.ControllerIdPredicate;
 import mage.game.Game;
-import mage.players.Player;
+import mage.game.permanent.Permanent;
 import mage.target.TargetPlayer;
 
 /**
  *
- * @author Plopman
+ * @author TheElk801
  */
-public class IgniteMemories extends CardImpl {
+public class RiversRebuke extends CardImpl {
 
-    public IgniteMemories(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{4}{R}");
+    public RiversRebuke(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{4}{U}{U}");
 
-        // Target player reveals a card at random from his or her hand. Ignite Memories deals damage to that player equal to that card's converted mana cost.
+        // Return all nonland permanents target player controls to their owner's hand.
+        this.getSpellAbility().addEffect(new RiversRebukeReturnToHandEffect());
         this.getSpellAbility().addTarget(new TargetPlayer());
-        this.getSpellAbility().addEffect(new IgniteMemoriesEffect());
-        // Storm
-        this.addAbility(new StormAbility());
     }
 
-    public IgniteMemories(final IgniteMemories card) {
+    public RiversRebuke(final RiversRebuke card) {
         super(card);
     }
 
     @Override
-    public IgniteMemories copy() {
-        return new IgniteMemories(this);
+    public RiversRebuke copy() {
+        return new RiversRebuke(this);
     }
 }
 
-class IgniteMemoriesEffect extends OneShotEffect {
+class RiversRebukeReturnToHandEffect extends OneShotEffect {
 
-    public IgniteMemoriesEffect() {
-        super(Outcome.Damage);
-        staticText = "Target player reveals a card at random from his or her hand. Ignite Memories deals damage to that player equal to that card's converted mana cost";
+    public RiversRebukeReturnToHandEffect() {
+        super(Outcome.ReturnToHand);
+        staticText = "Return all nonland permanents target player controls to their owner's hand";
     }
 
-    public IgniteMemoriesEffect(final IgniteMemoriesEffect effect) {
+    public RiversRebukeReturnToHandEffect(final RiversRebukeReturnToHandEffect effect) {
         super(effect);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
-        Player controller = game.getPlayer(targetPointer.getFirst(game, source));
-        MageObject sourceObject = source.getSourceObject(game);
-        if (controller != null && sourceObject != null) {
-            if (!controller.getHand().isEmpty()) {
-                Cards revealed = new CardsImpl();
-                Card card = controller.getHand().getRandom(game);
-                revealed.add(card);
-                controller.revealCards(sourceObject.getIdName(), revealed, game);
-                controller.damage(card.getConvertedManaCost(), source.getSourceId(), game, false, true);
-
+        if (targetPointer.getFirst(game, source) != null) {
+            FilterNonlandPermanent filter = new FilterNonlandPermanent();
+            filter.add(new ControllerIdPredicate(targetPointer.getFirst(game, source)));
+            for (Permanent permanent : game.getBattlefield().getActivePermanents(filter, source.getControllerId(), source.getSourceId(), game)) {
+                permanent.moveToZone(Zone.HAND, source.getSourceId(), game, true);
             }
             return true;
         }
@@ -99,8 +90,7 @@ class IgniteMemoriesEffect extends OneShotEffect {
     }
 
     @Override
-    public IgniteMemoriesEffect copy() {
-        return new IgniteMemoriesEffect(this);
+    public RiversRebukeReturnToHandEffect copy() {
+        return new RiversRebukeReturnToHandEffect(this);
     }
-
 }

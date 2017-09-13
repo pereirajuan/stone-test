@@ -25,42 +25,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.o;
+package mage.cards.a;
 
 import java.util.UUID;
-import mage.abilities.common.AsEntersBattlefieldAbility;
-import mage.abilities.costs.common.PayLifeCost;
-import mage.abilities.effects.common.TapSourceUnlessPaysEffect;
-import mage.abilities.mana.BlackManaAbility;
-import mage.abilities.mana.GreenManaAbility;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.DealtDamageAndDiedTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.GainLifeEffect;
+import mage.constants.SubType;
+import mage.constants.SuperType;
+import mage.abilities.keyword.TrampleAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.SubType;
+import mage.target.TargetPlayer;
 
 /**
  *
- * @author Loki
+ * @author TheElk801
  */
-public class OvergrownTomb extends CardImpl {
+public class AxelrodGunnarson extends CardImpl {
 
-    public OvergrownTomb(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.LAND}, null);
-        this.subtype.add(SubType.SWAMP);
-        this.subtype.add(SubType.FOREST);
+    public AxelrodGunnarson(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{4}{B}{B}{R}{R}");
 
-        this.addAbility(new AsEntersBattlefieldAbility(new TapSourceUnlessPaysEffect(new PayLifeCost(2)), "you may pay 2 life. If you don't, {this} enters the battlefield tapped"));
-        this.addAbility(new BlackManaAbility());
-        this.addAbility(new GreenManaAbility());
+        this.addSuperType(SuperType.LEGENDARY);
+        this.subtype.add(SubType.GIANT);
+        this.power = new MageInt(5);
+        this.toughness = new MageInt(5);
+
+        // Trample
+        this.addAbility(TrampleAbility.getInstance());
+
+        // Whenever a creature dealt damage by Axelrod Gunnarson this turn dies, you gain 1 life and Axelrod deals 1 damage to target player.
+        Ability ability = new DealtDamageAndDiedTriggeredAbility(new GainLifeEffect(1), false);
+        Effect effect = new DamageTargetEffect(1);
+        effect.setText("and {this} deals 1 damage to target player");
+        ability.addEffect(effect);
+        ability.addTarget(new TargetPlayer());
     }
 
-    public OvergrownTomb(final OvergrownTomb card) {
+    public AxelrodGunnarson(final AxelrodGunnarson card) {
         super(card);
     }
 
     @Override
-    public OvergrownTomb copy() {
-        return new OvergrownTomb(this);
+    public AxelrodGunnarson copy() {
+        return new AxelrodGunnarson(this);
     }
-
 }

@@ -25,49 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.w;
+package mage.cards.e;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.effects.Effect;
-import mage.abilities.effects.common.CreatureExploresTriggeredAbility;
-import mage.abilities.effects.common.GainLifeEffect;
-import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.keyword.ExploreSourceEffect;
+import mage.constants.SubType;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.SubType;
-import mage.counters.CounterType;
 
 /**
  *
  * @author TheElk801
  */
-public class WildgrowthWalker extends CardImpl {
+public class EmissaryOfSunrise extends CardImpl {
 
-    public WildgrowthWalker(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{G}");
+    public EmissaryOfSunrise(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{W}");
 
-        this.subtype.add(SubType.ELEMENTAL);
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(3);
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.CLERIC);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
 
-        // Whenever a creature you control explores, put a +1/+1 counter on Wildgrowth Walker and you gain 3 life.
-        Effect effect = new AddCountersSourceEffect(CounterType.P1P1.createInstance());
-        Ability ability = new CreatureExploresTriggeredAbility(effect);
-        effect = new GainLifeEffect(3);
-        effect.setText("and you gain 3 life");
-        ability.addEffect(effect);
-        this.addAbility(ability);
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+
+        // When Emissary of Sunrise enters the battlefield, it explores.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new ExploreSourceEffect()));
     }
 
-    public WildgrowthWalker(final WildgrowthWalker card) {
+    public EmissaryOfSunrise(final EmissaryOfSunrise card) {
         super(card);
     }
 
     @Override
-    public WildgrowthWalker copy() {
-        return new WildgrowthWalker(this);
+    public EmissaryOfSunrise copy() {
+        return new EmissaryOfSunrise(this);
     }
 }

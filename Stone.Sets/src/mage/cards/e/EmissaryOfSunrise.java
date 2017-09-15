@@ -27,45 +27,43 @@
  */
 package mage.cards.e;
 
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.keyword.ExploreSourceEffect;
+import mage.constants.SubType;
+import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Zone;
-import mage.filter.StaticFilters;
-import mage.target.common.TargetCardInLibrary;
-
-import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author TheElk801
  */
-public class EvolvingWilds extends CardImpl {
+public class EmissaryOfSunrise extends CardImpl {
 
-    public EvolvingWilds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.LAND}, null);
+    public EmissaryOfSunrise(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{W}");
 
-        // {T}, Sacrifice Evolving Wilds: Search your library for a basic land card and put it onto the battlefield tapped. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(
-                Zone.BATTLEFIELD,
-                new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(StaticFilters.FILTER_BASIC_LAND_CARD), true),
-                new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
-        this.addAbility(ability);
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.CLERIC);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(1);
+
+        // First strike
+        this.addAbility(FirstStrikeAbility.getInstance());
+
+        // When Emissary of Sunrise enters the battlefield, it explores.
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new ExploreSourceEffect()));
     }
 
-    public EvolvingWilds(final EvolvingWilds card) {
+    public EmissaryOfSunrise(final EmissaryOfSunrise card) {
         super(card);
     }
 
     @Override
-    public EvolvingWilds copy() {
-        return new EvolvingWilds(this);
+    public EmissaryOfSunrise copy() {
+        return new EmissaryOfSunrise(this);
     }
-
 }

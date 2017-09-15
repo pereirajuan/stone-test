@@ -25,44 +25,96 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.abilities.effects.common;
+package mage.cards.s;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.MageObject;
 import mage.abilities.Ability;
 import mage.abilities.Mode;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.condition.common.SourceOnBattlefieldCondition;
 import mage.abilities.costs.Cost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.decorator.ConditionalContinuousEffect;
 import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.Effect;
 import mage.abilities.effects.Effects;
 import mage.abilities.effects.OneShotEffect;
+import mage.abilities.effects.common.continuous.GainControlTargetEffect;
+import mage.abilities.keyword.ForestwalkAbility;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
+import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Outcome;
+import mage.constants.SubType;
+import mage.constants.Zone;
 import mage.game.Game;
 import mage.players.Player;
+import mage.target.common.TargetArtifactPermanent;
 import mage.util.CardUtil;
 
 /**
  *
- * @author LevelX2
+ * @author L_J
  */
-public class DoUnlessAnyPlayerPaysEffect extends OneShotEffect {
+public class ScarwoodBandits extends CardImpl {
+
+    public ScarwoodBandits(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.ROGUE);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Forestwalk
+        this.addAbility(new ForestwalkAbility());
+
+        // {2}{G}, {tap}: Unless an opponent pays {2}, gain control of target artifact for as long as Scarwood Bandits remains on the battlefield.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new DoUnlessAnyOpponentPaysEffect(
+                        new ConditionalContinuousEffect(
+                                new GainControlTargetEffect(Duration.Custom, true),
+                                SourceOnBattlefieldCondition.instance,
+                                "gain control of target artifact for as long as {this} remains on the battlefield"),
+                        new GenericManaCost(2)),
+                new ManaCostsImpl("{2}{G}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetArtifactPermanent());
+        this.addAbility(ability);
+    }
+
+    public ScarwoodBandits(final ScarwoodBandits card) {
+        super(card);
+    }
+
+    @Override
+    public ScarwoodBandits copy() {
+        return new ScarwoodBandits(this);
+    }
+}
+
+class DoUnlessAnyOpponentPaysEffect extends OneShotEffect {
 
     protected Effects executingEffects = new Effects();
     private final Cost cost;
     private String chooseUseText;
 
-    public DoUnlessAnyPlayerPaysEffect(Effect effect, Cost cost) {
+    public DoUnlessAnyOpponentPaysEffect(Effect effect, Cost cost) {
         this(effect, cost, null);
     }
 
-    public DoUnlessAnyPlayerPaysEffect(Effect effect, Cost cost, String chooseUseText) {
+    public DoUnlessAnyOpponentPaysEffect(Effect effect, Cost cost, String chooseUseText) {
         super(Outcome.Benefit);
         this.executingEffects.add(effect);
         this.cost = cost;
         this.chooseUseText = chooseUseText;
     }
 
-    public DoUnlessAnyPlayerPaysEffect(final DoUnlessAnyPlayerPaysEffect effect) {
+    public DoUnlessAnyOpponentPaysEffect(final DoUnlessAnyOpponentPaysEffect effect) {
         super(effect);
         this.executingEffects = effect.executingEffects.copy();
         this.cost = effect.cost.copy();
@@ -88,10 +140,10 @@ public class DoUnlessAnyPlayerPaysEffect extends OneShotEffect {
             message = CardUtil.replaceSourceName(message, sourceObject.getName());
             boolean result = true;
             boolean doEffect = true;
-            // check if any player is willing to pay
+            // check if any opponent is willing to pay
             for (UUID playerId : game.getState().getPlayersInRange(controller.getId(), game)) {
                 Player player = game.getPlayer(playerId);
-                if (player != null && cost.canPay(source, source.getSourceId(), player.getId(), game) && player.chooseUse(Outcome.Detriment, message, source, game)) {
+                if (player != null && player != controller && cost.canPay(source, source.getSourceId(), player.getId(), game) && player.chooseUse(Outcome.Detriment, message, source, game)) {
                     cost.clearPaid();
                     if (cost.pay(source, game, source.getSourceId(), player.getId(), false, null)) {
                         if (!game.isSimulation()) {
@@ -127,11 +179,11 @@ public class DoUnlessAnyPlayerPaysEffect extends OneShotEffect {
             return staticText;
         }
         String effectsText = executingEffects.getText(mode);
-        return effectsText.substring(0, effectsText.length() - 1) + " unless any player pays " + cost.getText();
+        return effectsText.substring(0, effectsText.length() - 1) + " unless any opponent pays " + cost.getText();
     }
 
     @Override
-    public DoUnlessAnyPlayerPaysEffect copy() {
-        return new DoUnlessAnyPlayerPaysEffect(this);
+    public DoUnlessAnyOpponentPaysEffect copy() {
+        return new DoUnlessAnyOpponentPaysEffect(this);
     }
 }

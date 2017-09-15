@@ -25,97 +25,85 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.f;
+package mage.cards.d;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.MageObject;
 import mage.abilities.Ability;
-import mage.abilities.common.LimitedTimesPerTurnActivatedAbility;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.mana.GenericManaCost;
-import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.common.EntersBattlefieldOrAttacksSourceTriggeredAbility;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.effects.common.LookLibraryControllerEffect;
 import mage.abilities.effects.common.continuous.BoostSourceEffect;
-import mage.abilities.effects.common.continuous.GainAbilitySourceEffect;
-import mage.abilities.keyword.TrampleAbility;
 import mage.cards.Card;
+import mage.constants.SubType;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.cards.Cards;
-import mage.cards.CardsImpl;
 import mage.constants.CardType;
-import mage.constants.SubType;
 import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Zone;
 import mage.game.Game;
 import mage.players.Player;
+import mage.target.common.TargetCardInGraveyard;
 
 /**
  *
- * @author LevelX2
+ * @author TheElk801
  */
-public class FeralDeceiver extends CardImpl {
+public class DeathgorgeScavenger extends CardImpl {
 
-    public FeralDeceiver(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{G}");
-        this.subtype.add(SubType.SPIRIT);
+    public DeathgorgeScavenger(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}");
 
+        this.subtype.add(SubType.DINOSAUR);
         this.power = new MageInt(3);
         this.toughness = new MageInt(2);
 
-        // {1}: Look at the top card of your library.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new LookLibraryControllerEffect(), new GenericManaCost(1)));
-
-        // {2}: Reveal the top card of your library. If it's a land card, {this} gets +2/+2 and gains trample until end of turn.
-        this.addAbility(new LimitedTimesPerTurnActivatedAbility(Zone.BATTLEFIELD, new FeralDeceiverEffect(), new ManaCostsImpl("{2}")));
+        // Whenever Deathgorge Scavenger enters the battlefield or attacks, you may exile target card from a graveyard. If a creature card is exiled this way, you gain 2 life. If a noncreature card is exiled this way, Deathgorge Scavenger gets +1/+1 until end of turn.
+        Ability ability = new EntersBattlefieldOrAttacksSourceTriggeredAbility(new DeathgorgeScavengerEffect(), true);
+        ability.addTarget(new TargetCardInGraveyard());
+        this.addAbility(ability);
     }
 
-    public FeralDeceiver(final FeralDeceiver card) {
+    public DeathgorgeScavenger(final DeathgorgeScavenger card) {
         super(card);
     }
 
     @Override
-    public FeralDeceiver copy() {
-        return new FeralDeceiver(this);
+    public DeathgorgeScavenger copy() {
+        return new DeathgorgeScavenger(this);
     }
 }
 
-class FeralDeceiverEffect extends OneShotEffect {
+class DeathgorgeScavengerEffect extends OneShotEffect {
 
-    public FeralDeceiverEffect() {
-        super(Outcome.BoostCreature);
-        this.staticText = "Reveal the top card of your library. If it's a land card, {this} gets +2/+2 and gains trample until end of turn";
+    public DeathgorgeScavengerEffect() {
+        super(Outcome.Benefit);
+        this.staticText = "exile target card from a graveyard. If a creature card is exiled this way, you gain 2 life. If a noncreature card is exiled this way, {this} gets +1/+1 until end of turn";
     }
 
-    public FeralDeceiverEffect(final FeralDeceiverEffect effect) {
+    public DeathgorgeScavengerEffect(final DeathgorgeScavengerEffect effect) {
         super(effect);
     }
 
     @Override
-    public FeralDeceiverEffect copy() {
-        return new FeralDeceiverEffect(this);
+    public DeathgorgeScavengerEffect copy() {
+        return new DeathgorgeScavengerEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
+        Card card = game.getCard(getTargetPointer().getFirst(game, source));
         Player controller = game.getPlayer(source.getControllerId());
-        MageObject sourceObject = source.getSourceObject(game);
-        if (controller != null && sourceObject != null) {
-            Cards cards = new CardsImpl();
-            Card card = controller.getLibrary().getFromTop(game);
-            if (card != null) {
-                cards.add(card);
-                controller.revealCards(sourceObject.getIdName(), cards, game);
-                if (card.isLand()) {
-                    game.addEffect(new BoostSourceEffect(2, 2, Duration.EndOfTurn), source);
-                    game.addEffect(new GainAbilitySourceEffect(TrampleAbility.getInstance(), Duration.EndOfTurn), source);
-                }
+        if (controller != null && card != null) {
+            controller.moveCardToExileWithInfo(card, null, "", source.getSourceId(), game, Zone.GRAVEYARD, true);
+            if (card.isCreature()) {
+                controller.gainLife(2, game);
+            } else {
+                new BoostSourceEffect(1, 1, Duration.EndOfTurn).apply(game, source);
             }
             return true;
         }
         return false;
     }
+
 }

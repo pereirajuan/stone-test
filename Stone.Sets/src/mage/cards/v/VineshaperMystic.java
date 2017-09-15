@@ -25,47 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.e;
+package mage.cards.v;
 
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import java.util.UUID;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.counter.AddCountersTargetEffect;
+import mage.constants.SubType;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Zone;
-import mage.filter.StaticFilters;
-import mage.target.common.TargetCardInLibrary;
-
-import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.constants.TargetController;
+import mage.counters.CounterType;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author TheElk801
  */
-public class EvolvingWilds extends CardImpl {
+public class VineshaperMystic extends CardImpl {
 
-    public EvolvingWilds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.LAND}, null);
+    private static final FilterPermanent filter = new FilterPermanent("Merfolk you control");
 
-        // {T}, Sacrifice Evolving Wilds: Search your library for a basic land card and put it onto the battlefield tapped. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(
-                Zone.BATTLEFIELD,
-                new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(StaticFilters.FILTER_BASIC_LAND_CARD), true),
-                new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
+    static {
+        filter.add(new SubtypePredicate(SubType.MERFOLK));
+        filter.add(new ControllerPredicate(TargetController.YOU));
+    }
+
+    public VineshaperMystic(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}");
+
+        this.subtype.add(SubType.MERFOLK);
+        this.subtype.add(SubType.SHAMAN);
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(3);
+
+        // When Vineshaper Mystic enters the battlefield, put a +1/+1 counter on each of up to two target Merfolk you control.
+        Effect effect = new AddCountersTargetEffect(CounterType.P1P1.createInstance());
+        effect.setText("put a +1/+1 counter on each of up to two target Merfolk you control");
+        Ability ability = new EntersBattlefieldTriggeredAbility(effect, false);
+        ability.addTarget(new TargetPermanent(0, 2, filter, false));
         this.addAbility(ability);
     }
 
-    public EvolvingWilds(final EvolvingWilds card) {
+    public VineshaperMystic(final VineshaperMystic card) {
         super(card);
     }
 
     @Override
-    public EvolvingWilds copy() {
-        return new EvolvingWilds(this);
+    public VineshaperMystic copy() {
+        return new VineshaperMystic(this);
     }
-
 }

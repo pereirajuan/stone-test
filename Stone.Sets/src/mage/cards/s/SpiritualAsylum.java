@@ -25,47 +25,60 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.e;
+package mage.cards.s;
 
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
+import java.util.UUID;
+import mage.abilities.common.AttacksCreatureYouControlTriggeredAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.SacrificeSourceEffect;
+import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
+import mage.abilities.keyword.ShroudAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Duration;
+import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.filter.StaticFilters;
-import mage.target.common.TargetCardInLibrary;
-
-import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author TheElk801
  */
-public class EvolvingWilds extends CardImpl {
+public class SpiritualAsylum extends CardImpl {
 
-    public EvolvingWilds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.LAND}, null);
+    private static final FilterPermanent filter = new FilterPermanent("Creatures and lands you control");
 
-        // {T}, Sacrifice Evolving Wilds: Search your library for a basic land card and put it onto the battlefield tapped. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(
-                Zone.BATTLEFIELD,
-                new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(StaticFilters.FILTER_BASIC_LAND_CARD), true),
-                new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
+    static {
+        filter.add(Predicates.or(
+                new CardTypePredicate(CardType.CREATURE),
+                new CardTypePredicate(CardType.LAND)
+        ));
+        filter.add(new ControllerPredicate(TargetController.YOU));
+    }
+
+    public SpiritualAsylum(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{2}{W}{W}");
+
+        // Creatures and lands you control have shroud.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GainAbilityControlledEffect(ShroudAbility.getInstance(),
+                Duration.WhileOnBattlefield, filter)));
+
+        // When a creature you control attacks, sacrifice Spiritual Asylum.
+        AttacksCreatureYouControlTriggeredAbility ability = new AttacksCreatureYouControlTriggeredAbility(new SacrificeSourceEffect());
+        ability.setOnce(true);
         this.addAbility(ability);
     }
 
-    public EvolvingWilds(final EvolvingWilds card) {
+    public SpiritualAsylum(final SpiritualAsylum card) {
         super(card);
     }
 
     @Override
-    public EvolvingWilds copy() {
-        return new EvolvingWilds(this);
+    public SpiritualAsylum copy() {
+        return new SpiritualAsylum(this);
     }
-
 }

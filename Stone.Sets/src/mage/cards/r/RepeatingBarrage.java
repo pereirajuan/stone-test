@@ -25,47 +25,51 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.e;
-
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.search.SearchLibraryPutInPlayEffect;
-import mage.cards.CardImpl;
-import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.Zone;
-import mage.filter.StaticFilters;
-import mage.target.common.TargetCardInLibrary;
+package mage.cards.r;
 
 import java.util.UUID;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.condition.common.RaidCondition;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.decorator.ConditionalActivatedAbility;
+import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.effects.common.ReturnSourceFromGraveyardToHandEffect;
+import mage.cards.CardImpl;
+import mage.cards.CardSetInfo;
+import mage.constants.AbilityWord;
+import mage.constants.CardType;
+import mage.constants.Zone;
+import mage.target.common.TargetCreatureOrPlayer;
+import mage.watchers.common.PlayerAttackedWatcher;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com
+ * @author TheElk801
  */
-public class EvolvingWilds extends CardImpl {
+public class RepeatingBarrage extends CardImpl {
 
-    public EvolvingWilds(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.LAND}, null);
+    public RepeatingBarrage(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{1}{R}{R}");
 
-        // {T}, Sacrifice Evolving Wilds: Search your library for a basic land card and put it onto the battlefield tapped. Then shuffle your library.
-        Ability ability = new SimpleActivatedAbility(
-                Zone.BATTLEFIELD,
-                new SearchLibraryPutInPlayEffect(new TargetCardInLibrary(StaticFilters.FILTER_BASIC_LAND_CARD), true),
-                new TapSourceCost());
-        ability.addCost(new SacrificeSourceCost());
-        this.addAbility(ability);
+        // Repeating Barrage deals 3 damage to target creature or player.
+        this.getSpellAbility().addEffect(new DamageTargetEffect(3));
+        this.getSpellAbility().addTarget(new TargetCreatureOrPlayer());
+
+        // Raid — {3}{R}{R}: Return Repeating Barrage from your graveyard to your hand. Activate this ability only if you attacked with a creature this turn.
+        Ability ability = new ConditionalActivatedAbility(Zone.GRAVEYARD,
+                new ReturnSourceFromGraveyardToHandEffect(),
+                new ManaCostsImpl("{3}{R}{R}"),
+                RaidCondition.instance);
+        ability.setAbilityWord(AbilityWord.RAID);
+        this.addAbility(ability, new PlayerAttackedWatcher());
     }
 
-    public EvolvingWilds(final EvolvingWilds card) {
+    public RepeatingBarrage(final RepeatingBarrage card) {
         super(card);
     }
 
     @Override
-    public EvolvingWilds copy() {
-        return new EvolvingWilds(this);
+    public RepeatingBarrage copy() {
+        return new RepeatingBarrage(this);
     }
-
 }

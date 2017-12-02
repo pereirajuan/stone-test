@@ -25,68 +25,58 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.g;
+package mage.cards.s;
 
 import java.util.UUID;
-
 import mage.abilities.common.BeginningOfEndStepTriggeredAbility;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.abilities.common.ControlledCreaturesDealCombatDamagePlayerTriggeredAbility;
 import mage.abilities.condition.common.PermanentsOnTheBattlefieldCondition;
 import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.LookLibraryAndPickControllerEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.abilities.effects.common.TransformSourceEffect;
 import mage.abilities.keyword.TransformAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.cards.i.ItlimocCradleOfTheSun;
+import mage.cards.v.VaultOfCatlacan;
 import mage.constants.CardType;
 import mage.constants.ComparisonType;
 import mage.constants.SuperType;
 import mage.constants.TargetController;
-import mage.constants.Zone;
-import mage.filter.FilterCard;
 import mage.filter.StaticFilters;
-import mage.filter.predicate.mageobject.CardTypePredicate;
+import mage.game.permanent.token.TreasureToken;
 
 /**
  *
- * @author JRHerlehy
+ * @author LevelX2
  */
-public class GrowingRitesOfItlimoc extends CardImpl {
+public class StormTheVault extends CardImpl {
 
-    private static final FilterCard filter = new FilterCard("a creature card");
-
-    static {
-        filter.add(new CardTypePredicate(CardType.CREATURE));
-    }
-
-    public GrowingRitesOfItlimoc(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{2}{G}");
+    public StormTheVault(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{2}{U}{R}");
 
         this.addSuperType(SuperType.LEGENDARY);
 
         this.transformable = true;
-        this.secondSideCardClazz = ItlimocCradleOfTheSun.class;
+        this.secondSideCardClazz = VaultOfCatlacan.class;
 
-        // When Growing Rites of Itlimoc enters the battlefield, look at the top four cards of your library.
-        // You may reveal a creature card from among them and put it into your hand.
-        // Put the rest on the bottom of your library in any order.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new LookLibraryAndPickControllerEffect(4, 1, filter, true, true, Zone.HAND, false)));
+        // Whenever one or more creatures you control deal combat damage to a player, create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color to your mana pool."
+        this.addAbility(new ControlledCreaturesDealCombatDamagePlayerTriggeredAbility(new CreateTokenEffect(new TreasureToken())));
 
-        // At the beginning of your end step, if you control four or more creatures, transform Growing Rites of Itlimoc.
+        // At the beginning of your end step, if you control five or more artifacts, transform Storm the Vault.
         this.addAbility(new TransformAbility());
         this.addAbility(new ConditionalTriggeredAbility(
                 new BeginningOfEndStepTriggeredAbility(new TransformSourceEffect(true), TargetController.YOU, false),
-                new PermanentsOnTheBattlefieldCondition(StaticFilters.FILTER_CONTROLLED_A_CREATURE, ComparisonType.MORE_THAN, 3),
-                "At the beginning of your end step, if you control four or more creatures, transform {this}"));
+                new PermanentsOnTheBattlefieldCondition(StaticFilters.FILTER_CONTROLLED_PERMANENT_ARTIFACT, ComparisonType.MORE_THAN, 4),
+                "At the beginning of your end step, if you control five or more artifacts, transform {this}"));
+
     }
 
-    public GrowingRitesOfItlimoc(final GrowingRitesOfItlimoc card) {
+    public StormTheVault(final StormTheVault card) {
         super(card);
     }
 
     @Override
-    public GrowingRitesOfItlimoc copy() {
-        return new GrowingRitesOfItlimoc(this);
+    public StormTheVault copy() {
+        return new StormTheVault(this);
     }
 }

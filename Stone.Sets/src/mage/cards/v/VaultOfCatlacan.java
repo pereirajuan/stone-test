@@ -25,36 +25,58 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.b;
+package mage.cards.v;
 
 import java.util.UUID;
 import mage.Mana;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
 import mage.abilities.effects.common.DynamicManaEffect;
+import mage.abilities.effects.common.InfoEffect;
+import mage.abilities.mana.AnyColorManaAbility;
+import mage.abilities.mana.SimpleManaAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.SuperType;
+import mage.constants.Zone;
 import mage.filter.StaticFilters;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class BattleHymn extends CardImpl {
+public class VaultOfCatlacan extends CardImpl {
 
-    public BattleHymn(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{R}");
+    public VaultOfCatlacan(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.LAND}, "");
 
-        // Add {R} to your mana pool for each creature you control.
-        this.getSpellAbility().addEffect(new DynamicManaEffect(Mana.RedMana(1), new PermanentsOnBattlefieldCount(StaticFilters.FILTER_CONTROLLED_CREATURE)));
+        this.addSuperType(SuperType.LEGENDARY);
+        this.nightCard = true;
+
+        // <i>(Transforms from Storm the Vault.)</i>
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new InfoEffect("<i>(Transforms from Storm the Vault.)</i>"));
+        ability.setRuleAtTheTop(true);
+        this.addAbility(ability);
+
+        // {T}: Add one mana of any color to your mana pool.
+        this.addAbility(new AnyColorManaAbility());
+
+        // {T}: Add {U} to your mana pool for each artifact you control.
+        this.addAbility(new SimpleManaAbility(Zone.BATTLEFIELD,
+                new DynamicManaEffect(Mana.BlueMana(1), new PermanentsOnBattlefieldCount(StaticFilters.FILTER_CONTROLLED_PERMANENT_ARTIFACT)),
+                new TapSourceCost()));
+
     }
 
-    public BattleHymn(final BattleHymn card) {
+    public VaultOfCatlacan(final VaultOfCatlacan card) {
         super(card);
     }
 
     @Override
-    public BattleHymn copy() {
-        return new BattleHymn(this);
+    public VaultOfCatlacan copy() {
+        return new VaultOfCatlacan(this);
     }
 }

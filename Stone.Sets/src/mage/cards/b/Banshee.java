@@ -28,33 +28,49 @@
 package mage.cards.b;
 
 import java.util.UUID;
-import mage.Mana;
-import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
-import mage.abilities.effects.common.DynamicManaEffect;
+import mage.MageInt;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.dynamicvalue.common.HalfValue;
+import mage.abilities.dynamicvalue.common.ManacostVariableValue;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DamageControllerEffect;
+import mage.abilities.effects.common.DamageTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.filter.StaticFilters;
+import mage.constants.SubType;
+import mage.constants.Zone;
+import mage.target.common.TargetCreatureOrPlayer;
 
 /**
  *
- * @author North
+ * @author L_J
  */
-public class BattleHymn extends CardImpl {
+public class Banshee extends CardImpl {
 
-    public BattleHymn(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{R}");
+    public Banshee(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId,setInfo,new CardType[]{CardType.CREATURE},"{2}{B}{B}");
+        this.subtype.add(SubType.SPIRIT);
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(1);
 
-        // Add {R} to your mana pool for each creature you control.
-        this.getSpellAbility().addEffect(new DynamicManaEffect(Mana.RedMana(1), new PermanentsOnBattlefieldCount(StaticFilters.FILTER_CONTROLLED_CREATURE)));
+        // {X}, {T}: Banshee deals half X damage, rounded down, to target creature or player, and half X damage, rounded up, to you.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(new HalfValue(new ManacostVariableValue(), false)).setText("Banshee deals half X damage, rounded down, to target creature or player,"), new ManaCostsImpl("{X}"));
+        ability.addCost(new TapSourceCost());
+        ability.addEffect(new DamageControllerEffect(new HalfValue(new ManacostVariableValue(), true)).setText(" and half X damage, rounded up, to you"));
+        ability.addTarget(new TargetCreatureOrPlayer());
+        this.addAbility(ability);
     }
 
-    public BattleHymn(final BattleHymn card) {
+    public Banshee(final Banshee card) {
         super(card);
     }
 
     @Override
-    public BattleHymn copy() {
-        return new BattleHymn(this);
+    public Banshee copy() {
+        return new Banshee(this);
     }
 }

@@ -25,72 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.f;
+package mage.abilities.effects.keyword;
 
-import java.util.UUID;
 import mage.abilities.Ability;
 import mage.abilities.effects.OneShotEffect;
-import mage.cards.CardImpl;
-import mage.cards.CardSetInfo;
-import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.designations.CitysBlessing;
+import mage.designations.DesignationType;
 import mage.filter.StaticFilters;
 import mage.game.Game;
-import mage.game.permanent.Permanent;
 import mage.players.Player;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class Fumigate extends CardImpl {
+public class AscendEffect extends OneShotEffect {
 
-    public Fumigate(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
-
-        // Destroy all creatures. You gain 1 life for each creature destroyed this way.
-        this.getSpellAbility().addEffect(new FumigateEffect());
+    public AscendEffect() {
+        super(Outcome.Detriment);
+        staticText = "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)<br>";
     }
 
-    public Fumigate(final Fumigate card) {
-        super(card);
-    }
-
-    @Override
-    public Fumigate copy() {
-        return new Fumigate(this);
-    }
-}
-
-class FumigateEffect extends OneShotEffect {
-
-    public FumigateEffect() {
-        super(Outcome.DestroyPermanent);
-        this.staticText = "Destroy all creatures. You gain 1 life for each creature destroyed this way";
-    }
-
-    public FumigateEffect(final FumigateEffect effect) {
+    public AscendEffect(final AscendEffect effect) {
         super(effect);
     }
 
     @Override
-    public FumigateEffect copy() {
-        return new FumigateEffect(this);
+    public AscendEffect copy() {
+        return new AscendEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            int destroyedCreature = 0;
-            for (Permanent creature : game.getState().getBattlefield().getActivePermanents(StaticFilters.FILTER_PERMANENT_CREATURE, controller.getId(), game)) {
-                if (creature.destroy(source.getSourceId(), game, false)) {
-                    destroyedCreature++;
+            if (game.getBattlefield().countAll(StaticFilters.FILTER_PERMANENT_ARTIFACT_CREATURE_ENCHANTMENT_OR_LAND, controller.getId(), game) > 9) {
+                if (!controller.hasDesignation(DesignationType.CITYS_BLESSING)) {
+                    controller.addDesignation(new CitysBlessing());
+                    game.informPlayers(controller.getLogName() + " gets the city's blessing for the rest of the game.");
+                } else {
+                    game.informPlayers(controller.getLogName() + " already has the city's blessing.");
                 }
-            }
-            game.applyEffects();
-            if (destroyedCreature > 0) {
-                controller.gainLife(destroyedCreature, game);
+            } else {
+                game.informPlayers(controller.getLogName() + " does not get the city's blessing.");
             }
             return true;
         }

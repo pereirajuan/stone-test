@@ -25,75 +25,38 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.f;
+package mage.cards.b;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.effects.OneShotEffect;
+import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Outcome;
 import mage.filter.StaticFilters;
-import mage.game.Game;
-import mage.game.permanent.Permanent;
-import mage.players.Player;
+import mage.game.permanent.token.TreasureToken;
 
 /**
  *
- * @author fireshoes
+ * @author LevelX2
  */
-public class Fumigate extends CardImpl {
+public class BrasssBounty extends CardImpl {
 
-    public Fumigate(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
+    public BrasssBounty(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{6}{R}");
 
-        // Destroy all creatures. You gain 1 life for each creature destroyed this way.
-        this.getSpellAbility().addEffect(new FumigateEffect());
+        // For each land you control, create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color to your mana pool."
+        this.getSpellAbility().addEffect(
+                new CreateTokenEffect(new TreasureToken(), new PermanentsOnBattlefieldCount(StaticFilters.FILTER_CONTROLLED_PERMANENT))
+                        .setText("For each land you control, create a colorless Treasure artifact token with \"{T}, Sacrifice this artifact: Add one mana of any color to your mana pool.\""));
     }
 
-    public Fumigate(final Fumigate card) {
+    public BrasssBounty(final BrasssBounty card) {
         super(card);
     }
 
     @Override
-    public Fumigate copy() {
-        return new Fumigate(this);
-    }
-}
-
-class FumigateEffect extends OneShotEffect {
-
-    public FumigateEffect() {
-        super(Outcome.DestroyPermanent);
-        this.staticText = "Destroy all creatures. You gain 1 life for each creature destroyed this way";
-    }
-
-    public FumigateEffect(final FumigateEffect effect) {
-        super(effect);
-    }
-
-    @Override
-    public FumigateEffect copy() {
-        return new FumigateEffect(this);
-    }
-
-    @Override
-    public boolean apply(Game game, Ability source) {
-        Player controller = game.getPlayer(source.getControllerId());
-        if (controller != null) {
-            int destroyedCreature = 0;
-            for (Permanent creature : game.getState().getBattlefield().getActivePermanents(StaticFilters.FILTER_PERMANENT_CREATURE, controller.getId(), game)) {
-                if (creature.destroy(source.getSourceId(), game, false)) {
-                    destroyedCreature++;
-                }
-            }
-            game.applyEffects();
-            if (destroyedCreature > 0) {
-                controller.gainLife(destroyedCreature, game);
-            }
-            return true;
-        }
-        return false;
+    public BrasssBounty copy() {
+        return new BrasssBounty(this);
     }
 }

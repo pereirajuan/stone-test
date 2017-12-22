@@ -33,26 +33,30 @@ import mage.constants.SetType;
 
 /**
  *
- * @author fireshoes
+ * @author JayDi85
  */
-public class WorldMagicCupQualifier extends ExpansionSet {
+public class ProTourPromos extends ExpansionSet {
 
-    private static final WorldMagicCupQualifier instance = new WorldMagicCupQualifier();
+    private static final ProTourPromos instance = new ProTourPromos();
 
-    public static WorldMagicCupQualifier getInstance() {
+    public static ProTourPromos getInstance() {
         return instance;
     }
 
-    private WorldMagicCupQualifier() {
-        super("World Magic Cup Qualifier", "WMCQ", ExpansionSet.buildDate(2011, 6, 17), SetType.PROMOTIONAL);
+    private ProTourPromos() {
+        super("Pro Tour Promos", "PPRO", ExpansionSet.buildDate(2007, 2, 9), SetType.PROMOTIONAL);
         this.hasBoosters = false;
         this.hasBasicLands = false;
-        // https://mtg.gamepedia.com/World_Magic_Cup_Qualifiers
-        cards.add(new SetCardInfo("Abrupt Decay", 2016, Rarity.RARE, mage.cards.a.AbruptDecay.class));
-        cards.add(new SetCardInfo("Geist of Saint Traft", 2014, Rarity.MYTHIC, mage.cards.g.GeistOfSaintTraft.class));
-        cards.add(new SetCardInfo("Inkmoth Nexus", 2017, Rarity.SPECIAL, mage.cards.i.InkmothNexus.class));
-        cards.add(new SetCardInfo("Thalia, Guardian of Thraben", 2015, Rarity.RARE, mage.cards.t.ThaliaGuardianOfThraben.class));
-        cards.add(new SetCardInfo("Vengevine", 2013, Rarity.MYTHIC, mage.cards.v.Vengevine.class));
+        // https://mtg.gamepedia.com/Promotional_cards#Pro_tour_cards
+        cards.add(new SetCardInfo("Ajani Goldmane", 2011, Rarity.MYTHIC, mage.cards.a.AjaniGoldmane.class));
+        cards.add(new SetCardInfo("Avatar of Woe", 2010, Rarity.RARE, mage.cards.a.AvatarOfWoe.class));
+        cards.add(new SetCardInfo("Emrakul, the Aeons Torn", 2017, Rarity.MYTHIC, mage.cards.e.EmrakulTheAeonsTorn.class));
+        cards.add(new SetCardInfo("Eternal Dragon", 2007, Rarity.RARE, mage.cards.e.EternalDragon.class));
+        cards.add(new SetCardInfo("Liliana of the Veil", 2015, Rarity.MYTHIC, mage.cards.l.LilianaOfTheVeil.class));
+        cards.add(new SetCardInfo("Mirari's Wake", 2008, Rarity.RARE, mage.cards.m.MirarisWake.class));
+        cards.add(new SetCardInfo("Noble Hierarch", 2018, Rarity.RARE, mage.cards.n.NobleHierarch.class));
+        cards.add(new SetCardInfo("Snapcaster Mage", 2016, Rarity.MYTHIC, mage.cards.s.SnapcasterMage.class));
+        cards.add(new SetCardInfo("Treva, the Renewer", 2009, Rarity.RARE, mage.cards.t.TrevaTheRenewer.class));
     }
 
 }

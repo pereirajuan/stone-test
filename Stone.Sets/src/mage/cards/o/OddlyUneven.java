@@ -25,10 +25,11 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.f;
+package mage.cards.o;
 
 import java.util.UUID;
 import mage.abilities.Ability;
+import mage.abilities.Mode;
 import mage.abilities.effects.OneShotEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
@@ -41,59 +42,69 @@ import mage.players.Player;
 
 /**
  *
- * @author fireshoes
+ * @author spjspj
  */
-public class Fumigate extends CardImpl {
+public class OddlyUneven extends CardImpl {
 
-    public Fumigate(UUID ownerId, CardSetInfo setInfo) {
+    public OddlyUneven(UUID ownerId, CardSetInfo setInfo) {
         super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{3}{W}{W}");
 
-        // Destroy all creatures. You gain 1 life for each creature destroyed this way.
-        this.getSpellAbility().addEffect(new FumigateEffect());
+        // Choose one --
+        // * Destroy each creature with an odd number of words in its name. (Hyphenated words are one word.)
+        this.getSpellAbility().addEffect(new OddOrEvenEffect(true));
+        // * Destroy each creature with an even number of words in its name.
+        Mode mode = new Mode();
+        mode.getEffects().add(new OddOrEvenEffect(false));
+        this.getSpellAbility().addMode(mode);
     }
 
-    public Fumigate(final Fumigate card) {
+    public OddlyUneven(final OddlyUneven card) {
         super(card);
     }
 
     @Override
-    public Fumigate copy() {
-        return new Fumigate(this);
+    public OddlyUneven copy() {
+        return new OddlyUneven(this);
     }
 }
 
-class FumigateEffect extends OneShotEffect {
+class OddOrEvenEffect extends OneShotEffect {
 
-    public FumigateEffect() {
+    private boolean odd = true;
+
+    public OddOrEvenEffect(boolean odd) {
         super(Outcome.DestroyPermanent);
-        this.staticText = "Destroy all creatures. You gain 1 life for each creature destroyed this way";
+        this.odd = odd;
+        this.staticText = "Destroy each creature with an " + (odd ? "odd" : "even") + " number of words in its name. (Hyphenated words are one word.)";
     }
 
-    public FumigateEffect(final FumigateEffect effect) {
+    public OddOrEvenEffect(final OddOrEvenEffect effect) {
         super(effect);
+        this.odd = effect.odd;
     }
 
     @Override
-    public FumigateEffect copy() {
-        return new FumigateEffect(this);
+    public OddOrEvenEffect copy() {
+        return new OddOrEvenEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            int destroyedCreature = 0;
             for (Permanent creature : game.getState().getBattlefield().getActivePermanents(StaticFilters.FILTER_PERMANENT_CREATURE, controller.getId(), game)) {
-                if (creature.destroy(source.getSourceId(), game, false)) {
-                    destroyedCreature++;
+                // Check the number of words in the name (based on number of spaces)
+                if (creature != null) {
+                    String name = creature.getName();
+                    int spaces = name.length() - name.replace(" ", "").length();
+                    boolean nameIsOdd = (spaces % 2 == 0);
+                    if (this.odd && nameIsOdd || !this.odd && !nameIsOdd) {
+                        creature.destroy(source.getSourceId(), game, false);
+                    }
                 }
             }
-            game.applyEffects();
-            if (destroyedCreature > 0) {
-                controller.gainLife(destroyedCreature, game);
-            }
-            return true;
         }
+
         return false;
     }
 }

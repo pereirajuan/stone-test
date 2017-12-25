@@ -11,7 +11,7 @@
 *       of conditions and the following disclaimer in the documentation and/or other materials
 *       provided with the distribution.
 *
-* THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
+* THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com AS IS AND ANY EXPRESS OR IMPLIED
 * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
 * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
@@ -24,43 +24,25 @@
 * The views and conclusions contained in the software and documentation are those of the
 * authors and should not be interpreted as representing official policies, either expressed
 * or implied, of BetaSteward_at_googlemail.com.
-*/
+ */
 
-package mage.abilities.keyword;
-
-import mage.constants.Zone;
-import mage.abilities.MageSingleton;
-import mage.abilities.StaticAbility;
-
-import java.io.ObjectStreamException;
+package mage.game.permanent.token;
+import mage.constants.CardType;
+import mage.constants.SubType;
+import mage.MageInt;
 
 /**
  *
- * @author BetaSteward_at_googlemail.com (spjspj)
+ * @author spjspj
  */
-public class SquirrellinkAbility extends StaticAbility implements MageSingleton {
+public class BrainiacToken extends Token {
 
-    private static final SquirrellinkAbility instance =  new SquirrellinkAbility();
-
-    private Object readResolve() throws ObjectStreamException {
-        return instance;
-    }
-
-    public static SquirrellinkAbility getInstance() {
-        return instance;
-    }
-
-    private SquirrellinkAbility() {
-        super(Zone.ALL, null);
-    }
-
-    @Override
-    public String getRule() {
-        return "Squirrellink <i>(Damage dealt by this creature also causes you to create that many 1/1 green Squirrel creature tokens.)</i>";
-    }
-
-    @Override
-    public SquirrellinkAbility copy() {
-        return instance;
+    public BrainiacToken() {
+        super("Brainiac", "1/1 red Brainiac creature token");
+        cardType.add(CardType.CREATURE);
+        color.setRed(true);
+        subtype.add(SubType.BRAINIAC);
+        power = new MageInt(1);
+        toughness = new MageInt(1);
     }
 }

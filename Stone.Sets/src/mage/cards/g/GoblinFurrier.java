@@ -25,48 +25,75 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.m;
+package mage.cards.g;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.SimpleActivatedAbility;
-import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.continuous.AddCardTypeTargetEffect;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.PreventionEffectImpl;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.SubType;
 import mage.constants.Duration;
 import mage.constants.Zone;
-import mage.target.Target;
-import mage.target.common.TargetLandPermanent;
+import mage.game.Game;
+import mage.game.events.GameEvent;
+import mage.game.permanent.Permanent;
 
 /**
  *
- * @author daagar
+ * @author LevelX2 & L_J
  */
-public class MyrLandshaper extends CardImpl {
+public class GoblinFurrier extends CardImpl {
 
-    public MyrLandshaper(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.ARTIFACT,CardType.CREATURE},"{3}");
-        this.subtype.add(SubType.MYR);
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+    public GoblinFurrier(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{R}");
+        this.subtype.add(SubType.GOBLIN);
+        this.subtype.add(SubType.WARRIOR);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
 
-        // {tap}: Target land becomes an artifact in addition to its other types until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCardTypeTargetEffect(Duration.EndOfTurn, CardType.ARTIFACT), new TapSourceCost());
-        Target target = new TargetLandPermanent();
-        ability.addTarget(target);
-        this.addAbility(ability);
+        // Prevent all damage that Goblin Furrier would deal to snow creatures.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new GoblinFurrierPreventEffectEffect(Duration.WhileOnBattlefield)));
     }
 
-    public MyrLandshaper(final MyrLandshaper card) {
+    public GoblinFurrier(final GoblinFurrier card) {
         super(card);
     }
 
     @Override
-    public MyrLandshaper copy() {
-        return new MyrLandshaper(this);
+    public GoblinFurrier copy() {
+        return new GoblinFurrier(this);
     }
+}
+
+class GoblinFurrierPreventEffectEffect extends PreventionEffectImpl {
+
+    public GoblinFurrierPreventEffectEffect(Duration duration) {
+        super(duration, Integer.MAX_VALUE, false);
+        staticText = "Prevent all damage that {this} would deal to snow creatures";
+    }
+
+    public GoblinFurrierPreventEffectEffect(final GoblinFurrierPreventEffectEffect effect) {
+        super(effect);
+    }
+
+    @Override
+    public GoblinFurrierPreventEffectEffect copy() {
+        return new GoblinFurrierPreventEffectEffect(this);
+    }
+
+    @Override
+    public boolean applies(GameEvent event, Ability source, Game game) {
+        if (super.applies(event, source, game)) {
+            if (event.getSourceId().equals(source.getSourceId())) {
+                Permanent damageTo = game.getPermanent(event.getTargetId());
+                return damageTo != null && damageTo.isSnow();
+            }
+        }
+        return false;
+    }
+
 }

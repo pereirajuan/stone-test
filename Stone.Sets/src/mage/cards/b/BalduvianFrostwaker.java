@@ -25,48 +25,69 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.m;
+package mage.cards.b;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.costs.common.TapSourceCost;
-import mage.abilities.effects.common.continuous.AddCardTypeTargetEffect;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.continuous.BecomesCreatureTargetEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.SubType;
-import mage.constants.Duration;
-import mage.constants.Zone;
-import mage.target.Target;
-import mage.target.common.TargetLandPermanent;
+import mage.constants.*;
+import mage.filter.common.FilterLandPermanent;
+import mage.filter.predicate.mageobject.SupertypePredicate;
+import mage.game.permanent.token.Token;
+import mage.target.TargetPermanent;
 
 /**
  *
- * @author daagar
+ * @author TheElk801 & L_J
  */
-public class MyrLandshaper extends CardImpl {
+public class BalduvianFrostwaker extends CardImpl {
 
-    public MyrLandshaper(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.ARTIFACT,CardType.CREATURE},"{3}");
-        this.subtype.add(SubType.MYR);
+    private static final FilterLandPermanent filter = new FilterLandPermanent("snow land");
+
+    static {
+        filter.add(new SupertypePredicate(SuperType.SNOW));
+    }
+
+    public BalduvianFrostwaker(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{U}");
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.WIZARD);
         this.power = new MageInt(1);
         this.toughness = new MageInt(1);
 
-        // {tap}: Target land becomes an artifact in addition to its other types until end of turn.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new AddCardTypeTargetEffect(Duration.EndOfTurn, CardType.ARTIFACT), new TapSourceCost());
-        Target target = new TargetLandPermanent();
-        ability.addTarget(target);
+        // {U}, {T}: Target snow land becomes a 2/2 blue Elemental creature with flying. It's still a land.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new BecomesCreatureTargetEffect(new BalduvianFrostwakerToken(), false, true, Duration.Custom), new ManaCostsImpl("{U}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetPermanent(filter));
         this.addAbility(ability);
     }
 
-    public MyrLandshaper(final MyrLandshaper card) {
+    public BalduvianFrostwaker(final BalduvianFrostwaker card) {
         super(card);
     }
 
     @Override
-    public MyrLandshaper copy() {
-        return new MyrLandshaper(this);
+    public BalduvianFrostwaker copy() {
+        return new BalduvianFrostwaker(this);
+    }
+}
+
+class BalduvianFrostwakerToken extends Token {
+
+    public BalduvianFrostwakerToken() {
+        super("Elemental", "2/2 blue Elemental creature with flying");
+        this.cardType.add(CardType.CREATURE);
+        color.setBlue(true);
+        subtype.add(SubType.ELEMENTAL);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+        this.addAbility(FlyingAbility.getInstance());
     }
 }

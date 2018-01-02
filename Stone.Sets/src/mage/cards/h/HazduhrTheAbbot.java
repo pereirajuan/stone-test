@@ -25,13 +25,14 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.d;
+package mage.cards.h;
 
 import java.util.UUID;
 import mage.MageInt;
 import mage.ObjectColor;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.RedirectionEffect;
 import mage.cards.CardImpl;
@@ -41,66 +42,72 @@ import mage.constants.SubType;
 import mage.constants.Duration;
 import mage.constants.SuperType;
 import mage.constants.Zone;
-import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.filter.predicate.mageobject.ColorPredicate;
 import mage.game.Game;
 import mage.game.events.GameEvent;
 import mage.game.permanent.Permanent;
 import mage.target.TargetPermanent;
-import mage.target.common.TargetCreaturePermanent;
+import mage.target.common.TargetControlledCreaturePermanent;
 
 /**
  *
- * @author TheElk801
+ * @author TheElk801 & L_J
  */
-public class DaughterOfAutumn extends CardImpl {
+public class HazduhrTheAbbot extends CardImpl {
 
-    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("white creature");
+    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("white creature you control");
 
     static {
         filter.add(new ColorPredicate(ObjectColor.WHITE));
     }
 
-    public DaughterOfAutumn(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{G}{G}");
-
+    public HazduhrTheAbbot(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{3}{W}{W}");
         addSuperType(SuperType.LEGENDARY);
-        this.subtype.add(SubType.AVATAR);
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.CLERIC);
         this.power = new MageInt(2);
-        this.toughness = new MageInt(4);
+        this.toughness = new MageInt(5);
 
-        // {W}: The next 1 damage that would be dealt to target white creature this turn is dealt to Daughter of Autumn instead.
-        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DaughterOfAutumnPreventDamageTargetEffect(Duration.EndOfTurn, 1), new ManaCostsImpl("{W}"));
-        ability.addTarget(new TargetCreaturePermanent(filter));
+        // {X}, {T}: The next X damage that would be dealt this turn to target white creature you control is dealt to Hazduhr the Abbot instead.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new HazduhrTheAbbotRedirectDamageEffect(Duration.EndOfTurn), new ManaCostsImpl("{X}"));
+        ability.addCost(new TapSourceCost());
+        ability.addTarget(new TargetControlledCreaturePermanent(filter));
         this.addAbility(ability);
     }
 
-    public DaughterOfAutumn(final DaughterOfAutumn card) {
+    public HazduhrTheAbbot(final HazduhrTheAbbot card) {
         super(card);
     }
 
     @Override
-    public DaughterOfAutumn copy() {
-        return new DaughterOfAutumn(this);
+    public HazduhrTheAbbot copy() {
+        return new HazduhrTheAbbot(this);
     }
 }
 
-class DaughterOfAutumnPreventDamageTargetEffect extends RedirectionEffect {
+class HazduhrTheAbbotRedirectDamageEffect extends RedirectionEffect {
 
-    private static FilterCreaturePermanent filter = new FilterCreaturePermanent();
+    private static FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent();
 
-    public DaughterOfAutumnPreventDamageTargetEffect(Duration duration, int amount) {
-        super(duration, amount, true);
-        staticText = "The next " + amount + " damage that would be dealt to target white creature this turn is dealt to {this} instead";
+    public HazduhrTheAbbotRedirectDamageEffect(Duration duration) {
+        super(duration, 0, true);
+        this.staticText = "The next X damage that would be dealt this turn to target white creature you control is dealt to {this} instead";
     }
 
-    public DaughterOfAutumnPreventDamageTargetEffect(final DaughterOfAutumnPreventDamageTargetEffect effect) {
+    public HazduhrTheAbbotRedirectDamageEffect(final HazduhrTheAbbotRedirectDamageEffect effect) {
         super(effect);
+    }
+    
+    @Override
+    public void init(Ability source, Game game) {
+        amountToRedirect = source.getManaCostsToPay().getX();
     }
 
     @Override
-    public DaughterOfAutumnPreventDamageTargetEffect copy() {
-        return new DaughterOfAutumnPreventDamageTargetEffect(this);
+    public HazduhrTheAbbotRedirectDamageEffect copy() {
+        return new HazduhrTheAbbotRedirectDamageEffect(this);
     }
 
     @Override

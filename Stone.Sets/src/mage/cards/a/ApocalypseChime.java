@@ -25,41 +25,55 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.f;
+package mage.cards.a;
 
 import java.util.UUID;
-import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
-import mage.abilities.condition.common.LiveLostLastTurnCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.DestroyAllEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.TargetController;
-import mage.game.permanent.token.SoldierToken;
+import mage.constants.Zone;
+import mage.filter.FilterPermanent;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.other.ExpansionSetPredicate;
+import mage.filter.predicate.permanent.TokenPredicate;
 
 /**
  *
- * @author LevelX2
+ * @author L_J
  */
-public class FirstResponse extends CardImpl {
+public class ApocalypseChime extends CardImpl {
 
-    public FirstResponse(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{3}{W}");
+    private static final FilterPermanent filter = new FilterPermanent("nontoken permanents with a name originally printed in the Homelands expansion");
 
-        // At the beginning of each upkeep, if you lost life last turn, create a 1/1 white Soldier creature token.
-        this.addAbility(new ConditionalTriggeredAbility(
-                new BeginningOfUpkeepTriggeredAbility(new CreateTokenEffect(new SoldierToken()), TargetController.ANY, false),
-                LiveLostLastTurnCondition.instance,
-                "At the beginning of each upkeep, if you lost life last turn, create a 1/1 white Soldier creature token."));
+    static {
+        filter.add(Predicates.and(
+                Predicates.not(new TokenPredicate()),
+                new ExpansionSetPredicate("HML")
+        ));
     }
 
-    public FirstResponse(final FirstResponse card) {
+    public ApocalypseChime(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId,setInfo,new CardType[]{CardType.ARTIFACT},"{2}");
+
+        // {2}, {T}, Sacrifice Apocalypse Chime: Destroy all nontoken permanents with a name originally printed in the Homelands expansion. They can't be regenerated.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DestroyAllEffect(filter, true), new ManaCostsImpl("{2}"));
+        ability.addCost(new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
+        this.addAbility(ability);
+    }
+
+    public ApocalypseChime(final ApocalypseChime card) {
         super(card);
     }
 
     @Override
-    public FirstResponse copy() {
-        return new FirstResponse(this);
+    public ApocalypseChime copy() {
+        return new ApocalypseChime(this);
     }
 }

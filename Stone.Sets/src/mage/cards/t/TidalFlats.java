@@ -25,20 +25,20 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.h;
+package mage.cards.t;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import mage.ObjectColor;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleActivatedAbility;
 import mage.abilities.costs.Cost;
-import mage.abilities.costs.common.SacrificeTargetCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.effects.common.PreventDamageByTargetEffect;
+import mage.abilities.effects.common.continuous.GainAbilityTargetEffect;
+import mage.abilities.keyword.FirstStrikeAbility;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
@@ -46,61 +46,56 @@ import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.constants.Zone;
 import mage.filter.common.FilterAttackingCreature;
-import mage.filter.common.FilterControlledCreaturePermanent;
-import mage.filter.predicate.mageobject.ColorPredicate;
+import mage.filter.predicate.Predicates;
+import mage.filter.predicate.mageobject.AbilityPredicate;
 import mage.game.Game;
+import mage.game.combat.CombatGroup;
 import mage.game.permanent.Permanent;
 import mage.players.Player;
-import mage.target.common.TargetControlledCreaturePermanent;
 import mage.target.targetpointer.FixedTarget;
 
 /**
  *
  * @author L_J
  */
-public class Heroism extends CardImpl {
+public class TidalFlats extends CardImpl {
 
-    private static final FilterControlledCreaturePermanent filter = new FilterControlledCreaturePermanent("a white creature");
-    static {
-        filter.add(new ColorPredicate(ObjectColor.WHITE));
-    }
-
-    public Heroism(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.ENCHANTMENT},"{2}{W}");
+    public TidalFlats(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId,setInfo,new CardType[]{CardType.ENCHANTMENT},"{U}");
         
-        // Sacrifice a white creature: For each attacking red creature, prevent all combat damage that would be dealt by that creature this turn unless its controller pays {2}{R}.
-        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new HeroismEffect(), new SacrificeTargetCost(new TargetControlledCreaturePermanent(1,1, filter, true))));
+        // {U}{U}: For each attacking creature without flying, its controller may pay {1}. If he or she doesn't, creatures you control blocking that creature gain first strike until end of turn.
+        this.addAbility(new SimpleActivatedAbility(Zone.BATTLEFIELD, new TidalFlatsEffect(), new ManaCostsImpl("{U}{U}")));
     }
 
-    public Heroism(final Heroism card) {
+    public TidalFlats(final TidalFlats card) {
         super(card);
     }
 
     @Override
-    public Heroism copy() {
-        return new Heroism(this);
+    public TidalFlats copy() {
+        return new TidalFlats(this);
     }
 }
 
-class HeroismEffect extends OneShotEffect {
+class TidalFlatsEffect extends OneShotEffect {
     
-    private static final FilterAttackingCreature filter = new FilterAttackingCreature("attacking red creature");
+    private static final FilterAttackingCreature filter = new FilterAttackingCreature("attacking creature without flying");
     static {
-        filter.add(new ColorPredicate(ObjectColor.RED));
+        filter.add(Predicates.not(new AbilityPredicate(FlyingAbility.class)));
     }
 
-    public HeroismEffect() {
+    public TidalFlatsEffect() {
         super(Outcome.Benefit);
-        this.staticText = "For each attacking red creature, prevent all combat damage that would be dealt by that creature this turn unless its controller pays {2}{R}";
+        this.staticText = "For each attacking creature without flying, its controller may pay {1}. If he or she doesn't, creatures you control blocking that creature gain first strike until end of turn";
     }
 
-    public HeroismEffect(final HeroismEffect effect) {
+    public TidalFlatsEffect(final TidalFlatsEffect effect) {
         super(effect);
     }
 
     @Override
-    public HeroismEffect copy() {
-        return new HeroismEffect(this);
+    public TidalFlatsEffect copy() {
+        return new TidalFlatsEffect(this);
     }
 
     @Override
@@ -109,29 +104,38 @@ class HeroismEffect extends OneShotEffect {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
             Player player = game.getPlayer(game.getActivePlayerId());
-            Cost cost = new ManaCostsImpl("{2}{R}");
-            List<Permanent> permanentsToPrevent = new ArrayList<>();
+            Cost cost = new ManaCostsImpl("{1}");            
+            List<Permanent> affectedPermanents = new ArrayList<>();
             for (Permanent permanent : game.getState().getBattlefield().getAllActivePermanents(filter, player.getId(), game)) {
                 cost.clearPaid();
-                String message = "Pay " + cost.getText() + "? If you don't, " + permanent.getLogName() + "'s combat damage will be prevented this turn.";
-                if (player != null && player.chooseUse(Outcome.Neutral, message, source, game)) {
+                String message = "Pay " + cost.getText() + " for " + permanent.getLogName() + "? If you don't, creatures " + controller.getLogName() + " controls blocking it gain first strike until end of turn.";
+                if (player != null && player.chooseUse(Outcome.Benefit, message, source, game)) {
                     if (cost.pay(source, game, source.getSourceId(), player.getId(), false, null)) {
                         game.informPlayers(player.getLogName() + " paid " + cost.getText() + " for " + permanent.getLogName());
                         continue;
                     } else {
                         game.informPlayers(player.getLogName() + " didn't pay " + cost.getText() + " for " + permanent.getLogName());
-                        permanentsToPrevent.add(permanent);
+                        affectedPermanents.add(permanent);
                     }
                 } else {
                     game.informPlayers(player.getLogName() + " didn't pay " + cost.getText() + " for " + permanent.getLogName());
-                    permanentsToPrevent.add(permanent);
+                    affectedPermanents.add(permanent);
                 }
             }
 
-            for (Permanent permanent : permanentsToPrevent) {
-                ContinuousEffect effect = new PreventDamageByTargetEffect(Duration.EndOfTurn, Integer.MAX_VALUE, true);
-                effect.setTargetPointer(new FixedTarget(permanent.getId()));
-                game.addEffect(effect, source);
+            for (Permanent permanent : affectedPermanents) {
+                CombatGroup group = game.getCombat().findGroup(permanent.getId());
+                if (group != null) {
+                    for (UUID blockerId : group.getBlockers()) {
+                        Permanent blocker = game.getPermanent(blockerId);
+                        if (blocker != null && blocker.getControllerId() == controller.getId()) {
+                            ContinuousEffect effect = new GainAbilityTargetEffect(FirstStrikeAbility.getInstance(), Duration.EndOfTurn);
+                            effect.setTargetPointer(new FixedTarget(blocker.getId()));
+                            game.addEffect(effect, source);
+                        }
+                    }
+                }
+                
             }
             return true;
         }

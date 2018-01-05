@@ -25,60 +25,57 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.l;
+package mage.cards.d;
 
 import java.util.UUID;
-import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
+import mage.MageInt;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.common.continuous.BoostSourceEffect;
+import mage.abilities.effects.common.continuous.GainAbilityControlledEffect;
+import mage.constants.*;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.SubType;
-import mage.constants.Duration;
-import mage.constants.Outcome;
-import mage.constants.Zone;
-import mage.target.TargetPermanent;
-import mage.target.common.TargetCreatureOrPlayer;
-import mage.target.common.TargetCreaturePermanent;
+import mage.filter.common.FilterAttackingCreature;
+import mage.filter.predicate.mageobject.SubtypePredicate;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author LevelX2
+ * @author JayDi85
  */
-public class LightningDiadem extends CardImpl {
+public class DireFleetNeckbreaker extends CardImpl {
 
-    public LightningDiadem(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.ENCHANTMENT},"{5}{R}");
-        this.subtype.add(SubType.AURA);
-
-
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
-        this.addAbility(ability);
-
-        // When Lightning Diadem enters the battlefield, it deals 2 damage to target creature or player.
-        ability = new EntersBattlefieldTriggeredAbility(new DamageTargetEffect(2, "it"));
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
-
-        // Enchanted creature gets +2/+2.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(2,2,Duration.WhileOnBattlefield)));
+    private static final FilterAttackingCreature filterYourAttackingPirates = new FilterAttackingCreature("Attacking Pirates");
+    static {
+        filterYourAttackingPirates.add(new ControllerPredicate(TargetController.YOU));
+        filterYourAttackingPirates.add(new SubtypePredicate(SubType.PIRATE));
     }
 
-    public LightningDiadem(final LightningDiadem card) {
+    public DireFleetNeckbreaker(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{2}{B}{R}");
+
+        this.subtype.add(SubType.ORC);
+        this.subtype.add(SubType.PIRATE);
+        this.power = new MageInt(3);
+        this.toughness = new MageInt(2);
+
+        // Attacking Pirates you control get +2/+0.
+        GainAbilityControlledEffect gainEffect = new GainAbilityControlledEffect(
+                new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostSourceEffect(2, 0, Duration.Custom)),
+                Duration.WhileOnBattlefield,
+                filterYourAttackingPirates,
+                false
+        );
+        gainEffect.setText("Attacking Pirates you control get +2/+0.");
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, gainEffect));
+    }
+
+    public DireFleetNeckbreaker(final DireFleetNeckbreaker card) {
         super(card);
     }
 
     @Override
-    public LightningDiadem copy() {
-        return new LightningDiadem(this);
+    public DireFleetNeckbreaker copy() {
+        return new DireFleetNeckbreaker(this);
     }
 }

@@ -25,44 +25,43 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.p;
+package mage.cards.s;
 
 import java.util.UUID;
 import mage.MageInt;
-import mage.abilities.Ability;
-import mage.abilities.common.DiesTriggeredAbility;
-import mage.abilities.effects.common.DamageTargetEffect;
+import mage.abilities.keyword.CantBeBlockedSourceAbility;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.SubType;
-import mage.target.common.TargetCreatureOrPlayer;
+import mage.constants.*;
 
 /**
  *
- * @author Loki
+ * @author JayDi85
  */
-public class PerilousMyr extends CardImpl {
+public class StormFleetSprinter extends CardImpl {
 
-    public PerilousMyr(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{2}");
-        this.subtype.add(SubType.MYR);
-        this.power = new MageInt(1);
-        this.toughness = new MageInt(1);
+    public StormFleetSprinter(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{U}{R}");
 
-        // When Perilous Myr dies, it deals 2 damage to target creature or player.
-        Ability ability = new DiesTriggeredAbility(new DamageTargetEffect(2, "it"), false);
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.PIRATE);
+        this.power = new MageInt(2);
+        this.toughness = new MageInt(2);
+
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
+
+        // Storm Fleet Sprinter can’t be blocked.
+        this.addAbility(new CantBeBlockedSourceAbility());
     }
 
-    public PerilousMyr(final PerilousMyr card) {
+    public StormFleetSprinter(final StormFleetSprinter card) {
         super(card);
     }
 
     @Override
-    public PerilousMyr copy() {
-        return new PerilousMyr(this);
+    public StormFleetSprinter copy() {
+        return new StormFleetSprinter(this);
     }
-
 }

@@ -25,60 +25,49 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.l;
+package mage.cards.d;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.effects.Effect;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.abilities.effects.common.LoseLifeSourceControllerEffect;
+import mage.constants.*;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.CardType;
-import mage.constants.SubType;
-import mage.constants.Duration;
-import mage.constants.Outcome;
-import mage.constants.Zone;
-import mage.target.TargetPermanent;
-import mage.target.common.TargetCreatureOrPlayer;
-import mage.target.common.TargetCreaturePermanent;
 
 /**
  *
- * @author LevelX2
+ * @author JayDi85
  */
-public class LightningDiadem extends CardImpl {
+public class DuskLegionZealot  extends CardImpl {
 
-    public LightningDiadem(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.ENCHANTMENT},"{5}{R}");
-        this.subtype.add(SubType.AURA);
+    public DuskLegionZealot (UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{B}");
 
+        this.subtype.add(SubType.VAMPIRE);
+        this.subtype.add(SubType.SOLDIER);
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
+        // When Dusk Legion Zealot enters the battlefield, you draw a card and you lose 1 life.
+        Effect drawEffect = new DrawCardSourceControllerEffect(1);
+        drawEffect.setText("you draw a card");
+        Ability ability = new EntersBattlefieldTriggeredAbility(drawEffect);
+        Effect lifeEffect = new LoseLifeSourceControllerEffect(1);
+        lifeEffect.setText("and you lose 1 life");
+        ability.addEffect(lifeEffect);
         this.addAbility(ability);
-
-        // When Lightning Diadem enters the battlefield, it deals 2 damage to target creature or player.
-        ability = new EntersBattlefieldTriggeredAbility(new DamageTargetEffect(2, "it"));
-        ability.addTarget(new TargetCreatureOrPlayer());
-        this.addAbility(ability);
-
-        // Enchanted creature gets +2/+2.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(2,2,Duration.WhileOnBattlefield)));
     }
 
-    public LightningDiadem(final LightningDiadem card) {
+    public DuskLegionZealot (final DuskLegionZealot  card) {
         super(card);
     }
 
     @Override
-    public LightningDiadem copy() {
-        return new LightningDiadem(this);
+    public DuskLegionZealot  copy() {
+        return new DuskLegionZealot (this);
     }
 }

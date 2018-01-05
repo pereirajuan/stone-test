@@ -1,3 +1,5 @@
+package mage.cards.f;
+
 /*
  *  Copyright 2010 BetaSteward_at_googlemail.com. All rights reserved.
  *
@@ -25,60 +27,54 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.l;
 
-import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.common.EntersBattlefieldTriggeredAbility;
-import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.effects.common.AttachEffect;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.common.SacrificeSourceCost;
+import mage.abilities.costs.common.TapSourceCost;
 import mage.abilities.effects.common.DamageTargetEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.keyword.EnchantAbility;
+import mage.abilities.keyword.HasteAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.SubType;
-import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.Zone;
-import mage.target.TargetPermanent;
 import mage.target.common.TargetCreatureOrPlayer;
-import mage.target.common.TargetCreaturePermanent;
+
+import java.util.UUID;
+
 
 /**
  *
- * @author LevelX2
+ * @author JayDi85
  */
-public class LightningDiadem extends CardImpl {
+public class FanaticalFirebrand extends CardImpl {
 
-    public LightningDiadem(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId,setInfo,new CardType[]{CardType.ENCHANTMENT},"{5}{R}");
-        this.subtype.add(SubType.AURA);
+    public FanaticalFirebrand(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{R}");
 
+        this.subtype.add(SubType.GOBLIN);
+        this.subtype.add(SubType.PIRATE);
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // Enchant creature
-        TargetPermanent auraTarget = new TargetCreaturePermanent();
-        this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
-        Ability ability = new EnchantAbility(auraTarget.getTargetName());
-        this.addAbility(ability);
+        // Haste
+        this.addAbility(HasteAbility.getInstance());
 
-        // When Lightning Diadem enters the battlefield, it deals 2 damage to target creature or player.
-        ability = new EntersBattlefieldTriggeredAbility(new DamageTargetEffect(2, "it"));
+        // {T}, Sacrifice Fanatical Firebrand: It deals 1 damage to target creature or player.
+        Ability ability = new SimpleActivatedAbility(Zone.BATTLEFIELD, new DamageTargetEffect(1, "It"), new TapSourceCost());
+        ability.addCost(new SacrificeSourceCost());
         ability.addTarget(new TargetCreatureOrPlayer());
         this.addAbility(ability);
-
-        // Enchanted creature gets +2/+2.
-        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(2,2,Duration.WhileOnBattlefield)));
     }
 
-    public LightningDiadem(final LightningDiadem card) {
+    public FanaticalFirebrand(final FanaticalFirebrand card) {
         super(card);
     }
 
     @Override
-    public LightningDiadem copy() {
-        return new LightningDiadem(this);
+    public FanaticalFirebrand copy() {
+        return new FanaticalFirebrand(this);
     }
 }

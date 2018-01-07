@@ -25,35 +25,56 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.cards.g;
 
 import java.util.UUID;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.Ability;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.costs.common.TapSourceCost;
+import mage.abilities.costs.mana.GenericManaCost;
+import mage.abilities.effects.common.AddManaOfAnyColorEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.InfoEffect;
+import mage.abilities.mana.SimpleManaAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.filter.StaticFilters;
-import mage.target.TargetSpell;
+import mage.constants.Zone;
+import mage.game.permanent.token.GoldForgeGarrisonGolemToken;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class RemoveSoul extends CardImpl {
+public class GoldForgeGarrison extends CardImpl {
 
-    public RemoveSoul(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public GoldForgeGarrison(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.LAND}, "");
 
-        this.getSpellAbility().addTarget(new TargetSpell(StaticFilters.FILTER_SPELL_CREATURE));
-        this.getSpellAbility().addEffect(new CounterTargetEffect());
+        this.nightCard = true;
+
+        // <i>(Transforms from Golden Guardian.)</i>
+        Ability ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new InfoEffect("<i>(Transforms from Golden Guardian.)</i>"));
+        ability.setRuleAtTheTop(true);
+        this.addAbility(ability);
+
+        // {T}: Add two mana of any one color to your mana pool.
+        this.addAbility(new SimpleManaAbility(Zone.BATTLEFIELD, new AddManaOfAnyColorEffect(2), new TapSourceCost()));
+
+        // {4}, {T}: Create a 4/4 colorless Golem artifact creature token.
+        ability = new SimpleActivatedAbility(new CreateTokenEffect(new GoldForgeGarrisonGolemToken(), 1), new GenericManaCost(4));
+        ability.addCost(new TapSourceCost());
+        this.addAbility(ability);
+
     }
 
-    public RemoveSoul(final RemoveSoul card) {
+    public GoldForgeGarrison(final GoldForgeGarrison card) {
         super(card);
     }
 
     @Override
-    public RemoveSoul copy() {
-        return new RemoveSoul(this);
+    public GoldForgeGarrison copy() {
+        return new GoldForgeGarrison(this);
     }
 }

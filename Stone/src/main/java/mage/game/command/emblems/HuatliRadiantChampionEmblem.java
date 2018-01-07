@@ -11,7 +11,7 @@
  *        of conditions and the following disclaimer in the documentation and/or other materials
  *        provided with the distribution.
  *
- *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ *  THIS SOFTWARE IS PROVIDED BY BetaSteward_at_googlemail.com ..AS IS.. AND ANY EXPRESS OR IMPLIED
  *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BetaSteward_at_googlemail.com OR
  *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
@@ -25,35 +25,28 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.game.command.emblems;
 
-import java.util.UUID;
-import mage.abilities.effects.common.CounterTargetEffect;
-import mage.cards.CardImpl;
-import mage.cards.CardSetInfo;
-import mage.constants.CardType;
+import mage.abilities.Ability;
+import mage.abilities.common.EntersBattlefieldControlledTriggeredAbility;
+import mage.abilities.effects.common.DrawCardSourceControllerEffect;
+import mage.constants.Zone;
 import mage.filter.StaticFilters;
-import mage.target.TargetSpell;
+import mage.game.command.Emblem;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class RemoveSoul extends CardImpl {
+public class HuatliRadiantChampionEmblem extends Emblem {
 
-    public RemoveSoul(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public HuatliRadiantChampionEmblem() {
+        this.setName("Emblem Huatli");
 
-        this.getSpellAbility().addTarget(new TargetSpell(StaticFilters.FILTER_SPELL_CREATURE));
-        this.getSpellAbility().addEffect(new CounterTargetEffect());
-    }
-
-    public RemoveSoul(final RemoveSoul card) {
-        super(card);
-    }
-
-    @Override
-    public RemoveSoul copy() {
-        return new RemoveSoul(this);
+        // Whenever a creature enters the battlefield under your control, you may draw a card.
+        Ability ability = new EntersBattlefieldControlledTriggeredAbility(Zone.COMMAND,
+                new DrawCardSourceControllerEffect(1), StaticFilters.FILTER_CONTROLLED_A_CREATURE, true);
+        this.getAbilities().add(ability);
+        this.setExpansionSetCodeForImage("RIX");
     }
 }

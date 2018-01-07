@@ -25,35 +25,39 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.cards.g;
 
 import java.util.UUID;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.dynamicvalue.common.PermanentsOnBattlefieldCount;
+import mage.abilities.effects.common.LoseLifeOpponentsEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.filter.StaticFilters;
-import mage.target.TargetSpell;
+import mage.constants.TargetController;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.permanent.ControllerPredicate;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class RemoveSoul extends CardImpl {
+public class GruesomeFate extends CardImpl {
 
-    public RemoveSoul(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public GruesomeFate(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.SORCERY}, "{7}{5}");
 
-        this.getSpellAbility().addTarget(new TargetSpell(StaticFilters.FILTER_SPELL_CREATURE));
-        this.getSpellAbility().addEffect(new CounterTargetEffect());
+        // Each opponent loses 1 life for each creature you control.
+        FilterCreaturePermanent filter = new FilterCreaturePermanent("creature you control");
+        filter.add(new ControllerPredicate(TargetController.YOU));
+        this.getSpellAbility().addEffect(new LoseLifeOpponentsEffect(new PermanentsOnBattlefieldCount(filter)));
     }
 
-    public RemoveSoul(final RemoveSoul card) {
+    public GruesomeFate(final GruesomeFate card) {
         super(card);
     }
 
     @Override
-    public RemoveSoul copy() {
-        return new RemoveSoul(this);
+    public GruesomeFate copy() {
+        return new GruesomeFate(this);
     }
 }

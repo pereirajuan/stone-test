@@ -25,35 +25,45 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.cards.g;
 
 import java.util.UUID;
-import mage.abilities.effects.common.CounterTargetEffect;
+import mage.MageInt;
+import mage.abilities.common.DiesTriggeredAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.keyword.DefenderAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.filter.StaticFilters;
-import mage.target.TargetSpell;
+import mage.constants.SubType;
+import mage.game.permanent.token.TreasureToken;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class RemoveSoul extends CardImpl {
+public class GleamingBarrier extends CardImpl {
 
-    public RemoveSoul(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public GleamingBarrier(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{2}");
 
-        this.getSpellAbility().addTarget(new TargetSpell(StaticFilters.FILTER_SPELL_CREATURE));
-        this.getSpellAbility().addEffect(new CounterTargetEffect());
+        this.subtype.add(SubType.WALL);
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(4);
+
+        // Defender
+        this.addAbility(DefenderAbility.getInstance());
+
+        // When Gleaming Barrier dies, create a colorless Treasure artifact token with "{t}, Sacrifice this artifact: Add one mana of any color to your mana pool."
+        this.addAbility(new DiesTriggeredAbility(new CreateTokenEffect(new TreasureToken())));
     }
 
-    public RemoveSoul(final RemoveSoul card) {
+    public GleamingBarrier(final GleamingBarrier card) {
         super(card);
     }
 
     @Override
-    public RemoveSoul copy() {
-        return new RemoveSoul(this);
+    public GleamingBarrier copy() {
+        return new GleamingBarrier(this);
     }
 }

@@ -25,35 +25,40 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.r;
+package mage.cards.h;
 
 import java.util.UUID;
 import mage.abilities.effects.common.CounterTargetEffect;
+import mage.abilities.effects.common.CreateTokenEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.filter.StaticFilters;
+import mage.game.permanent.token.TreasureToken;
 import mage.target.TargetSpell;
 
 /**
  *
- * @author North
+ * @author LevelX2
  */
-public class RemoveSoul extends CardImpl {
+public class Hornswoggle extends CardImpl {
 
-    public RemoveSoul(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public Hornswoggle(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{2}{U}");
 
-        this.getSpellAbility().addTarget(new TargetSpell(StaticFilters.FILTER_SPELL_CREATURE));
+        // Counter target creature spell. You create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color to your mana pool."
         this.getSpellAbility().addEffect(new CounterTargetEffect());
+        this.getSpellAbility().addTarget(new TargetSpell(StaticFilters.FILTER_SPELL_CREATURE));
+        this.getSpellAbility().addEffect(new CreateTokenEffect(new TreasureToken())
+                .setText("You create a colorless Treasure artifact token with \"{T}, Sacrifice this artifact: Add one mana of any color to your mana pool.\""));
     }
 
-    public RemoveSoul(final RemoveSoul card) {
+    public Hornswoggle(final Hornswoggle card) {
         super(card);
     }
 
     @Override
-    public RemoveSoul copy() {
-        return new RemoveSoul(this);
+    public Hornswoggle copy() {
+        return new Hornswoggle(this);
     }
 }

@@ -25,78 +25,80 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.p;
+package mage.cards.c;
 
-import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.condition.common.KickedCondition;
+import mage.abilities.common.BeginningOfUpkeepTriggeredAbility;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.effects.common.CreateTokenEffect;
+import mage.abilities.effects.common.SacrificeSourceEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.constants.SubType;
+import mage.constants.TargetController;
 import mage.game.Game;
-import mage.game.stack.Spell;
+import mage.game.permanent.token.GiantChickenToken;
 import mage.players.Player;
-import mage.target.TargetSpell;
+
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author ciaccona007
  */
-public class Prohibit extends CardImpl {
 
-    public Prohibit(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+public class ChickenEgg extends CardImpl {
 
-        // Kicker {2}
-        this.addAbility(new KickerAbility("{2}"));
+    public ChickenEgg(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{R}");
 
-        // Counter target spell if its converted mana cost is 2 or less. If Prohibit was kicked, counter that spell if its converted mana cost is 4 or less instead.
-        this.getSpellAbility().addEffect(new ProhibitEffect());
-        this.getSpellAbility().addTarget(new TargetSpell());
+        this.subtype.add(SubType.EGG);
+        this.power = new MageInt(0);
+        this.toughness = new MageInt(1);
+
+        // At the beginning of your upkeep, roll a six-sided die. If you roll a 6, sacrifice Chicken Egg and create a 4/4 red Giant Chicken creature token.
+        this.addAbility(new BeginningOfUpkeepTriggeredAbility(new ChickenEggEffect(), TargetController.YOU, false));
     }
 
-    public Prohibit(final Prohibit card) {
+    public ChickenEgg(final ChickenEgg card) {
         super(card);
     }
 
     @Override
-    public Prohibit copy() {
-        return new Prohibit(this);
+    public ChickenEgg copy() {
+        return new ChickenEgg(this);
     }
 }
 
-class ProhibitEffect extends OneShotEffect {
+class ChickenEggEffect extends OneShotEffect {
 
-    ProhibitEffect() {
-        super(Outcome.DestroyPermanent);
-        this.staticText = "Counter target spell if its converted mana cost is 2 or less. If {this} was kicked, counter that spell if its converted mana cost is 4 or less instead.";
+    ChickenEggEffect() {
+        super(Outcome.Benefit);
+        this.staticText = "roll a six-sided die. If you roll a 6, sacrifice {this} and create a 4/4 red Giant Chicken creature token";
     }
 
-    ProhibitEffect(final ProhibitEffect effect) {
+    ChickenEggEffect(final ChickenEggEffect effect) {
         super(effect);
-    }
-
-    @Override
-    public ProhibitEffect copy() {
-        return new ProhibitEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            Spell targetSpell = game.getSpell(this.getTargetPointer().getFirst(game, source));
-            if (targetSpell != null) {
-                int cmc = targetSpell.getConvertedManaCost();
-                if (cmc <= 2 || (KickedCondition.instance.apply(game, source) && cmc <= 4)) {
-                    targetSpell.counter(source.getSourceId(), game);
-                }
+            int result = controller.rollDice(game, 6);
+            if (result == 6) {
+                new SacrificeSourceEffect().apply(game, source);
+                return (new CreateTokenEffect(new GiantChickenToken(), 1)).apply(game, source);
             }
-            return true;
         }
         return false;
+    }
+
+    @Override
+    public ChickenEggEffect copy() {
+        return new ChickenEggEffect(this);
     }
 }

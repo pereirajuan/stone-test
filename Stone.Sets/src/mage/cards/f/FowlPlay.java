@@ -25,73 +25,68 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.s;
+package mage.cards.f;
 
 import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
-import mage.abilities.common.delayed.AtTheBeginOfNextEndStepDelayedTriggeredAbility;
-import mage.abilities.condition.InvertCondition;
-import mage.abilities.condition.common.ControllerAttackedThisTurnCondition;
-import mage.abilities.decorator.ConditionalTriggeredAbility;
-import mage.abilities.effects.Effect;
 import mage.abilities.effects.common.AttachEffect;
-import mage.abilities.effects.common.SacrificeSourceEffect;
-import mage.abilities.effects.common.continuous.BoostEnchantedEffect;
-import mage.abilities.effects.common.continuous.GainAbilityAttachedEffect;
+import mage.abilities.effects.common.continuous.BecomesCreatureAttachedEffect;
+import mage.constants.Outcome;
+import mage.target.TargetPermanent;
 import mage.abilities.keyword.EnchantAbility;
-import mage.abilities.keyword.FirstStrikeAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
-import mage.constants.AttachmentType;
 import mage.constants.CardType;
 import mage.constants.Duration;
-import mage.constants.Outcome;
 import mage.constants.SubType;
-import mage.constants.TargetController;
 import mage.constants.Zone;
-import mage.target.TargetPermanent;
+import mage.game.permanent.token.Token;
 import mage.target.common.TargetCreaturePermanent;
-import mage.watchers.common.AttackedThisTurnWatcher;
 
 /**
  *
- * @author LevelX2
+ * @author spjspj
  */
-public class SeeRed extends CardImpl {
+public class FowlPlay extends CardImpl {
 
-    public SeeRed(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{1}{R}");
+    public FowlPlay(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ENCHANTMENT}, "{2}{U}");
 
         this.subtype.add(SubType.AURA);
 
-        // Enchant creature
+        // Enchant creature 
         TargetPermanent auraTarget = new TargetCreaturePermanent();
         this.getSpellAbility().addTarget(auraTarget);
-        this.getSpellAbility().addEffect(new AttachEffect(Outcome.BoostCreature));
+        this.getSpellAbility().addEffect(new AttachEffect(Outcome.AddAbility));
         Ability ability = new EnchantAbility(auraTarget.getTargetName());
         this.addAbility(ability);
 
-        // Enchanted creature gets +2/+1 and has first strike.
-        ability = new SimpleStaticAbility(Zone.BATTLEFIELD, new BoostEnchantedEffect(2, 1, Duration.WhileOnBattlefield));
-        Effect effect = new GainAbilityAttachedEffect(FirstStrikeAbility.getInstance(), AttachmentType.AURA);
-        effect.setText("and has first strike");
-        ability.addEffect(effect);
-        this.addAbility(ability);
-
-        // At the beginning of your end step, if you didn't attack with a creature this turn, sacrifice See Red.
-        this.addAbility(new ConditionalTriggeredAbility(
-                new AtTheBeginOfNextEndStepDelayedTriggeredAbility(Zone.BATTLEFIELD, new SacrificeSourceEffect(), TargetController.YOU),
-                new InvertCondition(ControllerAttackedThisTurnCondition.instance),
-                "At the beginning of your end step, if you didn't attack with a creature this turn, sacrifice {this}."), new AttackedThisTurnWatcher());
+        // Enchanted creature is a Chicken with base power and toughness 1/1 and loses all abilities.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD,
+                new BecomesCreatureAttachedEffect(new FowlPlayToken(),
+                        "Enchanted creature is a Chicken with base power and toughness 1/1 and loses all abilities",
+                        Duration.WhileOnBattlefield, BecomesCreatureAttachedEffect.LoseType.ABILITIES_SUBTYPE_AND_PT)));
     }
 
-    public SeeRed(final SeeRed card) {
+    public FowlPlay(final FowlPlay card) {
         super(card);
     }
 
     @Override
-    public SeeRed copy() {
-        return new SeeRed(this);
+    public FowlPlay copy() {
+        return new FowlPlay(this);
+    }
+}
+
+class FowlPlayToken extends Token {
+
+    public FowlPlayToken() {
+        super("Chicken", "a Chicken with base power and toughness 1/1 with no abilities");
+        cardType.add(CardType.CREATURE);
+        subtype.add(SubType.CHICKEN);
+        power = new MageInt(1);
+        toughness = new MageInt(1);
     }
 }

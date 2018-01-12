@@ -25,42 +25,52 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.p;
+package mage.cards.t;
 
-import java.util.UUID;
-import mage.abilities.condition.common.CitysBlessingCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
-import mage.abilities.effects.keyword.AscendEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleActivatedAbility;
+import mage.abilities.costs.mana.ManaCostsImpl;
+import mage.abilities.effects.common.PutPermanentOnBattlefieldEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
-import mage.constants.Duration;
+import mage.constants.SubType;
+import mage.constants.SuperType;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreatureCard;
+
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author ciaccona007
  */
-public class PrideOfConquerors extends CardImpl {
+public class TimmyPowerGamer extends CardImpl {
 
-    public PrideOfConquerors(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{W}");
+    public TimmyPowerGamer(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId,setInfo,new CardType[]{CardType.CREATURE},"{2}{G}{G}");
 
-        // Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)
-        this.getSpellAbility().addEffect(new AscendEffect());
+        this.supertype.add(SuperType.LEGENDARY);
 
-        // Creatures you control get +1/+1 until end of turn. If you have the city's blessing, those creatures get +2/+2 until end of turn instead.
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(new BoostControlledEffect(2, 2, Duration.EndOfTurn),
-                new BoostControlledEffect(1, 1, Duration.EndOfTurn), CitysBlessingCondition.instance,
-                "Creatures you control get +1/+1 until end of turn. If you have the city's blessing, those creatures get +2/+2 until end of turn instead"));
+        this.subtype.add(SubType.HUMAN);
+        this.subtype.add(SubType.GAMER);
+
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
+
+        // {4}: You may put a creature card from your hand onto the battlefield.
+        SimpleActivatedAbility ability = new SimpleActivatedAbility(Zone.BATTLEFIELD,
+                new PutPermanentOnBattlefieldEffect(new FilterCreatureCard("a creature card")),
+                new ManaCostsImpl("{4}"));
+        this.addAbility(ability);
     }
 
-    public PrideOfConquerors(final PrideOfConquerors card) {
+    public TimmyPowerGamer(final TimmyPowerGamer card) {
         super(card);
     }
 
     @Override
-    public PrideOfConquerors copy() {
-        return new PrideOfConquerors(this);
+    public TimmyPowerGamer copy() {
+        return new TimmyPowerGamer(this);
     }
 }

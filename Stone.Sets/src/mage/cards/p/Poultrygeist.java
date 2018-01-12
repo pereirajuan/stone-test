@@ -27,76 +27,85 @@
  */
 package mage.cards.p;
 
-import java.util.UUID;
+import mage.MageInt;
 import mage.abilities.Ability;
-import mage.abilities.condition.common.KickedCondition;
+import mage.abilities.common.DiesCreatureTriggeredAbility;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.effects.common.counter.AddCountersSourceEffect;
+import mage.abilities.keyword.FlyingAbility;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Outcome;
+import mage.constants.SubType;
+import mage.counters.CounterType;
 import mage.game.Game;
-import mage.game.stack.Spell;
+import mage.game.permanent.Permanent;
 import mage.players.Player;
-import mage.target.TargetSpell;
+
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author ciaccona007
  */
-public class Prohibit extends CardImpl {
+public class Poultrygeist extends CardImpl {
 
-    public Prohibit(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public Poultrygeist(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId,setInfo,new CardType[]{CardType.CREATURE},"{2}{B}");
+        this.subtype.add(SubType.CHICKEN);
 
-        // Kicker {2}
-        this.addAbility(new KickerAbility("{2}"));
+        this.power = new MageInt(1);
+        this.toughness = new MageInt(1);
 
-        // Counter target spell if its converted mana cost is 2 or less. If Prohibit was kicked, counter that spell if its converted mana cost is 4 or less instead.
-        this.getSpellAbility().addEffect(new ProhibitEffect());
-        this.getSpellAbility().addTarget(new TargetSpell());
+        // Flying
+        this.addAbility(FlyingAbility.getInstance());
+
+        // Whenever a creature dies, you may roll a six-sided die. If you roll a 1, sacrifice Poultrygeist. Otherwise, put a +1/+1 counter on Poultrygeist.
+        Ability ability = new DiesCreatureTriggeredAbility(new PoultrygeistEffect(), true);
+        this.addAbility(ability);
     }
 
-    public Prohibit(final Prohibit card) {
+    public Poultrygeist(final Poultrygeist card) {
         super(card);
     }
 
     @Override
-    public Prohibit copy() {
-        return new Prohibit(this);
+    public Poultrygeist copy() {
+        return new Poultrygeist(this);
     }
 }
 
-class ProhibitEffect extends OneShotEffect {
+class PoultrygeistEffect extends OneShotEffect {
 
-    ProhibitEffect() {
-        super(Outcome.DestroyPermanent);
-        this.staticText = "Counter target spell if its converted mana cost is 2 or less. If {this} was kicked, counter that spell if its converted mana cost is 4 or less instead.";
+    PoultrygeistEffect() {
+        super(Outcome.BoostCreature);
+        this.staticText = "roll a six-sided die. If you roll a 1, sacrifice {this}. Otherwise, put a +1/+1 counter on {this}";
     }
 
-    ProhibitEffect(final ProhibitEffect effect) {
-        super(effect);
-    }
-
-    @Override
-    public ProhibitEffect copy() {
-        return new ProhibitEffect(this);
+    PoultrygeistEffect(final PoultrygeistEffect ability) {
+        super(ability);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            Spell targetSpell = game.getSpell(this.getTargetPointer().getFirst(game, source));
-            if (targetSpell != null) {
-                int cmc = targetSpell.getConvertedManaCost();
-                if (cmc <= 2 || (KickedCondition.instance.apply(game, source) && cmc <= 4)) {
-                    targetSpell.counter(source.getSourceId(), game);
+            int result = controller.rollDice(game, 6);
+            Permanent permanent = game.getPermanent(source.getSourceId());
+            if (permanent != null) {
+                if (result == 1) {
+                    return permanent.sacrifice(source.getSourceId(), game);
+                } else {
+                    return new AddCountersSourceEffect(CounterType.P1P1.createInstance()).apply(game, source);
                 }
             }
-            return true;
         }
         return false;
+    }
+
+    @Override
+    public PoultrygeistEffect copy() {
+        return new PoultrygeistEffect(this);
     }
 }

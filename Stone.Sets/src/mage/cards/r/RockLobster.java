@@ -25,42 +25,50 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.p;
+package mage.cards.r;
 
 import java.util.UUID;
-import mage.abilities.condition.common.CitysBlessingCondition;
-import mage.abilities.decorator.ConditionalContinuousEffect;
-import mage.abilities.effects.common.continuous.BoostControlledEffect;
-import mage.abilities.effects.keyword.AscendEffect;
+import mage.MageInt;
+import mage.abilities.common.SimpleStaticAbility;
+import mage.abilities.effects.common.combat.CantAttackBlockAllEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
 import mage.constants.Duration;
+import mage.constants.SubType;
+import mage.constants.Zone;
+import mage.filter.common.FilterCreaturePermanent;
+import mage.filter.predicate.mageobject.NamePredicate;
 
 /**
  *
- * @author LevelX2
+ * @author spjspj
  */
-public class PrideOfConquerors extends CardImpl {
+public class RockLobster extends CardImpl {
 
-    public PrideOfConquerors(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{W}");
+    private static final FilterCreaturePermanent filter = new FilterCreaturePermanent("creatures named Scissors Lizard");
 
-        // Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)
-        this.getSpellAbility().addEffect(new AscendEffect());
-
-        // Creatures you control get +1/+1 until end of turn. If you have the city's blessing, those creatures get +2/+2 until end of turn instead.
-        this.getSpellAbility().addEffect(new ConditionalContinuousEffect(new BoostControlledEffect(2, 2, Duration.EndOfTurn),
-                new BoostControlledEffect(1, 1, Duration.EndOfTurn), CitysBlessingCondition.instance,
-                "Creatures you control get +1/+1 until end of turn. If you have the city's blessing, those creatures get +2/+2 until end of turn instead"));
+    static {
+        filter.add(new NamePredicate("Scissors Lizard"));
     }
 
-    public PrideOfConquerors(final PrideOfConquerors card) {
+    public RockLobster(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.ARTIFACT, CardType.CREATURE}, "{4}");
+
+        this.subtype.add(SubType.LOBSTER);
+        this.power = new MageInt(4);
+        this.toughness = new MageInt(3);
+
+        //  Creatures named Scissors Lizard can't attack or block.
+        this.addAbility(new SimpleStaticAbility(Zone.BATTLEFIELD, new CantAttackBlockAllEffect(Duration.WhileOnBattlefield, filter)));
+    }
+
+    public RockLobster(final RockLobster card) {
         super(card);
     }
 
     @Override
-    public PrideOfConquerors copy() {
-        return new PrideOfConquerors(this);
+    public RockLobster copy() {
+        return new RockLobster(this);
     }
 }

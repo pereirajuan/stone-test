@@ -25,78 +25,75 @@
  *  authors and should not be interpreted as representing official policies, either expressed
  *  or implied, of BetaSteward_at_googlemail.com.
  */
-package mage.cards.p;
 
-import java.util.UUID;
+package mage.cards.g;
+
 import mage.abilities.Ability;
-import mage.abilities.condition.common.KickedCondition;
+import mage.abilities.effects.ContinuousEffect;
 import mage.abilities.effects.OneShotEffect;
-import mage.abilities.keyword.KickerAbility;
+import mage.abilities.effects.common.continuous.BoostTargetEffect;
 import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.CardType;
+import mage.constants.Duration;
 import mage.constants.Outcome;
 import mage.game.Game;
-import mage.game.stack.Spell;
+import mage.game.permanent.Permanent;
 import mage.players.Player;
-import mage.target.TargetSpell;
+import mage.target.common.TargetCreaturePermanent;
+import mage.target.targetpointer.FixedTarget;
+
+import java.util.UUID;
 
 /**
  *
- * @author LevelX2
+ * @author  ciaccona007
  */
-public class Prohibit extends CardImpl {
+public class GrowthSpurt extends CardImpl {
 
-    public Prohibit(UUID ownerId, CardSetInfo setInfo) {
-        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{U}");
+    public GrowthSpurt(UUID ownerId, CardSetInfo setInfo) {
+        super(ownerId, setInfo, new CardType[]{CardType.INSTANT}, "{1}{G}");
 
-        // Kicker {2}
-        this.addAbility(new KickerAbility("{2}"));
-
-        // Counter target spell if its converted mana cost is 2 or less. If Prohibit was kicked, counter that spell if its converted mana cost is 4 or less instead.
-        this.getSpellAbility().addEffect(new ProhibitEffect());
-        this.getSpellAbility().addTarget(new TargetSpell());
+        this.getSpellAbility().addTarget(new TargetCreaturePermanent());
+        this.getSpellAbility().addEffect(new GrowthSpurtEffect());
     }
 
-    public Prohibit(final Prohibit card) {
+    public GrowthSpurt(final GrowthSpurt card) {
         super(card);
     }
 
     @Override
-    public Prohibit copy() {
-        return new Prohibit(this);
+    public GrowthSpurt copy() {
+        return new GrowthSpurt(this);
     }
 }
 
-class ProhibitEffect extends OneShotEffect {
-
-    ProhibitEffect() {
-        super(Outcome.DestroyPermanent);
-        this.staticText = "Counter target spell if its converted mana cost is 2 or less. If {this} was kicked, counter that spell if its converted mana cost is 4 or less instead.";
+class GrowthSpurtEffect extends OneShotEffect {
+    GrowthSpurtEffect() {
+        super(Outcome.BoostCreature);
+        this.staticText = "todo"; //TODO
     }
 
-    ProhibitEffect(final ProhibitEffect effect) {
+    GrowthSpurtEffect(final GrowthSpurtEffect effect) {
         super(effect);
-    }
-
-    @Override
-    public ProhibitEffect copy() {
-        return new ProhibitEffect(this);
     }
 
     @Override
     public boolean apply(Game game, Ability source) {
         Player controller = game.getPlayer(source.getControllerId());
         if (controller != null) {
-            Spell targetSpell = game.getSpell(this.getTargetPointer().getFirst(game, source));
-            if (targetSpell != null) {
-                int cmc = targetSpell.getConvertedManaCost();
-                if (cmc <= 2 || (KickedCondition.instance.apply(game, source) && cmc <= 4)) {
-                    targetSpell.counter(source.getSourceId(), game);
-                }
+            int result = controller.rollDice(game, 6);
+            Permanent permanent = game.getPermanent(source.getFirstTarget());
+            if (permanent != null) {
+                ContinuousEffect effect = new BoostTargetEffect(result, result, Duration.EndOfTurn);
+                effect.setTargetPointer(new FixedTarget(permanent, game));
+                game.addEffect(effect, source);
             }
-            return true;
         }
         return false;
+    }
+
+    public GrowthSpurtEffect copy() {
+        return new GrowthSpurtEffect(this);
     }
 }

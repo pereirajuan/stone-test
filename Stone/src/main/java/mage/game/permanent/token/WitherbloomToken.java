@@ -9,9 +9,9 @@ import mage.constants.SubType;
 /**
  * @author TheElk801
  */
-public final class PestToken2 extends TokenImpl {
+public final class WitherbloomToken extends TokenImpl {
 
-    public PestToken2() {
+    public WitherbloomToken() {
         super("Pest", "1/1 black and green Pest creature token with \"When this creature dies, you gain 1 life.\"");
         cardType.add(CardType.CREATURE);
         color.setBlack(true);
@@ -23,11 +23,11 @@ public final class PestToken2 extends TokenImpl {
         this.addAbility(new DiesSourceTriggeredAbility(new GainLifeEffect(1)));
     }
 
-    private PestToken2(final PestToken2 token) {
+    private WitherbloomToken(final WitherbloomToken token) {
         super(token);
     }
 
-    public PestToken2 copy() {
-        return new PestToken2(this);
+    public WitherbloomToken copy() {
+        return new WitherbloomToken(this);
     }
 }
